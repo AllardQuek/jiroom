@@ -1,0 +1,8 @@
+{
+  "feature_id": "ui-framework-setup_20250107",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2025-01-07T01:39:00Z",
+  "updated_at": "2025-01-07T01:39:00Z",
+  "description": "Configure Tailwind CSS with custom color palette and initialize shadcn/ui component library with base components (Button, Card, Form, Input, Dialog)"
+}

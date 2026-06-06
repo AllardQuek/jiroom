@@ -1,0 +1,8 @@
+{
+  "feature_id": "project-initialization_20250107",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2025-01-07T01:20:00Z",
+  "updated_at": "2025-01-07T01:20:00Z",
+  "description": "Initialize Next.js project with TypeScript, Tailwind CSS, ESLint and install core dependencies (Zustand, React Hook Form, Zod, Lucide React)"
+}

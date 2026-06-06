@@ -1,0 +1,8 @@
+{
+  "feature_id": "state-management_20250107",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2025-01-07T01:43:00Z",
+  "updated_at": "2025-01-07T01:43:00Z",
+  "description": "Create Zustand stores with localStorage persistence for all data models (Listings, Evaluations, Templates, Verdicts) and define TypeScript types"
+}
