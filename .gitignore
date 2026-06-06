@@ -51,7 +51,7 @@ lerna-debug.log*
 Thumbs.db
 
 # Cascade/Devin
-.devin/
+# .devin/
 
 # Logs
 logs/
