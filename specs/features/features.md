@@ -6,7 +6,7 @@ This file tracks all features in the Rental Viewing Evaluator project.
 
 - [x] **Feature: Project Initialization**
   *Link: [./project-initialization_20250107/](./project-initialization_20250107/)*
-- [~] **Feature: UI Framework Setup**
+- [x] **Feature: UI Framework Setup**
   *Link: [./ui-framework-setup_20250107/](./ui-framework-setup_20250107/)*
 - [ ] **Feature: State Management**
   *Link: [./state-management_20250107/](./state-management_20250107/)*
