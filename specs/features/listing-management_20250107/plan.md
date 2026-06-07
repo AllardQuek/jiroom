@@ -62,11 +62,11 @@
     - [x] Integrate ListingList component
     - [x] Add "Add Listing" button
     - [x] Add CreateListingForm dialog
-- [ ] Task: Update listing detail page
-    - [ ] Update app/listings/[id]/page.tsx
-    - [ ] Integrate ListingDetail component
-    - [ ] Fetch listing data from store
-    - [ ] Handle not-found state
+- [x] Task: Update listing detail page [4fe2ebb]
+    - [x] Update app/listings/[id]/page.tsx
+    - [x] Integrate ListingDetail component
+    - [x] Fetch listing data from store
+    - [x] Handle not-found state
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Status Management
