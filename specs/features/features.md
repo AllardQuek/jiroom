@@ -23,7 +23,7 @@ This file tracks all features in the Rental Viewing Evaluator project.
   *Link: [./viewing-tracking_20250107/](./viewing-tracking_20250107/)*
 - [x] **Feature: Notes & Comments**
   *Link: [./notes-comments_20250107/](./notes-comments_20250107/)*
-- [~] **Feature: Verdict System** (In Progress)
+- [x] **Feature: Verdict System**
   *Link: [./verdict-system_20250107/](./verdict-system_20250107/)*
 - [~] **Feature: Comparison View**
   *Link: [./comparison-view_20250107/](./comparison-view_20250107/)*
