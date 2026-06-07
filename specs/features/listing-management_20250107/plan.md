@@ -57,11 +57,11 @@
 - [x] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Page Integration
-- [ ] Task: Update listings list page
-    - [ ] Update app/listings/page.tsx
-    - [ ] Integrate ListingList component
-    - [ ] Add "Add Listing" button
-    - [ ] Add CreateListingForm dialog
+- [x] Task: Update listings list page [2477c10]
+    - [x] Update app/listings/page.tsx
+    - [x] Integrate ListingList component
+    - [x] Add "Add Listing" button
+    - [x] Add CreateListingForm dialog
 - [ ] Task: Update listing detail page
     - [ ] Update app/listings/[id]/page.tsx
     - [ ] Integrate ListingDetail component
