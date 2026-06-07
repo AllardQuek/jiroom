@@ -24,12 +24,12 @@
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Notes Editor
-- [ ] Task: Create NotesEditor component
-    - [ ] Create components/notes/NotesEditor.tsx
-    - [ ] Implement textarea for notes input
-    - [ ] Add bullet formatting hint
-    - [ ] Add save/cancel actions
-    - [ ] Add timestamp display
+- [x] Task: Create NotesEditor component [369eb52]
+    - [x] Create components/notes/NotesEditor.tsx
+    - [x] Implement textarea for notes input
+    - [x] Add bullet formatting hint
+    - [x] Add save/cancel actions
+    - [x] Add timestamp display
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Inline Notes
