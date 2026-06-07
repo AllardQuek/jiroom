@@ -69,7 +69,7 @@
     - [x] Handle not-found state
 - [x] Task: User Manual Verification 'Phase 5'
 
-## Phase 6: Status Management
+## Phase 6: Status Management [checkpoint: 4a9e3ab]
 - [x] Task: Implement quick status change [f7759b9]
     - [x] Add status dropdown/buttons to ListingCard
     - [x] Implement optimistic UI updates
@@ -81,7 +81,7 @@
 - [x] Task: Install missing dependencies [ae2a0cd]
     - [x] Add @hookform/resolvers to package.json
     - [x] User must run: npm install
-- [ ] Task: User Manual Verification 'Phase 6'
+- [x] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Verification
 - [ ] Task: Verify TypeScript compilation
