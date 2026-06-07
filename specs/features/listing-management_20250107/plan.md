@@ -29,7 +29,7 @@
 - [x] Task: Install @radix-ui/react-select dependency [3eb714a]
     - [x] Added to package.json
     - [x] User must run: npm install
-- [~] Task: Create CreateListingForm component
+- [x] Task: Create CreateListingForm component [83118e9]
     - [x] Create components/listings/CreateListingForm.tsx
     - [x] Implement form with React Hook Form
     - [x] Add form fields: Source URL, Title, Price, Area, Source Platform, Status
