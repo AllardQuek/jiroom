@@ -1,12 +1,12 @@
 # Implementation Plan: Verdict System
 
 ## Phase 1: Type Updates
-- [ ] Task: Update Verdict type definition
-    - [ ] Update status field in types/verdict.ts to 4 types
-    - [ ] Add reasoning field
-    - [ ] Add score field
-    - [ ] Add created_at field
-    - [ ] Verify TypeScript compilation
+- [x] Task: Update Verdict type definition [c0f9dba]
+    - [x] Update status field in types/verdict.ts to 4 types
+    - [x] Add reasoning field
+    - [x] Add score field
+    - [x] Add created_at field
+    - [x] Verify TypeScript compilation
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Score Calculation
