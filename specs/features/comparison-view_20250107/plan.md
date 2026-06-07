@@ -18,11 +18,11 @@
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Add to Compare Button
-- [ ] Task: Create AddToCompareButton component
-    - [ ] Create components/comparison/AddToCompareButton.tsx
-    - [ ] Implement add/remove toggle
-    - [ ] Add disabled state when max limit reached
-    - [ ] Integrate with comparison store
+- [x] Task: Create AddToCompareButton component [cfc923c]
+    - [x] Create components/comparison/AddToCompareButton.tsx
+    - [x] Implement add/remove toggle
+    - [x] Add disabled state when max limit reached
+    - [x] Integrate with comparison store
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Comparison Table
