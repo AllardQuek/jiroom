@@ -94,7 +94,7 @@ export function ComparisonColumn({ listing }: ComparisonColumnProps) {
           <div className="flex justify-between items-center text-sm">
             <span className="text-muted-foreground">Verdict:</span>
             {verdict ? (
-              <Badge className={statusColors[verdict.status]}>
+              <Badge variant="outline" className={statusColors[verdict.status]}>
                 {verdict.status}
               </Badge>
             ) : (
@@ -105,7 +105,7 @@ export function ComparisonColumn({ listing }: ComparisonColumnProps) {
           <div className="flex justify-between items-center text-sm">
             <span className="text-muted-foreground">Viewing:</span>
             {viewing ? (
-              <Badge className={viewingStatusColors[viewing.status]}>
+              <Badge variant="outline" className={viewingStatusColors[viewing.status]}>
                 {viewing.status}
               </Badge>
             ) : (

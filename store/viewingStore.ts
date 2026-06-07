@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { Viewing } from "@/types/listing";
 
 interface ViewingState {
@@ -33,6 +33,7 @@ export const useViewingStore = create<ViewingState>()(
     }),
     {
       name: "viewing-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

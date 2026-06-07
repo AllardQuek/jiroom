@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { Evaluation } from "@/types/evaluation";
 
 interface EvaluationState {
@@ -36,6 +36,7 @@ export const useEvaluationStore = create<EvaluationState>()(
     }),
     {
       name: "evaluation-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

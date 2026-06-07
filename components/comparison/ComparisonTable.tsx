@@ -40,7 +40,7 @@ export function ComparisonTable() {
       </div>
 
       <div className="overflow-x-auto">
-        <div className="min-w-[800px]">
+        <div className="min-w-[280px]">
           <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${selectedListings.length}, minmax(280px, 1fr))` }}>
             {selectedListings.map((listing) => (
               <ComparisonColumn key={listing.id} listing={listing} />

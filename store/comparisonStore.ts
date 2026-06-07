@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 const MAX_LISTINGS = 3;
 
@@ -45,6 +45,7 @@ export const useComparisonStore = create<ComparisonState>()(
     }),
     {
       name: "comparison-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

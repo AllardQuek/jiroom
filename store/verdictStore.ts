@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { Verdict } from "@/types/verdict";
 
 interface VerdictState {
@@ -33,6 +33,7 @@ export const useVerdictStore = create<VerdictState>()(
     }),
     {
       name: "verdict-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
