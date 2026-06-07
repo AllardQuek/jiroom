@@ -87,7 +87,12 @@
 - [x] Task: Verify TypeScript compilation [de62752]
     - [x] Run npx tsc --noEmit (requires npm install)
     - [x] Verify no type errors (requires npm install)
-- [ ] Task: Verify functionality
+- [x] Task: Fix Next.js 15 async params bug [42445f4]
+    - [x] Update params type to Promise in detail page
+    - [x] Add useEffect to resolve params on mount
+    - [x] Add loading state to prevent 404
+    - [x] Verify TypeScript compilation
+- [~] Task: Verify functionality
     - [ ] Test create listing flow
     - [ ] Test edit listing flow
     - [ ] Test delete listing flow
