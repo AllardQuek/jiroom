@@ -10,11 +10,11 @@
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Score Calculation
-- [ ] Task: Create score calculation utility
-    - [ ] Create lib/utils/calculateScore.ts
-    - [ ] Implement weighted sum algorithm
-    - [ ] Handle different input types (rating, checkbox, number)
-    - [ ] Normalize to 0-100 scale
+- [x] Task: Create score calculation utility [b53933f]
+    - [x] Create lib/utils/calculateScore.ts
+    - [x] Implement weighted sum algorithm
+    - [x] Handle different input types (rating, checkbox, number)
+    - [x] Normalize to 0-100 scale
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Verdict Section Component
