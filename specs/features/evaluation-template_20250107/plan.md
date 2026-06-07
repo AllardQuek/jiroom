@@ -9,15 +9,15 @@
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Default Template Data
-- [ ] Task: Create default template data
-    - [ ] Create lib/data/defaultTemplate.ts
-    - [ ] Define 8 categories with common criteria
-    - [ ] Set appropriate input types for each criterion
-    - [ ] Set default weight of 2 for all criteria
-- [ ] Task: Implement template seeding
-    - [ ] Add seeding logic to template store initialization
-    - [ ] Check if templates exist on app load
-    - [ ] Create default template if none exist
+- [x] Task: Create default template data [7b955e4]
+    - [x] Create lib/data/defaultTemplate.ts
+    - [x] Define 8 categories with common criteria
+    - [x] Set appropriate input types for each criterion
+    - [x] Set default weight of 2 for all criteria
+- [x] Task: Implement template seeding [7b955e4]
+    - [x] Add seeding logic to template store initialization
+    - [x] Check if templates exist on app load
+    - [x] Create default template if none exist
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Zod Validation Schemas
