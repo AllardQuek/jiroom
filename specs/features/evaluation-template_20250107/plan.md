@@ -93,17 +93,17 @@
 - [x] Task: Verify TypeScript compilation [38b7761]
     - [x] Run npx tsc --noEmit
     - [x] Verify no type errors
-- [ ] Task: Verify functionality
-    - [ ] Test default template seeding
-    - [ ] Test create blank template
-    - [ ] Test add/edit/delete criteria
-    - [ ] Test criteria reordering
-    - [ ] Test all 5 input types
-    - [ ] Test category grouping
-    - [ ] Test weight selection
-    - [ ] Test localStorage persistence
-- [ ] Task: Verify mobile responsiveness
-    - [ ] Test template editor on mobile
-    - [ ] Test criteria form on mobile
-    - [ ] Verify up/down buttons work
-- [ ] Task: User Manual Verification 'Phase 9'
+- [x] Task: Verify functionality [user-verified]
+    - [x] Test default template seeding
+    - [x] Test create blank template
+    - [x] Test add/edit/delete criteria
+    - [x] Test criteria reordering
+    - [x] Test all 5 input types
+    - [x] Test category grouping
+    - [x] Test weight selection
+    - [x] Test localStorage persistence
+- [x] Task: Verify mobile responsiveness [user-verified]
+    - [x] Test template editor on mobile
+    - [x] Test criteria form on mobile
+    - [x] Verify up/down buttons work
+- [x] Task: User Manual Verification 'Phase 9' [user-verified]
