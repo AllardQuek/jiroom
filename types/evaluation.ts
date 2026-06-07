@@ -18,6 +18,8 @@ export interface Criterion {
   id: string;
   name: string;
   description: string;
-  weight: number;
-  type: "score" | "boolean" | "text";
+  weight: number; // 1-3 scale
+  type: "checkbox" | "rating" | "number" | "text" | "select";
+  category: string;
+  options?: string[]; // for select type
 }
