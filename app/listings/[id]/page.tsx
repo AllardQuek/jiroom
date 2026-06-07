@@ -8,6 +8,8 @@ import { ListingDetail } from "@/components/listings/ListingDetail";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { DeleteConfirmationDialog } from "@/components/listings/DeleteConfirmationDialog";
 import { ViewingSection } from "@/components/viewing/ViewingSection";
+import { InlineNotes } from "@/components/notes/InlineNotes";
+import { NotesSection } from "@/components/notes/NotesSection";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { notFound } from "next/navigation";
 import { Viewing } from "@/types/listing";
@@ -19,6 +21,7 @@ export default function ListingDetailPage({
 }) {
   const router = useRouter();
   const listings = useListingStore((state) => state.listings);
+  const updateListing = useListingStore((state) => state.updateListing);
   const deleteListing = useListingStore((state) => state.deleteListing);
   const getViewingByListingId = useViewingStore((state) => state.getViewingByListingId);
   const addViewing = useViewingStore((state) => state.addViewing);
@@ -58,6 +61,10 @@ export default function ListingDetailPage({
     router.push("/listings");
   };
 
+  const handleListingNotesUpdate = (notes: string) => {
+    updateListing(listing.id, { notes });
+  };
+
   const handleViewingUpdate = (updates: Partial<Viewing>) => {
     if (viewing) {
       updateViewing(viewing.id, updates);
@@ -76,11 +83,34 @@ export default function ListingDetailPage({
         onDelete={handleDelete}
       />
 
+      <InlineNotes
+        notes={listing.notes || ""}
+        onUpdate={handleListingNotesUpdate}
+        label="Listing Notes"
+      />
+
       <ViewingSection
         viewing={viewing}
         listingId={listing.id}
         onViewingUpdate={handleViewingUpdate}
         onViewingCreate={handleViewingCreate}
+      />
+
+      <NotesSection
+        sources={[
+          {
+            label: "Listing",
+            notes: listing.notes || "",
+            updatedAt: undefined,
+            onUpdate: handleListingNotesUpdate,
+          },
+          {
+            label: "Viewing",
+            notes: viewing?.notes || "",
+            updatedAt: viewing?.notes_updated_at,
+            onUpdate: (notes) => handleViewingUpdate({ notes, notes_updated_at: new Date().toISOString() }),
+          },
+        ]}
       />
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

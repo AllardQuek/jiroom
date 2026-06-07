@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Calendar, Clock } from "lucide-react";
 import { useState } from "react";
 import { ViewingStatusButtons } from "./ViewingStatusButtons";
-import { ViewingNotes } from "./ViewingNotes";
+import { InlineNotes } from "@/components/notes/InlineNotes";
 import { ScheduleViewingForm } from "./ScheduleViewingForm";
 
 interface ViewingSectionProps {
@@ -122,9 +122,11 @@ export function ViewingSection({
             onStatusChange={(status) => onViewingUpdate({ status })}
           />
 
-          <ViewingNotes
+          <InlineNotes
             notes={viewing.notes || ""}
-            onNotesChange={(notes) => onViewingUpdate({ notes })}
+            onUpdate={(notes) => onViewingUpdate({ notes, notes_updated_at: new Date().toISOString() })}
+            updatedAt={viewing.notes_updated_at}
+            label="Viewing Notes"
           />
 
           {viewing.scheduled_date && (
