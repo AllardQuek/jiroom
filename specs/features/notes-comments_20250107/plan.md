@@ -33,11 +33,11 @@
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Inline Notes
-- [ ] Task: Create InlineNotes component
-    - [ ] Create components/notes/InlineNotes.tsx
-    - [ ] Display notes with bullet parsing
-    - [ ] Add edit button
-    - [ ] Add collapsible functionality
+- [x] Task: Create InlineNotes component [943d884]
+    - [x] Create components/notes/InlineNotes.tsx
+    - [x] Display notes with bullet parsing
+    - [x] Add edit button
+    - [x] Add collapsible functionality
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Dedicated Notes Section
