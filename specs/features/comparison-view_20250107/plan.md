@@ -66,18 +66,18 @@
 - [ ] Task: User Manual Verification 'Phase 7'
 
 ## Phase 8: Verification
-- [ ] Task: Verify TypeScript compilation
-    - [ ] Run npx tsc --noEmit
-    - [ ] Verify no type errors
-- [ ] Task: Verify functionality
-    - [ ] Test listing selection from list view
-    - [ ] Test add to compare from detail view
-    - [ ] Test comparison table display
-    - [ ] Test remove from comparison
-    - [ ] Test localStorage persistence
-    - [ ] Test max limit (3 listings)
-- [ ] Task: Verify mobile responsiveness
-    - [ ] Test horizontal scroll on mobile
-    - [ ] Test column layout on different screen sizes
-    - [ ] Test touch targets on mobile
-- [ ] Task: User Manual Verification 'Phase 8'
+- [x] Task: Verify TypeScript compilation [user-verified]
+    - [x] Run npx tsc --noEmit
+    - [x] Verify no type errors
+- [x] Task: Verify functionality [user-verified]
+    - [x] Test listing selection from list view
+    - [x] Test add to compare from detail view
+    - [x] Test comparison table display
+    - [x] Test remove from comparison
+    - [x] Test localStorage persistence
+    - [x] Test max limit (3 listings)
+- [x] Task: Verify mobile responsiveness [user-verified]
+    - [x] Test horizontal scroll on mobile
+    - [x] Test column layout on different screen sizes
+    - [x] Test touch targets on mobile
+- [x] Task: User Manual Verification 'Phase 8' [user-verified]
