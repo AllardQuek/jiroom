@@ -10,5 +10,5 @@ This file tracks all features in the Rental Viewing Evaluator project.
   *Link: [./ui-framework-setup_20250107/](./ui-framework-setup_20250107/)*
 - [x] **Feature: State Management**
   *Link: [./state-management_20250107/](./state-management_20250107/)*
-- [ ] **Feature: Routing Structure**
+- [~] **Feature: Routing Structure**
   *Link: [./routing-structure_20250107/](./routing-structure_20250107/)*
