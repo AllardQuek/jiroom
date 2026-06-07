@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useListingStore } from "@/store/listingStore";
+import { useViewingStore } from "@/store/viewingStore";
 import { ListingDetail } from "@/components/listings/ListingDetail";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { DeleteConfirmationDialog } from "@/components/listings/DeleteConfirmationDialog";
+import { ViewingSection } from "@/components/viewing/ViewingSection";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { notFound } from "next/navigation";
+import { Viewing } from "@/types/listing";
 
 export default function ListingDetailPage({
   params,
@@ -17,6 +20,9 @@ export default function ListingDetailPage({
   const router = useRouter();
   const listings = useListingStore((state) => state.listings);
   const deleteListing = useListingStore((state) => state.deleteListing);
+  const getViewingByListingId = useViewingStore((state) => state.getViewingByListingId);
+  const addViewing = useViewingStore((state) => state.addViewing);
+  const updateViewing = useViewingStore((state) => state.updateViewing);
   const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
 
   // Resolve params on mount
@@ -25,6 +31,7 @@ export default function ListingDetailPage({
   }, [params]);
 
   const listing = resolvedParams ? listings.find((l) => l.id === resolvedParams.id) : null;
+  const viewing = listing ? (getViewingByListingId(listing.id) ?? null) : null;
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -51,12 +58,29 @@ export default function ListingDetailPage({
     router.push("/listings");
   };
 
+  const handleViewingUpdate = (updates: Partial<Viewing>) => {
+    if (viewing) {
+      updateViewing(viewing.id, updates);
+    }
+  };
+
+  const handleViewingCreate = (newViewing: Viewing) => {
+    addViewing(newViewing);
+  };
+
   return (
-    <div className="p-4">
+    <div className="p-4 space-y-4">
       <ListingDetail
         listing={listing}
         onEdit={handleEdit}
         onDelete={handleDelete}
+      />
+
+      <ViewingSection
+        viewing={viewing}
+        listingId={listing.id}
+        onViewingUpdate={handleViewingUpdate}
+        onViewingCreate={handleViewingCreate}
       />
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
