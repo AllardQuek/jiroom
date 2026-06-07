@@ -1,12 +1,12 @@
 # Implementation Plan: Notes & Comments
 
 ## Phase 1: Type Updates
-- [ ] Task: Update Listing type
-    - [ ] Add notes field to Listing interface in types/listing.ts
-    - [ ] Verify TypeScript compilation
-- [ ] Task: Update Viewing type
-    - [ ] Add notes_updated_at field to Viewing interface in types/listing.ts
-    - [ ] Verify TypeScript compilation
+- [x] Task: Update Listing type [2b60181]
+    - [x] Add notes field to Listing interface in types/listing.ts
+    - [x] Verify TypeScript compilation
+- [x] Task: Update Viewing type [2b60181]
+    - [x] Add notes_updated_at field to Viewing interface in types/listing.ts
+    - [x] Verify TypeScript compilation
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Store Updates
