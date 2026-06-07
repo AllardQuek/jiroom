@@ -43,11 +43,11 @@
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Status Management
-- [ ] Task: Create ViewingStatusButtons component
-    - [ ] Create components/viewing/ViewingStatusButtons.tsx
-    - [ ] Implement 5 status buttons
-    - [ ] Add color coding for each status
-    - [ ] Add optimistic UI updates
+- [x] Task: Create ViewingStatusButtons component [406fbde]
+    - [x] Create components/viewing/ViewingStatusButtons.tsx
+    - [x] Implement 5 status buttons
+    - [x] Add color coding for each status
+    - [x] Add optimistic UI updates
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Notes Component
