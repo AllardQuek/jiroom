@@ -66,27 +66,27 @@
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Page Integration
-- [ ] Task: Update template page
-    - [ ] Update app/template/page.tsx
-    - [ ] Integrate TemplateList component
-    - [ ] Add CreateTemplateForm dialog
-    - [ ] Add TemplateEditor dialog
+- [x] Task: Update template page [1fc17bf]
+    - [x] Update app/template/page.tsx
+    - [x] Integrate TemplateList component
+    - [x] Add CreateTemplateForm dialog
+    - [x] Add TemplateEditor dialog
 - [ ] Task: User Manual Verification 'Phase 7'
 
 ## Phase 8: Criteria Operations
-- [ ] Task: Implement add criteria
-    - [ ] Add criteria to template
-    - [ ] Generate unique ID
-    - [ ] Set default values
-- [ ] Task: Implement edit criteria
-    - [ ] Update criteria in template
-    - [ ] Handle type changes
-- [ ] Task: Implement delete criteria
-    - [ ] Add confirmation dialog
-    - [ ] Remove from template
-- [ ] Task: Implement reorder criteria
-    - [ ] Move criteria up/down in array
-    - [ ] Update template in store
+- [x] Task: Implement add criteria [1fc17bf]
+    - [x] Add criteria to template
+    - [x] Generate unique ID
+    - [x] Set default values
+- [x] Task: Implement edit criteria [1fc17bf]
+    - [x] Update criteria in template
+    - [x] Handle type changes
+- [x] Task: Implement delete criteria [1fc17bf]
+    - [x] Add confirmation dialog
+    - [x] Remove from template
+- [x] Task: Implement reorder criteria [1fc17bf]
+    - [x] Move criteria up/down in array
+    - [x] Update template in store
 - [ ] Task: User Manual Verification 'Phase 8'
 
 ## Phase 9: Verification
