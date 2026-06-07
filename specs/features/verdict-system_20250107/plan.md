@@ -35,11 +35,11 @@
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Score Display
-- [ ] Task: Create ScoreDisplay component
-    - [ ] Create components/verdict/ScoreDisplay.tsx
-    - [ ] Calculate score from evaluation
-    - [ ] Display score prominently
-    - [ ] Update score when evaluation changes
+- [~] Task: Create ScoreDisplay component
+    - [x] Create components/verdict/ScoreDisplay.tsx
+    - [x] Calculate score from evaluation
+    - [x] Display score prominently
+    - [x] Update score when evaluation changes
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Reasoning Component
