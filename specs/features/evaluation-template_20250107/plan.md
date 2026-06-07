@@ -29,12 +29,12 @@
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Template List Component
-- [ ] Task: Create TemplateList component
-    - [ ] Create components/template/TemplateList.tsx
-    - [ ] Display all templates from store
-    - [ ] Add "Create Template" button
-    - [ ] Add edit/delete actions for each template
-    - [ ] Add empty state message
+- [x] Task: Create TemplateList component [32f8c1a]
+    - [x] Create components/template/TemplateList.tsx
+    - [x] Display all templates from store
+    - [x] Add "Create Template" button
+    - [x] Add edit/delete actions for each template
+    - [x] Add empty state message
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Template Editor Component
