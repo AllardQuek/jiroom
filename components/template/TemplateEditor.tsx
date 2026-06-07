@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Template } from "@/types/evaluation";
 import { useTemplateStore } from "@/store/templateStore";

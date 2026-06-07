@@ -1,3 +1,5 @@
+"use client";
+
 import { Verdict } from "@/types/verdict";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

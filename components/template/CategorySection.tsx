@@ -1,3 +1,5 @@
+"use client";
+
 import { Criterion } from "@/types/evaluation";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";

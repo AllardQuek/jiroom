@@ -1,3 +1,5 @@
+"use client";
+
 import { useTemplateStore } from "@/store/templateStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
