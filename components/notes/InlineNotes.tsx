@@ -35,29 +35,31 @@ export function InlineNotes({
   }
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">{label}</span>
-        <div className="flex gap-1">
+    <div>
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-xs font-medium text-muted-foreground">
+          {label}
+        </span>
+        <div className="flex gap-0.5">
           <Button
             size="icon"
             variant="ghost"
-            className="h-6 w-6"
+            className="h-5 w-5 text-muted-foreground/60 hover:text-foreground"
             onClick={() => setIsExpanded(!isExpanded)}
           >
             {isExpanded ? (
-              <ChevronUp className="w-4 h-4" />
+              <ChevronUp className="w-3.5 h-3.5" />
             ) : (
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className="w-3.5 h-3.5" />
             )}
           </Button>
           <Button
             size="icon"
             variant="ghost"
-            className="h-6 w-6"
+            className="h-5 w-5 text-muted-foreground/60 hover:text-foreground"
             onClick={() => setIsEditing(true)}
           >
-            <Edit2 className="w-4 h-4" />
+            <Edit2 className="w-3.5 h-3.5" />
           </Button>
         </div>
       </div>
@@ -66,7 +68,7 @@ export function InlineNotes({
           {notes ? (
             <BulletParser text={notes} />
           ) : (
-            <p className="text-muted-foreground italic">No notes</p>
+            <p className="text-xs text-muted-foreground/50 italic">No notes</p>
           )}
         </div>
       )}

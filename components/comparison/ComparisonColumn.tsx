@@ -49,7 +49,7 @@ export function ComparisonColumn({ listing }: ComparisonColumnProps) {
   };
 
   const handleViewDetails = () => {
-    router.push(`/listings/${listing.id}`);
+    router.push(`/listings?detail=${listing.id}`);
   };
 
   return (

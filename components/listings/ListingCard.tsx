@@ -1,27 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import { Listing } from "@/types/listing";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
 import { ListingSelector } from "@/components/comparison/ListingSelector";
 import { useViewingStore } from "@/store/viewingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
-import { CalendarDays, MapPin } from "lucide-react";
+import {
+  CalendarDays,
+  MapPin,
+  FileText,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { calculateScore } from "@/lib/utils/calculateScore";
 
 interface ListingCardProps {
   listing: Listing;
+  onClick?: (id: string) => void;
 }
 
 const statusColors: Record<string, string> = {
-  new: "bg-slate-100 text-slate-700 border-slate-200",
-  to_view: "bg-blue-50 text-blue-700 border-blue-200",
-  viewed: "bg-green-50 text-green-700 border-green-200",
-  archived: "bg-gray-100 text-gray-500 border-gray-200",
-  shortlisted: "bg-indigo-50 text-indigo-700 border-indigo-200",
+  new: "bg-amber-100 text-amber-800 border-amber-200",
+  to_view: "bg-blue-100 text-blue-800 border-blue-200",
+  viewed: "bg-emerald-100 text-emerald-800 border-emerald-200",
+  archived: "bg-stone-100 text-stone-500 border-stone-200",
+  shortlisted: "bg-violet-100 text-violet-800 border-violet-200",
 };
 
 const statusLabels: Record<string, string> = {
@@ -32,8 +39,8 @@ const statusLabels: Record<string, string> = {
   shortlisted: "Shortlisted",
 };
 
-export function ListingCard({ listing }: ListingCardProps) {
-  const router = useRouter();
+export function ListingCard({ listing, onClick }: ListingCardProps) {
+  const [showNotes, setShowNotes] = useState(false);
   const viewings = useViewingStore((state) => state.viewings);
   const evaluation = useEvaluationStore((state) =>
     state.getEvaluationByListingId(listing.id)
@@ -58,25 +65,28 @@ export function ListingCard({ listing }: ListingCardProps) {
       : null;
 
   const handleClick = () => {
-    router.push(`/listings/${listing.id}`);
+    onClick?.(listing.id);
   };
 
-  const statusColor = statusColors[listing.status] || "bg-gray-100";
+  const statusColor =
+    statusColors[listing.status] || "bg-stone-100 text-stone-500";
   const statusLabel = statusLabels[listing.status] || listing.status;
+
+  const hasNotes = !!listing.notes;
 
   return (
     <Card
-      className="overflow-hidden group cursor-pointer border-border/50 hover:border-primary/50 hover:shadow-xl transition-all duration-300 rounded-xl"
+      className="overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-md transition-all duration-200 rounded-xl"
       onClick={handleClick}
     >
-      <div className="p-4 space-y-4">
-        <div className="flex justify-between items-start gap-4">
-          <div className="space-y-1 flex-1">
-            <h3 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors line-clamp-2">
+      <div className="p-3.5 space-y-3">
+        <div className="flex justify-between items-start gap-3">
+          <div className="space-y-1 flex-1 min-w-0">
+            <h3 className="font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">
               {listing.title}
             </h3>
             {listing.source_platform && (
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
                 {listing.source_platform}
               </p>
             )}
@@ -91,32 +101,30 @@ export function ListingCard({ listing }: ListingCardProps) {
 
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-black text-primary">
+            <span className="text-xl font-bold text-primary">
               ${listing.price.toLocaleString()}
             </span>
-            <span className="text-xs text-muted-foreground font-medium">
-              /month
-            </span>
+            <span className="text-xs text-muted-foreground">/mo</span>
           </div>
 
           <Badge
             variant="outline"
-            className={`${statusColor} font-bold border px-2 py-0.5 rounded-md`}
+            className={`font-medium border px-2 py-0.5 rounded-md text-xs ${statusColor}`}
           >
             {statusLabel}
           </Badge>
         </div>
 
         {viewing?.scheduled_date && (
-          <div className="bg-primary/5 rounded-lg p-3 flex items-center gap-3 border border-primary/10">
-            <div className="bg-primary/10 p-2 rounded-md text-primary">
-              <CalendarDays size={16} />
+          <div className="bg-primary/5 rounded-lg p-2.5 flex items-center gap-2.5">
+            <div className="bg-primary/10 p-1.5 rounded-md text-primary">
+              <CalendarDays size={14} />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-primary uppercase leading-none mb-1">
+              <span className="text-[10px] font-semibold text-primary uppercase leading-none mb-0.5">
                 Upcoming Viewing
               </span>
-              <span className="text-xs font-semibold">
+              <span className="text-xs font-medium">
                 {format(parseISO(viewing.scheduled_date), "MMM d, h:mm aa")}
               </span>
             </div>
@@ -124,17 +132,17 @@ export function ListingCard({ listing }: ListingCardProps) {
         )}
 
         {totalCount > 0 && (
-          <div className="space-y-2 rounded-lg border border-border/50 bg-muted/20 p-3">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-muted-foreground">
+          <div>
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="font-medium text-muted-foreground">
                 Evaluation
               </span>
-              <span className="font-bold">
+              <span className="font-semibold">
                 {answeredCount}/{totalCount}
-                {score !== null ? ` · ${score}/100` : ""}
+                {score !== null ? ` · ${score}` : ""}
               </span>
             </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+            <div className="h-1 overflow-hidden rounded-full bg-muted">
               <div
                 className="h-full rounded-full bg-primary transition-all"
                 style={{ width: `${completionPercent}%` }}
@@ -143,15 +151,44 @@ export function ListingCard({ listing }: ListingCardProps) {
           </div>
         )}
 
-        <div className="flex items-center justify-between pt-2 border-t border-border/50">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+        <div className="flex items-center justify-between pt-2 border-t border-border/30">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <MapPin size={12} />
-            <span>{listing.area || "Location not set"}</span>
+            <span>{listing.area || "No area"}</span>
           </div>
-          <p className="text-[10px] text-muted-foreground/60 italic">
-            Added {new Date(listing.created_at).toLocaleDateString()}
-          </p>
+          <div className="flex items-center gap-2">
+            {hasNotes && (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setShowNotes(!showNotes);
+                }}
+                className="flex items-center gap-1 text-xs text-muted-foreground/60 hover:text-foreground transition-colors"
+              >
+                <FileText size={12} />
+                <span>Notes</span>
+                {showNotes ? (
+                  <ChevronUp size={12} />
+                ) : (
+                  <ChevronDown size={12} />
+                )}
+              </button>
+            )}
+            <p className="text-[10px] text-muted-foreground/40">
+              {new Date(listing.created_at).toLocaleDateString()}
+            </p>
+          </div>
         </div>
+
+        {showNotes && hasNotes && (
+          <div
+            className="rounded-lg bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground"
+            onClick={(event) => event.stopPropagation()}
+          >
+            {listing.notes}
+          </div>
+        )}
       </div>
     </Card>
   );

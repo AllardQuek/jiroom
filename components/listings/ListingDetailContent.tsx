@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useListingStore } from "@/store/listingStore";
 import { useViewingStore } from "@/store/viewingStore";
 import { useVerdictStore } from "@/store/verdictStore";
@@ -11,7 +10,6 @@ import { DeleteConfirmationDialog } from "@/components/listings/DeleteConfirmati
 import { ViewingSection } from "@/components/viewing/ViewingSection";
 import { EvaluationSection } from "@/components/evaluation/EvaluationSection";
 import { InlineNotes } from "@/components/notes/InlineNotes";
-import { NotesSection } from "@/components/notes/NotesSection";
 import { VerdictSection } from "@/components/verdict/VerdictSection";
 import { AddToCompareButton } from "@/components/comparison/AddToCompareButton";
 import {
@@ -20,16 +18,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { notFound } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { Viewing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
 
-export default function ListingDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const router = useRouter();
+interface ListingDetailContentProps {
+  listingId: string;
+  onDeleted?: () => void;
+}
+
+export function ListingDetailContent({
+  listingId,
+  onDeleted,
+}: ListingDetailContentProps) {
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
   const deleteListing = useListingStore((state) => state.deleteListing);
@@ -42,18 +43,7 @@ export default function ListingDetailPage({
   const addVerdict = useVerdictStore((state) => state.addVerdict);
   const updateVerdict = useVerdictStore((state) => state.updateVerdict);
 
-  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(
-    null
-  );
-
-  // Resolve params on mount
-  useEffect(() => {
-    params.then(setResolvedParams);
-  }, [params]);
-
-  const listing = resolvedParams
-    ? listings.find((l) => l.id === resolvedParams.id)
-    : null;
+  const listing = listings.find((l) => l.id === listingId) ?? null;
   const viewing = listing
     ? (viewings.find((v) => v.listing_id === listing.id) ?? null)
     : null;
@@ -65,27 +55,27 @@ export default function ListingDetailPage({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Show loading state while params are resolving or if deleting
-  if (!resolvedParams || isDeleting) {
-    return <div className="p-4">Loading...</div>;
+  if (isDeleting) {
+    return <div className="p-4 text-sm text-muted-foreground">Deleting...</div>;
   }
 
   if (!listing) {
-    notFound();
+    return (
+      <div className="p-4 space-y-3">
+        <p className="text-sm text-muted-foreground">
+          Listing not found. It may have been deleted.
+        </p>
+        <Button type="button" onClick={onDeleted}>
+          Back to Listings
+        </Button>
+      </div>
+    );
   }
-
-  const handleEdit = () => {
-    setIsEditDialogOpen(true);
-  };
-
-  const handleDelete = () => {
-    setIsDeleteDialogOpen(true);
-  };
 
   const handleDeleteConfirm = () => {
     setIsDeleting(true);
     deleteListing(listing.id);
-    router.push("/listings");
+    onDeleted?.();
   };
 
   const handleListingNotesUpdate = (notes: string) => {
@@ -113,13 +103,15 @@ export default function ListingDetailPage({
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex justify-between items-start">
-        <ListingDetail
-          listing={listing}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+    <div className="space-y-5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <ListingDetail
+            listing={listing}
+            onEdit={() => setIsEditDialogOpen(true)}
+            onDelete={() => setIsDeleteDialogOpen(true)}
+          />
+        </div>
         <AddToCompareButton listingId={listing.id} />
       </div>
 
@@ -143,27 +135,6 @@ export default function ListingDetailPage({
         listingId={listing.id}
         onVerdictUpdate={handleVerdictUpdate}
         onVerdictCreate={handleVerdictCreate}
-      />
-
-      <NotesSection
-        sources={[
-          {
-            label: "Listing",
-            notes: listing.notes || "",
-            updatedAt: undefined,
-            onUpdate: handleListingNotesUpdate,
-          },
-          {
-            label: "Viewing",
-            notes: viewing?.notes || "",
-            updatedAt: viewing?.notes_updated_at,
-            onUpdate: (notes) =>
-              handleViewingUpdate({
-                notes,
-                notes_updated_at: new Date().toISOString(),
-              }),
-          },
-        ]}
       />
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

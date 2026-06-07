@@ -1,10 +1,9 @@
 "use client";
 
 import { Viewing } from "@/types/listing";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, Calendar, Clock } from "lucide-react";
+import { Calendar, Clock, ChevronDown, ChevronUp, Eye } from "lucide-react";
 import { useState } from "react";
 import { ViewingStatusButtons } from "./ViewingStatusButtons";
 import { InlineNotes } from "@/components/notes/InlineNotes";
@@ -26,11 +25,11 @@ const statusLabels: Record<string, string> = {
 };
 
 const statusColors: Record<string, string> = {
-  to_view: "bg-gray-500",
-  upcoming: "bg-blue-500",
-  viewed: "bg-green-500",
-  skipped: "bg-yellow-500",
-  cancelled: "bg-red-500",
+  to_view: "bg-stone-100 text-stone-700 border-stone-200",
+  upcoming: "bg-blue-100 text-blue-700 border-blue-200",
+  viewed: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  skipped: "bg-amber-100 text-amber-700 border-amber-200",
+  cancelled: "bg-red-100 text-red-700 border-red-200",
 };
 
 export function ViewingSection({
@@ -55,19 +54,20 @@ export function ViewingSection({
 
   if (!viewing) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Viewing</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            No viewing scheduled yet
-          </p>
-          <Button onClick={() => setIsScheduleFormOpen(true)}>
-            <Calendar className="w-4 h-4 mr-2" />
-            Schedule Viewing
-          </Button>
-          {isScheduleFormOpen && (
+      <div className="rounded-xl bg-muted/50 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Eye className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-medium">Viewing</span>
+          </div>
+        </div>
+        <p className="text-sm text-muted-foreground mb-3">Not scheduled yet</p>
+        <Button size="sm" onClick={() => setIsScheduleFormOpen(true)}>
+          <Calendar className="h-4 w-4 mr-1.5" />
+          Schedule
+        </Button>
+        {isScheduleFormOpen && (
+          <div className="mt-4">
             <ScheduleViewingForm
               listingId={listingId}
               onCancel={() => setIsScheduleFormOpen(false)}
@@ -81,41 +81,44 @@ export function ViewingSection({
                 setIsScheduleFormOpen(false);
               }}
             />
-          )}
-        </CardContent>
-      </Card>
+          </div>
+        )}
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Viewing</CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </Button>
+    <div className="rounded-xl bg-muted/50 p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <Eye className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium">Viewing</span>
         </div>
-      </CardHeader>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-6 w-6"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? (
+            <ChevronUp className="h-4 w-4" />
+          ) : (
+            <ChevronDown className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
+
       {isExpanded && (
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Badge className={statusColors[viewing.status]}>
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="outline" className={statusColors[viewing.status]}>
               {statusLabels[viewing.status]}
             </Badge>
             {viewing.scheduled_date && (
-              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                <Clock className="w-4 h-4" />
+              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="h-3.5 w-3.5" />
                 {formatDate(viewing.scheduled_date)}
-              </div>
+              </span>
             )}
           </div>
 
@@ -126,22 +129,28 @@ export function ViewingSection({
 
           <InlineNotes
             notes={viewing.notes || ""}
-            onUpdate={(notes) => onViewingUpdate({ notes, notes_updated_at: new Date().toISOString() })}
+            onUpdate={(notes) =>
+              onViewingUpdate({
+                notes,
+                notes_updated_at: new Date().toISOString(),
+              })
+            }
             updatedAt={viewing.notes_updated_at}
-            label="Viewing Notes"
+            label="Notes"
           />
 
           {viewing.scheduled_date && (
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
+              className="h-7 text-xs text-muted-foreground"
               onClick={() => onViewingUpdate({ scheduled_date: undefined })}
             >
-              Remove Scheduled Date
+              Remove date
             </Button>
           )}
-        </CardContent>
+        </div>
       )}
-    </Card>
+    </div>
   );
 }

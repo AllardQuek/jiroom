@@ -1,10 +1,9 @@
 "use client";
 
 import { Verdict } from "@/types/verdict";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Gavel } from "lucide-react";
 import { useState } from "react";
 import { VerdictStatusButtons } from "./VerdictStatusButtons";
 import { ScoreDisplay } from "./ScoreDisplay";
@@ -25,10 +24,10 @@ const statusLabels: Record<string, string> = {
 };
 
 const statusColors: Record<string, string> = {
-  yes: "bg-green-500",
-  maybe: "bg-yellow-500",
-  no: "bg-red-500",
-  undecided: "bg-gray-500",
+  yes: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  maybe: "bg-amber-100 text-amber-700 border-amber-200",
+  no: "bg-red-100 text-red-700 border-red-200",
+  undecided: "bg-stone-100 text-stone-500 border-stone-200",
 };
 
 export function VerdictSection({
@@ -41,63 +40,63 @@ export function VerdictSection({
 
   if (!verdict) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Verdict</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            No verdict set yet
-          </p>
-          <VerdictStatusButtons
-            currentStatus="undecided"
-            onStatusChange={(status: string) => {
-              const newVerdict: Verdict = {
-                id: crypto.randomUUID(),
-                listing_id: listingId,
-                status: status as "yes" | "maybe" | "no" | "undecided",
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-              };
-              onVerdictCreate(newVerdict);
-            }}
-          />
-        </CardContent>
-      </Card>
+      <div className="rounded-xl bg-muted/50 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Gavel className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-medium">Verdict</span>
+          </div>
+        </div>
+        <p className="text-sm text-muted-foreground mb-3">Not set yet</p>
+        <VerdictStatusButtons
+          currentStatus="undecided"
+          onStatusChange={(status) => {
+            const newVerdict: Verdict = {
+              id: crypto.randomUUID(),
+              listing_id: listingId,
+              status: status as "yes" | "maybe" | "no" | "undecided",
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            };
+            onVerdictCreate(newVerdict);
+          }}
+        />
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Verdict</CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </Button>
+    <div className="rounded-xl bg-muted/50 p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <Gavel className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium">Verdict</span>
         </div>
-      </CardHeader>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-6 w-6"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? (
+            <ChevronUp className="h-4 w-4" />
+          ) : (
+            <ChevronDown className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
+
       {isExpanded && (
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Badge className={statusColors[verdict.status]}>
-              {statusLabels[verdict.status]}
-            </Badge>
-          </div>
+        <div className="space-y-3">
+          <Badge variant="outline" className={statusColors[verdict.status]}>
+            {statusLabels[verdict.status]}
+          </Badge>
 
           <ScoreDisplay listingId={listingId} />
 
           <VerdictStatusButtons
             currentStatus={verdict.status}
-            onStatusChange={(status: string) =>
+            onStatusChange={(status) =>
               onVerdictUpdate({
                 status: status as "yes" | "maybe" | "no" | "undecided",
                 updated_at: new Date().toISOString(),
@@ -107,15 +106,15 @@ export function VerdictSection({
 
           <VerdictReasoning
             reasoning={verdict.reasoning || ""}
-            onReasoningChange={(reasoning: string) =>
+            onReasoningChange={(reasoning) =>
               onVerdictUpdate({
                 reasoning,
                 updated_at: new Date().toISOString(),
               })
             }
           />
-        </CardContent>
+        </div>
       )}
-    </Card>
+    </div>
   );
 }

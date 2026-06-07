@@ -1,8 +1,7 @@
 import { Listing } from "@/types/listing";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Edit, Trash2 } from "lucide-react";
+import { ExternalLink, Edit3, Trash2 } from "lucide-react";
 
 interface ListingDetailProps {
   listing: Listing;
@@ -11,11 +10,11 @@ interface ListingDetailProps {
 }
 
 const statusColors: Record<string, string> = {
-  new: "bg-gray-500",
-  to_view: "bg-blue-500",
-  viewed: "bg-green-500",
-  archived: "bg-gray-400",
-  shortlisted: "bg-yellow-500",
+  new: "bg-amber-100 text-amber-800 border-amber-200",
+  to_view: "bg-blue-100 text-blue-800 border-blue-200",
+  viewed: "bg-emerald-100 text-emerald-800 border-emerald-200",
+  archived: "bg-stone-100 text-stone-500 border-stone-200",
+  shortlisted: "bg-violet-100 text-violet-800 border-violet-200",
 };
 
 const statusLabels: Record<string, string> = {
@@ -26,71 +25,85 @@ const statusLabels: Record<string, string> = {
   shortlisted: "Shortlisted",
 };
 
-export function ListingDetail({ listing, onEdit, onDelete }: ListingDetailProps) {
-  const statusColor = statusColors[listing.status] || "bg-gray-500";
+export function ListingDetail({
+  listing,
+  onEdit,
+  onDelete,
+}: ListingDetailProps) {
+  const statusColor =
+    statusColors[listing.status] || "bg-stone-100 text-stone-500";
   const statusLabel = statusLabels[listing.status] || listing.status;
 
-  const handleOpenSource = () => {
-    window.open(listing.source_url, "_blank");
-  };
-
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-2xl">{listing.title}</CardTitle>
-          <Badge className={`${statusColor} text-white`}>{statusLabel}</Badge>
+    <div className="space-y-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-lg font-semibold leading-snug">
+            {listing.title}
+          </h2>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            {listing.source_platform || "No source"}
+          </p>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm text-muted-foreground">Price</p>
-            <p className="text-2xl font-semibold">${listing.price.toLocaleString()}</p>
-          </div>
-          {listing.area && (
-            <div>
-              <p className="text-sm text-muted-foreground">Area</p>
-              <p className="text-lg">{listing.area}</p>
-            </div>
-          )}
-        </div>
+        <Badge
+          variant="outline"
+          className={`shrink-0 font-medium ${statusColor}`}
+        >
+          {statusLabel}
+        </Badge>
+      </div>
 
-        <div className="space-y-2">
-          <div>
-            <p className="text-sm text-muted-foreground">Source Platform</p>
-            <p>{listing.source_platform || "Not specified"}</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Source URL</p>
-            <Button
-              variant="link"
-              className="p-0 h-auto text-left"
-              onClick={handleOpenSource}
-            >
-              <span className="truncate block max-w-md">
-                {listing.source_url}
-              </span>
-              <ExternalLink className="inline ml-2 h-4 w-4" />
-            </Button>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Created</p>
-            <p>{new Date(listing.created_at).toLocaleDateString()}</p>
-          </div>
-        </div>
+      <div className="flex items-baseline gap-1">
+        <span className="text-3xl font-bold tracking-tight text-primary">
+          ${listing.price.toLocaleString()}
+        </span>
+        <span className="text-sm text-muted-foreground">/month</span>
+      </div>
 
-        <div className="flex gap-2 pt-4 border-t">
-          <Button onClick={onEdit} variant="outline">
-            <Edit className="mr-2 h-4 w-4" />
-            Edit
-          </Button>
-          <Button onClick={onDelete} variant="destructive">
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-sm text-muted-foreground">
+        {listing.area && (
+          <span className="flex items-center gap-1.5">
+            <span className="h-1 w-1 rounded-full bg-muted-foreground/40" />
+            {listing.area}
+          </span>
+        )}
+        <span className="flex items-center gap-1.5">
+          <span className="h-1 w-1 rounded-full bg-muted-foreground/40" />
+          Added {new Date(listing.created_at).toLocaleDateString()}
+        </span>
+      </div>
+
+      {listing.source_url && (
+        <button
+          type="button"
+          onClick={() => window.open(listing.source_url, "_blank")}
+          className="inline-flex items-center gap-1.5 text-sm text-primary/80 hover:text-primary transition-colors"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+          View source
+        </button>
+      )}
+
+      <div className="flex gap-2 pt-2">
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={onEdit}
+          className="h-8 gap-1.5"
+        >
+          <Edit3 className="h-3.5 w-3.5" />
+          Edit
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={onDelete}
+          className="h-8 gap-1.5 text-destructive hover:text-destructive"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          Delete
+        </Button>
+      </div>
+    </div>
   );
 }
