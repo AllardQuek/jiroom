@@ -8,6 +8,7 @@ interface VerdictState {
   updateVerdict: (id: string, updates: Partial<Verdict>) => void;
   deleteVerdict: (id: string) => void;
   getVerdict: (id: string) => Verdict | undefined;
+  getVerdictByListingId: (listingId: string) => Verdict | undefined;
 }
 
 export const useVerdictStore = create<VerdictState>()(
@@ -27,6 +28,8 @@ export const useVerdictStore = create<VerdictState>()(
           verdicts: state.verdicts.filter((verdict) => verdict.id !== id),
         })),
       getVerdict: (id) => get().verdicts.find((verdict) => verdict.id === id),
+      getVerdictByListingId: (listingId) =>
+        get().verdicts.find((verdict) => verdict.listing_id === listingId),
     }),
     {
       name: "verdict-storage",

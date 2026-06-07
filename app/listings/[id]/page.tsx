@@ -4,15 +4,18 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useListingStore } from "@/store/listingStore";
 import { useViewingStore } from "@/store/viewingStore";
+import { useVerdictStore } from "@/store/verdictStore";
 import { ListingDetail } from "@/components/listings/ListingDetail";
 import { EditListingForm } from "@/components/listings/EditListingForm";
 import { DeleteConfirmationDialog } from "@/components/listings/DeleteConfirmationDialog";
 import { ViewingSection } from "@/components/viewing/ViewingSection";
 import { InlineNotes } from "@/components/notes/InlineNotes";
 import { NotesSection } from "@/components/notes/NotesSection";
+import { VerdictSection } from "@/components/verdict/VerdictSection";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { notFound } from "next/navigation";
 import { Viewing } from "@/types/listing";
+import { Verdict } from "@/types/verdict";
 
 export default function ListingDetailPage({
   params,
@@ -26,6 +29,9 @@ export default function ListingDetailPage({
   const getViewingByListingId = useViewingStore((state) => state.getViewingByListingId);
   const addViewing = useViewingStore((state) => state.addViewing);
   const updateViewing = useViewingStore((state) => state.updateViewing);
+  const getVerdictByListingId = useVerdictStore((state) => state.getVerdictByListingId);
+  const addVerdict = useVerdictStore((state) => state.addVerdict);
+  const updateVerdict = useVerdictStore((state) => state.updateVerdict);
   const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
 
   // Resolve params on mount
@@ -35,6 +41,7 @@ export default function ListingDetailPage({
 
   const listing = resolvedParams ? listings.find((l) => l.id === resolvedParams.id) : null;
   const viewing = listing ? (getViewingByListingId(listing.id) ?? null) : null;
+  const verdict = listing ? (getVerdictByListingId(listing.id) ?? null) : null;
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -75,6 +82,16 @@ export default function ListingDetailPage({
     addViewing(newViewing);
   };
 
+  const handleVerdictUpdate = (updates: Partial<Verdict>) => {
+    if (verdict) {
+      updateVerdict(verdict.id, updates);
+    }
+  };
+
+  const handleVerdictCreate = (newVerdict: Verdict) => {
+    addVerdict(newVerdict);
+  };
+
   return (
     <div className="p-4 space-y-4">
       <ListingDetail
@@ -94,6 +111,13 @@ export default function ListingDetailPage({
         listingId={listing.id}
         onViewingUpdate={handleViewingUpdate}
         onViewingCreate={handleViewingCreate}
+      />
+
+      <VerdictSection
+        verdict={verdict}
+        listingId={listing.id}
+        onVerdictUpdate={handleVerdictUpdate}
+        onVerdictCreate={handleVerdictCreate}
       />
 
       <NotesSection
