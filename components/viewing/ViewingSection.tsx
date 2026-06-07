@@ -72,7 +72,6 @@ export function ViewingSection({
               onSubmit={(data) => {
                 const newViewing: Viewing = {
                   id: crypto.randomUUID(),
-                  listing_id: listingId,
                   ...data,
                   created_at: new Date().toISOString(),
                 };
