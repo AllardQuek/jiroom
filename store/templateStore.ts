@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Template } from "@/types/evaluation";
+import { defaultTemplate } from "@/lib/data/defaultTemplate";
 
 interface TemplateState {
   templates: Template[];
@@ -8,6 +9,7 @@ interface TemplateState {
   updateTemplate: (id: string, updates: Partial<Template>) => void;
   deleteTemplate: (id: string) => void;
   getTemplate: (id: string) => Template | undefined;
+  initializeTemplates: () => void;
 }
 
 export const useTemplateStore = create<TemplateState>()(
@@ -27,6 +29,12 @@ export const useTemplateStore = create<TemplateState>()(
           templates: state.templates.filter((template) => template.id !== id),
         })),
       getTemplate: (id) => get().templates.find((template) => template.id === id),
+      initializeTemplates: () => {
+        const { templates } = get();
+        if (templates.length === 0) {
+          set({ templates: [defaultTemplate] });
+        }
+      },
     }),
     {
       name: "template-storage",
