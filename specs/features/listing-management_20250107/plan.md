@@ -70,7 +70,7 @@
 - [x] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Status Management
-- [~] Task: Implement quick status change
+- [x] Task: Implement quick status change [f7759b9]
     - [x] Add status dropdown/buttons to ListingCard
     - [x] Implement optimistic UI updates
     - [x] Add status change confirmation (optional)
