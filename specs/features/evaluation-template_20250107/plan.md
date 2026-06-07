@@ -51,18 +51,18 @@
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Criteria Form Component
-- [ ] Task: Create CriteriaForm component
-    - [ ] Create components/template/CriteriaForm.tsx
-    - [ ] Implement form with React Hook Form
-    - [ ] Add fields: name, description, type, category, weight
-    - [ ] Add conditional options field for select type
-    - [ ] Integrate Zod validation
-- [ ] Task: Create CriteriaItem component
-    - [ ] Create components/template/CriteriaItem.tsx
-    - [ ] Display individual criteria
-    - [ ] Show type, weight, category indicators
-    - [ ] Add edit/delete actions
-    - [ ] Add up/down buttons for reordering
+- [x] Task: Create CriteriaForm component [42696bf]
+    - [x] Create components/template/CriteriaForm.tsx
+    - [x] Implement form with React Hook Form
+    - [x] Add fields: name, description, type, category, weight
+    - [x] Add conditional options field for select type
+    - [x] Integrate Zod validation
+- [x] Task: Create CriteriaItem component [42696bf]
+    - [x] Create components/template/CriteriaItem.tsx
+    - [x] Display individual criteria
+    - [x] Show type, weight, category indicators
+    - [x] Add edit/delete actions
+    - [x] Add up/down buttons for reordering
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Page Integration
