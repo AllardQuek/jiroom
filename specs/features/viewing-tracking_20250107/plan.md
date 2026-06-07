@@ -9,11 +9,11 @@
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Viewing Store
-- [ ] Task: Create viewing store
-    - [ ] Create store/viewingStore.ts
-    - [ ] Define ViewingState interface
-    - [ ] Implement CRUD operations (add, update, delete, get)
-    - [ ] Add localStorage persistence
+- [x] Task: Create viewing store [a4c4a21]
+    - [x] Create store/viewingStore.ts
+    - [x] Define ViewingState interface
+    - [x] Implement CRUD operations (add, update, delete, get)
+    - [x] Add localStorage persistence
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Zod Validation Schemas
