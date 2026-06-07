@@ -1,3 +1,5 @@
+"use client";
+
 import { useComparisonStore } from "@/store/comparisonStore";
 import { useListingStore } from "@/store/listingStore";
 import { ComparisonColumn } from "./ComparisonColumn";
