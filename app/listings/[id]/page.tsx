@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useListingStore } from "@/store/listingStore";
 import { ListingDetail } from "@/components/listings/ListingDetail";
@@ -12,15 +12,27 @@ import { notFound } from "next/navigation";
 export default function ListingDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const router = useRouter();
   const listings = useListingStore((state) => state.listings);
   const deleteListing = useListingStore((state) => state.deleteListing);
-  const listing = listings.find((l) => l.id === params.id);
+  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
+
+  // Resolve params on mount
+  useEffect(() => {
+    params.then(setResolvedParams);
+  }, [params]);
+
+  const listing = resolvedParams ? listings.find((l) => l.id === resolvedParams.id) : null;
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  // Show loading state while params are resolving
+  if (!resolvedParams) {
+    return <div className="p-4">Loading...</div>;
+  }
 
   if (!listing) {
     notFound();
