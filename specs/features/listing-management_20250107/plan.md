@@ -70,14 +70,17 @@
 - [x] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Status Management
-- [ ] Task: Implement quick status change
-    - [ ] Add status dropdown/buttons to ListingCard
-    - [ ] Implement optimistic UI updates
-    - [ ] Add status change confirmation (optional)
-- [ ] Task: Add status color coding
-    - [ ] Define status color palette
-    - [ ] Apply colors to status indicators
-    - [ ] Ensure accessibility (contrast)
+- [~] Task: Implement quick status change
+    - [x] Add status dropdown/buttons to ListingCard
+    - [x] Implement optimistic UI updates
+    - [x] Add status change confirmation (optional)
+- [x] Task: Add status color coding [a41196f]
+    - [x] Define status color palette
+    - [x] Apply colors to status indicators
+    - [x] Ensure accessibility (contrast)
+- [x] Task: Install missing dependencies [ae2a0cd]
+    - [x] Add @hookform/resolvers to package.json
+    - [x] User must run: npm install
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Verification
