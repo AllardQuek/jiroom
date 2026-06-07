@@ -25,12 +25,12 @@
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Viewing Section Component
-- [ ] Task: Create ViewingSection component
-    - [ ] Create components/viewing/ViewingSection.tsx
-    - [ ] Display viewing status prominently
-    - [ ] Display scheduled date/time when available
-    - [ ] Display viewing notes
-    - [ ] Add collapsible functionality
+- [x] Task: Create ViewingSection component [e1ca08f]
+    - [x] Create components/viewing/ViewingSection.tsx
+    - [x] Display viewing status prominently
+    - [x] Display scheduled date/time when available
+    - [x] Display viewing notes
+    - [x] Add collapsible functionality
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Schedule Viewing Form
