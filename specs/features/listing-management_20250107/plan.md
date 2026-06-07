@@ -44,12 +44,12 @@
 - [x] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Detail View Component
-- [ ] Task: Create ListingDetail component
-    - [ ] Create components/listings/ListingDetail.tsx
-    - [ ] Display all listing fields
-    - [ ] Add "Open Source" button
-    - [ ] Add Edit and Delete buttons
-    - [ ] Add status management UI
+- [x] Task: Create ListingDetail component [a41196f]
+    - [x] Create components/listings/ListingDetail.tsx
+    - [x] Display all listing fields
+    - [x] Add "Open Source" button
+    - [x] Add Edit and Delete buttons
+    - [x] Add status management UI
 - [ ] Task: Create DeleteConfirmation dialog
     - [ ] Use shadcn/ui Dialog component
     - [ ] Implement confirmation logic
