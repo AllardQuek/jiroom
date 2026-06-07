@@ -34,13 +34,16 @@
 - [x] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Verification
-- [x] Task: Verify all routes work
-    - [x] Test / route redirects to /listings
-    - [x] Test /listings route
-    - [x] Test /listings/[id] dynamic route
-    - [x] Test /compare route
-    - [x] Test /template route
-- [x] Task: Verify TypeScript compilation
-    - [x] Run `npx tsc --noEmit`
-    - [x] Verify no type errors
-- [x] Task: User Manual Verification 'Phase 4'
+- [ ] Task: Verify all routes work
+    - [ ] Test / route redirects to /listings
+    - [ ] Test /listings route
+    - [ ] Test /listings/[id] dynamic route
+    - [ ] Test /compare route
+    - [ ] Test /template route
+- [ ] Task: Verify TypeScript compilation
+    - [ ] Run `npx tsc --noEmit`
+    - [ ] Verify no type errors
+- [ ] Task: Verify dev server starts
+    - [ ] Run `npm run dev`
+    - [ ] Verify server starts without errors
+- [ ] Task: User Manual Verification 'Phase 4'
