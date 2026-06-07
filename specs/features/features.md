@@ -15,7 +15,7 @@ This file tracks all features in the Rental Viewing Evaluator project.
 
 ## MVP Features (User-Facing Functionality)
 
-- [~] **Feature: Listing Management** (In Progress - Verification Pending)
+- [x] **Feature: Listing Management**
   *Link: [./listing-management_20250107/](./listing-management_20250107/)*
 - [~] **Feature: Evaluation Template**
   *Link: [./evaluation-template_20250107/](./evaluation-template_20250107/)*
