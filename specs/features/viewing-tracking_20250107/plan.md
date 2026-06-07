@@ -1,11 +1,11 @@
 # Implementation Plan: Viewing Tracking
 
 ## Phase 1: Type Updates
-- [ ] Task: Update Viewing type definition
-    - [ ] Update status field in types/listing.ts to 5 types
-    - [ ] Make scheduled_date optional
-    - [ ] Add created_at field
-    - [ ] Verify TypeScript compilation
+- [x] Task: Update Viewing type definition [58d4f1b]
+    - [x] Update status field in types/listing.ts to 5 types
+    - [x] Make scheduled_date optional
+    - [x] Add created_at field
+    - [x] Verify TypeScript compilation
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Viewing Store
