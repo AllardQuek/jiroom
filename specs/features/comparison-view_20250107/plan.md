@@ -1,12 +1,12 @@
 # Implementation Plan: Comparison View
 
 ## Phase 1: Comparison Store
-- [ ] Task: Create comparison store
-    - [ ] Create store/comparisonStore.ts
-    - [ ] Define ComparisonState interface
-    - [ ] Implement add/remove/clear actions
-    - [ ] Add localStorage persistence
-    - [ ] Add max limit validation (3 listings)
+- [x] Task: Create comparison store [ceff1cf]
+    - [x] Create store/comparisonStore.ts
+    - [x] Define ComparisonState interface
+    - [x] Implement add/remove/clear actions
+    - [x] Add localStorage persistence
+    - [x] Add max limit validation (3 listings)
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Listing Selector
