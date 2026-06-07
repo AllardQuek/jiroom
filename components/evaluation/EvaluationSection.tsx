@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { Check, Circle, Star } from "lucide-react";
+import { Check, Circle, Star, Trash2, Minus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -52,6 +51,9 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   const updateEvaluation = useEvaluationStore(
     (state) => state.updateEvaluation
   );
+  const deleteEvaluation = useEvaluationStore(
+    (state) => state.deleteEvaluation
+  );
 
   useEffect(() => {
     initializeTemplates();
@@ -88,11 +90,13 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
     const now = new Date().toISOString();
 
     if (evaluation) {
+      const responsesWithUpdate = {
+        ...evaluation.responses,
+        [criterionId]: value,
+      };
+
       updateEvaluation(evaluation.id, {
-        responses: {
-          ...evaluation.responses,
-          [criterionId]: value,
-        },
+        responses: responsesWithUpdate,
         updated_at: now,
       });
       return;
@@ -112,22 +116,74 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
     addEvaluation(newEvaluation);
   };
 
+  const clearResponse = (criterionId: string) => {
+    if (!evaluation) {
+      return;
+    }
+
+    const nextResponses = { ...evaluation.responses };
+    delete nextResponses[criterionId];
+
+    if (Object.keys(nextResponses).length === 0) {
+      deleteEvaluation(evaluation.id);
+      return;
+    }
+
+    updateEvaluation(evaluation.id, {
+      responses: nextResponses,
+      updated_at: new Date().toISOString(),
+    });
+  };
+
   const renderInput = (criterion: Criterion) => {
     const value = responses[criterion.id];
 
     switch (criterion.type) {
       case "checkbox":
         return (
-          <Checkbox
-            checked={value === "true" || value === 1}
-            onCheckedChange={(checked) =>
-              saveResponse(criterion.id, checked ? "true" : "false")
-            }
-          />
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant={value === "true" ? "default" : "outline"}
+              size="sm"
+              className="gap-2"
+              onClick={() => saveResponse(criterion.id, "true")}
+            >
+              Yes
+            </Button>
+            <Button
+              type="button"
+              variant={value === "false" ? "default" : "outline"}
+              size="sm"
+              className="gap-2"
+              onClick={() => saveResponse(criterion.id, "false")}
+            >
+              No
+            </Button>
+            <Button
+              type="button"
+              variant={value === "na" ? "default" : "ghost"}
+              size="sm"
+              className="gap-2 text-muted-foreground"
+              onClick={() => saveResponse(criterion.id, "na")}
+            >
+              N/A
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => clearResponse(criterion.id)}
+              aria-label={`Clear ${criterion.name}`}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
         );
       case "rating":
         return (
-          <div className="flex gap-1">
+          <div className="flex flex-wrap items-center gap-1.5">
             {[1, 2, 3, 4, 5].map((rating) => (
               <Button
                 key={rating}
@@ -136,6 +192,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                 size="icon"
                 className="h-8 w-8"
                 onClick={() => saveResponse(criterion.id, rating)}
+                aria-label={`Rate ${criterion.name} ${rating} out of 5`}
               >
                 <Star
                   className={
@@ -144,48 +201,111 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                 />
               </Button>
             ))}
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-8 gap-2 px-2 text-muted-foreground"
+              onClick={() => clearResponse(criterion.id)}
+            >
+              <Minus className="h-4 w-4" />
+              Clear
+            </Button>
           </div>
         );
       case "number":
         return (
-          <Input
-            type="number"
-            value={typeof value === "number" ? value : ""}
-            onChange={(event) =>
-              saveResponse(criterion.id, Number(event.target.value))
-            }
-            className="max-w-40"
-          />
+          <div className="flex items-center gap-2">
+            <Input
+              type="number"
+              value={typeof value === "number" ? value : ""}
+              onChange={(event) => {
+                const nextValue = event.target.value;
+                if (nextValue === "") {
+                  clearResponse(criterion.id);
+                  return;
+                }
+
+                saveResponse(criterion.id, Number(nextValue));
+              }}
+              className="max-w-40"
+              placeholder={
+                criterion.name.toLowerCase().includes("commute")
+                  ? "Minutes"
+                  : ""
+              }
+            />
+            {criterion.name.toLowerCase().includes("commute") && (
+              <Badge variant="secondary" className="h-8 px-2">
+                min
+              </Badge>
+            )}
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-8 gap-2 px-2 text-muted-foreground"
+              onClick={() => clearResponse(criterion.id)}
+            >
+              Clear
+            </Button>
+          </div>
         );
       case "select":
         return (
-          <Select
-            value={typeof value === "string" ? value : ""}
-            onValueChange={(selectedValue) =>
-              saveResponse(criterion.id, selectedValue)
-            }
-          >
-            <SelectTrigger className="max-w-56">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {(criterion.options ?? []).map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2">
+            <Select
+              value={typeof value === "string" ? value : ""}
+              onValueChange={(selectedValue) =>
+                saveResponse(criterion.id, selectedValue)
+              }
+            >
+              <SelectTrigger className="max-w-56">
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {(criterion.options ?? []).map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="h-8 gap-2 px-2 text-muted-foreground"
+              onClick={() => clearResponse(criterion.id)}
+            >
+              Clear
+            </Button>
+          </div>
         );
       case "text":
       default:
         return (
-          <Textarea
-            value={typeof value === "string" ? value : ""}
-            onChange={(event) => saveResponse(criterion.id, event.target.value)}
-            placeholder="Add notes"
-            className="min-h-20"
-          />
+          <div className="space-y-2">
+            <Textarea
+              value={typeof value === "string" ? value : ""}
+              onChange={(event) =>
+                saveResponse(criterion.id, event.target.value)
+              }
+              placeholder="Add notes"
+              className="min-h-20"
+            />
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8 gap-2 px-2 text-muted-foreground"
+                onClick={() => clearResponse(criterion.id)}
+              >
+                Clear
+              </Button>
+            </div>
+          </div>
         );
     }
   };
@@ -215,10 +335,13 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-5">
+      <CardContent className="space-y-6">
         {Object.entries(groupedCriteria).map(([category, criteria]) => (
-          <section key={category} className="space-y-3">
-            <div className="flex items-center justify-between border-b pb-2">
+          <section
+            key={category}
+            className="space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4"
+          >
+            <div className="flex items-center justify-between border-b border-border/60 pb-2">
               <h3 className="text-sm font-bold">{category}</h3>
               <span className="text-xs text-muted-foreground">
                 {
@@ -230,14 +353,14 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
               </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               {criteria.map((criterion) => {
                 const answered = hasResponse(responses[criterion.id]);
 
                 return (
                   <div
                     key={criterion.id}
-                    className="grid gap-3 rounded-lg border bg-background p-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center"
+                    className="grid gap-4 rounded-xl border border-border/60 bg-background p-4 shadow-sm md:grid-cols-[minmax(0,1fr)_auto] md:items-center"
                   >
                     <div className="min-w-0">
                       <div className="flex items-start gap-2">
