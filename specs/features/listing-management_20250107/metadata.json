@@ -1,0 +1,8 @@
+{
+  "feature_id": "listing-management_20250107",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2025-01-07T11:08:00Z",
+  "updated_at": "2025-01-07T11:08:00Z",
+  "description": "Enable users to create, edit, and manage room listings from property portal URLs"
+}

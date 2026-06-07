@@ -1,0 +1,78 @@
+# Implementation Plan: Notes & Comments
+
+## Phase 1: Type Updates
+- [ ] Task: Update Listing type
+    - [ ] Add notes field to Listing interface in types/listing.ts
+    - [ ] Verify TypeScript compilation
+- [ ] Task: Update Viewing type
+    - [ ] Add notes_updated_at field to Viewing interface in types/listing.ts
+    - [ ] Verify TypeScript compilation
+- [ ] Task: User Manual Verification 'Phase 1'
+
+## Phase 2: Store Updates
+- [ ] Task: Update listing store
+    - [ ] Ensure updateListing action handles notes field
+    - [ ] Test notes persistence
+- [ ] Task: User Manual Verification 'Phase 2'
+
+## Phase 3: Bullet Parser
+- [ ] Task: Create BulletParser component
+    - [ ] Create components/notes/BulletParser.tsx
+    - [ ] Implement markdown-style bullet parsing
+    - [ ] Render bullets as visual bullet points
+    - [ ] Preserve original text for editing
+- [ ] Task: User Manual Verification 'Phase 3'
+
+## Phase 4: Notes Editor
+- [ ] Task: Create NotesEditor component
+    - [ ] Create components/notes/NotesEditor.tsx
+    - [ ] Implement textarea for notes input
+    - [ ] Add bullet formatting hint
+    - [ ] Add save/cancel actions
+    - [ ] Add timestamp display
+- [ ] Task: User Manual Verification 'Phase 4'
+
+## Phase 5: Inline Notes
+- [ ] Task: Create InlineNotes component
+    - [ ] Create components/notes/InlineNotes.tsx
+    - [ ] Display notes with bullet parsing
+    - [ ] Add edit button
+    - [ ] Add collapsible functionality
+- [ ] Task: User Manual Verification 'Phase 5'
+
+## Phase 6: Dedicated Notes Section
+- [ ] Task: Create NotesSection component
+    - [ ] Create components/notes/NotesSection.tsx
+    - [ ] Display all notes grouped by source
+    - [ ] Show timestamps for each note
+    - [ ] Add edit functionality
+    - [ ] Add collapsible functionality
+- [ ] Task: User Manual Verification 'Phase 6'
+
+## Phase 7: Page Integration
+- [ ] Task: Integrate listing notes
+    - [ ] Update listing detail page
+    - [ ] Add inline notes to listing section
+    - [ ] Add NotesSection to page
+- [ ] Task: Integrate viewing notes
+    - [ ] Update viewing section
+    - [ ] Add inline notes to viewing section
+    - [ ] Ensure viewing notes use bullet parser
+- [ ] Task: User Manual Verification 'Phase 7'
+
+## Phase 8: Verification
+- [ ] Task: Verify TypeScript compilation
+    - [ ] Run npx tsc --noEmit
+    - [ ] Verify no type errors
+- [ ] Task: Verify functionality
+    - [ ] Test listing notes with bullets
+    - [ ] Test viewing notes with bullets
+    - [ ] Test inline notes display
+    - [ ] Test dedicated notes section
+    - [ ] Test localStorage persistence
+    - [ ] Test timestamp display
+- [ ] Task: Verify mobile responsiveness
+    - [ ] Test notes input on mobile
+    - [ ] Test bullet typing on mobile
+    - [ ] Test collapsible notes on mobile
+- [ ] Task: User Manual Verification 'Phase 8'
