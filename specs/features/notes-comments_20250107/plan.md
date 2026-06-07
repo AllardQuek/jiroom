@@ -16,11 +16,11 @@
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Bullet Parser
-- [ ] Task: Create BulletParser component
-    - [ ] Create components/notes/BulletParser.tsx
-    - [ ] Implement markdown-style bullet parsing
-    - [ ] Render bullets as visual bullet points
-    - [ ] Preserve original text for editing
+- [x] Task: Create BulletParser component [8d5a3af]
+    - [x] Create components/notes/BulletParser.tsx
+    - [x] Implement markdown-style bullet parsing
+    - [x] Render bullets as visual bullet points
+    - [x] Preserve original text for editing
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Notes Editor
