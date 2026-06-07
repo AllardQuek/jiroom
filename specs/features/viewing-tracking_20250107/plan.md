@@ -17,11 +17,11 @@
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Zod Validation Schemas
-- [ ] Task: Create viewing validation schema
-    - [ ] Create lib/schemas/viewingSchema.ts
-    - [ ] Define validation for scheduled_date
-    - [ ] Define validation for status
-    - [ ] Define validation for notes
+- [x] Task: Create viewing validation schema [896abf9]
+    - [x] Create lib/schemas/viewingSchema.ts
+    - [x] Define validation for scheduled_date
+    - [x] Define validation for status
+    - [x] Define validation for notes
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Viewing Section Component
