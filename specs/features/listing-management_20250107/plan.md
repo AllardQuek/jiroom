@@ -9,11 +9,11 @@
 ## Phase 2: Component Structure Setup
 - [x] Task: Create components directory [22276af]
     - [x] Create components/listings/ directory
-- [ ] Task: Create ListingCard component
-    - [ ] Create components/listings/ListingCard.tsx
-    - [ ] Implement card layout with Title, Price, Status, Source URL
-    - [ ] Add click handler for navigation to detail view
-    - [ ] Add status color coding
+- [x] Task: Create ListingCard component [cfca322]
+    - [x] Create components/listings/ListingCard.tsx
+    - [x] Implement card layout with Title, Price, Status, Source URL
+    - [x] Add click handler for navigation to detail view
+    - [x] Add status color coding
 - [ ] Task: Create ListingList component
     - [ ] Create components/listings/ListingList.tsx
     - [ ] Implement grid/card layout for multiple listings
