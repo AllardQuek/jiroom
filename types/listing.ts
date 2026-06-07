@@ -5,7 +5,7 @@ export interface Listing {
   title: string;
   price: number;
   area: string;
-  status: "saved" | "viewed" | "rejected" | "shortlisted";
+  status: "new" | "to_view" | "viewed" | "archived" | "shortlisted";
   created_at: string;
 }
 
