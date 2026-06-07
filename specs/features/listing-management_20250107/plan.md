@@ -1,9 +1,9 @@
 # Implementation Plan: Listing Management
 
 ## Phase 1: Type Updates
-- [ ] Task: Update Listing type definition
-    - [ ] Update status type in types/listing.ts
-    - [ ] Verify TypeScript compilation
+- [x] Task: Update Listing type definition [e42d0b7]
+    - [x] Update status type in types/listing.ts
+    - [x] Verify TypeScript compilation
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Component Structure Setup
