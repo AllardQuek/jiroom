@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { Listing } from "@/types/listing";
 
 interface ListingState {
@@ -30,6 +30,7 @@ export const useListingStore = create<ListingState>()(
     }),
     {
       name: "listing-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
