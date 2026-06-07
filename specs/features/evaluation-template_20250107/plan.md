@@ -1,11 +1,11 @@
 # Implementation Plan: Evaluation Template
 
 ## Phase 1: Type Updates
-- [ ] Task: Update Criterion type definition
-    - [ ] Update type field in types/evaluation.ts to 5 types
-    - [ ] Add category field to Criterion interface
-    - [ ] Add options field to Criterion interface (for select type)
-    - [ ] Verify TypeScript compilation
+- [x] Task: Update Criterion type definition [34f6ef0]
+    - [x] Update type field in types/evaluation.ts to 5 types
+    - [x] Add category field to Criterion interface
+    - [x] Add options field to Criterion interface (for select type)
+    - [x] Verify TypeScript compilation
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Default Template Data
