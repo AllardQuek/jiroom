@@ -86,7 +86,10 @@ export function ScheduleViewingForm({
             )}
           />
 
-          <div className="flex gap-2">
+          <div className="flex flex-row-reverse gap-2">
+            <Button type="submit" disabled={isSubmitting} className="flex-1">
+              {isSubmitting ? "Saving..." : "Schedule Viewing"}
+            </Button>
             <Button
               type="button"
               variant="outline"
@@ -94,9 +97,6 @@ export function ScheduleViewingForm({
               className="flex-1"
             >
               Cancel
-            </Button>
-            <Button type="submit" disabled={isSubmitting} className="flex-1">
-              {isSubmitting ? "Saving..." : "Schedule Viewing"}
             </Button>
           </div>
         </form>

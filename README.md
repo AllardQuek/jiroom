@@ -58,6 +58,31 @@ npm run build
 npm start
 ```
 
+## Deploying To Vercel
+
+This app is ready for a standard Next.js deployment on Vercel.
+
+1. Push the repository to GitHub, GitLab, or Bitbucket.
+2. Create a new project in Vercel and import this repository.
+3. Keep the default settings Vercel detects:
+   - Framework preset: `Next.js`
+   - Build command: `npm run build`
+   - Output directory: leave empty
+4. Add any environment variables if you introduce them later. The current app does not require any.
+5. Deploy the project.
+
+For local verification before you push, run:
+
+```bash
+npm run build
+```
+
+If you want to mirror Vercel more closely in a local preview, use:
+
+```bash
+npm run build && npm start
+```
+
 ## Project Structure
 
 ```

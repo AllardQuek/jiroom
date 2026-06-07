@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
@@ -10,19 +10,17 @@ interface ScoreDisplayProps {
 }
 
 export function ScoreDisplay({ listingId }: ScoreDisplayProps) {
-  const evaluation = useEvaluationStore((state) => state.getEvaluationByListingId(listingId));
+  const evaluation = useEvaluationStore((state) =>
+    state.getEvaluationByListingId(listingId)
+  );
   const templates = useTemplateStore((state) => state.templates);
-  const [score, setScore] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (evaluation && templates.length > 0) {
-      // Use the first template (or could match by template_id)
-      const template = templates[0];
-      const calculatedScore = calculateScore(evaluation.responses, template);
-      setScore(calculatedScore);
-    } else {
-      setScore(null);
+  const score = useMemo(() => {
+    if (!evaluation || templates.length === 0) {
+      return null;
     }
+
+    return calculateScore(evaluation.responses, templates[0]);
   }, [evaluation, templates]);
 
   if (score === null) {

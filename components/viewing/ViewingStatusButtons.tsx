@@ -10,13 +10,13 @@ interface ViewingStatusButtonsProps {
 
 const statusConfig: Record<
   string,
-  { label: string; color: string; variant: "default" | "secondary" | "outline" }
+  { label: string; variant: "default" | "secondary" | "outline" | "destructive" }
 > = {
-  to_view: { label: "To View", color: "bg-gray-500", variant: "outline" },
-  upcoming: { label: "Upcoming", color: "bg-blue-500", variant: "default" },
-  viewed: { label: "Viewed", color: "bg-green-500", variant: "default" },
-  skipped: { label: "Skipped", color: "bg-yellow-500", variant: "secondary" },
-  cancelled: { label: "Cancelled", color: "bg-red-500", variant: "outline" },
+  to_view: { label: "To View", variant: "outline" },
+  upcoming: { label: "Upcoming", variant: "secondary" },
+  viewed: { label: "Viewed", variant: "default" },
+  skipped: { label: "Skipped", variant: "outline" },
+  cancelled: { label: "Cancelled", variant: "destructive" },
 };
 
 export function ViewingStatusButtons({
@@ -40,10 +40,10 @@ export function ViewingStatusButtons({
         return (
           <Button
             key={status}
-            variant={isActive ? "default" : "outline"}
+            variant={isActive ? config.variant : "outline"}
             size="sm"
             onClick={() => onStatusChange(status)}
-            className={isActive ? config.color : ""}
+            className={isActive ? "" : "opacity-60"}
           >
             {config.label}
           </Button>
