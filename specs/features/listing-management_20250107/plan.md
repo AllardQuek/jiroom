@@ -4,7 +4,7 @@
 - [x] Task: Update Listing type definition [e42d0b7]
     - [x] Update status type in types/listing.ts
     - [x] Verify TypeScript compilation
-- [x] Task: User Manual Verification 'Phase 1'
+- [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Component Structure Setup [checkpoint: ecfee9c]
 - [x] Task: Create components directory [22276af]
@@ -19,7 +19,7 @@
     - [x] Implement grid/card layout for multiple listings
     - [x] Integrate with useListingStore
     - [x] Add empty state message
-- [x] Task: User Manual Verification 'Phase 2'
+- [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Form Components [checkpoint: 349e811]
 - [x] Task: Create Zod validation schema [685912b]
@@ -41,7 +41,7 @@
     - [x] Pre-populate with existing data
     - [x] Integrate Zod validation
     - [x] Add success/error handling
-- [x] Task: User Manual Verification 'Phase 3'
+- [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Detail View Component [checkpoint: a3809c3]
 - [x] Task: Create ListingDetail component [a41196f]
@@ -54,7 +54,7 @@
     - [x] Use shadcn/ui Dialog component
     - [x] Implement confirmation logic
     - [x] Add cancel/confirm actions
-- [x] Task: User Manual Verification 'Phase 4'
+- [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Page Integration [checkpoint: f96b802]
 - [x] Task: Update listings list page [2477c10]
@@ -67,7 +67,7 @@
     - [x] Integrate ListingDetail component
     - [x] Fetch listing data from store
     - [x] Handle not-found state
-- [x] Task: User Manual Verification 'Phase 5'
+- [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Status Management [checkpoint: 4a9e3ab]
 - [x] Task: Implement quick status change [f7759b9]
@@ -81,21 +81,21 @@
 - [x] Task: Install missing dependencies [ae2a0cd]
     - [x] Add @hookform/resolvers to package.json
     - [x] User must run: npm install
-- [x] Task: User Manual Verification 'Phase 6'
+- [ ] Task: User Manual Verification 'Phase 6'
 
-## Phase 7: Verification [checkpoint: 4a89c41]
-- [x] Task: Verify TypeScript compilation [1e9d942]
-    - [x] Run npx tsc --noEmit (blocked - requires npm install)
-    - [x] Verify no type errors (blocked - requires npm install)
-- [x] Task: Verify functionality [1e9d942]
-    - [x] Test create listing flow
-    - [x] Test edit listing flow
-    - [x] Test delete listing flow
-    - [x] Test status changes
-    - [x] Test source URL button
-    - [x] Test localStorage persistence
-- [x] Task: Verify mobile responsiveness [1e9d942]
-    - [x] Test on mobile viewport
-    - [x] Verify touch targets
-    - [x] Test form on mobile
-- [x] Task: User Manual Verification 'Phase 7'
+## Phase 7: Verification
+- [ ] Task: Verify TypeScript compilation
+    - [ ] Run npx tsc --noEmit (requires npm install)
+    - [ ] Verify no type errors (requires npm install)
+- [ ] Task: Verify functionality
+    - [ ] Test create listing flow
+    - [ ] Test edit listing flow
+    - [ ] Test delete listing flow
+    - [ ] Test status changes
+    - [ ] Test source URL button
+    - [ ] Test localStorage persistence
+- [ ] Task: Verify mobile responsiveness
+    - [ ] Test on mobile viewport
+    - [ ] Verify touch targets
+    - [ ] Test form on mobile
+- [ ] Task: User Manual Verification 'Phase 7'
