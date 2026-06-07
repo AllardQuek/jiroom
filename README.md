@@ -1,0 +1,102 @@
+# Rental Room Rater
+
+A mobile-first web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, track viewing statuses, and make final decisions through visual comparison tools.
+
+## Features
+
+- **Listing Management**: Save, edit, and track room listings from property portals
+- **Evaluation Template**: Customizable evaluation criteria with weighted scoring
+- **Viewing Tracking**: Schedule viewings and track status (To View, Upcoming, Viewed, Skipped, Cancelled)
+- **Notes & Comments**: Freeform notes with bullet-style input support
+- **Verdict System**: Final decision states (Yes, Maybe, No, Undecided) with lightweight scoring
+- **Comparison View**: Side-by-side comparison of up to 3 listings
+
+## Tech Stack
+
+- **Framework**: Next.js 16.2.7 with React 19.2.4
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4
+- **UI Components**: shadcn/ui (Radix UI primitives)
+- **State Management**: Zustand 5.0.14 with localStorage persistence
+- **Forms**: React Hook Form 7.77.0 with Zod 4.4.3 validation
+- **Icons**: Lucide React 1.17.0
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/AllardQuek/rental-room-rater.git
+cd rental-room-rater
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+## Usage
+
+### Development
+
+Run the development server:
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Build
+
+Build for production:
+```bash
+npm run build
+```
+
+### Start Production Server
+
+```bash
+npm start
+```
+
+## Project Structure
+
+```
+room-rater/
+├── app/                    # Next.js App Router pages
+│   ├── listings/          # Listing pages
+│   ├── template/          # Template pages
+│   └── compare/           # Comparison page
+├── components/            # React components
+│   ├── comparison/       # Comparison feature components
+│   ├── listings/         # Listing feature components
+│   ├── notes/            # Notes feature components
+│   ├── template/         # Template feature components
+│   ├── ui/               # shadcn/ui components
+│   ├── verdict/          # Verdict feature components
+│   └── viewing/          # Viewing feature components
+├── lib/                  # Utility functions
+│   ├── schemas/          # Zod validation schemas
+│   └── utils/            # Helper functions
+├── store/                # Zustand state management
+├── types/                # TypeScript type definitions
+└── specs/                # Feature specifications
+```
+
+## Data Persistence
+
+All data is stored locally in the browser using localStorage via Zustand middleware. No authentication or backend is required for the MVP.
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## License
+
+MIT
+
+## Contributing
+
+This is a personal project. Feel free to fork and modify for your own use.
