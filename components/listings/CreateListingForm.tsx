@@ -49,6 +49,8 @@ export function CreateListingForm({ onSuccess, onCancel }: CreateListingFormProp
       const newListing = {
         id: crypto.randomUUID(),
         ...data,
+        source_platform: data.source_platform || "",
+        area: data.area || "",
         created_at: new Date().toISOString(),
       };
       addListing(newListing);
