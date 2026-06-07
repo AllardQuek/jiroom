@@ -26,11 +26,11 @@
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Comparison Table
-- [ ] Task: Create ComparisonTable component
-    - [ ] Create components/comparison/ComparisonTable.tsx
-    - [ ] Implement column layout (responsive)
-    - [ ] Add horizontal scroll for mobile
-    - [ ] Add empty state
+- [x] Task: Create ComparisonTable component [26a7719]
+    - [x] Create components/comparison/ComparisonTable.tsx
+    - [x] Implement column layout (responsive)
+    - [x] Add horizontal scroll for mobile
+    - [x] Add empty state
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Comparison Column
