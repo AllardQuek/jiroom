@@ -22,10 +22,10 @@
 - [x] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Form Components
-- [ ] Task: Create Zod validation schema
-    - [ ] Create lib/schemas/listingSchema.ts
-    - [ ] Define validation rules for all fields
-    - [ ] Test schema validation
+- [x] Task: Create Zod validation schema [685912b]
+    - [x] Create lib/schemas/listingSchema.ts
+    - [x] Define validation rules for all fields
+    - [x] Test schema validation
 - [ ] Task: Create CreateListingForm component
     - [ ] Create components/listings/CreateListingForm.tsx
     - [ ] Implement form with React Hook Form
