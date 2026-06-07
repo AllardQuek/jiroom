@@ -10,9 +10,9 @@
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Store Updates
-- [ ] Task: Update listing store
-    - [ ] Ensure updateListing action handles notes field
-    - [ ] Test notes persistence
+- [x] Task: Update listing store [no-change-needed]
+    - [x] Ensure updateListing action handles notes field
+    - [x] Test notes persistence
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Bullet Parser
