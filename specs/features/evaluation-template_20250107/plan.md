@@ -21,11 +21,11 @@
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Zod Validation Schemas
-- [ ] Task: Create template validation schema
-    - [ ] Create lib/schemas/templateSchema.ts
-    - [ ] Define validation for template fields
-    - [ ] Define validation for criteria fields
-    - [ ] Add enum validation for types and weights
+- [x] Task: Create template validation schema [7a4024b]
+    - [x] Create lib/schemas/templateSchema.ts
+    - [x] Define validation for template fields
+    - [x] Define validation for criteria fields
+    - [x] Add enum validation for types and weights
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Template List Component
