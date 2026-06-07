@@ -8,6 +8,7 @@ interface EvaluationState {
   updateEvaluation: (id: string, updates: Partial<Evaluation>) => void;
   deleteEvaluation: (id: string) => void;
   getEvaluation: (id: string) => Evaluation | undefined;
+  getEvaluationByListingId: (listingId: string) => Evaluation | undefined;
 }
 
 export const useEvaluationStore = create<EvaluationState>()(
@@ -30,6 +31,8 @@ export const useEvaluationStore = create<EvaluationState>()(
         })),
       getEvaluation: (id) =>
         get().evaluations.find((evaluation) => evaluation.id === id),
+      getEvaluationByListingId: (listingId) =>
+        get().evaluations.find((evaluation) => evaluation.listing_id === listingId),
     }),
     {
       name: "evaluation-storage",
