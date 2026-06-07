@@ -35,12 +35,12 @@
     - [x] Add form fields: Source URL, Title, Price, Area, Source Platform, Status
     - [x] Integrate Zod validation
     - [x] Add success/error handling
-- [ ] Task: Create EditListingForm component
-    - [ ] Create components/listings/EditListingForm.tsx
-    - [ ] Implement form with React Hook Form
-    - [ ] Pre-populate with existing data
-    - [ ] Integrate Zod validation
-    - [ ] Add success/error handling
+- [x] Task: Create EditListingForm component [63457fd]
+    - [x] Create components/listings/EditListingForm.tsx
+    - [x] Implement form with React Hook Form
+    - [x] Pre-populate with existing data
+    - [x] Integrate Zod validation
+    - [x] Add success/error handling
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Detail View Component
