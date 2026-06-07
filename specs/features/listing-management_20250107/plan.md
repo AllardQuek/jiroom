@@ -56,7 +56,7 @@
     - [x] Add cancel/confirm actions
 - [x] Task: User Manual Verification 'Phase 4'
 
-## Phase 5: Page Integration
+## Phase 5: Page Integration [checkpoint: f96b802]
 - [x] Task: Update listings list page [2477c10]
     - [x] Update app/listings/page.tsx
     - [x] Integrate ListingList component
@@ -67,7 +67,7 @@
     - [x] Integrate ListingDetail component
     - [x] Fetch listing data from store
     - [x] Handle not-found state
-- [ ] Task: User Manual Verification 'Phase 5'
+- [x] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Status Management
 - [ ] Task: Implement quick status change
