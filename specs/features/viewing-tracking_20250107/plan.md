@@ -51,11 +51,11 @@
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Notes Component
-- [ ] Task: Create ViewingNotes component
-    - [ ] Create components/viewing/ViewingNotes.tsx
-    - [ ] Implement text input for notes
-    - [ ] Add edit/save functionality
-    - [ ] Integrate with viewing store
+- [x] Task: Create ViewingNotes component [49c0e0d]
+    - [x] Create components/viewing/ViewingNotes.tsx
+    - [x] Implement text input for notes
+    - [x] Add edit/save functionality
+    - [x] Integrate with viewing store
 - [ ] Task: User Manual Verification 'Phase 7'
 
 ## Phase 8: Page Integration
