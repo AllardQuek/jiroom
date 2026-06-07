@@ -17,7 +17,7 @@ This file tracks all features in the Rental Viewing Evaluator project.
 
 - [x] **Feature: Listing Management**
   *Link: [./listing-management_20250107/](./listing-management_20250107/)*
-- [~] **Feature: Evaluation Template**
+- [~] **Feature: Evaluation Template** (In Progress)
   *Link: [./evaluation-template_20250107/](./evaluation-template_20250107/)*
 - [~] **Feature: Viewing Tracking**
   *Link: [./viewing-tracking_20250107/](./viewing-tracking_20250107/)*
