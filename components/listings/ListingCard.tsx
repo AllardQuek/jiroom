@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ListingSelector } from "@/components/comparison/ListingSelector";
 
 interface ListingCardProps {
   listing: Listing;
@@ -63,26 +64,29 @@ export function ListingCard({ listing }: ListingCardProps) {
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-semibold text-lg line-clamp-2">{listing.title}</h3>
-          <Select
-            value={listing.status}
-            onValueChange={(value: string) =>
-              updateListing(listing.id, { status: value as Listing["status"] })
-            }
-          >
-            <SelectTrigger
-              className={`w-32 ${statusColor} text-white border-0`}
-              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          <div className="flex gap-2">
+            <ListingSelector listingId={listing.id} />
+            <Select
+              value={listing.status}
+              onValueChange={(value: string) =>
+                updateListing(listing.id, { status: value as Listing["status"] })
+              }
             >
-              <SelectValue>{statusLabel}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="new">New</SelectItem>
-              <SelectItem value="to_view">To View</SelectItem>
-              <SelectItem value="viewed">Viewed</SelectItem>
-              <SelectItem value="archived">Archived</SelectItem>
-              <SelectItem value="shortlisted">Shortlisted</SelectItem>
-            </SelectContent>
-          </Select>
+              <SelectTrigger
+                className={`w-32 ${statusColor} text-white border-0`}
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              >
+                <SelectValue>{statusLabel}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="new">New</SelectItem>
+                <SelectItem value="to_view">To View</SelectItem>
+                <SelectItem value="viewed">Viewed</SelectItem>
+                <SelectItem value="archived">Archived</SelectItem>
+                <SelectItem value="shortlisted">Shortlisted</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <div className="space-y-1 text-sm text-muted-foreground">
           <p className="font-semibold text-foreground">

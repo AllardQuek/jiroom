@@ -12,6 +12,7 @@ import { ViewingSection } from "@/components/viewing/ViewingSection";
 import { InlineNotes } from "@/components/notes/InlineNotes";
 import { NotesSection } from "@/components/notes/NotesSection";
 import { VerdictSection } from "@/components/verdict/VerdictSection";
+import { AddToCompareButton } from "@/components/comparison/AddToCompareButton";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { notFound } from "next/navigation";
 import { Viewing } from "@/types/listing";
@@ -94,11 +95,14 @@ export default function ListingDetailPage({
 
   return (
     <div className="p-4 space-y-4">
-      <ListingDetail
-        listing={listing}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <div className="flex justify-between items-start">
+        <ListingDetail
+          listing={listing}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+        <AddToCompareButton listingId={listing.id} />
+      </div>
 
       <InlineNotes
         notes={listing.notes || ""}
