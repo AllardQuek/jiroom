@@ -27,11 +27,11 @@
 - [ ] Task: User Manual Verification 'Phase 3'
 
 ## Phase 4: Status Management
-- [ ] Task: Create VerdictStatusButtons component
-    - [ ] Create components/verdict/VerdictStatusButtons.tsx
-    - [ ] Implement 4 status buttons
-    - [ ] Add color coding for each status
-    - [ ] Add optimistic UI updates
+- [x] Task: Create VerdictStatusButtons component [952cdfe]
+    - [x] Create components/verdict/VerdictStatusButtons.tsx
+    - [x] Implement 4 status buttons
+    - [x] Add color coding for each status
+    - [x] Add optimistic UI updates
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Score Display
