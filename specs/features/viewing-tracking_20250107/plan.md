@@ -34,12 +34,12 @@
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Schedule Viewing Form
-- [ ] Task: Create ScheduleViewingForm component
-    - [ ] Create components/viewing/ScheduleViewingForm.tsx
-    - [ ] Implement date/time picker
-    - [ ] Integrate with React Hook Form
-    - [ ] Add Zod validation
-    - [ ] Add save/cancel actions
+- [x] Task: Create ScheduleViewingForm component [c2c2a62]
+    - [x] Create components/viewing/ScheduleViewingForm.tsx
+    - [x] Implement date/time picker
+    - [x] Integrate with React Hook Form
+    - [x] Add Zod validation
+    - [x] Add save/cancel actions
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Status Management
