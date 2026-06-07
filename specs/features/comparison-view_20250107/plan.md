@@ -34,13 +34,13 @@
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Comparison Column
-- [ ] Task: Create ComparisonColumn component
-    - [ ] Create components/comparison/ComparisonColumn.tsx
-    - [ ] Display listing basic info
-    - [ ] Display evaluation score
-    - [ ] Display verdict status
-    - [ ] Display viewing status
-    - [ ] Add remove button
+- [x] Task: Create ComparisonColumn component [7a909c8]
+    - [x] Create components/comparison/ComparisonColumn.tsx
+    - [x] Display listing basic info
+    - [x] Display evaluation score
+    - [x] Display verdict status
+    - [x] Display viewing status
+    - [x] Add remove button
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Comparison Row
