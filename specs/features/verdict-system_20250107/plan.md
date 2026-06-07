@@ -51,7 +51,7 @@
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Page Integration
-- [~] Task: Integrate verdict into listing detail
+- [x] Task: Integrate verdict into listing detail [7c158ed]
     - [x] Update app/listings/[id]/page.tsx
     - [x] Add VerdictSection component
     - [x] Fetch verdict data from store
