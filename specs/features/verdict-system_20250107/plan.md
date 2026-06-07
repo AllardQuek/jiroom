@@ -51,11 +51,11 @@
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Page Integration
-- [ ] Task: Integrate verdict into listing detail
-    - [ ] Update app/listings/[id]/page.tsx
-    - [ ] Add VerdictSection component
-    - [ ] Fetch verdict data from store
-    - [ ] Handle verdict not found state
+- [~] Task: Integrate verdict into listing detail
+    - [x] Update app/listings/[id]/page.tsx
+    - [x] Add VerdictSection component
+    - [x] Fetch verdict data from store
+    - [x] Handle verdict not found state
 - [ ] Task: User Manual Verification 'Phase 7'
 
 ## Phase 8: Verification
