@@ -26,12 +26,15 @@
     - [x] Create lib/schemas/listingSchema.ts
     - [x] Define validation rules for all fields
     - [x] Test schema validation
-- [ ] Task: Create CreateListingForm component
-    - [ ] Create components/listings/CreateListingForm.tsx
-    - [ ] Implement form with React Hook Form
-    - [ ] Add form fields: Source URL, Title, Price, Area, Source Platform, Status
-    - [ ] Integrate Zod validation
-    - [ ] Add success/error handling
+- [x] Task: Install @radix-ui/react-select dependency [3eb714a]
+    - [x] Added to package.json
+    - [x] User must run: npm install
+- [~] Task: Create CreateListingForm component
+    - [x] Create components/listings/CreateListingForm.tsx
+    - [x] Implement form with React Hook Form
+    - [x] Add form fields: Source URL, Title, Price, Area, Source Platform, Status
+    - [x] Integrate Zod validation
+    - [x] Add success/error handling
 - [ ] Task: Create EditListingForm component
     - [ ] Create components/listings/EditListingForm.tsx
     - [ ] Implement form with React Hook Form
