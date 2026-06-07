@@ -50,14 +50,14 @@
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Page Integration
-- [ ] Task: Integrate listing notes
-    - [ ] Update listing detail page
-    - [ ] Add inline notes to listing section
-    - [ ] Add NotesSection to page
-- [ ] Task: Integrate viewing notes
-    - [ ] Update viewing section
-    - [ ] Add inline notes to viewing section
-    - [ ] Ensure viewing notes use bullet parser
+- [x] Task: Integrate listing notes [32dad46]
+    - [x] Update listing detail page
+    - [x] Add inline notes to listing section
+    - [x] Add NotesSection to page
+- [x] Task: Integrate viewing notes [32dad46]
+    - [x] Update viewing section
+    - [x] Add inline notes to viewing section
+    - [x] Ensure viewing notes use bullet parser
 - [ ] Task: User Manual Verification 'Phase 7'
 
 ## Phase 8: Verification
