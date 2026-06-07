@@ -10,11 +10,11 @@
 - [ ] Task: User Manual Verification 'Phase 1'
 
 ## Phase 2: Listing Selector
-- [ ] Task: Create ListingSelector component
-    - [ ] Create components/comparison/ListingSelector.tsx
-    - [ ] Implement checkbox for each listing
-    - [ ] Integrate with comparison store
-    - [ ] Add visual highlight for selected listings
+- [~] Task: Create ListingSelector component
+    - [x] Create components/comparison/ListingSelector.tsx
+    - [x] Implement checkbox for each listing
+    - [x] Integrate with comparison store
+    - [x] Add visual highlight for selected listings
 - [ ] Task: User Manual Verification 'Phase 2'
 
 ## Phase 3: Add to Compare Button
