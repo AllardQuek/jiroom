@@ -41,12 +41,12 @@
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Dedicated Notes Section
-- [ ] Task: Create NotesSection component
-    - [ ] Create components/notes/NotesSection.tsx
-    - [ ] Display all notes grouped by source
-    - [ ] Show timestamps for each note
-    - [ ] Add edit functionality
-    - [ ] Add collapsible functionality
+- [x] Task: Create NotesSection component [21f2479]
+    - [x] Create components/notes/NotesSection.tsx
+    - [x] Display all notes grouped by source
+    - [x] Show timestamps for each note
+    - [x] Add edit functionality
+    - [x] Add collapsible functionality
 - [ ] Task: User Manual Verification 'Phase 6'
 
 ## Phase 7: Page Integration
