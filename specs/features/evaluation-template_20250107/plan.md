@@ -38,16 +38,16 @@
 - [ ] Task: User Manual Verification 'Phase 4'
 
 ## Phase 5: Template Editor Component
-- [ ] Task: Create TemplateEditor component
-    - [ ] Create components/template/TemplateEditor.tsx
-    - [ ] Implement template name editing
-    - [ ] Integrate with useTemplateStore
-    - [ ] Add save/cancel actions
-- [ ] Task: Create CategorySection component
-    - [ ] Create components/template/CategorySection.tsx
-    - [ ] Display criteria grouped by category
-    - [ ] Add category header
-    - [ ] Add "Add Criteria" button per category
+- [x] Task: Create TemplateEditor component [ac7371f]
+    - [x] Create components/template/TemplateEditor.tsx
+    - [x] Implement template name editing
+    - [x] Integrate with useTemplateStore
+    - [x] Add save/cancel actions
+- [x] Task: Create CategorySection component [ac7371f]
+    - [x] Create components/template/CategorySection.tsx
+    - [x] Display criteria grouped by category
+    - [x] Add category header
+    - [x] Add "Add Criteria" button per category
 - [ ] Task: User Manual Verification 'Phase 5'
 
 ## Phase 6: Criteria Form Component
