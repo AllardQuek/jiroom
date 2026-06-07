@@ -59,11 +59,11 @@
 - [ ] Task: User Manual Verification 'Phase 7'
 
 ## Phase 8: Page Integration
-- [ ] Task: Integrate viewing into listing detail
-    - [ ] Update app/listings/[id]/page.tsx
-    - [ ] Add ViewingSection component
-    - [ ] Fetch viewing data from store
-    - [ ] Handle viewing not found state
+- [x] Task: Integrate viewing into listing detail [81677ab]
+    - [x] Update app/listings/[id]/page.tsx
+    - [x] Add ViewingSection component
+    - [x] Fetch viewing data from store
+    - [x] Handle viewing not found state
 - [ ] Task: User Manual Verification 'Phase 8'
 
 ## Phase 9: Verification
