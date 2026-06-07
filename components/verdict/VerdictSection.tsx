@@ -49,7 +49,7 @@ export function VerdictSection({
           </p>
           <VerdictStatusButtons
             currentStatus="undecided"
-            onStatusChange={(status) => {
+            onStatusChange={(status: string) => {
               const newVerdict: Verdict = {
                 id: crypto.randomUUID(),
                 listing_id: listingId,
@@ -95,7 +95,7 @@ export function VerdictSection({
 
           <VerdictStatusButtons
             currentStatus={verdict.status}
-            onStatusChange={(status) =>
+            onStatusChange={(status: string) =>
               onVerdictUpdate({
                 status: status as "yes" | "maybe" | "no" | "undecided",
                 updated_at: new Date().toISOString(),
@@ -105,7 +105,7 @@ export function VerdictSection({
 
           <VerdictReasoning
             reasoning={verdict.reasoning || ""}
-            onReasoningChange={(reasoning) =>
+            onReasoningChange={(reasoning: string) =>
               onVerdictUpdate({
                 reasoning,
                 updated_at: new Date().toISOString(),
