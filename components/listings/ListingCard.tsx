@@ -15,29 +15,12 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import { format, parseISO } from "date-fns";
 import { calculateScore } from "@/lib/utils/calculateScore";
 
 interface ListingCardProps {
   listing: Listing;
   onClick?: (id: string) => void;
 }
-
-const statusColors: Record<string, string> = {
-  new: "bg-amber-100 text-amber-800 border-amber-200",
-  to_view: "bg-blue-100 text-blue-800 border-blue-200",
-  viewed: "bg-emerald-100 text-emerald-800 border-emerald-200",
-  archived: "bg-stone-100 text-stone-500 border-stone-200",
-  shortlisted: "bg-violet-100 text-violet-800 border-violet-200",
-};
-
-const statusLabels: Record<string, string> = {
-  new: "New",
-  to_view: "To View",
-  viewed: "Viewed",
-  archived: "Archived",
-  shortlisted: "Shortlisted",
-};
 
 export function ListingCard({ listing, onClick }: ListingCardProps) {
   const [showNotes, setShowNotes] = useState(false);
@@ -67,10 +50,6 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
   const handleClick = () => {
     onClick?.(listing.id);
   };
-
-  const statusColor =
-    statusColors[listing.status] || "bg-stone-100 text-stone-500";
-  const statusLabel = statusLabels[listing.status] || listing.status;
 
   const hasNotes = !!listing.notes;
 
@@ -107,29 +86,16 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
             <span className="text-xs text-muted-foreground">/mo</span>
           </div>
 
-          <Badge
-            variant="outline"
-            className={`font-medium border px-2 py-0.5 rounded-md text-xs ${statusColor}`}
-          >
-            {statusLabel}
-          </Badge>
+          {viewing?.scheduled_date && (
+            <Badge
+              variant="secondary"
+              className="font-medium px-1.5 py-0.5 rounded-md text-[10px] gap-1 leading-none"
+            >
+              <CalendarDays size={10} />
+              Scheduled
+            </Badge>
+          )}
         </div>
-
-        {viewing?.scheduled_date && (
-          <div className="bg-primary/5 rounded-lg p-2.5 flex items-center gap-2.5">
-            <div className="bg-primary/10 p-1.5 rounded-md text-primary">
-              <CalendarDays size={14} />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[10px] font-semibold text-primary uppercase leading-none mb-0.5">
-                Upcoming Viewing
-              </span>
-              <span className="text-xs font-medium">
-                {format(parseISO(viewing.scheduled_date), "MMM d, h:mm aa")}
-              </span>
-            </div>
-          </div>
-        )}
 
         {totalCount > 0 && (
           <div>

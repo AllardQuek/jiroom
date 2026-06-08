@@ -13,9 +13,6 @@ export interface Listing {
 export interface Viewing {
   id: string;
   listing_id: string;
-  scheduled_date?: string; // optional, only set when scheduled
-  status: "to_view" | "upcoming" | "viewed" | "skipped" | "cancelled";
-  notes?: string;
-  notes_updated_at?: string; // track when notes were last updated
+  scheduled_date?: string;
   created_at: string;
 }

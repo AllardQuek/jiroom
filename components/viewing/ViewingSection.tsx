@@ -1,12 +1,9 @@
 "use client";
 
 import { Viewing } from "@/types/listing";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, ChevronDown, ChevronUp, Eye } from "lucide-react";
+import { Calendar, Clock, Eye } from "lucide-react";
 import { useState } from "react";
-import { ViewingStatusButtons } from "./ViewingStatusButtons";
-import { InlineNotes } from "@/components/notes/InlineNotes";
 import { ScheduleViewingForm } from "./ScheduleViewingForm";
 
 interface ViewingSectionProps {
@@ -16,30 +13,13 @@ interface ViewingSectionProps {
   onViewingCreate: (viewing: Viewing) => void;
 }
 
-const statusLabels: Record<string, string> = {
-  to_view: "To View",
-  upcoming: "Upcoming",
-  viewed: "Viewed",
-  skipped: "Skipped",
-  cancelled: "Cancelled",
-};
-
-const statusColors: Record<string, string> = {
-  to_view: "bg-stone-100 text-stone-700 border-stone-200",
-  upcoming: "bg-blue-100 text-blue-700 border-blue-200",
-  viewed: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  skipped: "bg-amber-100 text-amber-700 border-amber-200",
-  cancelled: "bg-red-100 text-red-700 border-red-200",
-};
-
 export function ViewingSection({
   viewing,
   listingId,
   onViewingUpdate,
   onViewingCreate,
 }: ViewingSectionProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [isScheduleFormOpen, setIsScheduleFormOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -62,15 +42,15 @@ export function ViewingSection({
           </div>
         </div>
         <p className="text-sm text-muted-foreground mb-3">Not scheduled yet</p>
-        <Button size="sm" onClick={() => setIsScheduleFormOpen(true)}>
+        <Button size="sm" onClick={() => setIsFormOpen(true)}>
           <Calendar className="h-4 w-4 mr-1.5" />
           Schedule
         </Button>
-        {isScheduleFormOpen && (
+        {isFormOpen && (
           <div className="mt-4">
             <ScheduleViewingForm
               listingId={listingId}
-              onCancel={() => setIsScheduleFormOpen(false)}
+              onCancel={() => setIsFormOpen(false)}
               onSubmit={(data) => {
                 const newViewing: Viewing = {
                   id: crypto.randomUUID(),
@@ -78,7 +58,7 @@ export function ViewingSection({
                   created_at: new Date().toISOString(),
                 };
                 onViewingCreate(newViewing);
-                setIsScheduleFormOpen(false);
+                setIsFormOpen(false);
               }}
             />
           </div>
@@ -89,68 +69,60 @@ export function ViewingSection({
 
   return (
     <div className="rounded-xl bg-muted/50 p-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Eye className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">Viewing</span>
-        </div>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="h-6 w-6"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? (
-            <ChevronUp className="h-4 w-4" />
-          ) : (
-            <ChevronDown className="h-4 w-4" />
-          )}
-        </Button>
+      <div className="flex items-center gap-2 mb-3">
+        <Eye className="h-4 w-4 text-muted-foreground" />
+        <span className="text-sm font-medium">Viewing</span>
       </div>
 
-      {isExpanded && (
-        <div className="space-y-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="outline" className={statusColors[viewing.status]}>
-              {statusLabels[viewing.status]}
-            </Badge>
+      <div className="space-y-3">
+        <div className="flex items-start justify-between gap-2">
+          <button
+            type="button"
+            onClick={() => setIsFormOpen(!isFormOpen)}
+            className="text-left flex-1 group"
+          >
+            {viewing.scheduled_date ? (
+              <div className="flex items-center gap-1.5 text-sm group-hover:text-primary transition-colors">
+                <Clock className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                <span>{formatDate(viewing.scheduled_date)}</span>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                No date scheduled
+              </p>
+            )}
+          </button>
+
+          <div className="flex items-center gap-1">
             {viewing.scheduled_date && (
-              <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="h-3.5 w-3.5" />
-                {formatDate(viewing.scheduled_date)}
-              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs text-muted-foreground shrink-0"
+                onClick={() => onViewingUpdate({ scheduled_date: undefined })}
+              >
+                Remove date
+              </Button>
             )}
           </div>
-
-          <ViewingStatusButtons
-            currentStatus={viewing.status}
-            onStatusChange={(status) => onViewingUpdate({ status })}
-          />
-
-          <InlineNotes
-            notes={viewing.notes || ""}
-            onUpdate={(notes) =>
-              onViewingUpdate({
-                notes,
-                notes_updated_at: new Date().toISOString(),
-              })
-            }
-            updatedAt={viewing.notes_updated_at}
-            label="Notes"
-          />
-
-          {viewing.scheduled_date && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 text-xs text-muted-foreground"
-              onClick={() => onViewingUpdate({ scheduled_date: undefined })}
-            >
-              Remove date
-            </Button>
-          )}
         </div>
-      )}
+
+        {isFormOpen && (
+          <div className="border rounded-lg bg-muted p-4">
+            <ScheduleViewingForm
+              listingId={listingId}
+              viewing={viewing}
+              onCancel={() => setIsFormOpen(false)}
+              onSubmit={(data) => {
+                onViewingUpdate({
+                  scheduled_date: data.scheduled_date || undefined,
+                });
+                setIsFormOpen(false);
+              }}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
