@@ -27,3 +27,8 @@ This file tracks all features in the Rental Viewing Evaluator project.
   *Link: [./verdict-system_20250107/](./verdict-system_20250107/)*
 - [x] **Feature: Comparison View**
   *Link: [./comparison-view_20250107/](./comparison-view_20250107/)*
+
+## Post-MVP Features
+
+- [ ] **Feature: Map View**
+  *Link: [./map-view_20250609/](./map-view_20250609/)*

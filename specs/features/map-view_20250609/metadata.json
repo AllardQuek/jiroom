@@ -1,0 +1,8 @@
+{
+  "feature_id": "map-view_20250609",
+  "type": "feature",
+  "status": "spec",
+  "created_at": "2025-06-09T00:00:00Z",
+  "updated_at": "2025-06-09T00:00:00Z",
+  "description": "Visualize shortlisted listings on a map with location-aware inputs, filtering, and spatial analysis tools"
+}
