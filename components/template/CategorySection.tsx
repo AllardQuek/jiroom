@@ -44,9 +44,13 @@ export function CategorySection({
               criterion={criterion}
               onEdit={() => onEditCriteria(criterion.id)}
               onDelete={() => onDeleteCriteria(criterion.id)}
-              onMoveUp={index > 0 ? () => onMoveCriteria(criterion.id, "up") : undefined}
+              onMoveUp={
+                index > 0 ? () => onMoveCriteria(criterion.id, "up") : undefined
+              }
               onMoveDown={
-                index < criteria.length - 1 ? () => onMoveCriteria(criterion.id, "down") : undefined
+                index < criteria.length - 1
+                  ? () => onMoveCriteria(criterion.id, "down")
+                  : undefined
               }
             />
           ))

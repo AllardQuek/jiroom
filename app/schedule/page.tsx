@@ -49,8 +49,11 @@ function DaySection({
     <div className="space-y-3">
       <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm pb-2 pt-4 -mx-4 px-4">
         <div className="flex items-baseline gap-2">
-          <h2 className={`text-base font-bold ${isPast ? "text-muted-foreground/60" : ""}`}>
-            {isPast ? "Past — " : ""}{label}
+          <h2
+            className={`text-base font-bold ${isPast ? "text-muted-foreground/60" : ""}`}
+          >
+            {isPast ? "Past — " : ""}
+            {label}
           </h2>
           <span className="text-xs text-muted-foreground">{dateLabel}</span>
         </div>
@@ -68,37 +71,51 @@ function DaySection({
               onClick={() => onListingClick(viewing.listing_id)}
               className="w-full text-left"
             >
-              <Card className={`transition-all duration-200 group w-full ${
-                isPast
-                  ? "opacity-50 border-border/30 hover:opacity-70"
-                  : "hover:shadow-md active:scale-[0.99] border-border/50"
-              }`}>
+              <Card
+                className={`transition-all duration-200 group w-full ${
+                  isPast
+                    ? "opacity-50 border-border/30 hover:opacity-70"
+                    : "hover:shadow-md active:scale-[0.99] border-border/50"
+                }`}
+              >
                 <CardContent className="p-0">
                   <div className="flex items-center gap-4 px-4 py-4 min-w-0">
                     <div className="text-center shrink-0">
-                      <div className={`text-lg font-black tracking-tight ${
-                        isPast ? "text-muted-foreground/50" : "text-foreground"
-                      }`}>
+                      <div
+                        className={`text-lg font-black tracking-tight ${
+                          isPast
+                            ? "text-muted-foreground/50"
+                            : "text-foreground"
+                        }`}
+                      >
                         {format(date, "h:mm")}
                       </div>
-                      <div className={`text-[11px] font-semibold uppercase tracking-wider leading-tight ${
-                        isPast ? "text-muted-foreground/40" : "text-muted-foreground/60"
-                      }`}>
+                      <div
+                        className={`text-[11px] font-semibold uppercase tracking-wider leading-tight ${
+                          isPast
+                            ? "text-muted-foreground/40"
+                            : "text-muted-foreground/60"
+                        }`}
+                      >
                         {format(date, "a")}
                       </div>
                     </div>
 
-                    <div className={`w-px h-10 shrink-0 ${
-                      isPast ? "bg-border/20" : "bg-border/60"
-                    }`} />
+                    <div
+                      className={`w-px h-10 shrink-0 ${
+                        isPast ? "bg-border/20" : "bg-border/60"
+                      }`}
+                    />
 
                     <div className="flex-1 min-w-0 space-y-0.5">
                       <div className="flex items-center gap-1.5">
-                        <h3 className={`text-sm font-semibold line-clamp-1 ${
-                          isPast
-                            ? "text-muted-foreground/70"
-                            : "group-hover:text-primary transition-colors"
-                        }`}>
+                        <h3
+                          className={`text-sm font-semibold line-clamp-1 ${
+                            isPast
+                              ? "text-muted-foreground/70"
+                              : "group-hover:text-primary transition-colors"
+                          }`}
+                        >
                           {viewing.listing.title}
                         </h3>
                         {viewing.listing.source_url && (
@@ -114,9 +131,13 @@ function DaySection({
                         )}
                       </div>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span className={`font-semibold ${
-                          isPast ? "text-muted-foreground/70" : "text-foreground"
-                        }`}>
+                        <span
+                          className={`font-semibold ${
+                            isPast
+                              ? "text-muted-foreground/70"
+                              : "text-foreground"
+                          }`}
+                        >
                           ${viewing.listing.price.toLocaleString()}
                         </span>
                         {viewing.listing.area && (

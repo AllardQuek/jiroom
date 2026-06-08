@@ -6,22 +6,38 @@ import { useTemplateStore } from "@/store/templateStore";
 import { TemplateList } from "@/components/template/TemplateList";
 import { TemplateEditor } from "@/components/template/TemplateEditor";
 import { CriteriaForm } from "@/components/template/CriteriaForm";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { DeleteConfirmationDialog } from "@/components/listings/DeleteConfirmationDialog";
-import { createCriterionSchema, CriterionFormData } from "@/lib/schemas/templateSchema";
+import {
+  createCriterionSchema,
+  CriterionFormData,
+} from "@/lib/schemas/templateSchema";
 
 export default function TemplatePage() {
-  const initializeTemplates = useTemplateStore((state) => state.initializeTemplates);
+  const initializeTemplates = useTemplateStore(
+    (state) => state.initializeTemplates
+  );
   const templates = useTemplateStore((state) => state.templates);
   const addTemplate = useTemplateStore((state) => state.addTemplate);
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
   const deleteTemplate = useTemplateStore((state) => state.deleteTemplate);
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
-  const [deletingTemplateId, setDeletingTemplateId] = useState<string | null>(null);
+  const [editingTemplateId, setEditingTemplateId] = useState<string | null>(
+    null
+  );
+  const [deletingTemplateId, setDeletingTemplateId] = useState<string | null>(
+    null
+  );
   const [isCriteriaFormOpen, setIsCriteriaFormOpen] = useState(false);
-  const [editingCriterionId, setEditingCriterionId] = useState<string | null>(null);
+  const [editingCriterionId, setEditingCriterionId] = useState<string | null>(
+    null
+  );
   const [addingToCategory, setAddingToCategory] = useState<string | null>(null);
 
   useEffect(() => {
@@ -94,23 +110,34 @@ export default function TemplatePage() {
   const handleDeleteCriteria = (criterionId: string) => {
     if (!editingTemplate) return;
 
-    const updatedCriteria = editingTemplate.criteria.filter((c) => c.id !== criterionId);
+    const updatedCriteria = editingTemplate.criteria.filter(
+      (c) => c.id !== criterionId
+    );
     updateTemplate(editingTemplate.id, {
       criteria: updatedCriteria,
       updated_at: new Date().toISOString(),
     });
   };
 
-  const handleMoveCriteria = (criterionId: string, direction: "up" | "down") => {
+  const handleMoveCriteria = (
+    criterionId: string,
+    direction: "up" | "down"
+  ) => {
     if (!editingTemplate) return;
 
     const criteria = [...editingTemplate.criteria];
     const index = criteria.findIndex((c) => c.id === criterionId);
 
     if (direction === "up" && index > 0) {
-      [criteria[index], criteria[index - 1]] = [criteria[index - 1], criteria[index]];
+      [criteria[index], criteria[index - 1]] = [
+        criteria[index - 1],
+        criteria[index],
+      ];
     } else if (direction === "down" && index < criteria.length - 1) {
-      [criteria[index], criteria[index + 1]] = [criteria[index + 1], criteria[index]];
+      [criteria[index], criteria[index + 1]] = [
+        criteria[index + 1],
+        criteria[index],
+      ];
     }
 
     updateTemplate(editingTemplate.id, {
@@ -125,7 +152,9 @@ export default function TemplatePage() {
     return Array.from(categories);
   };
 
-  const editingCriterion = editingTemplate?.criteria.find((c) => c.id === editingCriterionId);
+  const editingCriterion = editingTemplate?.criteria.find(
+    (c) => c.id === editingCriterionId
+  );
 
   return (
     <div className="p-4">
@@ -156,16 +185,20 @@ export default function TemplatePage() {
               </DialogTitle>
             </DialogHeader>
             <CriteriaForm
-              defaultValues={editingCriterion ? {
-                name: editingCriterion.name,
-                description: editingCriterion.description,
-                type: editingCriterion.type,
-                category: editingCriterion.category,
-                weight: editingCriterion.weight,
-                options: editingCriterion.options,
-              } : {
-                category: addingToCategory || "",
-              }}
+              defaultValues={
+                editingCriterion
+                  ? {
+                      name: editingCriterion.name,
+                      description: editingCriterion.description,
+                      type: editingCriterion.type,
+                      category: editingCriterion.category,
+                      weight: editingCriterion.weight,
+                      options: editingCriterion.options,
+                    }
+                  : {
+                      category: addingToCategory || "",
+                    }
+              }
               categories={getCategories()}
               onSubmit={handleCriteriaSubmit}
               onCancel={() => setIsCriteriaFormOpen(false)}

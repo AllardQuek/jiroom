@@ -47,7 +47,9 @@ export function CriteriaItem({
           </Badge>
         </div>
         {criterion.description && (
-          <p className="text-sm text-muted-foreground truncate">{criterion.description}</p>
+          <p className="text-sm text-muted-foreground truncate">
+            {criterion.description}
+          </p>
         )}
       </div>
 

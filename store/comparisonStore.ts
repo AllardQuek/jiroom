@@ -28,7 +28,9 @@ export const useComparisonStore = create<ComparisonState>()(
       removeFromComparison: (id) => {
         const { selectedListingIds } = get();
         set({
-          selectedListingIds: selectedListingIds.filter((listingId) => listingId !== id),
+          selectedListingIds: selectedListingIds.filter(
+            (listingId) => listingId !== id
+          ),
         });
       },
       clearComparison: () => {

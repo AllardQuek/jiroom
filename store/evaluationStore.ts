@@ -32,7 +32,9 @@ export const useEvaluationStore = create<EvaluationState>()(
       getEvaluation: (id) =>
         get().evaluations.find((evaluation) => evaluation.id === id),
       getEvaluationByListingId: (listingId) =>
-        get().evaluations.find((evaluation) => evaluation.listing_id === listingId),
+        get().evaluations.find(
+          (evaluation) => evaluation.listing_id === listingId
+        ),
     }),
     {
       name: "evaluation-storage",

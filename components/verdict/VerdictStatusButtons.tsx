@@ -40,9 +40,7 @@ export function VerdictStatusButtons({
           size="sm"
           variant={currentStatus === status ? "default" : "outline"}
           className={
-            currentStatus === status
-              ? statusColors[status]
-              : "border-gray-300"
+            currentStatus === status ? statusColors[status] : "border-gray-300"
           }
           onClick={() => onStatusChange(status)}
         >

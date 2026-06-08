@@ -7,12 +7,12 @@ export function BulletParser({ text }: BulletParserProps) {
     return null;
   }
 
-  const lines = text.split('\n');
+  const lines = text.split("\n");
 
   return (
     <div className="space-y-1">
       {lines.map((line, index) => {
-        const isBullet = line.trim().startsWith('- ');
+        const isBullet = line.trim().startsWith("- ");
         const content = isBullet ? line.trim().substring(2) : line;
 
         if (!content.trim()) {

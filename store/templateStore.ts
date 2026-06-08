@@ -28,7 +28,8 @@ export const useTemplateStore = create<TemplateState>()(
         set((state) => ({
           templates: state.templates.filter((template) => template.id !== id),
         })),
-      getTemplate: (id) => get().templates.find((template) => template.id === id),
+      getTemplate: (id) =>
+        get().templates.find((template) => template.id === id),
       initializeTemplates: () => {
         const { templates } = get();
         if (templates.length === 0) {

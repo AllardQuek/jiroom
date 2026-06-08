@@ -12,7 +12,9 @@ export function AddToCompareButton({ listingId }: AddToCompareButtonProps) {
   const isSelected = useComparisonStore((state) => state.isSelected(listingId));
   const canAddMore = useComparisonStore((state) => state.canAddMore());
   const addToListing = useComparisonStore((state) => state.addToListing);
-  const removeFromComparison = useComparisonStore((state) => state.removeFromComparison);
+  const removeFromComparison = useComparisonStore(
+    (state) => state.removeFromComparison
+  );
 
   const handleClick = () => {
     if (isSelected) {

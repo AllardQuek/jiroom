@@ -263,7 +263,8 @@ export const seedVerdicts: Verdict[] = [
     id: ids.vd2,
     listing_id: ids.l4,
     status: "yes",
-    reasoning: "Best option so far — great location, reasonable price, nice room",
+    reasoning:
+      "Best option so far — great location, reasonable price, nice room",
     score: 85,
     updated_at: daysAgo(4),
     created_at: daysAgo(4),
@@ -339,9 +340,15 @@ export function loadSeedData(): void {
   const payload: Record<string, { state: unknown; version: number }> = {
     "listing-storage": { state: { listings: seedListings }, version: 0 },
     "viewing-storage": { state: { viewings: seedViewings }, version: 0 },
-    "evaluation-storage": { state: { evaluations: seedEvaluations }, version: 0 },
+    "evaluation-storage": {
+      state: { evaluations: seedEvaluations },
+      version: 0,
+    },
     "verdict-storage": { state: { verdicts: seedVerdicts }, version: 0 },
-    "comparison-storage": { state: { selectedListingIds: seedComparisonIds }, version: 0 },
+    "comparison-storage": {
+      state: { selectedListingIds: seedComparisonIds },
+      version: 0,
+    },
   };
 
   for (const [key, value] of Object.entries(payload)) {

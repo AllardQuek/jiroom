@@ -236,7 +236,10 @@ export function ComparisonColumn({
               variant="outline"
               className="border-amber-300/60 bg-amber-50 text-amber-700 text-[10px] px-1.5 py-0 font-semibold"
             >
-              <Star size={8} className="fill-amber-500 text-amber-500 -mt-0.5 mr-0.5 inline" />
+              <Star
+                size={8}
+                className="fill-amber-500 text-amber-500 -mt-0.5 mr-0.5 inline"
+              />
               Best
             </Badge>
           )}

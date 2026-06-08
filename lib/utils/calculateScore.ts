@@ -31,7 +31,10 @@ export function calculateScore(
         break;
       case "number":
         // Number: normalize based on reasonable range (0-100)
-        value = Math.min((typeof response === "number" ? response : 0) / 100, 1);
+        value = Math.min(
+          (typeof response === "number" ? response : 0) / 100,
+          1
+        );
         break;
       case "text":
       case "select":

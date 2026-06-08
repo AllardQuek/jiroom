@@ -11,7 +11,11 @@ interface TemplateListProps {
   onDelete: (id: string) => void;
 }
 
-export function TemplateList({ onEdit, onCreate, onDelete }: TemplateListProps) {
+export function TemplateList({
+  onEdit,
+  onCreate,
+  onDelete,
+}: TemplateListProps) {
   const templates = useTemplateStore((state) => state.templates);
 
   if (templates.length === 0) {

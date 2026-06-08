@@ -49,7 +49,10 @@ export function NotesSection({ sources }: NotesSectionProps) {
           {sources.map((source, index) => {
             if (!source.notes) return null;
             return (
-              <div key={index} className="border-b pb-4 last:border-0 last:pb-0">
+              <div
+                key={index}
+                className="border-b pb-4 last:border-0 last:pb-0"
+              >
                 <InlineNotes
                   notes={source.notes}
                   onUpdate={source.onUpdate}

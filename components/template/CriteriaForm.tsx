@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createCriterionSchema, CriterionFormData } from "@/lib/schemas/templateSchema";
+import {
+  createCriterionSchema,
+  CriterionFormData,
+} from "@/lib/schemas/templateSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -149,7 +152,10 @@ export function CriteriaForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Weight (1=Low, 2=Medium, 3=High) *</FormLabel>
-              <Select onValueChange={(v) => field.onChange(Number(v))} defaultValue={String(field.value)}>
+              <Select
+                onValueChange={(v) => field.onChange(Number(v))}
+                defaultValue={String(field.value)}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select weight" />
@@ -177,7 +183,11 @@ export function CriteriaForm({
                   <Input
                     placeholder="e.g., Option 1, Option 2, Option 3"
                     {...field}
-                    onChange={(e) => field.onChange(e.target.value.split(",").map((o) => o.trim()))}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value.split(",").map((o) => o.trim())
+                      )
+                    }
                   />
                 </FormControl>
                 <FormMessage />
