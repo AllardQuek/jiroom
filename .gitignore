@@ -54,6 +54,13 @@ Thumbs.db
 # Cascade/Devin
 # .devin/
 
+# Tooling
+.codegraph/
+
+# Package manager lockfiles (project uses npm)
+pnpm-lock.yaml
+yarn.lock
+
 # Logs
 logs/
 *.log
