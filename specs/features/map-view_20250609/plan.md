@@ -71,44 +71,36 @@
 ## M1a — Map UX Enhancements (Post-v1)
 
 ### Phase 10: Hover Tooltips
-- [ ] Task: Create `components/map/MapTooltip.tsx`
-  - [ ] Shared floating overlay, positioned via `map.getProjection()` + marker screen coords
-  - [ ] Shows: title, price, score, notes preview
-  - [ ] 300ms hover delay
-  - [ ] Disabled on touch devices
-- [ ] Task: Update `MapView.tsx` with hover state management (`hoveredMarker`)
-- [ ] Task: Add `onMouseEnter` / `onMouseLeave` handlers to listing `AdvancedMarker`
-- [ ] Task: Verify tooltip shows/hides on hover
+- [x] Task: Create `components/map/MapTooltip.tsx`
+  - [x] Shared floating overlay, positioned via DOM event coords
+  - [x] Shows: title, price, score, notes preview
+  - [x] 300ms hover delay
+  - [x] Disabled on touch devices
+- [x] Task: Update `MapView.tsx` with hover state management (`hoveredMarker`)
+- [x] Task: Add `onMouseEnter` / `onMouseLeave` handlers to listing `AdvancedMarker`
+- [x] Task: Verify tooltip shows/hides on hover
 
 ### Phase 11: Area-Based Marker Coloring
-- [ ] Task: Create `components/map/MarkerColorToggle.tsx` (toggle button)
-- [ ] Task: Create `components/map/AreaLegend.tsx` (color → area legend)
-- [ ] Task: Compute area → color map from unique `area` values in listings
-- [ ] Task: Apply area-based color to AdvancedMarker Pin when mode is active
-- [ ] Task: Verify colors update when switching modes
+- [x] Task: Create `components/map/MarkerColorToggle.tsx` (toggle button)
+- [x] Task: Create `components/map/AreaLegend.tsx` (color → area legend)
+- [x] Task: Compute area → color map from unique `area` values in listings
+- [x] Task: Apply area-based color to AdvancedMarker Pin when mode is active
+- [x] Task: Verify colors update when switching modes
 
 ### Phase 12: Enhanced Filters
-- [ ] Task: Update `components/map/MapFilters.tsx`
-  - [ ] Add area chips (auto-extracted from listings)
-  - [ ] Add score range filter (min/max inputs)
-  - [ ] Add criteria picker + min rating input
-  - [ ] Compose all filters with existing status/price filters
-- [ ] Task: Filter listings by area selection
-- [ ] Task: Filter listings by score range (from evaluation store)
-- [ ] Task: Filter listings by criteria rating (from evaluation store)
-- [ ] Task: Verify filters compose correctly
+- [x] Task: Update `components/map/MapFilters.tsx`
+  - [x] Add area chips (auto-extracted from listings)
+  - [x] Add score range filter (min/max inputs)
+  - [x] Add criteria picker + min rating input
+  - [x] Compose all filters with existing status/price filters
+- [x] Task: Filter listings by area selection
+- [x] Task: Filter listings by score range (from evaluation store)
+- [x] Task: Filter listings by criteria rating (from evaluation store)
+- [x] Task: Verify filters compose correctly
 
 ### Phase 13: Verification (M1a)
-- [ ] Task: Verify TypeScript compilation
-- [ ] Task: Verify lint
-- [ ] Task: Verify build
-- [ ] Task: Test hover tooltip on desktop
-- [ ] Task: Test no hover interference on mobile touch
-- [ ] Task: Test area color mode toggle
-- [ ] Task: Test area legend matches marker colors
-- [ ] Task: Test area filter chips
-- [ ] Task: Test score range filter
-- [ ] Task: Test criteria rating filter
-- [ ] Task: Test all filters combined
+- [x] Task: Verify TypeScript compilation
+- [x] Task: Verify lint
+- [x] Task: Verify build
 
 ## Deviations from Original Plan

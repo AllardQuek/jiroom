@@ -33,6 +33,21 @@
 - [Non-goal 2]
 - [Non-goal 3]
 
+## User Stories & Rationale
+
+> User stories capture *why* this feature exists — the concrete scenarios a user encounters that this feature addresses. Each story is written as:
+> **"As a [persona], I want to [action], so that [outcome/value]."**
+> If the feature was born from a specific design decision or trade-off, capture that under "Design Rationale."
+
+### User Stories
+
+- **[Persona]**: As a **[persona]**, I want to **[action]**, so that **[outcome/value]**.
+- **[Persona]**: As a **[persona]**, I want to **[action]**, so that **[outcome/value]**.
+
+### Design Rationale
+
+[Explain why this feature was built this way, what alternatives were considered, and what trade-offs were accepted. This prevents future contributors from questioning decisions without understanding the context.]
+
 ---
 
 # Part 2: Core Specifications

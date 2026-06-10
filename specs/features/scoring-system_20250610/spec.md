@@ -4,6 +4,18 @@
 
 Replace the current weighted-sum (0–100) scoring with a simpler +1/0/-1 per-criterion system. Weights are removed entirely. Each responded question contributes either +1 (positive), 0 (neutral), or -1 (negative). The score is the percentage of points earned out of points possible.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **All users**: As a renter, I want a scoring system that I can intuitively understand without reading documentation, so that I can trust and act on the scores when comparing listings.
+- **All users**: As a user, I want the score to reflect only criteria I actually answered, so that skipping irrelevant questions doesn't unfairly penalize a listing.
+- **All users**: As a renter comparing two listings with scores of 72 and 83, I want to understand what contributed to that difference, so that I can make an informed decision rather than trusting a black-box number.
+
+### Design Rationale
+
+The original weighted-sum system was replaced because 29 of 32 criteria were of type `select` or `text`, which received score 0 — making the overall score nearly meaningless. The +1/0/-1 system maps intuitively to positive/neutral/negative sentiment and ensures every answered criterion actually contributes to the score. Weights were removed because they added opacity without commensurate value — users couldn't easily reason about how a 0.3 weight on criterion X interacted with a 0.7 weight on criterion Y. The denominator being "responded questions" (not total criteria) avoids penalizing listings for N/A or skipped fields, which is critical because not all criteria apply to every rental situation.
+
 ## Motivation
 
 - The current system assigns score 0 to `select` and `text` criteria (29 of 32 criteria), making the score nearly meaningless

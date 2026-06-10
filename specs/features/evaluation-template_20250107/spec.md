@@ -4,6 +4,19 @@
 
 Provide a customizable evaluation template system for consistent room assessment. This feature enables users to define reusable evaluation criteria with multiple input types, grouping by category, and optional weighting to personalize their room evaluation process.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a first-time renter, I want a pre-built evaluation template with common rental criteria, so that I can start evaluating listings immediately without designing a system from scratch.
+- **Experienced renter**: As someone who has rented before and knows what matters to me, I want to customize the template by adding my own criteria (e.g., "distance to gym") and removing irrelevant ones, so that evaluations reflect my personal priorities.
+- **Family renter**: As a parent renting with a partner, I want to group criteria by category (e.g., "Safety," "Space for kids"), so that we can focus on what matters most to our family situation.
+- **All users**: As a renter evaluating multiple listings, I want to apply the same template consistently across all of them, so that I can compare answers side-by-side without format mismatch.
+
+### Design Rationale
+
+The template system uses 5 input types (checkbox, rating, number, select, text) chosen to cover the common rental evaluation patterns without over-engineering. Checkboxes handle yes/no questions, ratings handle subjective scales (1-5), numbers handle quantitative inputs (e.g., utility cost), selects handle multi-option categories (e.g., wall type), and text handles freeform notes within evaluations. Weights were included in the initial design but later removed when the scoring system was simplified (see scoring-system spec). The default template was seeded with 32 criteria across 8 categories based on common rental concerns in Singapore, the primary market.
+
 ## Functional Requirements
 
 ### FR1: Default Template

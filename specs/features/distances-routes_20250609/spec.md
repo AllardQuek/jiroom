@@ -4,6 +4,20 @@
 
 When viewing a listing on the map, display public transport routes and durations from that listing to all anchors. This directly answers the core question: "How long does it take to get from this apartment to my office / the nearest MRT / school?"
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a renter with a 9-to-5 office job, I want to click a listing and see transit time to my office anchor, so that I can immediately know if the daily commute is feasible.
+- **Family renter**: As a parent evaluating multiple listings, I want to filter my shortlist to only show listings within 30 minutes of my child's school, so that I don't waste time on options with impractical commutes.
+- **All users**: As a renter comparing several options, I want to see route lines drawn on the map from a selected listing to all my anchors, so that I can visually understand the spatial relationship and route quality (not just duration).
+- **All users**: As a renter, I want to switch between transit, driving, walking, and cycling, so that I can evaluate commute options for different modes of transport I might use.
+- **All users**: As a renter looking at a list of 20+ listings, I want to sort by commute time to my office anchor, so that the closest options appear first and I can focus my attention efficiently.
+
+### Design Rationale
+
+Routes are computed on-demand (when a listing is clicked), not pre-fetched for all listings, because the Directions API costs $0.005/request. Computing routes for every listing × every anchor on page load would be expensive and wasteful — users typically only deeply evaluate a few listings per session. The sort-by-commute-time feature (FR6.3) was deferred because it would require N × M Directions API calls (every visible listing to the selected anchor) without the user explicitly requesting those routes, changing the cost model from "pay per click" to "pay per page load." In-memory caching with a 5-minute TTL prevents redundant calls when re-selecting the same listing.
+
 ## Use Cases
 
 - Click a listing → see transit time to every anchor simultaneously
@@ -80,16 +94,16 @@ When viewing a listing on the map, display public transport routes and durations
 
 ## Acceptance Criteria
 
-- [ ] AC1: Clicking a listing shows transit route lines to all anchors on the map
-- [ ] AC2: Each route line is colored by the anchor's type
-- [ ] AC3: Each anchor shows transit duration in the listing InfoWindow
-- [ ] AC4: Changing travel mode re-fetches routes for the selected listing
-- [ ] AC5: Selecting a different listing replaces the route lines
-- [ ] AC6: Deselecting a listing removes all route lines
-- [ ] AC7: Anchor-centric filter shows only listings within N minutes
+- [x] AC1: Clicking a listing shows transit route lines to all anchors on the map
+- [x] AC2: Each route line is colored by the anchor's type
+- [x] AC3: Each anchor shows transit duration in the listing InfoWindow
+- [x] AC4: Changing travel mode re-fetches routes for the selected listing
+- [x] AC5: Selecting a different listing replaces the route lines
+- [x] AC6: Deselecting a listing removes all route lines
+- [x] AC7: Anchor-centric filter shows only listings within N minutes (cached routes)
 - [ ] AC8: Sort-by-commute-time works in the listing list
-- [ ] AC9: Cached routes don't re-fetch within 5 minutes
-- [ ] AC10: Error state for un-routable anchors shows gracefully
+- [x] AC9: Cached routes don't re-fetch within 5 minutes
+- [x] AC10: Error state for un-routable anchors shows gracefully
 
 ## Data Model Changes
 

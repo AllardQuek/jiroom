@@ -4,6 +4,18 @@
 
 Provide a final decision system for shortlisted listings. This feature enables users to make a final verdict (Yes, Maybe, No, Undecided) on listings after evaluation, with optional simple scoring display to support decision-making.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a renter evaluating 5+ listings, I want to mark a clear Yes/No/Maybe verdict on each one, so that I can quickly filter to my top candidates when it's time to make a decision.
+- **All users**: As a renter who viewed a listing weeks ago, I want to see my saved verdict and reasoning, so that I can recall why I decided the way I did without re-reading all my notes and evaluation responses.
+- **Family renter**: As a couple making a decision together, I want to see the evaluation score alongside the verdict, so that we can have an informed discussion about whether the data supports our gut feeling.
+
+### Design Rationale
+
+The verdict system uses 4 discrete states (Yes, Maybe, No, Undecided) rather than a continuous scale because final rental decisions are inherently categorical — you either commit, reject, or remain uncertain. "Undecided" is included as an explicit state (rather than "no verdict set") to distinguish "haven't thought about it yet" from "thought about it and can't decide." The optional reasoning field captures the *why* behind a decision, which is critical for recall weeks later when comparing multiple options. The score display is drawn from the evaluation system's calculated score (not a separate verdict score) to keep a single source of truth for quantitative assessment.
+
 ## Functional Requirements
 
 ### FR1: Verdict Status

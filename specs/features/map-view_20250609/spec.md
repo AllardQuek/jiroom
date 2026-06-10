@@ -4,6 +4,20 @@
 
 Enable users to visualize their shortlisted listings on a map, add listings with location-aware input, and build spatial awareness of how listings relate to each other and to key places of interest. The map is a complementary surface to the existing kanban — not a replacement — supporting spatial reasoning (where are my options? how far apart?) that the list view cannot provide.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a renter looking at 15+ listings across Singapore, I want to see them all on a map, so that I can immediately understand which neighborhoods have the most options and how listings cluster geographically.
+- **All users**: As a renter, I want to filter the map by status, price range, and area, so that I can focus on the subset of listings that match my current criteria without visual clutter from irrelevant options.
+- **All users**: As a renter scanning the map, I want to hover over a marker to see a quick preview (price, score, notes), so that I can rapidly triage listings without opening every InfoWindow.
+- **All users**: As a renter who found a promising location while exploring the map, I want to search for that place and create a listing directly from the map, so that the discovery-to-save flow is seamless.
+- **All users**: As a renter, I want to switch marker colors between "by status" and "by area" modes, so that I can spot different patterns depending on what I'm prioritizing (status pipeline vs. geographic spread).
+
+### Design Rationale
+
+The map was built as a separate tab alongside the list view (not a replacement) because both surfaces serve distinct needs: the list is better for scanning dense information (price, score, notes, verdicts), while the map is better for spatial reasoning. The marker color modes (by status / by area) address two different questions: "which listings have I not yet viewed?" (status) vs. "how are options distributed across neighborhoods?" (area). Hover tooltips use a 300ms delay to prevent flicker during mouse traversal and are disabled on touch devices where tap-to-select would conflict.
+
 ## Use Cases
 
 - Visualize all saved listings on a map
@@ -20,7 +34,7 @@ Enable users to visualize their shortlisted listings on a map, add listings with
 | Milestone | Scope | Status |
 |-----------|-------|--------|
 | M1 — Core Map | Map tab, Places Autocomplete on add/edit, markers by status, filters, tooltip | **Shipped** |
-| M1a — Map UX | Area-based coloring, hover tooltips, enhanced filters (area, score, criteria) | **Specified** |
+| M1a — Map UX | Area-based coloring, hover tooltips, enhanced filters (area, score, criteria) | **Shipped** |
 | M3 — Anchors | User-defined places of interest shown alongside listings | **Shipped** |
 | M4 — Routes | Transit/driving/walking routes from listing to anchors | **Specified** |
 
@@ -62,12 +76,12 @@ See `plan.md` for implementation details. The following sections document M1a en
 
 ### Acceptance Criteria (M1a)
 
-- [ ] AC11: Hovering a marker shows a tooltip with price, score, and notes within 300ms
-- [ ] AC12: Toggling "By Area" coloring re-colors markers by their `area` field
-- [ ] AC13: Area filter chips show/hide listings by selected areas
-- [ ] AC14: Score range filter shows/hides listings by evaluation score
-- [ ] AC15: Criteria filter with minimum rating shows/hides listings accordingly
-- [ ] AC16: All filters compose correctly with each other and with existing status/price filters
+- [x] AC11: Hovering a marker shows a tooltip with price, score, and notes within 300ms
+- [x] AC12: Toggling "By Area" coloring re-colors markers by their `area` field
+- [x] AC13: Area filter chips show/hide listings by selected areas
+- [x] AC14: Score range filter shows/hides listings by evaluation score
+- [x] AC15: Criteria filter with minimum rating shows/hides listings accordingly
+- [x] AC16: All filters compose correctly with each other and with existing status/price filters
 
 ### Out of Scope (M1a)
 

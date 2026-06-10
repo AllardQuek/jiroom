@@ -4,6 +4,20 @@
 
 Anchors are user-defined places of interest (home, work, school, MRT stations, grocery stores) that appear alongside listings on the map. They provide the spatial reference points needed for distance calculations (M4). Unlike listings, anchors have no price, status, or evaluation — they are simple location markers with a type and color.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a renter new to Singapore, I want to mark my office location as an anchor, so that I can quickly see commute times from any listing to my workplace.
+- **Family renter**: As a parent, I want to mark my child's school as an anchor, so that I can filter listings by walking distance to the school drop-off point.
+- **Budget-conscious student**: As a student, I want to mark the nearest MRT station as an anchor, so that I can evaluate listings based on transit connectivity to my university.
+- **All users**: As a renter, I want to see anchor markers visually distinct from listing markers on the map, so that I can immediately distinguish between places I'm considering (listings) and fixed reference points (anchors).
+- **All users**: I want to edit or delete anchors, so that I can update my reference points as my priorities change (e.g., new job location).
+
+### Design Rationale
+
+Anchors were extracted as a separate data model (not a subtype of listings) because they serve a fundamentally different purpose: listings are temporary options being evaluated, while anchors are semi-permanent reference points. This separation also makes the Directions API calls cleaner — anchors are always known, stable coordinates, while listings may or may not have location data. The anchor type system (home/work/school/station/other) with associated colors was chosen over freeform tagging to make the map immediately scannable without a legend.
+
 ## Use Cases
 
 - Mark your home or office location
