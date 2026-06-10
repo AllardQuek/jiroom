@@ -1,5 +1,5 @@
-import AnchorListPage from "@/components/anchors/AnchorList";
+import { redirect } from "next/navigation";
 
-export default function AnchorsPage() {
-  return <AnchorListPage />;
+export default function AnchorsRedirect() {
+  redirect("/map");
 }

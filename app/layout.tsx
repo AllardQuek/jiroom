@@ -3,6 +3,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Providers from "@/components/Providers";
+import SettingsButton from "@/components/SettingsButton";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col pb-16">
         <Providers>{children}</Providers>
         <Navigation />
+        <SettingsButton />
       </body>
     </html>
   );

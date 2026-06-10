@@ -18,6 +18,7 @@ import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
 import { MapFilters } from "./MapFilters";
 import AnchorMarker from "./AnchorMarker";
+import AnchorPanel from "./AnchorPanel";
 import {
   Dialog,
   DialogContent,
@@ -27,7 +28,7 @@ import {
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
 import { CreateAnchorForm } from "@/components/anchors/CreateAnchorForm";
 import { Button } from "@/components/ui/button";
-import { Plus, MapPin } from "lucide-react";
+import { Plus, MapPin, List } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const LocationSearch = dynamic(() => import("./LocationSearch"), {
@@ -89,6 +90,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [showCreateListingDialog, setShowCreateListingDialog] = useState(false);
   const [showCreateAnchorDialog, setShowCreateAnchorDialog] = useState(false);
+  const [showAnchorPanel, setShowAnchorPanel] = useState(false);
 
   const filteredListings = listings.filter((l) => {
     if (!l.lat || !l.lng) return false;
@@ -107,12 +109,28 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     setSearchResult(place);
   }, []);
 
+  const handleAnchorSelect = useCallback(
+    (anchor: Anchor) => {
+      setSelectedAnchor(anchor);
+      setSelectedListing(null);
+      setShowAnchorPanel(false);
+    },
+    []
+  );
+
   return (
     <div className="relative w-full h-full">
-      <MapFilters filters={filters} onFiltersChange={setFilters} />
       <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
         <LocationSearch onPlaceSelect={handlePlaceSelect} />
       </div>
+      <MapFilters filters={filters} onFiltersChange={setFilters} />
+      <button
+        onClick={() => setShowAnchorPanel(true)}
+        className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
+      >
+        <List size={14} />
+        Anchors
+      </button>
       <Map
         defaultCenter={{ lat: 1.3521, lng: 103.8198 }}
         defaultZoom={12}
@@ -285,6 +303,12 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           />
         </DialogContent>
       </Dialog>
+
+      <AnchorPanel
+        open={showAnchorPanel}
+        onClose={() => setShowAnchorPanel(false)}
+        onAnchorSelect={handleAnchorSelect}
+      />
     </div>
   );
 }
