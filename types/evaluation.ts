@@ -14,12 +14,20 @@ export interface Template {
   updated_at: string;
 }
 
+export interface Threshold {
+  min?: number;
+  max?: number;
+  score: -1 | 0 | 1;
+}
+
 export interface Criterion {
   id: string;
   name: string;
-  description: string;
-  weight: number; // 1-3 scale
-  type: "checkbox" | "rating" | "number" | "text" | "select";
+  description?: string;
+  type: "checkbox" | "rating" | "number" | "text" | "select" | "derived";
   category: string;
-  options?: string[]; // for select type
+  options?: string[];
+  scores?: Record<string, -1 | 0 | 1>;
+  thresholds?: Threshold[];
+  derivedFrom?: string[];
 }

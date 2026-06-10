@@ -119,33 +119,6 @@ export default function TemplatePage() {
     });
   };
 
-  const handleMoveCriteria = (
-    criterionId: string,
-    direction: "up" | "down"
-  ) => {
-    if (!editingTemplate) return;
-
-    const criteria = [...editingTemplate.criteria];
-    const index = criteria.findIndex((c) => c.id === criterionId);
-
-    if (direction === "up" && index > 0) {
-      [criteria[index], criteria[index - 1]] = [
-        criteria[index - 1],
-        criteria[index],
-      ];
-    } else if (direction === "down" && index < criteria.length - 1) {
-      [criteria[index], criteria[index + 1]] = [
-        criteria[index + 1],
-        criteria[index],
-      ];
-    }
-
-    updateTemplate(editingTemplate.id, {
-      criteria,
-      updated_at: new Date().toISOString(),
-    });
-  };
-
   const getCategories = () => {
     if (!editingTemplate) return [];
     const categories = new Set(editingTemplate.criteria.map((c) => c.category));
@@ -172,7 +145,6 @@ export default function TemplatePage() {
           onAddCriteria={handleAddCriteria}
           onEditCriteria={handleEditCriteria}
           onDeleteCriteria={handleDeleteCriteria}
-          onMoveCriteria={handleMoveCriteria}
         />
       )}
 
@@ -192,8 +164,9 @@ export default function TemplatePage() {
                       description: editingCriterion.description,
                       type: editingCriterion.type,
                       category: editingCriterion.category,
-                      weight: editingCriterion.weight,
                       options: editingCriterion.options,
+                      scores: editingCriterion.scores,
+                      thresholds: editingCriterion.thresholds,
                     }
                   : {
                       category: addingToCategory || "",

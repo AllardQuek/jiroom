@@ -27,10 +27,34 @@ interface ComparisonColumnProps {
 function CriterionValue({
   criterion,
   value,
+  listingPrice,
+  responses,
 }: {
   criterion: Criterion;
   value: number | string | undefined;
+  listingPrice?: number;
+  responses?: Record<string, number | string>;
 }) {
+  if (criterion.type === "derived") {
+    if (listingPrice === undefined) {
+      return <span className="text-muted-foreground/40 text-xs">&mdash;</span>;
+    }
+    let total = listingPrice;
+    if (criterion.derivedFrom && responses) {
+      for (const depId of criterion.derivedFrom) {
+        const depResponse = responses[depId];
+        if (depResponse !== undefined && depResponse !== "") {
+          total += Number(depResponse) || 0;
+        }
+      }
+    }
+    return (
+      <span className="text-foreground text-xs tabular-nums font-medium">
+        ${total.toLocaleString()}
+      </span>
+    );
+  }
+
   if (value === undefined || value === "") {
     return <span className="text-muted-foreground/40 text-xs">&mdash;</span>;
   }
@@ -346,16 +370,13 @@ export function ComparisonColumn({
                                 &middot; {criterion.description}
                               </span>
                             )}
-                            {criterion.weight > 1 && (
-                              <span className="text-[9px] text-muted-foreground/40 font-medium">
-                                &times;{criterion.weight}
-                              </span>
-                            )}
                           </div>
                           <div className="shrink-0 ml-3">
                             <CriterionValue
                               criterion={criterion}
                               value={responses[criterion.id]}
+                              listingPrice={listing.price}
+                              responses={responses}
                             />
                           </div>
                         </div>

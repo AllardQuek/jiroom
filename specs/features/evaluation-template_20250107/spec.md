@@ -7,18 +7,9 @@ Provide a customizable evaluation template system for consistent room assessment
 ## Functional Requirements
 
 ### FR1: Default Template
-- Pre-populate with common rental criteria organized by category:
-  - Cost: Monthly rent, deposit, utilities included
-  - Connectivity: Commute time, public transport access
-  - Room Quality: Size, natural light, ventilation, cleanliness
-  - Bathroom: Ensuite vs shared, cleanliness, water pressure
-  - Household Rules: Guests allowed, cooking allowed, quiet hours
-  - Access/Location: Neighborhood safety, proximity to amenities
-  - Amenities: WiFi, AC, furnished, laundry
-  - Lease/Risk: Lease duration, landlord responsiveness, contract terms
-- Each criterion has appropriate input type (rating, checkbox, number, text, select)
-- Default weight of 2 (Medium) for all criteria
-- Users can delete or modify default template
+- Pre-populate with rental criteria organized by category (see full listing in §Default Template Data)
+- Users can delete or modify the default template
+- The default template is seeded once on first app load if no templates exist
 
 ### FR2: Template Management
 - Create new blank templates
@@ -46,7 +37,7 @@ Support 5 input types for criteria:
 - Organize criteria by category
 - Display criteria grouped by category in template editor
 - Categories can be created/edited/deleted
-- Default categories match the 8 groups in default template
+- Default categories match the 9 groups in default template
 
 ### FR6: Criteria Weighting
 - 1-3 scale for weight (1=Low, 2=Medium, 3=High importance)
@@ -73,7 +64,7 @@ Support 5 input types for criteria:
 
 ## Acceptance Criteria
 
-- [ ] AC1: Default template is pre-populated with 8 categories and common criteria
+- [ ] AC1: Default template is pre-populated with 9 categories and 32 criteria matching the master list
 - [ ] AC2: User can create a new blank template
 - [ ] AC3: User can edit template name and criteria
 - [ ] AC4: User can add criteria with all 5 input types
@@ -132,19 +123,89 @@ export interface Criterion {
 - `components/template/CategorySection.tsx` - Grouped criteria display
 
 ### Default Template Data
-Default template should be seeded on first app load if no templates exist:
-```typescript
-const defaultTemplate: Template = {
-  id: "default",
-  name: "Default Rental Evaluation",
-  criteria: [
-    // Cost category
-    { id: "c1", name: "Monthly rent", type: "number", category: "Cost", weight: 2, description: "Monthly rent in SGD" },
-    // ... other criteria
-  ],
-  updated_at: new Date().toISOString()
-}
-```
+Default template seeded on first app load. 32 criteria across 9 categories.
+
+**Response format conventions:**
+- `select` with `["Yes", "No", "Maybe"]` — tristate evaluation
+- `select` with `["OK", "Not OK", "Unsure"]` — quality assessment
+- `select` with `["Yes", "No"]` — binary with explicit selection (no unchecked ambiguity)
+- `number` — quantitative input
+- `text` — freeform notes
+- `checkbox` — not used in default template (use `select ["Yes", "No"]` instead for clarity)
+
+#### Cost (weight: high)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c1 | Utilities included | select | Yes, No, Partial | 3 |
+| c2 | Monthly utility cost (SGD) | number | Expected/average amount | 2 |
+| c3 | Additional costs (cleaning, aircon, etc.) | select | Yes, No | 2 |
+| c4 | Additional costs amount (SGD/mth) | number | Only applicable if c3=Yes | 2 |
+
+#### Connectivity (weight: medium)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c5 | WiFi included | select | Yes, No, Maybe | 3 |
+| c6 | WiFi coverage / quality notes | text | Free text | 1 |
+| c7 | Mobile data coverage in room | select | Yes, No, Maybe | 2 |
+
+#### Room (weight: medium)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c8 | Room windows | select | Window, Indoor window, No window | 2 |
+| c9 | Bed size | select | Single, Super single, Queen, King | 2 |
+| c10 | Walls | select | Real wall, Partition | 2 |
+| c11 | Furniture included | select | Yes, No, Maybe | 2 |
+| c12 | Power point availability | select | OK, Not OK, Unsure | 2 |
+| c13 | Move-in date notes | text | e.g. lease expiry, early move-in | 2 |
+
+#### Bathroom (weight: high)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c14 | Bathroom/shower quality (pressure, size) | select | Yes, No, Maybe | 3 |
+| c15 | People sharing bathroom | number | 1-2→OK, 3→Maybe, 4+→Not OK (UI calculates mapping) | 3 |
+
+#### Amenities (weight: medium)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c16 | Washer available | select | Yes, No | 2 |
+| c17 | Dryer available | select | Yes, No | 1 |
+| c18 | Trash management notes | text | Free text | 1 |
+
+#### Household (weight: medium)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c19 | Tenant profile notes | text | Free text | 2 |
+| c20 | Comfortable with current tenants | select | Yes, No, Maybe | 2 |
+| c21 | Visitors allowed | select | Yes, No, Maybe | 2 |
+| c22 | Visitor rules notes | text | Free text | 1 |
+
+#### Surroundings (weight: medium)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c23 | Noise disturbances | select | Yes, No, Maybe (ambulance, plane, construction, common areas) | 2 |
+| c24 | Wet weather accessibility | select | Yes, No, Maybe (sheltered walkways, place to wait out rain) | 2 |
+
+#### Nearby (weight: low)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c25 | Nearby food options | text | Free text | 2 |
+| c26 | Nearby supermarket | text | Free text | 2 |
+| c27 | Nearby parks / running routes | text | Free text | 1 |
+
+#### Additional (weight: medium)
+| ID | Name | Type | Options / Desc | W |
+|----|------|------|---------------|---|
+| c28 | Break / transfer clause | text | Free text | 3 |
+| c29 | Renewal terms & rent increase | text | Free text | 3 |
+| c30 | Damage coverage (what's covered) | text | Free text | 3 |
+| c31 | Deposit return conditions & timeline | text | Free text | 3 |
+| c32 | Condo gates / shortcut to MRT/bus | select | Yes, No, Maybe | 1 |
+
+**Response mapping for c15 (People sharing bathroom):**
+- 1-2 people → mapped to "OK" (adds positive score)
+- 3 people → mapped to "Maybe" (neutral)
+- 4+ people → mapped to "Not OK" (negative)
+The mapping is computed by the evaluation form UI; the user only inputs the number.
 
 ### Form Validation
 Use React Hook Form with Zod schemas:

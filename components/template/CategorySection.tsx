@@ -8,19 +8,19 @@ import { CriteriaItem } from "./CriteriaItem";
 interface CategorySectionProps {
   category: string;
   criteria: Criterion[];
+  templateId: string;
   onAddCriteria: () => void;
   onEditCriteria: (criterionId: string) => void;
   onDeleteCriteria: (criterionId: string) => void;
-  onMoveCriteria: (criterionId: string, direction: "up" | "down") => void;
 }
 
 export function CategorySection({
   category,
   criteria,
+  templateId,
   onAddCriteria,
   onEditCriteria,
   onDeleteCriteria,
-  onMoveCriteria,
 }: CategorySectionProps) {
   return (
     <div className="border rounded-lg p-4">
@@ -38,20 +38,13 @@ export function CategorySection({
             No criteria in this category
           </p>
         ) : (
-          criteria.map((criterion, index) => (
+          criteria.map((criterion) => (
             <CriteriaItem
               key={criterion.id}
               criterion={criterion}
+              templateId={templateId}
               onEdit={() => onEditCriteria(criterion.id)}
               onDelete={() => onDeleteCriteria(criterion.id)}
-              onMoveUp={
-                index > 0 ? () => onMoveCriteria(criterion.id, "up") : undefined
-              }
-              onMoveDown={
-                index < criteria.length - 1
-                  ? () => onMoveCriteria(criterion.id, "down")
-                  : undefined
-              }
             />
           ))
         )}

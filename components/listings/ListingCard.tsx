@@ -44,7 +44,7 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
     totalCount > 0 ? Math.round((answeredCount / totalCount) * 100) : 0;
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template)
+      ? calculateScore(evaluation.responses, template, listing.price)
       : null;
 
   const handleClick = () => {

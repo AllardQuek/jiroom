@@ -1,52 +1,88 @@
 import { Criterion, Template } from "@/types/evaluation";
 
+function scoreFromThresholds(
+  value: number,
+  thresholds?: { min?: number; max?: number; score: -1 | 0 | 1 }[]
+): number | null {
+  if (!thresholds || thresholds.length === 0) return null;
+  for (const t of thresholds) {
+    const aboveMin = t.min === undefined || value >= t.min;
+    const belowMax = t.max === undefined || value <= t.max;
+    if (aboveMin && belowMax) return t.score;
+  }
+  return 0;
+}
+
 export function calculateScore(
   responses: Record<string, number | string>,
-  template: Template
-): number {
-  if (!template.criteria.length) {
-    return 0;
-  }
+  template: Template,
+  listingPrice?: number
+): number | null {
+  if (!template.criteria.length) return null;
 
-  let totalWeight = 0;
-  let weightedSum = 0;
+  let totalPoints = 0;
+  let totalCount = 0;
 
   for (const criterion of template.criteria) {
     const response = responses[criterion.id];
-    if (response === undefined) continue;
 
-    const weight = criterion.weight;
-    totalWeight += weight;
+    // Skip criteria without a response
+    if (response === undefined || response === "") continue;
 
-    let value = 0;
+    // Text type is always excluded from scoring
+    if (criterion.type === "text") continue;
 
-    switch (criterion.type) {
-      case "rating":
-        // Rating 1-5: normalize to 0-1, then multiply by weight
-        value = (typeof response === "number" ? response : 0) / 5;
-        break;
-      case "checkbox":
-        // Checkbox: 1 or 0 (stored as string "true"/"false" or number 1/0)
-        value = response === "true" || response === 1 ? 1 : 0;
-        break;
-      case "number":
-        // Number: normalize based on reasonable range (0-100)
-        value = Math.min(
-          (typeof response === "number" ? response : 0) / 100,
-          1
-        );
-        break;
-      case "text":
-      case "select":
-        // Text/Select: no score contribution
-        value = 0;
-        break;
+    // Handle derived type (computed from other fields)
+    if (criterion.type === "derived") {
+      let derivedValue = listingPrice ?? 0;
+      if (criterion.derivedFrom) {
+        for (const depId of criterion.derivedFrom) {
+          const depResponse = responses[depId];
+          if (depResponse !== undefined && depResponse !== "") {
+            derivedValue += Number(depResponse) || 0;
+          }
+        }
+      }
+      const points = scoreFromThresholds(derivedValue, criterion.thresholds);
+      if (points !== null) {
+        totalPoints += points;
+        totalCount += 1;
+      }
+      continue;
     }
 
-    weightedSum += value * weight;
+    // N/A responses are excluded
+    if (response === "na") continue;
+
+    let points: number | null = null;
+
+    switch (criterion.type) {
+      case "checkbox":
+        points = response === "true" ? 1 : -1;
+        break;
+      case "rating": {
+        const rating = typeof response === "number" ? response : Number(response);
+        points = rating <= 2 ? -1 : rating === 3 ? 0 : 1;
+        break;
+      }
+      case "select":
+        points = criterion.scores?.[String(response)] ?? 0;
+        break;
+      case "number": {
+        const numValue = typeof response === "number" ? response : Number(response);
+        points = scoreFromThresholds(numValue, criterion.thresholds);
+        break;
+      }
+    }
+
+    if (points !== null) {
+      totalPoints += points;
+      totalCount += 1;
+    }
   }
 
-  // Normalize to 0-100 scale
-  if (totalWeight === 0) return 0;
-  return Math.round((weightedSum / totalWeight) * 100);
+  if (totalCount === 0) return null;
+
+  // Shift from [-count, +count] range to [0, 100]
+  return Math.round(((totalPoints + totalCount) / (2 * totalCount)) * 100);
 }
