@@ -96,9 +96,7 @@ export default function AnchorPanel({
           {sorted.length === 0 && (
             <div className="text-center text-muted-foreground py-8">
               <p className="text-sm">No anchors yet</p>
-              <p className="text-xs mt-1">
-                Add anchors from the map search
-              </p>
+              <p className="text-xs mt-1">Add anchors from the map search</p>
             </div>
           )}
 
@@ -115,9 +113,7 @@ export default function AnchorPanel({
                   style={{ backgroundColor: color }}
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">
-                    {anchor.title}
-                  </p>
+                  <p className="text-sm font-medium truncate">{anchor.title}</p>
                   <div className="flex items-center gap-2 mt-0.5">
                     <span
                       className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded"

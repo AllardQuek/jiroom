@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import {
   Map,
   AdvancedMarker,
   InfoWindow,
   Pin,
   useMap,
+  useMapsLibrary,
 } from "@vis.gl/react-google-maps";
 import { useListingStore } from "@/store/listingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
@@ -16,7 +17,15 @@ import { calculateScore } from "@/lib/utils/calculateScore";
 import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
-import { MapFilters } from "./MapFilters";
+import { MapFilters, type Filters } from "./MapFilters";
+import { MapTooltip } from "./MapTooltip";
+import { MarkerColorToggle } from "./MarkerColorToggle";
+import type { ColorMode } from "./MarkerColorToggle";
+import { RoutePolyline } from "./RoutePolyline";
+import { TravelModeToggle } from "./TravelModeToggle";
+import { CommuteInfo, type RouteData } from "@/components/distance/CommuteInfo";
+import { useRoutePrefsStore } from "@/store/routePrefsStore";
+import { getCachedRoute, setCachedRoute } from "@/lib/utils/routeCache";
 import AnchorMarker from "./AnchorMarker";
 import AnchorPanel from "./AnchorPanel";
 import {
@@ -43,11 +52,36 @@ const STATUS_COLORS: Record<string, string> = {
   archived: "#D1D5DB",
 };
 
-interface Filters {
-  status: string[];
-  priceMin: number | null;
-  priceMax: number | null;
-  showAnchors: boolean;
+const AREA_PALETTE = [
+  "#3B82F6",
+  "#EF4444",
+  "#10B981",
+  "#F59E0B",
+  "#8B5CF6",
+  "#EC4899",
+  "#06B6D4",
+  "#F97316",
+  "#84CC16",
+  "#6366F1",
+  "#14B8A6",
+  "#A855F7",
+];
+
+function parseDurationToMinutes(text: string): number | null {
+  const parts = text.match(/(\d+)\s*(hour|hr|h|min|mins?)/gi);
+  if (!parts) return null;
+  let total = 0;
+  for (const part of parts) {
+    const lower = part.toLowerCase();
+    if (lower.includes("hour") || lower.includes("hr") || lower === "h") {
+      const num = parseInt(part, 10);
+      if (!isNaN(num)) total += num * 60;
+    } else if (lower.includes("min")) {
+      const num = parseInt(part, 10);
+      if (!isNaN(num)) total += num;
+    }
+  }
+  return total || null;
 }
 
 interface MapViewProps {
@@ -86,11 +120,145 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     priceMin: null,
     priceMax: null,
     showAnchors: true,
+    areas: [],
+    scoreMin: null,
+    scoreMax: null,
+    criterionId: null,
+    criterionMinScore: null,
   });
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [showCreateListingDialog, setShowCreateListingDialog] = useState(false);
   const [showCreateAnchorDialog, setShowCreateAnchorDialog] = useState(false);
   const [showAnchorPanel, setShowAnchorPanel] = useState(false);
+  const [hoveredMarker, setHoveredMarker] = useState<{
+    listing: Listing;
+    x: number;
+    y: number;
+  } | null>(null);
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isTouchDevice = useMemo(
+    () =>
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window || navigator.maxTouchPoints > 0),
+    []
+  );
+  const [colorMode, setColorMode] = useState<ColorMode>("status");
+  const visibleAnchors = useMemo(
+    () => (filters.showAnchors ? anchors : []),
+    [filters.showAnchors, anchors]
+  );
+  const evaluations = useEvaluationStore((state) => state.evaluations);
+  const templates = useTemplateStore((state) => state.templates);
+  const template = templates[0];
+
+  const areaOptions = useMemo(
+    () => [...new Set(listings.map((l) => l.area).filter(Boolean))] as string[],
+    [listings]
+  );
+  const criteriaOptions = useMemo(() => template?.criteria ?? [], [template]);
+
+  const areaColorMap = useMemo(() => {
+    const uniqueAreas = [
+      ...new Set(listings.map((l) => l.area).filter(Boolean)),
+    ] as string[];
+    const map: Record<string, string> = {};
+    uniqueAreas.forEach((area, i) => {
+      map[area] = AREA_PALETTE[i % AREA_PALETTE.length];
+    });
+    return map;
+  }, [listings]);
+
+  const travelMode = useRoutePrefsStore((s) => s.travelMode);
+  const setTravelMode = useRoutePrefsStore((s) => s.setTravelMode);
+  const filterAnchorId = useRoutePrefsStore((s) => s.filterAnchorId);
+  const maxCommuteMinutes = useRoutePrefsStore((s) => s.maxCommuteMinutes);
+  const routesLib = useMapsLibrary("routes");
+  const directionsServiceRef = useRef<google.maps.DirectionsService | null>(
+    null
+  );
+  const [routeResults, setRouteResults] = useState<Record<string, RouteData>>(
+    {}
+  );
+
+  useEffect(() => {
+    if (routesLib) {
+      directionsServiceRef.current = new routesLib.DirectionsService();
+    }
+  }, [routesLib]);
+
+  useEffect(() => {
+    if (
+      !selectedListing ||
+      !selectedListing.lat ||
+      !selectedListing.lng ||
+      !directionsServiceRef.current ||
+      visibleAnchors.length === 0
+    ) {
+      return;
+    }
+
+    const targets = visibleAnchors;
+    const listing = selectedListing;
+
+    const initial: Record<string, RouteData> = {};
+    targets.forEach((a) => {
+      initial[a.id] = { result: null, error: null, loading: true };
+    });
+    setRouteResults(initial);
+
+    targets.forEach(async (anchor) => {
+      const originKey = `${listing.lat},${listing.lng}`;
+      const destKey = `${anchor.lat},${anchor.lng}`;
+
+      const cached = getCachedRoute(originKey, destKey, travelMode);
+      if (cached) {
+        initial[anchor.id] = { result: cached, error: null, loading: false };
+        setRouteResults({ ...initial });
+        return;
+      }
+
+      try {
+        const res = await directionsServiceRef.current!.route({
+          origin: { lat: listing.lat!, lng: listing.lng! },
+          destination: { lat: anchor.lat, lng: anchor.lng },
+          travelMode: travelMode as google.maps.TravelModeString,
+          transitOptions:
+            travelMode === "TRANSIT"
+              ? { departureTime: new Date() }
+              : undefined,
+        });
+        setCachedRoute(originKey, destKey, travelMode, res);
+        initial[anchor.id] = { result: res, error: null, loading: false };
+      } catch {
+        initial[anchor.id] = {
+          result: null,
+          error: "No route",
+          loading: false,
+        };
+      }
+      setRouteResults({ ...initial });
+    });
+  }, [selectedListing, travelMode, visibleAnchors]);
+
+  const handleMouseEnter = useCallback((listing: Listing, e: Event) => {
+    const mouseEvent = e as MouseEvent;
+    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredMarker({
+        listing,
+        x: mouseEvent.clientX,
+        y: mouseEvent.clientY,
+      });
+    }, 300);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setHoveredMarker(null);
+  }, []);
 
   const filteredListings = listings.filter((l) => {
     if (!l.lat || !l.lng) return false;
@@ -98,10 +266,60 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       return false;
     if (filters.priceMin !== null && l.price < filters.priceMin) return false;
     if (filters.priceMax !== null && l.price > filters.priceMax) return false;
+    if (
+      filters.areas.length > 0 &&
+      (!l.area || !filters.areas.includes(l.area))
+    )
+      return false;
+
+    if (
+      filters.scoreMin !== null ||
+      filters.scoreMax !== null ||
+      filters.criterionId !== null
+    ) {
+      const evaluation = evaluations.find((e) => e.listing_id === l.id);
+      const score =
+        evaluation && template
+          ? calculateScore(evaluation.responses, template)
+          : null;
+
+      if (
+        filters.scoreMin !== null &&
+        (score === null || score < filters.scoreMin)
+      )
+        return false;
+      if (
+        filters.scoreMax !== null &&
+        (score === null || score > filters.scoreMax)
+      )
+        return false;
+
+      if (filters.criterionId !== null) {
+        const criterionScore = evaluation?.responses[filters.criterionId];
+        if (
+          typeof criterionScore !== "number" ||
+          criterionScore < (filters.criterionMinScore ?? 1)
+        )
+          return false;
+      }
+    }
+
+    if (filterAnchorId && maxCommuteMinutes !== null && l.lat && l.lng) {
+      const filterAnchor = anchors.find((a) => a.id === filterAnchorId);
+      if (filterAnchor) {
+        const key = `${l.lat},${l.lng}`;
+        const destKey = `${filterAnchor.lat},${filterAnchor.lng}`;
+        const cached = getCachedRoute(key, destKey, travelMode);
+        const durationText = cached?.routes[0]?.legs[0]?.duration?.text;
+        if (durationText) {
+          const minutes = parseDurationToMinutes(durationText);
+          if (minutes !== null && minutes > maxCommuteMinutes) return false;
+        }
+      }
+    }
+
     return true;
   });
-
-  const visibleAnchors = filters.showAnchors ? anchors : [];
 
   const handlePlaceSelect = useCallback((place: SearchResult) => {
     setSelectedListing(null);
@@ -109,28 +327,36 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     setSearchResult(place);
   }, []);
 
-  const handleAnchorSelect = useCallback(
-    (anchor: Anchor) => {
-      setSelectedAnchor(anchor);
-      setSelectedListing(null);
-      setShowAnchorPanel(false);
-    },
-    []
-  );
+  const handleAnchorSelect = useCallback((anchor: Anchor) => {
+    setSelectedAnchor(anchor);
+    setSelectedListing(null);
+    setShowAnchorPanel(false);
+  }, []);
 
   return (
     <div className="relative w-full h-full">
       <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
         <LocationSearch onPlaceSelect={handlePlaceSelect} />
       </div>
-      <MapFilters filters={filters} onFiltersChange={setFilters} />
-      <button
-        onClick={() => setShowAnchorPanel(true)}
-        className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
-      >
-        <List size={14} />
-        Anchors
-      </button>
+      <MapFilters
+        filters={filters}
+        onFiltersChange={setFilters}
+        colorMode={colorMode}
+        areaColors={areaColorMap}
+        areaOptions={areaOptions}
+        criteria={criteriaOptions}
+      />
+      <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+        <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
+        <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
+        <button
+          onClick={() => setShowAnchorPanel(true)}
+          className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
+        >
+          <List size={14} />
+          Anchors
+        </button>
+      </div>
       <Map
         defaultCenter={{ lat: 1.3521, lng: 103.8198 }}
         defaultZoom={12}
@@ -140,6 +366,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         onClick={() => {
           setSelectedListing(null);
           setSelectedAnchor(null);
+          setRouteResults({});
         }}
       >
         {filteredListings.map((listing) => (
@@ -149,16 +376,41 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             onClick={() => {
               setSelectedListing(listing);
               setSelectedAnchor(null);
+              setHoveredMarker(null);
             }}
+            onMouseEnter={
+              !isTouchDevice ? (e) => handleMouseEnter(listing, e) : undefined
+            }
+            onMouseLeave={!isTouchDevice ? handleMouseLeave : undefined}
           >
             <Pin
-              background={STATUS_COLORS[listing.status] || "#9CA3AF"}
+              background={
+                colorMode === "area"
+                  ? areaColorMap[listing.area] || "#6B7280"
+                  : STATUS_COLORS[listing.status] || "#9CA3AF"
+              }
               borderColor="#374151"
               glyphColor="#FFFFFF"
               scale={1.2}
             />
           </AdvancedMarker>
         ))}
+
+        {selectedListing &&
+          visibleAnchors.map((anchor) => {
+            const data = routeResults[anchor.id];
+            if (!data?.result) return null;
+            const color = anchor.color || ANCHOR_COLORS[anchor.type];
+            const duration = data.result.routes[0]?.legs[0]?.duration?.text;
+            return (
+              <RoutePolyline
+                key={anchor.id}
+                result={data.result}
+                color={color}
+                label={duration}
+              />
+            );
+          })}
 
         {visibleAnchors.map((anchor) => (
           <AnchorMarker
@@ -192,10 +444,25 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             }}
             onCloseClick={() => setSelectedListing(null)}
           >
-            <ListingPreviewCard
-              listing={selectedListing}
-              onViewDetails={onViewDetails}
-            />
+            <div>
+              <ListingPreviewCard
+                listing={selectedListing}
+                onViewDetails={onViewDetails}
+              />
+              <CommuteInfo
+                anchors={visibleAnchors}
+                routes={routeResults}
+                travelModeLabel={
+                  travelMode === "TRANSIT"
+                    ? "Transit"
+                    : travelMode === "DRIVING"
+                      ? "Driving"
+                      : travelMode === "WALKING"
+                        ? "Walking"
+                        : "Biking"
+                }
+              />
+            </div>
           </InfoWindow>
         )}
 
@@ -303,6 +570,14 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           />
         </DialogContent>
       </Dialog>
+
+      {hoveredMarker && (
+        <MapTooltip
+          listing={hoveredMarker.listing}
+          x={hoveredMarker.x}
+          y={hoveredMarker.y}
+        />
+      )}
 
       <AnchorPanel
         open={showAnchorPanel}

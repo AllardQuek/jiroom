@@ -16,6 +16,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { calculateScore } from "@/lib/utils/calculateScore";
+import { CommuteBadge } from "@/components/distance/CommuteBadge";
 
 interface ListingCardProps {
   listing: Listing;
@@ -121,6 +122,7 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <MapPin size={12} />
             <span>{listing.area || "No area"}</span>
+            <CommuteBadge listing={listing} />
           </div>
           <div className="flex items-center gap-2">
             {hasNotes && (
