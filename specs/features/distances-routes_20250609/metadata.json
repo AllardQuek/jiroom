@@ -1,0 +1,8 @@
+{
+  "feature_id": "distances-routes_20250609",
+  "type": "feature",
+  "status": "spec",
+  "created_at": "2025-06-09T00:00:00Z",
+  "updated_at": "2025-06-09T00:00:00Z",
+  "description": "Compute straight-line distances from listings to anchors, with radius filtering and sort-by-distance"
+}

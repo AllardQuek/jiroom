@@ -1,4 +1,4 @@
-# Map View
+# Map View — M1 Core Map
 
 ## Overview
 
@@ -7,8 +7,9 @@ Enable users to visualize their shortlisted listings on a map, add listings with
 ## Use Cases
 
 - Visualize all saved listings on a map
-- Categorize pins by status, price band, or area
+- Categorize pins by status, area, or other grouping
 - Filter map by status, price, area, or evaluation criteria
+- Hover over a pin to see quick info: price, score, notes
 - Add a listing from a location search on the map
 - Import an existing Google Maps saved list
 - Set places of interest (work, MRT, parks) and see relative distances
@@ -18,178 +19,103 @@ Enable users to visualize their shortlisted listings on a map, add listings with
 
 | Milestone | Scope | Status |
 |-----------|-------|--------|
-| M1 — Core Map | Map tab, Places Autocomplete on add/edit, markers by status, filters, tooltip | **Specified** |
-| M2 — Import | Google Takeout CSV/GeoJSON/KML import → listing records | Future |
-| M3 — Anchors | User-defined places of interest shown alongside listings | Future |
-| M4 — Distances | Straight-line distances, later public transport routes | Future |
-
-This spec covers **M1 only**. Subsequent milestones will be specified after M1 ships.
+| M1 — Core Map | Map tab, Places Autocomplete on add/edit, markers by status, filters, tooltip | **Shipped** |
+| M1a — Map UX | Area-based coloring, hover tooltips, enhanced filters (area, score, criteria) | **Specified** |
+| M3 — Anchors | User-defined places of interest shown alongside listings | **Shipped** |
+| M4 — Routes | Transit/driving/walking routes from listing to anchors | **Specified** |
 
 ---
 
-## M1 — Core Map
+## M1 — Core Map (Shipped)
 
-### Functional Requirements
+See `plan.md` for implementation details. The following sections document M1a enhancements added post-v1.
 
-#### FR1: Location-Aware Listing Input
-- **FR1.1**: The create listing form SHALL include a "Location" field with Google Places Autocomplete
-- **FR1.2**: Selecting an autocomplete result SHALL populate:
-  - `title` with the place name
-  - `area` with the locality / administrative area level 1 / sublocality (first available)
-  - `lat` and `lng` with the place coordinates
-  - `googlePlaceId` with the Google Place ID
-- **FR1.3**: All fields after autocomplete SHALL remain editable by the user
-- **FR1.4**: The edit listing form SHALL include the same Autocomplete field, pre-populated with the current location if available
-- **FR1.5**: Creating or editing a listing without using Autocomplete SHALL leave `lat`, `lng`, and `googlePlaceId` unset (the listing will not appear on the map)
+---
 
-#### FR2: Map Tab
-- **FR2.1**: The bottom navigation SHALL include a 5th tab "Map" between Schedule and Templates
-- **FR2.2**: The Map tab SHALL render a full-viewport Google Map
-- **FR2.3**: The map SHALL display a marker for every listing that has `lat` and `lng` set
-- **FR2.4**: Markers SHALL be color-coded by listing status:
-  - New: gray
-  - To View: blue
-  - Viewed: amber
-  - Shortlisted: green
-  - Archived: muted/dimmed
-- **FR2.5**: Markers SHALL use Google's Advanced Markers with custom SVG icons for status colors
+## M1a — Map UX Enhancements
 
-#### FR3: Marker Interaction
-- **FR3.1**: Clicking a marker SHALL open an InfoWindow with:
-  - Listing title
+### FR6: Hover Tooltips
+- **FR6.1**: Hovering over a listing marker SHALL display a lightweight tooltip (not InfoWindow) showing:
+  - Listing title (truncated)
   - Price (formatted)
   - Score (if evaluated)
-  - Status badge
-  - Area
-  - Buttons: "View Details" (opens listing detail modal), "Open in Google Maps" (opens google.com/maps/dir/?api=1&destination=lat,lng)
-- **FR3.2**: The InfoWindow SHALL be dismissible by clicking the close button or clicking elsewhere on the map
+  - Notes preview (first 80 characters, if present)
+- **FR6.2**: The tooltip SHALL appear above the marker within 300ms of hover start
+- **FR6.3**: The tooltip SHALL disappear on mouse leave
+- **FR6.4**: On mobile (touch devices), tooltips SHALL NOT interfere with tap-to-select — the InfoWindow on click takes precedence
+- **FR6.5**: Tooltips SHALL be implemented as a single shared floating overlay (not per-marker DOM nodes) to minimize re-renders
 
-#### FR4: Map Filters
-- **FR4.1**: A filter bar SHALL appear at the top of the map view
-- **FR4.2**: Filters SHALL include:
-  - Status: multi-select checkboxes (New, To View, Viewed, Shortlisted, Archived)
-  - Price range: min/max numeric inputs
-- **FR4.3**: Applying a filter SHALL immediately show/hide markers on the map (no API call, client-side filter of store data)
-- **FR4.4**: The map SHALL auto-fit bounds to show all visible markers after filtering
+### FR7: Area-Based Marker Coloring
+- **FR7.1**: The map SHALL support two coloring modes, toggled via a button in the filter panel:
+  - **By Status** (default): markers colored by listing status (existing M1 behavior)
+  - **By Area**: markers colored by geographic area (e.g. Tampines, Simei, Clementi)
+- **FR7.2**: In "By Area" mode, areas SHALL be auto-detected from the `area` field on each listing
+- **FR7.3**: Each unique area SHALL receive a distinct color from a predefined palette
+- **FR7.4**: Listings without an `area` value SHALL default to a neutral "Unknown" gray
+- **FR7.5**: A legend SHALL appear in the filter panel showing the area → color mapping
 
-#### FR5: Map-First Listing Creation
-- **FR5.1**: A search box SHALL appear at the top of the map view (same Places Autocomplete as the form)
-- **FR5.2**: Selecting a search result SHALL:
-  - Center the map on the selected location
-  - Drop a temporary marker
-  - Show a "Create listing here" button/card
-- **FR5.3**: Tapping "Create listing here" SHALL open the create listing dialog with location fields pre-filled from the search result
+### FR8: Enhanced Filters
+- **FR8.1**: The filter panel SHALL include an **Area** filter showing all unique areas as checkable chips
+- **FR8.2**: The filter panel SHALL include a **Score** range filter (min/max, 0–10)
+- **FR8.3**: The filter panel SHALL include a **Criteria** filter allowing the user to select specific evaluation criteria and set a minimum rating (e.g. "Rent must be ≥ 7")
+- **FR8.4**: All filters SHALL compose logically (AND within each category, AND across categories)
 
-### Non-Functional Requirements
+### Acceptance Criteria (M1a)
 
-#### NFR1: Google Maps API Integration
-- **NFR1.1**: The Google Maps JavaScript API SHALL be loaded via `@vis.gl/react-google-maps` (APIProvider, Map, AdvancedMarker, useMapsLibrary hooks)
-- **NFR1.2**: The API key SHALL be stored in a `.env.local` file as `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
-- **NFR1.3**: Required APIs to enable in Google Cloud Console: Maps JavaScript API, Places API
-- **NFR1.4**: The map SHALL work without a map ID (default styling, no cloud customization required)
+- [ ] AC11: Hovering a marker shows a tooltip with price, score, and notes within 300ms
+- [ ] AC12: Toggling "By Area" coloring re-colors markers by their `area` field
+- [ ] AC13: Area filter chips show/hide listings by selected areas
+- [ ] AC14: Score range filter shows/hides listings by evaluation score
+- [ ] AC15: Criteria filter with minimum rating shows/hides listings accordingly
+- [ ] AC16: All filters compose correctly with each other and with existing status/price filters
 
-#### NFR2: Mobile-First UX
-- **NFR2.1**: The map SHALL fill the viewport between the top bar and bottom nav
-- **NFR2.2**: Filter bar SHALL be collapsible on mobile to maximize map real estate
-- **NFR2.3**: InfoWindows SHALL be readable on small screens (max-width constrained)
-- **NFR2.4**: Touch targets for markers and buttons SHALL be minimum 44px
+### Out of Scope (M1a)
 
-#### NFR3: Performance
-- **NFR3.1**: No Google Maps API calls on listings without coordinates (no wasted geocoding)
-- **NFR3.2**: Marker rendering SHALL handle up to 100 markers without noticeable lag
-- **NFR3.3**: Filter changes SHALL re-render within 100ms
-
-### Acceptance Criteria
-
-- [ ] AC1: User can search a location in the create listing form and have lat/lng/area/title pre-filled
-- [ ] AC2: User can edit an existing listing's location using the same autocomplete
-- [ ] AC3: A 5th "Map" tab appears in the bottom navigation
-- [ ] AC4: Listings with coordinates render as color-coded markers on the map
-- [ ] AC5: Clicking a marker shows an InfoWindow with listing details and action links
-- [ ] AC6: The "Open in Google Maps" link opens correct directions in a new tab
-- [ ] AC7: Status and price range filters correctly show/hide markers
-- [ ] AC8: The map auto-fits bounds to visible markers
-- [ ] AC9: User can search on the map and create a listing from the result
-- [ ] AC10: Listings without coordinates are silently excluded from the map
-
-### Out of Scope (M1)
-
-- Google Takeout import (M2)
-- Anchor/POI creation (M3)
-- Distance calculation or route overlays (M4)
-- Marker clustering
+- Marker clustering (separate feature if needed)
 - Saved map view state (zoom, center)
 - Cloud-based map styling or custom map IDs
 - Batch geocoding existing listings without coordinates
-- Verdict-based marker coloring (status only for M1)
+- Google Takeout import (archived)
 
 ### Data Model Changes
 
-Add to `types/listing.ts`:
+No new fields. The existing `area` string field and evaluation store scores are sufficient.
 
-```typescript
-export interface Listing {
-  // ... existing fields ...
-  lat?: number;           // Latitude from Places Autocomplete
-  lng?: number;           // Longitude from Places Autocomplete
-  googlePlaceId?: string; // Google Place ID for future enrichment
-}
-```
-
-These fields are optional. Listings without them simply don't render on the map.
-
-### Component Structure
+### Component Structure (M1a Additions)
 
 ```
 components/
   map/
-    MapView.tsx            # Main map page component
-    MapViewContent.tsx     # Internal map wrapper (needs Suspense)
-    MapFilters.tsx         # Filter bar (status, price range)
-    ListingPreviewCard.tsx # InfoWindow content / bottom sheet content
-    LocationSearch.tsx     # Places Autocomplete for map-first creation
-    MapMarker.tsx          # Single marker wrapper (status-colored)
-app/
-  map/
-    page.tsx               # Map page route
+    MapTooltip.tsx            # Shared hover tooltip overlay
+    MarkerColorToggle.tsx     # "By Status" / "By Area" toggle
+    AreaLegend.tsx            # Color legend for area mode
+    MapFilters.tsx            # Updated: area chips, score range, criteria filter
 ```
-
-### Dependencies
-
-- `@vis.gl/react-google-maps` — React components for Google Maps JS API
-- `@types/google.maps` — TypeScript types for Google Maps (dev dependency)
-- Google Cloud project with Maps JavaScript API + Places API enabled
-- API key in `.env.local`
-
-#### API Key Strategy
-
-Use the [Maps Demo Key](https://developers.google.com/maps/documentation/javascript/demo-key) for development — no billing required, supports all M1 features (map rendering, markers, Places Autocomplete). Before regular personal use, upgrade the same key by adding billing (the $200/mo free credit covers a single-user tool indefinitely) or create a new billing-enabled key. Migration is a one-line env var change.
 
 ### Technical Notes
 
-#### Script Loading
-`@vis.gl/react-google-maps` handles script loading via `APIProvider`. No manual script tag or callback needed. The API key is passed as a prop:
-
+#### Tooltip Implementation
+Use a single shared `<div>` positioned absolutely on the map, driven by a hover state:
 ```tsx
-<APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}>
-  <Map ...>
-    <AdvancedMarker ... />
-  </Map>
-</APIProvider>
+const [hoveredMarker, setHoveredMarker] = useState<{ listing: Listing; x: number; y: number } | null>(null);
+```
+On `onMouseEnter` of an AdvancedMarker, calculate screen position using `map.getProjection()` and show the tooltip. On `onMouseLeave`, hide it.
+
+#### Color Palette for Areas
+Predefined palette of 12 colors for areas, cycling when exceeded:
+```
+#3B82F6 (blue), #EF4444 (red), #10B981 (green), #F59E0B (amber),
+#8B5CF6 (violet), #EC4899 (pink), #06B6D4 (cyan), #F97316 (orange),
+#84CC16 (lime), #6366F1 (indigo), #14B8A6 (teal), #A855F7 (purple)
 ```
 
-#### Places Library Access
-Use `useMapsLibrary('places')` hook to load the Places library for Autocomplete. This is loaded dynamically only when needed (lazy).
+#### Criteria Filter Implementation
+Criteria data comes from the evaluation store (`useEvaluationStore`). Each evaluation has `responses` keyed by criterion ID. The filter picks a criterion + minimum score + any matching listing's evaluation must have that criterion ≥ min.
 
-#### Autocomplete Integration
-Both the create/edit form and the map search use the same `PlaceAutocomplete` wrapper component. On selection, both paths call the same callback to set `title`, `area`, `lat`, `lng`, `googlePlaceId`.
-
-#### Marker Colors
-Use `AdvancedMarker` with custom `content` (a `<div>` styled as a colored circle/pin) rather than the default red pin. The color is derived from `listing.status`.
-
-#### InfoWindow
-Use Google Maps `InfoWindow` (available via `useMapsLibrary`) or the `@vis.gl/react-google-maps` wrapper. Position it at the marker's coordinates.
-
-#### No Geocoding
-This spec explicitly does NOT include geocoding. Coordinates come only from Places Autocomplete selections. Existing listings without coordinates remain off the map until the user edits them and re-selects a location.
-
+```tsx
+const matchesCriteria = (listingId: string) => {
+  const evaluation = evaluations.find(e => e.listingId === listingId);
+  if (!evaluation || !selectedCriterion || minScore === null) return true;
+  return (evaluation.responses[selectedCriterion]?.score ?? 0) >= minScore;
+};
+```

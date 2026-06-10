@@ -25,6 +25,7 @@ import PlaceAutocomplete from "@/components/map/PlaceAutocomplete";
 interface CreateListingFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  defaultValues?: Partial<ListingFormData>;
 }
 
 const extractFromUrl = (url: string) => {
@@ -101,13 +102,16 @@ const extractFromUrl = (url: string) => {
 export function CreateListingForm({
   onSuccess,
   onCancel,
+  defaultValues: defaultValuesProp,
 }: CreateListingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const addListing = useListingStore((state) => state.addListing);
   const listings = useListingStore((state) => state.listings);
 
   const form = useForm<ListingFormData>({
-    resolver: zodResolver(listingSchema),
+    resolver: zodResolver(
+      listingSchema
+    ) as unknown as import("react-hook-form").Resolver<ListingFormData>,
     defaultValues: {
       source_url: "",
       title: "",
@@ -115,6 +119,7 @@ export function CreateListingForm({
       area: "",
       source_platform: "",
       status: "to_view",
+      ...defaultValuesProp,
     },
   });
 
@@ -250,14 +255,15 @@ export function CreateListingForm({
               </label>
               <PlaceAutocomplete
                 onPlaceSelect={(place) => {
-                  form.setValue("title", place.title);
-                  form.setValue("area", place.area);
-                  form.setValue("lat", place.lat);
-                  form.setValue("lng", place.lng);
-                  form.setValue("googlePlaceId", place.googlePlaceId);
+                  if (place.lat) {
+                    form.setValue("title", place.title);
+                    form.setValue("area", place.area);
+                    form.setValue("lat", place.lat);
+                    form.setValue("lng", place.lng);
+                    form.setValue("googlePlaceId", place.googlePlaceId);
+                  }
                 }}
-                placeholder="Search address or building name..."
-                className="bg-primary/5 border border-primary/20 focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary rounded-lg px-3 py-2 w-full text-sm outline-none transition-colors placeholder:text-muted-foreground/50"
+                className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-2 w-full text-sm outline-none"
               />
               <p className="text-[0.8rem] text-muted-foreground mt-1.5">
                 Search to auto-fill location details

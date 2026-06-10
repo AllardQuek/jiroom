@@ -15,6 +15,7 @@ interface Filters {
   status: string[];
   priceMin: number | null;
   priceMax: number | null;
+  showAnchors: boolean;
 }
 
 interface MapFiltersProps {
@@ -75,6 +76,27 @@ export function MapFilters({ filters, onFiltersChange }: MapFiltersProps) {
                 {opt.label}
               </button>
             ))}
+          </div>
+
+          <div className="border-t border-border/30 pt-3">
+            <span className="text-xs font-semibold">Anchors</span>
+            <div className="flex items-center gap-2 mt-1.5">
+              <button
+                onClick={() =>
+                  onFiltersChange({
+                    ...filters,
+                    showAnchors: !filters.showAnchors,
+                  })
+                }
+                className={`text-[11px] px-2.5 py-1 rounded-full border font-medium transition-colors ${
+                  filters.showAnchors
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
+                }`}
+              >
+                Show anchors
+              </button>
+            </div>
           </div>
 
           <div className="border-t border-border/30 pt-3">

@@ -8,6 +8,7 @@ import {
   ClipboardList,
   CalendarDays,
   Map,
+  MapPin,
 } from "lucide-react";
 
 export default function Navigation() {
@@ -17,13 +18,14 @@ export default function Navigation() {
     { name: "Listings", href: "/listings", icon: LayoutList },
     { name: "Compare", href: "/compare", icon: GitCompareArrows },
     { name: "Map", href: "/map", icon: Map },
+    { name: "Anchors", href: "/anchors", icon: MapPin },
     { name: "Schedule", href: "/schedule", icon: CalendarDays },
     { name: "Templates", href: "/template", icon: ClipboardList },
   ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
-      <div className="flex justify-around items-center h-20 max-w-lg mx-auto px-4">
+      <div className="flex justify-around items-center h-20 max-w-lg mx-auto px-2">
         {tabs.map((tab) => {
           const isActive =
             pathname === tab.href || pathname.startsWith(tab.href + "/");
