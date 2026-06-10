@@ -44,7 +44,9 @@ export function EditListingForm({
   const updateListing = useListingStore((state) => state.updateListing);
 
   const form = useForm<ListingFormData>({
-    resolver: zodResolver(listingSchema),
+    resolver: zodResolver(
+      listingSchema
+    ) as unknown as import("react-hook-form").Resolver<ListingFormData>,
     defaultValues: {
       source_url: listing.source_url,
       title: listing.title,
@@ -129,15 +131,16 @@ export function EditListingForm({
               <FormControl>
                 <PlaceAutocomplete
                   onPlaceSelect={(place) => {
-                    form.setValue("title", place.title);
-                    form.setValue("area", place.area);
-                    form.setValue("lat", place.lat);
-                    form.setValue("lng", place.lng);
-                    form.setValue("googlePlaceId", place.googlePlaceId);
+                    if (place.lat) {
+                      form.setValue("title", place.title);
+                      form.setValue("lat", place.lat);
+                      form.setValue("lng", place.lng);
+                      form.setValue("googlePlaceId", place.googlePlaceId);
+                    }
+                    form.setValue("area", place.area || place.title);
                   }}
-                  placeholder="Search address or building name..."
                   initialValue={field.value}
-                  className="bg-primary/5 border border-primary/20 focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary rounded-lg px-3 py-2 w-full text-sm outline-none transition-colors placeholder:text-muted-foreground/50"
+                  className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-2 w-full text-sm outline-none"
                 />
               </FormControl>
               <FormMessage />
