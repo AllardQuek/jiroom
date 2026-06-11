@@ -4,6 +4,18 @@
 
 Enable side-by-side comparison of multiple listings. This feature allows users to select up to 3 listings and compare their key metrics, evaluation scores, and verdict status in a unified view to support final decision-making.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a renter who has narrowed down to 3 options, I want to see them side-by-side with all key metrics aligned, so that I can make a final decision without flipping between browser tabs or my own spreadsheets.
+- **Family renter**: As a couple evaluating rentals together, I want to compare evaluation scores and verdicts across listings on one screen, so that we can discuss trade-offs and reach consensus faster.
+- **All users**: As a renter who has filled evaluations for several listings, I want the comparison view to highlight which listing has the best value for each metric (lowest price, highest score), so that I can identify the strongest option at a glance.
+
+### Design Rationale
+
+The comparison view was capped at 3 listings based on the practical limit of what can be meaningfully compared on a mobile screen. Beyond 3, each column becomes too narrow to be useful. The view prioritizes evaluation score, verdict status, and price as the primary comparison dimensions — these are the three signals that drive most rental decisions. Source platform and viewing status are secondary context. The "highlight best value" pattern (e.g., green for lowest price) was chosen over color-coding by performance (red/yellow/green) to avoid implying that certain criteria are inherently good or bad.
+
 ## Functional Requirements
 
 ### FR1: Listing Selection

@@ -28,11 +28,25 @@ export const useTemplateStore = create<TemplateState>()(
         set((state) => ({
           templates: state.templates.filter((template) => template.id !== id),
         })),
-      getTemplate: (id) => get().templates.find((template) => template.id === id),
+      getTemplate: (id) =>
+        get().templates.find((template) => template.id === id),
       initializeTemplates: () => {
         const { templates } = get();
-        if (templates.length === 0) {
-          set({ templates: [defaultTemplate] });
+        const codeIds = defaultTemplate.criteria
+          .map((c) => c.id)
+          .sort()
+          .join(",");
+        const existingDefault = templates.find((t) => t.id === "default");
+        if (existingDefault) {
+          const storedIds = existingDefault.criteria
+            .map((c) => c.id)
+            .sort()
+            .join(",");
+          if (storedIds === codeIds) return;
+          const others = templates.filter((t) => t.id !== "default");
+          set({ templates: [...others, defaultTemplate] });
+        } else {
+          set({ templates: [...templates, defaultTemplate] });
         }
       },
     }),

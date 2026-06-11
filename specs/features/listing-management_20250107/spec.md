@@ -4,6 +4,20 @@
 
 Enable users to create, edit, and manage room listings from property portal URLs. This feature provides the foundational data entry and management capabilities for the Rental Viewing Evaluator, allowing users to track shortlisted rooms discovered on external property portals.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a renter browsing PropertyGuru, I find a listing I like and want to save it, so that I can track it alongside other options without keeping browser tabs open or copying details to a spreadsheet.
+- **All users**: As a renter, I want to paste a URL and add minimal metadata (price, area), so that I can quickly capture a listing in seconds during a browsing session.
+- **All users**: As a renter managing 10+ listings, I want to see them in a clean card-based list with price and status at a glance, so that I can scan and triage my options efficiently.
+- **All users**: As a renter, I want to click through to the original source URL from the app, so that I can revisit the full listing details on the property portal without searching for it again.
+- **All users**: As a renter who made a mistake or found a better option, I want to edit or delete listings, so that my shortlist stays accurate and reflects my current options.
+
+### Design Rationale
+
+Listings use manual data entry (paste URL, type price, etc.) rather than auto-extraction from property portal URLs because each portal has different HTML structure, making scraping fragile and costly to maintain. The manual approach is a deliberate trade-off: it takes 10-15 seconds per listing but works reliably for any source. The card-based list view was chosen over a table/grid because it's more mobile-friendly and allows richer per-item information (status badge, area, notes preview) without requiring horizontal scroll. Status (New / To View / Viewed / Shortlisted / Archived) provides a lightweight pipeline that maps to the typical renter workflow from initial discovery through final decision.
+
 ## Functional Requirements
 
 ### FR1: Listing List View

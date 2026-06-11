@@ -8,7 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CategorySection } from "./CategorySection";
 import { CriteriaForm } from "./CriteriaForm";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface TemplateEditorProps {
   template: Template;
@@ -17,7 +22,6 @@ interface TemplateEditorProps {
   onAddCriteria: (categoryId: string) => void;
   onEditCriteria: (criterionId: string) => void;
   onDeleteCriteria: (criterionId: string) => void;
-  onMoveCriteria: (criterionId: string, direction: "up" | "down") => void;
 }
 
 export function TemplateEditor({
@@ -27,7 +31,6 @@ export function TemplateEditor({
   onAddCriteria,
   onEditCriteria,
   onDeleteCriteria,
-  onMoveCriteria,
 }: TemplateEditorProps) {
   const [name, setName] = useState(template.name);
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
@@ -81,10 +84,10 @@ export function TemplateEditor({
                 key={category}
                 category={category}
                 criteria={criteria}
+                templateId={template.id}
                 onAddCriteria={() => onAddCriteria(category)}
                 onEditCriteria={onEditCriteria}
                 onDeleteCriteria={onDeleteCriteria}
-                onMoveCriteria={onMoveCriteria}
               />
             ))}
           </div>

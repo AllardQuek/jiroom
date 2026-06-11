@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -10,7 +10,7 @@ import {
 import { useListingStore } from "@/store/listingStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sparkles, Globe } from "lucide-react";
+import { Sparkles, Globe, MapPin } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -20,11 +20,12 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import { useEffect } from "react";
+import PlaceAutocomplete from "@/components/map/PlaceAutocomplete";
 
 interface CreateListingFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
+  defaultValues?: Partial<ListingFormData>;
 }
 
 const extractFromUrl = (url: string) => {
@@ -101,13 +102,16 @@ const extractFromUrl = (url: string) => {
 export function CreateListingForm({
   onSuccess,
   onCancel,
+  defaultValues: defaultValuesProp,
 }: CreateListingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const addListing = useListingStore((state) => state.addListing);
   const listings = useListingStore((state) => state.listings);
 
   const form = useForm<ListingFormData>({
-    resolver: zodResolver(listingSchema),
+    resolver: zodResolver(
+      listingSchema
+    ) as unknown as import("react-hook-form").Resolver<ListingFormData>,
     defaultValues: {
       source_url: "",
       title: "",
@@ -115,6 +119,7 @@ export function CreateListingForm({
       area: "",
       source_platform: "",
       status: "to_view",
+      ...defaultValuesProp,
     },
   });
 
@@ -241,6 +246,30 @@ export function CreateListingForm({
               )}
             />
 
+            <div>
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
+                <span className="flex items-center gap-2">
+                  <MapPin size={14} className="text-primary" />
+                  Location
+                </span>
+              </label>
+              <PlaceAutocomplete
+                onPlaceSelect={(place) => {
+                  if (place.lat) {
+                    form.setValue("title", place.title);
+                    form.setValue("area", place.area);
+                    form.setValue("lat", place.lat);
+                    form.setValue("lng", place.lng);
+                    form.setValue("googlePlaceId", place.googlePlaceId);
+                  }
+                }}
+                className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-2 w-full text-sm outline-none"
+              />
+              <p className="text-[0.8rem] text-muted-foreground mt-1.5">
+                Search to auto-fill location details
+              </p>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -263,12 +292,12 @@ export function CreateListingForm({
 
               <FormField
                 control={form.control}
-                name="area"
+                name="source_platform"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Area / District</FormLabel>
+                    <FormLabel>Platform</FormLabel>
                     <FormControl>
-                      <Input placeholder="D15, Clementi..." {...field} />
+                      <Input placeholder="Auto-detected..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -276,19 +305,7 @@ export function CreateListingForm({
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="source_platform"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Platform</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Auto-detected..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <input type="hidden" {...form.register("area")} />
           </div>
         </div>
 

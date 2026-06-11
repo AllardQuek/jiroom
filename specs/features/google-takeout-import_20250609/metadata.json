@@ -1,0 +1,9 @@
+{
+  "feature_id": "google-takeout-import_20250609",
+  "type": "feature",
+  "status": "archived",
+  "created_at": "2025-06-09T00:00:00Z",
+  "updated_at": "2025-06-09T00:00:00Z",
+  "archived_reason": "Google Takeout is heavyweight UX (user must request export, wait, download, then upload). Google Maps Saved Places lists have no public API — accessing them would require scraping, which violates ToS. The native map-first creation flow (M1 Phase 8) solves the same problem: search a location, create a listing. No batch import needed.",
+  "description": "Import Google Maps Saved Places from Google Takeout CSV files as listings (archived — not feasible without scraping)"
+}

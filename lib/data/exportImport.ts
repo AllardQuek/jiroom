@@ -48,9 +48,17 @@ export function downloadData(exportData: ExportData): void {
   URL.revokeObjectURL(url);
 }
 
-export function importData(json: ExportData): { success: boolean; message: string; storesImported: number } {
+export function importData(json: ExportData): {
+  success: boolean;
+  message: string;
+  storesImported: number;
+} {
   if (!json.data || typeof json.data !== "object") {
-    return { success: false, message: "Invalid backup file: missing data object", storesImported: 0 };
+    return {
+      success: false,
+      message: "Invalid backup file: missing data object",
+      storesImported: 0,
+    };
   }
 
   let count = 0;

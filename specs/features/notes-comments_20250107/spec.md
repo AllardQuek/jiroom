@@ -4,6 +4,18 @@
 
 Enable freeform note-taking at listing and viewing level with bullet-style formatting support. This feature allows users to capture thoughts, observations, and details during their rental evaluation process, with notes displayed both inline in relevant sections and in a dedicated overview section.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a renter attending back-to-back viewings, I want to quickly jot down observations during or immediately after each visit, so that I don't forget which listing had the noisy aircon or the friendly housemates.
+- **Family renter**: As a couple evaluating a listing together, I want to capture freeform notes about things that don't fit in structured evaluation fields (e.g., "landlord seemed rigid on move-in date"), so that we have a complete picture when discussing later.
+- **All users**: As a renter with a long shortlist, I want to see a note preview on the listing card without opening the detail view, so that I can quickly distinguish listings by my own comments rather than just price and status.
+
+### Design Rationale
+
+Notes are intentionally freeform rather than structured fields because rental evaluation has too many unpredictable dimensions to capture in a fixed schema. The bullet-style formatting (lines starting with "-") provides lightweight structure without requiring a full rich-text editor — users can use it for quick lists of pros/cons, observations, or action items. The 80-character note preview on listing cards balances information density with scanability: enough to distinguish listings by key insight, not so much that cards become cluttered. Notes exist at both listing level (general thoughts) and viewing level (visit-specific observations), reflecting the two distinct contexts where users capture information.
+
 ## Functional Requirements
 
 ### FR1: Listing-Level Notes

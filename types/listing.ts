@@ -7,6 +7,9 @@ export interface Listing {
   area: string;
   status: "new" | "to_view" | "viewed" | "archived" | "shortlisted";
   notes?: string; // listing-level notes
+  lat?: number;
+  lng?: number;
+  googlePlaceId?: string;
   created_at: string;
 }
 

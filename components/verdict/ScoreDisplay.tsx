@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
+import { useListingStore } from "@/store/listingStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
 
 interface ScoreDisplayProps {
@@ -14,14 +15,15 @@ export function ScoreDisplay({ listingId }: ScoreDisplayProps) {
     state.getEvaluationByListingId(listingId)
   );
   const templates = useTemplateStore((state) => state.templates);
+  const listings = useListingStore((state) => state.listings);
 
   const score = useMemo(() => {
     if (!evaluation || templates.length === 0) {
       return null;
     }
-
-    return calculateScore(evaluation.responses, templates[0]);
-  }, [evaluation, templates]);
+    const listing = listings.find((l) => l.id === listingId);
+    return calculateScore(evaluation.responses, templates[0], listing?.price);
+  }, [evaluation, templates, listings, listingId]);
 
   if (score === null) {
     return (

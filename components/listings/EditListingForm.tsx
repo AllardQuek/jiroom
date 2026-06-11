@@ -3,11 +3,15 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { listingSchema, type ListingFormData } from "@/lib/schemas/listingSchema";
+import {
+  listingSchema,
+  type ListingFormData,
+} from "@/lib/schemas/listingSchema";
 import { useListingStore } from "@/store/listingStore";
 import { Listing } from "@/types/listing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { MapPin } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -23,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import PlaceAutocomplete from "@/components/map/PlaceAutocomplete";
 
 interface EditListingFormProps {
   listing: Listing;
@@ -30,12 +35,18 @@ interface EditListingFormProps {
   onCancel?: () => void;
 }
 
-export function EditListingForm({ listing, onSuccess, onCancel }: EditListingFormProps) {
+export function EditListingForm({
+  listing,
+  onSuccess,
+  onCancel,
+}: EditListingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const updateListing = useListingStore((state) => state.updateListing);
 
   const form = useForm<ListingFormData>({
-    resolver: zodResolver(listingSchema),
+    resolver: zodResolver(
+      listingSchema
+    ) as unknown as import("react-hook-form").Resolver<ListingFormData>,
     defaultValues: {
       source_url: listing.source_url,
       title: listing.title,
@@ -113,9 +124,24 @@ export function EditListingForm({ listing, onSuccess, onCancel }: EditListingFor
           name="area"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Area</FormLabel>
+              <FormLabel className="flex items-center gap-2">
+                <MapPin size={14} className="text-primary" />
+                Location
+              </FormLabel>
               <FormControl>
-                <Input placeholder="Downtown" {...field} />
+                <PlaceAutocomplete
+                  onPlaceSelect={(place) => {
+                    if (place.lat) {
+                      form.setValue("title", place.title);
+                      form.setValue("lat", place.lat);
+                      form.setValue("lng", place.lng);
+                      form.setValue("googlePlaceId", place.googlePlaceId);
+                    }
+                    form.setValue("area", place.area || place.title);
+                  }}
+                  initialValue={field.value}
+                  className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-2 w-full text-sm outline-none"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -32,7 +32,9 @@ export function ViewingNotes({ notes, onNotesChange }: ViewingNotesProps) {
         <Textarea
           id="viewing-notes"
           value={localNotes}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setLocalNotes(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setLocalNotes(e.target.value)
+          }
           placeholder="Add notes about this viewing..."
           rows={3}
           className="resize-none"

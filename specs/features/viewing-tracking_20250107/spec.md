@@ -4,6 +4,19 @@
 
 Allow users to schedule and track viewing appointments for listings. This feature enables users to manage their viewing workflow by scheduling viewings, tracking viewing status, and adding viewing-specific notes directly within the listing detail view.
 
+## User Stories & Rationale
+
+### User Stories
+
+- **Young professional**: As a renter coordinating viewings after work, I want to schedule a date/time for each listing, so that I can plan my viewing route efficiently without double-booking myself.
+- **All users**: As a renter who scheduled viewings across multiple days, I want to see an overview of upcoming viewings, so that I know what's on my calendar and can prepare accordingly.
+- **All users**: As a renter attending a viewing, I want to capture notes specific to the visit (e.g., "landlord was late," "room smelled musty"), so that my viewing impressions are stored alongside the listing data and not lost in a separate notes app.
+- **All users**: As a renter managing 10+ listings, I want to track viewing status (To View, Upcoming, Viewed, Skipped, Cancelled), so that I can see at a glance which listings I've actually seen in person versus still need to visit.
+
+### Design Rationale
+
+Viewing tracking is a lightweight layer on top of listings rather than a separate calendar system. The 5 statuses (To View / Upcoming / Viewed / Skipped / Cancelled) cover the full lifecycle of a viewing appointment from scheduling through outcome. "Skipped" and "Cancelled" are distinguished to capture intent: skipped means the user decided not to attend, while cancelled means the appointment was called off by either party — this distinction matters for future reference. Viewing-specific notes are stored separately from listing-level notes to preserve the context of when an observation was made (before, during, or after the visit).
+
 ## Functional Requirements
 
 ### FR1: Viewing Scheduling

@@ -47,8 +47,9 @@ export function ComparisonTable() {
 
   const getScore = (listingId: string) => {
     const evaluation = evaluations.find((e) => e.listing_id === listingId);
+    const listing = listings.find((l) => l.id === listingId);
     if (!evaluation || !template) return null;
-    return calculateScore(evaluation.responses, template);
+    return calculateScore(evaluation.responses, template, listing?.price);
   };
 
   const scores = useMemo(

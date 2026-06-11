@@ -32,8 +32,8 @@ export function DeleteConfirmationDialog({
         <DialogHeader>
           <DialogTitle>Delete Listing</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{listingTitle}"? This action cannot be
-            undone.
+            Are you sure you want to delete "{listingTitle}"? This action cannot
+            be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

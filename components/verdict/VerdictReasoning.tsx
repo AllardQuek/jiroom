@@ -35,7 +35,9 @@ export function VerdictReasoning({
         <Textarea
           id="verdict-reasoning"
           value={localReasoning}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setLocalReasoning(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setLocalReasoning(e.target.value)
+          }
           placeholder="Add reasoning for your verdict..."
           rows={3}
           className="resize-none"
@@ -64,7 +66,9 @@ export function VerdictReasoning({
       {reasoning ? (
         <p className="text-sm p-3 bg-muted rounded-lg">{reasoning}</p>
       ) : (
-        <p className="text-sm text-muted-foreground italic">No reasoning added</p>
+        <p className="text-sm text-muted-foreground italic">
+          No reasoning added
+        </p>
       )}
     </div>
   );

@@ -1,0 +1,8 @@
+{
+  "feature_id": "anchors-poi_20250609",
+  "type": "feature",
+  "status": "spec",
+  "created_at": "2025-06-09T00:00:00Z",
+  "updated_at": "2025-06-09T00:00:00Z",
+  "description": "User-defined places of interest (home, work, school, MRT stations) shown alongside listings on the map"
+}

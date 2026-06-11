@@ -20,7 +20,12 @@ import {
   importData,
   type ExportData,
 } from "@/lib/data/exportImport";
-import { loadSeedData, isSeedModeActive, isAnyStoreEmpty, toggleSeedMode } from "@/lib/data/seedData";
+import {
+  loadSeedData,
+  isSeedModeActive,
+  isAnyStoreEmpty,
+  toggleSeedMode,
+} from "@/lib/data/seedData";
 
 export function ListingsPageInner() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -65,9 +70,15 @@ export function ListingsPageInner() {
   function handleToggleSeed() {
     const result = toggleSeedMode();
     if (result === "seed") {
-      setBackupStatus({ type: "success", message: "Sample data loaded. Reloading..." });
+      setBackupStatus({
+        type: "success",
+        message: "Sample data loaded. Reloading...",
+      });
     } else if (result === "user") {
-      setBackupStatus({ type: "success", message: "Your data restored. Reloading..." });
+      setBackupStatus({
+        type: "success",
+        message: "Your data restored. Reloading...",
+      });
     } else {
       setBackupStatus({ type: "error", message: "No user data to restore" });
       return;
@@ -97,7 +108,10 @@ export function ListingsPageInner() {
         const json = JSON.parse(event.target?.result as string) as ExportData;
         const result = importData(json);
         if (result.success) {
-          setBackupStatus({ type: "success", message: "Restored. Reloading..." });
+          setBackupStatus({
+            type: "success",
+            message: "Restored. Reloading...",
+          });
           setTimeout(() => window.location.reload(), 1500);
         } else {
           setBackupStatus({ type: "error", message: result.message });
@@ -131,7 +145,12 @@ export function ListingsPageInner() {
             <Plus className="mr-2 h-4 w-4" />
             Add listing
           </Button>
-          <Button variant="ghost" size="icon" onClick={handleExport} title="Export data">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleExport}
+            title="Export data"
+          >
             <Download className="h-4 w-4" />
           </Button>
           <Button
@@ -194,7 +213,6 @@ export function ListingsPageInner() {
         open={!!selectedListingId}
         onClose={() => setSelectedListingId(null)}
       />
-
     </div>
   );
 }

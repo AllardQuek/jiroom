@@ -59,7 +59,9 @@ export function NotesEditor({
       <Textarea
         id="notes"
         value={localValue}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setLocalValue(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+          setLocalValue(e.target.value)
+        }
         placeholder="Add notes... Use '-' at the start of a line for bullet points"
         rows={4}
         className="resize-none"
