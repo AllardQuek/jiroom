@@ -229,7 +229,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
 
         const routeData: RouteResultData = {
           path: route.path ?? [],
-          durationText: route.legs?.[0]?.localizedValues?.duration?.text ?? "",
+          durationText: route.legs?.[0]?.localizedValues?.duration ?? "",
         };
 
         setCachedRoute(originKey, destKey, travelMode, routeData);

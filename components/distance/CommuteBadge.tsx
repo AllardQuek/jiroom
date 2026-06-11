@@ -23,7 +23,7 @@ export function CommuteBadge({ listing }: CommuteBadgeProps) {
   const originKey = `${listing.lat},${listing.lng}`;
   const destKey = `${anchor.lat},${anchor.lng}`;
   const cached = getCachedRoute(originKey, destKey, travelMode);
-  const duration = cached?.routes[0]?.legs[0]?.duration?.text;
+  const duration = cached?.durationText;
 
   if (!duration) return null;
 
