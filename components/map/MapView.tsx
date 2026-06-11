@@ -25,7 +25,11 @@ import { RoutePolyline } from "./RoutePolyline";
 import { TravelModeToggle } from "./TravelModeToggle";
 import { CommuteInfo, type RouteData } from "@/components/distance/CommuteInfo";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
-import { getCachedRoute, setCachedRoute } from "@/lib/utils/routeCache";
+import {
+  getCachedRoute,
+  setCachedRoute,
+  type RouteResultData,
+} from "@/lib/utils/routeCache";
 import AnchorMarker from "./AnchorMarker";
 import AnchorPanel from "./AnchorPanel";
 import {
@@ -173,25 +177,16 @@ export default function MapView({ onViewDetails }: MapViewProps) {
   const filterAnchorId = useRoutePrefsStore((s) => s.filterAnchorId);
   const maxCommuteMinutes = useRoutePrefsStore((s) => s.maxCommuteMinutes);
   const routesLib = useMapsLibrary("routes");
-  const directionsServiceRef = useRef<google.maps.DirectionsService | null>(
-    null
-  );
   const [routeResults, setRouteResults] = useState<Record<string, RouteData>>(
     {}
   );
-
-  useEffect(() => {
-    if (routesLib) {
-      directionsServiceRef.current = new routesLib.DirectionsService();
-    }
-  }, [routesLib]);
 
   useEffect(() => {
     if (
       !selectedListing ||
       !selectedListing.lat ||
       !selectedListing.lng ||
-      !directionsServiceRef.current ||
+      !routesLib ||
       visibleAnchors.length === 0
     ) {
       return;
@@ -199,6 +194,9 @@ export default function MapView({ onViewDetails }: MapViewProps) {
 
     const targets = visibleAnchors;
     const listing = selectedListing;
+    const RouteClass = (
+      routesLib as unknown as { Route: typeof google.maps.routes.Route }
+    ).Route;
 
     const initial: Record<string, RouteData> = {};
     targets.forEach((a) => {
@@ -218,17 +216,28 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       }
 
       try {
-        const res = await directionsServiceRef.current!.route({
+        const { routes } = await RouteClass.computeRoutes({
           origin: { lat: listing.lat!, lng: listing.lng! },
           destination: { lat: anchor.lat, lng: anchor.lng },
-          travelMode: travelMode as google.maps.TravelModeString,
-          transitOptions:
-            travelMode === "TRANSIT"
-              ? { departureTime: new Date() }
-              : undefined,
+          travelMode: travelMode as google.maps.TravelMode,
+          departureTime: travelMode === "TRANSIT" ? new Date() : undefined,
+          fields: ["path", "legs"],
         });
-        setCachedRoute(originKey, destKey, travelMode, res);
-        initial[anchor.id] = { result: res, error: null, loading: false };
+
+        const route = routes?.[0];
+        if (!route) throw new Error("No route");
+
+        const routeData: RouteResultData = {
+          path: route.path ?? [],
+          durationText: route.legs?.[0]?.localizedValues?.duration?.text ?? "",
+        };
+
+        setCachedRoute(originKey, destKey, travelMode, routeData);
+        initial[anchor.id] = {
+          result: routeData,
+          error: null,
+          loading: false,
+        };
       } catch {
         initial[anchor.id] = {
           result: null,
@@ -238,7 +247,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       }
       setRouteResults({ ...initial });
     });
-  }, [selectedListing, travelMode, visibleAnchors]);
+  }, [selectedListing, travelMode, visibleAnchors, routesLib]);
 
   const handleMouseEnter = useCallback((listing: Listing, e: Event) => {
     const mouseEvent = e as MouseEvent;
@@ -310,7 +319,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         const key = `${l.lat},${l.lng}`;
         const destKey = `${filterAnchor.lat},${filterAnchor.lng}`;
         const cached = getCachedRoute(key, destKey, travelMode);
-        const durationText = cached?.routes[0]?.legs[0]?.duration?.text;
+        const durationText = cached?.durationText;
         if (durationText) {
           const minutes = parseDurationToMinutes(durationText);
           if (minutes !== null && minutes > maxCommuteMinutes) return false;
@@ -401,11 +410,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             const data = routeResults[anchor.id];
             if (!data?.result) return null;
             const color = anchor.color || ANCHOR_COLORS[anchor.type];
-            const duration = data.result.routes[0]?.legs[0]?.duration?.text;
+            const duration = data.result.durationText;
             return (
               <RoutePolyline
                 key={anchor.id}
-                result={data.result}
+                data={data.result}
                 color={color}
                 label={duration}
               />

@@ -1,28 +1,21 @@
 "use client";
 
 import { Polyline, AdvancedMarker } from "@vis.gl/react-google-maps";
+import type { RouteResultData } from "@/lib/utils/routeCache";
 
 interface RoutePolylineProps {
-  result: google.maps.DirectionsResult;
+  data: RouteResultData;
   color: string;
   label?: string;
 }
 
-export function RoutePolyline({ result, color, label }: RoutePolylineProps) {
-  const route = result.routes[0];
-  if (!route) return null;
-
-  const leg = route.legs[0];
-  if (!leg) return null;
-
-  const path = leg.steps.map((step) => ({
-    lat: step.start_location.lat(),
-    lng: step.start_location.lng(),
+export function RoutePolyline({ data, color, label }: RoutePolylineProps) {
+  const path = data.path.map((p) => ({
+    lat: p.lat,
+    lng: p.lng,
   }));
-  path.push({
-    lat: leg.end_location.lat(),
-    lng: leg.end_location.lng(),
-  });
+
+  if (path.length === 0) return null;
 
   const midIndex = Math.floor(path.length / 2);
   const midPoint = path[midIndex];

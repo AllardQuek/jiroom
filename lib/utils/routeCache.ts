@@ -1,5 +1,10 @@
+export interface RouteResultData {
+  path: google.maps.LatLngAltitude[];
+  durationText: string;
+}
+
 interface CacheEntry {
-  result: google.maps.DirectionsResult;
+  result: RouteResultData;
   timestamp: number;
 }
 
@@ -14,7 +19,7 @@ export function getCachedRoute(
   origin: string,
   destination: string,
   mode: string
-): google.maps.DirectionsResult | null {
+): RouteResultData | null {
   const key = makeKey(origin, destination, mode);
   const entry = cache.get(key);
   if (!entry) return null;
@@ -29,7 +34,7 @@ export function setCachedRoute(
   origin: string,
   destination: string,
   mode: string,
-  result: google.maps.DirectionsResult
+  result: RouteResultData
 ): void {
   const key = makeKey(origin, destination, mode);
   cache.set(key, { result, timestamp: Date.now() });

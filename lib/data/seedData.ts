@@ -1,6 +1,7 @@
 import type { Listing, Viewing } from "@/types/listing";
 import type { Evaluation, Template } from "@/types/evaluation";
 import type { Verdict } from "@/types/verdict";
+import type { Anchor } from "@/types/anchor";
 
 const now = new Date("2026-06-08T10:00:00+08:00").toISOString();
 const daysAgo = (n: number) =>
@@ -38,6 +39,8 @@ const ids = {
   e2: "seed-eval-2",
   vd1: "seed-verdict-1",
   vd2: "seed-verdict-2",
+  a1: "seed-anchor-1",
+  a2: "seed-anchor-2",
 };
 
 export const seedListings: Listing[] = [
@@ -50,6 +53,9 @@ export const seedListings: Listing[] = [
     area: "Novena / Toa Payoh",
     status: "to_view",
     notes: "Near MRT, aircon included, owner staying in",
+    lat: 1.32044,
+    lng: 103.84383,
+    googlePlaceId: "ChIJTxTEcecZ2jERVySfJurj8Ok",
     created_at: daysAgo(5),
   },
   {
@@ -61,6 +67,9 @@ export const seedListings: Listing[] = [
     area: "Tampines",
     status: "new",
     notes: "",
+    lat: 1.34959,
+    lng: 103.95679,
+    googlePlaceId: "ChIJ0e4CNAQ92jERy_T_mqOSB48",
     created_at: daysAgo(2),
   },
   {
@@ -72,6 +81,9 @@ export const seedListings: Listing[] = [
     area: "Robertson Quay / River Valley",
     status: "viewed",
     notes: "Beautiful river view, great amenities, but noisy at night",
+    lat: 1.29106,
+    lng: 103.83755,
+    googlePlaceId: "ChIJIX6wyp0Z2jERXBArtuk8cAg",
     created_at: daysAgo(14),
   },
   {
@@ -83,6 +95,9 @@ export const seedListings: Listing[] = [
     area: "Holland Village / Buona Vista",
     status: "shortlisted",
     notes: "Top choice — near work, great neighborhood, good layout",
+    lat: 1.31091,
+    lng: 103.79519,
+    googlePlaceId: "ChIJIQ4seGoa2jERoXJVVkJefFs",
     created_at: daysAgo(10),
   },
   {
@@ -94,6 +109,9 @@ export const seedListings: Listing[] = [
     area: "Clementi / West Coast",
     status: "archived",
     notes: "Too far from MRT, decided not to pursue",
+    lat: 1.31618,
+    lng: 103.76494,
+    googlePlaceId: "ChIJV4YgZpAa2jERoKTarqz3AAU",
     created_at: daysAgo(20),
   },
   {
@@ -105,6 +123,9 @@ export const seedListings: Listing[] = [
     area: "Bugis / Rochor",
     status: "new",
     notes: "",
+    lat: 1.3002,
+    lng: 103.8552,
+    googlePlaceId: "ChIJj7TW9LoZ2jERQgNlXkKhASQ",
     created_at: daysAgo(1),
   },
   {
@@ -116,6 +137,9 @@ export const seedListings: Listing[] = [
     area: "Katong / Joo Chiat",
     status: "to_view",
     notes: "Great food area, older unit but well maintained",
+    lat: 1.30597,
+    lng: 103.90496,
+    googlePlaceId: "ChIJicht9G0Y2jER1DYdsrIIJw8",
     created_at: daysAgo(1),
   },
   {
@@ -127,6 +151,9 @@ export const seedListings: Listing[] = [
     area: "Bedok / Upper East Coast",
     status: "viewed",
     notes: "",
+    lat: 1.3236,
+    lng: 103.92734,
+    googlePlaceId: "ChIJpVt39rMi2jERD2-YBlmmdLU",
     created_at: daysAgo(3),
   },
 ];
@@ -173,6 +200,29 @@ export const seedViewings: Viewing[] = [
     listing_id: ids.l8,
     scheduled_date: yearsFromNow(100),
     created_at: daysAgo(3),
+  },
+];
+
+export const seedAnchors: Anchor[] = [
+  {
+    id: ids.a1,
+    title: "Office @ Raffles Place",
+    type: "work",
+    lat: 1.28448,
+    lng: 103.85134,
+    googlePlaceId: "ChIJHw1aRQkZ2jERFr2P6umQZHc",
+    address: "Raffles Place, Singapore",
+    createdAt: daysAgo(30),
+  },
+  {
+    id: ids.a2,
+    title: "Current Home @ Tiong Bahru",
+    type: "home",
+    lat: 1.28637,
+    lng: 103.8253,
+    googlePlaceId: "ChIJqSM3IH8Z2jERSQIOd4L_FoU",
+    address: "Tiong Bahru, Singapore",
+    createdAt: daysAgo(30),
   },
 ];
 
@@ -294,6 +344,7 @@ const STORE_KEYS = [
   "verdict-storage",
   "template-storage",
   "comparison-storage",
+  "anchor-storage",
 ];
 
 export function isSeedModeActive(): boolean {
@@ -361,6 +412,7 @@ export function loadSeedData(): void {
       state: { selectedListingIds: seedComparisonIds },
       version: 0,
     },
+    "anchor-storage": { state: { anchors: seedAnchors }, version: 0 },
   };
 
   for (const [key, value] of Object.entries(payload)) {

@@ -2,10 +2,11 @@
 
 import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
 import { Anchor } from "@/types/anchor";
+import type { RouteResultData } from "@/lib/utils/routeCache";
 import { Loader2, RouteOff } from "lucide-react";
 
 export interface RouteData {
-  result: google.maps.DirectionsResult | null;
+  result: RouteResultData | null;
   error: string | null;
   loading: boolean;
 }
@@ -34,7 +35,7 @@ export function CommuteInfo({
         {visibleAnchors.map((anchor) => {
           const data = routes[anchor.id];
           const color = anchor.color || ANCHOR_COLORS[anchor.type];
-          const duration = data?.result?.routes[0]?.legs[0]?.duration?.text;
+          const duration = data?.result?.durationText;
 
           return (
             <div key={anchor.id} className="flex items-center gap-2 text-xs">
