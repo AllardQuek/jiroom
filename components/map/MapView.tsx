@@ -355,7 +355,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         areaOptions={areaOptions}
         criteria={criteriaOptions}
       />
-      <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+      <div className="absolute top-3 right-16 z-10 flex items-center gap-1.5">
         <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
         <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
         <button

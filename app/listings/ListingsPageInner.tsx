@@ -127,7 +127,7 @@ export function ListingsPageInner() {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 pr-14">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Listings</h1>

@@ -82,7 +82,7 @@ export function ComparisonTable() {
   }
 
   return (
-    <div className="p-4 pb-24 space-y-4">
+    <div className="p-4 pb-24 space-y-4 pr-14">
       <style>{`
         @keyframes cmp-fade-in {
           from { opacity: 0; transform: translateY(-6px); }
