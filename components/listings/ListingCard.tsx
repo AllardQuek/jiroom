@@ -120,8 +120,11 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
 
         <div className="flex items-center justify-between pt-2 border-t border-border/30">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <MapPin size={12} />
-            <span>{listing.area || "No area"}</span>
+            <MapPin size={12} className={!listing.lat ? "opacity-30" : ""} />
+            <span className={!listing.lat ? "opacity-40 italic" : ""}>
+              {listing.area || "No area"}
+              {!listing.lat && " (no map)"}
+            </span>
             <CommuteBadge listing={listing} />
           </div>
           <div className="flex items-center gap-2">

@@ -21,6 +21,7 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import PlaceAutocomplete from "@/components/map/PlaceAutocomplete";
+import { CreatableSelect } from "@/components/listings/AreaSelect";
 
 interface CreateListingFormProps {
   onSuccess?: () => void;
@@ -99,6 +100,39 @@ const extractFromUrl = (url: string) => {
   }
 };
 
+export function PriceInput({
+  field,
+}: {
+  field: {
+    value: number | undefined;
+    onChange: (v: number | undefined) => void;
+    onBlur: () => void;
+    ref: React.Ref<HTMLInputElement>;
+    name: string;
+  };
+}) {
+  const [text, setText] = useState(
+    () => (field.value ? String(field.value) : "")
+  );
+
+  return (
+    <Input
+      type="text"
+      inputMode="numeric"
+      placeholder="0"
+      value={text}
+      onChange={(e) => {
+        const cleaned = e.target.value.replace(/\D/g, "");
+        setText(cleaned);
+        field.onChange(cleaned === "" ? undefined : Number(cleaned));
+      }}
+      onBlur={field.onBlur}
+      ref={field.ref}
+      name={field.name}
+    />
+  );
+}
+
 export function CreateListingForm({
   onSuccess,
   onCancel,
@@ -127,19 +161,17 @@ export function CreateListingForm({
     control: form.control,
     name: "source_url",
   });
-  const currentTitle = useWatch({
-    control: form.control,
-    name: "title",
-  });
 
   const isDuplicateUrl = listings.some(
     (l) => l.source_url === sourceUrl && sourceUrl !== ""
   );
-  const isDuplicateTitle = listings.some(
-    (l) =>
-      l.title.toLowerCase() === currentTitle.toLowerCase() &&
-      currentTitle !== ""
-  );
+
+  const areaOptions = [
+    ...new Set(listings.map((l) => l.area).filter(Boolean)),
+  ] as string[];
+  const platformOptions = [
+    ...new Set(listings.map((l) => l.source_platform).filter(Boolean)),
+  ] as string[];
 
   // Auto-fill effect
   useEffect(() => {
@@ -192,7 +224,7 @@ export function CreateListingForm({
                 <FormControl>
                   <Input
                     placeholder="Paste link from PropertyGuru, 99.co, etc."
-                    className="bg-primary/5 border-primary/20 focus-visible:ring-primary"
+
                     {...field}
                   />
                 </FormControl>
@@ -226,48 +258,50 @@ export function CreateListingForm({
           </div>
 
           <div className="grid grid-cols-1 gap-4">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Short Title / Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. 252 Tampines St 21" {...field} />
-                  </FormControl>
-                  {isDuplicateTitle && !isDuplicateUrl && (
-                    <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-1 flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                      Another listing has this exact title
-                    </div>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <div>
               <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
                 <span className="flex items-center gap-2">
                   <MapPin size={14} className="text-primary" />
-                  Location
+                  Location *
                 </span>
               </label>
               <PlaceAutocomplete
                 onPlaceSelect={(place) => {
+                  form.setValue("title", place.displayText);
                   if (place.lat) {
-                    form.setValue("title", place.title);
-                    form.setValue("area", place.area);
                     form.setValue("lat", place.lat);
                     form.setValue("lng", place.lng);
                     form.setValue("googlePlaceId", place.googlePlaceId);
                   }
                 }}
-                className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-2 w-full text-sm outline-none"
               />
               <p className="text-[0.8rem] text-muted-foreground mt-1.5">
-                Search to auto-fill location details
+                Sets the listing title and map coordinates from the selected place
               </p>
+            </div>
+
+            <div>
+              <FormField
+                control={form.control}
+                name="area"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center gap-2">
+                      <MapPin size={14} className="text-primary" />
+                      Area
+                    </FormLabel>
+                    <FormControl>
+                      <CreatableSelect
+                        value={field.value}
+                        onChange={field.onChange}
+                        options={areaOptions}
+                        placeholder="Select or type an area..."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -278,12 +312,7 @@ export function CreateListingForm({
                   <FormItem>
                     <FormLabel>Monthly Price ($)</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
-                      />
+                      <PriceInput field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -297,7 +326,12 @@ export function CreateListingForm({
                   <FormItem>
                     <FormLabel>Platform</FormLabel>
                     <FormControl>
-                      <Input placeholder="Auto-detected..." {...field} />
+                      <CreatableSelect
+                        value={field.value}
+                        onChange={field.onChange}
+                        options={platformOptions}
+                        placeholder="Auto-detected..."
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -305,7 +339,6 @@ export function CreateListingForm({
               />
             </div>
 
-            <input type="hidden" {...form.register("area")} />
           </div>
         </div>
 

@@ -149,12 +149,12 @@ export function CreateAnchorForm({
           </label>
           <PlaceAutocomplete
             onPlaceSelect={(place) => {
+              form.setValue("title", place.displayText);
+              form.setValue("address", place.displayText);
               if (place.lat) {
-                form.setValue("title", place.title);
                 form.setValue("lat", place.lat);
                 form.setValue("lng", place.lng);
                 form.setValue("googlePlaceId", place.googlePlaceId);
-                form.setValue("address", place.area);
               }
             }}
             initialValue={anchorToEdit?.address}

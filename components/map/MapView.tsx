@@ -41,7 +41,7 @@ import {
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
 import { CreateAnchorForm } from "@/components/anchors/CreateAnchorForm";
 import { Button } from "@/components/ui/button";
-import { Plus, MapPin, List } from "lucide-react";
+import { Plus, MapPin, List, AlertCircle, X } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const LocationSearch = dynamic(() => import("./LocationSearch"), {
@@ -93,8 +93,7 @@ interface MapViewProps {
 }
 
 interface SearchResult {
-  title: string;
-  area: string;
+  displayText: string;
   lat: number;
   lng: number;
   googlePlaceId: string;
@@ -133,6 +132,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [showCreateListingDialog, setShowCreateListingDialog] = useState(false);
   const [showCreateAnchorDialog, setShowCreateAnchorDialog] = useState(false);
+  const [dismissNoCoords, setDismissNoCoords] = useState(false);
   const [showAnchorPanel, setShowAnchorPanel] = useState(false);
   const [hoveredMarker, setHoveredMarker] = useState<{
     listing: Listing;
@@ -269,6 +269,8 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     setHoveredMarker(null);
   }, []);
 
+  const listingsWithoutCoords = listings.filter((l) => !l.lat || !l.lng);
+
   const filteredListings = listings.filter((l) => {
     if (!l.lat || !l.lng) return false;
     if (filters.status.length > 0 && !filters.status.includes(l.status))
@@ -347,6 +349,23 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
         <LocationSearch onPlaceSelect={handlePlaceSelect} />
       </div>
+      {listingsWithoutCoords.length > 0 && !dismissNoCoords && (
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
+          <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg px-3 py-2 text-xs text-amber-800 dark:text-amber-200 shadow-sm">
+            <AlertCircle size={14} className="shrink-0" />
+            <span className="flex-1">
+              {listingsWithoutCoords.length} listing{listingsWithoutCoords.length > 1 ? "s" : ""} without map coordinates — edit to add a location
+            </span>
+            <button
+              type="button"
+              onClick={() => setDismissNoCoords(true)}
+              className="shrink-0 hover:text-amber-900 dark:hover:text-amber-100"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      )}
       <MapFilters
         filters={filters}
         onFiltersChange={setFilters}
@@ -533,8 +552,8 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           </DialogHeader>
           <CreateListingForm
             defaultValues={{
-              title: searchResult?.title || "",
-              area: searchResult?.area || "",
+              title: searchResult?.displayText || "",
+              area: searchResult?.displayText || "",
               lat: searchResult?.lat,
               lng: searchResult?.lng,
               googlePlaceId: searchResult?.googlePlaceId,
@@ -560,11 +579,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           </DialogHeader>
           <CreateAnchorForm
             defaultValues={{
-              title: searchResult?.title || "",
+              title: searchResult?.displayText || "",
               lat: searchResult?.lat,
               lng: searchResult?.lng,
               googlePlaceId: searchResult?.googlePlaceId,
-              address: searchResult?.area,
+              address: searchResult?.displayText || "",
             }}
             anchorToEdit={selectedAnchor || undefined}
             onSuccess={() => {

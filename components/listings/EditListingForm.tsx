@@ -28,6 +28,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import PlaceAutocomplete from "@/components/map/PlaceAutocomplete";
+import { CreatableSelect } from "@/components/listings/AreaSelect";
+import { PriceInput } from "@/components/listings/CreateListingForm";
 
 interface EditListingFormProps {
   listing: Listing;
@@ -42,6 +44,14 @@ export function EditListingForm({
 }: EditListingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const updateListing = useListingStore((state) => state.updateListing);
+  const listings = useListingStore((state) => state.listings);
+
+  const areaOptions = [
+    ...new Set(listings.map((l) => l.area).filter(Boolean)),
+  ] as string[];
+  const platformOptions = [
+    ...new Set(listings.map((l) => l.source_platform).filter(Boolean)),
+  ] as string[];
 
   const form = useForm<ListingFormData>({
     resolver: zodResolver(
@@ -54,6 +64,9 @@ export function EditListingForm({
       area: listing.area,
       source_platform: listing.source_platform,
       status: listing.status,
+      lat: listing.lat,
+      lng: listing.lng,
+      googlePlaceId: listing.googlePlaceId,
     },
   });
 
@@ -88,36 +101,41 @@ export function EditListingForm({
 
         <FormField
           control={form.control}
-          name="title"
+          name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title *</FormLabel>
+              <FormLabel>Price *</FormLabel>
               <FormControl>
-                <Input placeholder="2 bedroom apartment" {...field} />
+                <PriceInput field={field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Price *</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="1500"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div>
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
+            <span className="flex items-center gap-2">
+              <MapPin size={14} className="text-primary" />
+              Location *
+            </span>
+          </label>
+          <PlaceAutocomplete
+            onPlaceSelect={(place) => {
+              form.setValue("title", place.displayText);
+              if (place.lat) {
+                form.setValue("lat", place.lat);
+                form.setValue("lng", place.lng);
+                form.setValue("googlePlaceId", place.googlePlaceId);
+              }
+            }}
+            initialValue={listing.title}
+            placeId={listing.googlePlaceId}
+          />
+          <p className="text-[0.8rem] text-muted-foreground mt-1.5">
+            Updates the listing title and map coordinates from the selected place
+          </p>
+        </div>
 
         <FormField
           control={form.control}
@@ -126,21 +144,14 @@ export function EditListingForm({
             <FormItem>
               <FormLabel className="flex items-center gap-2">
                 <MapPin size={14} className="text-primary" />
-                Location
+                Area
               </FormLabel>
               <FormControl>
-                <PlaceAutocomplete
-                  onPlaceSelect={(place) => {
-                    if (place.lat) {
-                      form.setValue("title", place.title);
-                      form.setValue("lat", place.lat);
-                      form.setValue("lng", place.lng);
-                      form.setValue("googlePlaceId", place.googlePlaceId);
-                    }
-                    form.setValue("area", place.area || place.title);
-                  }}
-                  initialValue={field.value}
-                  className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-2 w-full text-sm outline-none"
+                <CreatableSelect
+                  value={field.value}
+                  onChange={field.onChange}
+                  options={areaOptions}
+                  placeholder="Select or type an area..."
                 />
               </FormControl>
               <FormMessage />
@@ -155,7 +166,12 @@ export function EditListingForm({
             <FormItem>
               <FormLabel>Source Platform</FormLabel>
               <FormControl>
-                <Input placeholder="Zillow, Craigslist, etc." {...field} />
+                <CreatableSelect
+                  value={field.value}
+                  onChange={field.onChange}
+                  options={platformOptions}
+                  placeholder="Auto-detected..."
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -4,8 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 
 interface LocationSearchResult {
-  title: string;
-  area: string;
+  displayText: string;
   lat: number;
   lng: number;
   googlePlaceId: string;
@@ -144,27 +143,6 @@ export default function LocationSearch({ onPlaceSelect }: LocationSearchProps) {
     const loc = place.location;
     if (!loc) return;
 
-    const dn = place.displayName;
-    const title =
-      typeof dn === "object" && dn?.text
-        ? dn.text
-        : place.formattedAddress || "";
-
-    const preferred = [
-      "sublocality",
-      "locality",
-      "administrative_area_level_1",
-    ];
-    const comps = place.addressComponents || [];
-    let area = "";
-    for (const key of preferred) {
-      const c = comps.find((c: { types: string[] }) => c.types.includes(key));
-      if (c) {
-        area = c.longText;
-        break;
-      }
-    }
-
     if (sessionTokenRef.current && placesLib) {
       const lib = placesLib as unknown as Record<string, unknown>;
       const SessionTokenCtor =
@@ -175,8 +153,7 @@ export default function LocationSearch({ onPlaceSelect }: LocationSearchProps) {
     }
 
     callbackRef.current({
-      title,
-      area,
+      displayText,
       lat: loc.lat(),
       lng: loc.lng(),
       googlePlaceId: place.id || "",
