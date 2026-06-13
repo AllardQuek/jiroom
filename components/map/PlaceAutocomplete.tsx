@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { Input } from "@/components/ui/input";
+import { cleanTitle } from "@/lib/data/migrations";
 
 interface PlaceResult {
   displayText: string;
@@ -127,8 +128,9 @@ export default function PlaceAutocomplete({
     console.log("[PlaceAutocomplete] handleSelect:", suggestion.text);
     if (!placesLib || !suggestion.placePrediction) return;
 
+    const cleanedText = cleanTitle(suggestion.text);
     justSelectedRef.current = true;
-    setValue(suggestion.text);
+    setValue(cleanedText);
     setShowDropdown(false);
 
     interface SuggestionWithToPlace {
@@ -163,7 +165,7 @@ export default function PlaceAutocomplete({
       return;
     }
 
-    const displayText = suggestion.text;
+    const displayText = cleanTitle(suggestion.text);
 
     if (sessionTokenRef.current && placesLib) {
       const lib = placesLib as unknown as Record<string, unknown>;
