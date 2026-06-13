@@ -11,25 +11,22 @@ const statusLabels: Record<string, string> = {
   yes: "Yes",
   maybe: "Maybe",
   no: "No",
-  undecided: "Undecided",
 };
 
 const statusColors: Record<string, string> = {
   yes: "bg-green-500 hover:bg-green-600",
   maybe: "bg-yellow-500 hover:bg-yellow-600",
   no: "bg-red-500 hover:bg-red-600",
-  undecided: "bg-gray-500 hover:bg-gray-600",
 };
 
 export function VerdictStatusButtons({
   currentStatus,
   onStatusChange,
 }: VerdictStatusButtonsProps) {
-  const statuses: Array<"yes" | "maybe" | "no" | "undecided"> = [
+  const statuses: Array<"yes" | "maybe" | "no"> = [
     "yes",
     "maybe",
     "no",
-    "undecided",
   ];
 
   return (

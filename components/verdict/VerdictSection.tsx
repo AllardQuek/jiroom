@@ -20,14 +20,12 @@ const statusLabels: Record<string, string> = {
   yes: "Yes",
   maybe: "Maybe",
   no: "No",
-  undecided: "Undecided",
 };
 
 const statusColors: Record<string, string> = {
   yes: "bg-emerald-100 text-emerald-700 border-emerald-200",
   maybe: "bg-amber-100 text-amber-700 border-amber-200",
   no: "bg-red-100 text-red-700 border-red-200",
-  undecided: "bg-stone-100 text-stone-500 border-stone-200",
 };
 
 export function VerdictSection({
@@ -49,12 +47,12 @@ export function VerdictSection({
         </div>
         <p className="text-sm text-muted-foreground mb-3">Not set yet</p>
         <VerdictStatusButtons
-          currentStatus="undecided"
+          currentStatus="maybe"
           onStatusChange={(status) => {
             const newVerdict: Verdict = {
               id: crypto.randomUUID(),
               listing_id: listingId,
-              status: status as "yes" | "maybe" | "no" | "undecided",
+              status: status as "yes" | "maybe" | "no",
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
             };
@@ -98,7 +96,7 @@ export function VerdictSection({
             currentStatus={verdict.status}
             onStatusChange={(status) =>
               onVerdictUpdate({
-                status: status as "yes" | "maybe" | "no" | "undecided",
+                status: status as "yes" | "maybe" | "no",
                 updated_at: new Date().toISOString(),
               })
             }

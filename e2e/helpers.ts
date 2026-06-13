@@ -83,7 +83,7 @@ export function seedLocalStorage(page: Page) {
         title: "Master Room @ Holland Village",
         price: 2200,
         area: "Holland Village / Buona Vista",
-        status: "shortlisted",
+        status: "viewed",
         notes:
           "Top choice \u2014 near work, great neighborhood, good layout",
         lat: 1.3117,

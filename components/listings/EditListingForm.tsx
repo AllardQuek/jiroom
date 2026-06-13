@@ -195,7 +195,7 @@ export function EditListingForm({
                   <SelectItem value="to_view">To View</SelectItem>
                   <SelectItem value="viewed">Viewed</SelectItem>
                   <SelectItem value="archived">Archived</SelectItem>
-                  <SelectItem value="shortlisted">Shortlisted</SelectItem>
+
                 </SelectContent>
               </Select>
               <FormMessage />

@@ -10,7 +10,7 @@ export const listingSchema = z.object({
   area: z.string().optional(),
   source_platform: z.string().optional(),
   status: z
-    .enum(["new", "to_view", "viewed", "archived", "shortlisted"])
+    .enum(["new", "to_view", "viewed", "archived"])
     .default("new"),
   lat: z.number().optional(),
   lng: z.number().optional(),

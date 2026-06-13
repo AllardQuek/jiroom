@@ -14,7 +14,6 @@ const statusColors: Record<string, string> = {
   to_view: "bg-blue-100 text-blue-800 border-blue-200",
   viewed: "bg-emerald-100 text-emerald-800 border-emerald-200",
   archived: "bg-stone-100 text-stone-500 border-stone-200",
-  shortlisted: "bg-violet-100 text-violet-800 border-violet-200",
 };
 
 const statusLabels: Record<string, string> = {
@@ -22,7 +21,6 @@ const statusLabels: Record<string, string> = {
   to_view: "To View",
   viewed: "Viewed",
   archived: "Archived",
-  shortlisted: "Shortlisted",
 };
 
 export function ListingDetail({

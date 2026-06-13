@@ -177,14 +177,12 @@ const statusVariant: Record<
   yes: "default",
   maybe: "secondary",
   no: "destructive",
-  undecided: "outline",
 };
 
 const statusLabel: Record<string, string> = {
   yes: "Yes",
   maybe: "Maybe",
   no: "No",
-  undecided: "Undecided",
 };
 
 export function ComparisonColumn({

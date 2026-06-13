@@ -5,7 +5,7 @@ export interface Listing {
   title: string;
   price: number;
   area: string;
-  status: "new" | "to_view" | "viewed" | "archived" | "shortlisted";
+  status: "new" | "to_view" | "viewed" | "archived";
   notes?: string; // listing-level notes
   lat?: number;
   lng?: number;
