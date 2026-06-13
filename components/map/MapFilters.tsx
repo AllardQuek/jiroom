@@ -1,18 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import type { ColorMode } from "./MarkerColorToggle";
 import { AreaLegend } from "./AreaLegend";
 import { CommuteFilter } from "@/components/distance/CommuteFilter";
-import type { Criterion } from "@/types/evaluation";
 
 const STATUS_OPTIONS = [
   { value: "new", label: "New" },
   { value: "to_view", label: "To View" },
   { value: "viewed", label: "Viewed" },
-  { value: "shortlisted", label: "Shortlisted" },
   { value: "archived", label: "Archived" },
+] as const;
+
+const VERDICT_OPTIONS = [
+  { value: "yes", label: "Yes" },
+  { value: "maybe", label: "Maybe" },
+  { value: "no", label: "No" },
 ] as const;
 
 export interface Filters {

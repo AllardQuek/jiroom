@@ -13,6 +13,7 @@ import { useListingStore } from "@/store/listingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { useAnchorStore } from "@/store/anchorStore";
+import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
 import { Listing } from "@/types/listing";
