@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { Check, Circle, Hash, Type, Trash2 } from "lucide-react";
+import { Check, Hash, Type, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -391,12 +391,8 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                   key={criterion.id}
                   className="group flex items-start gap-3 rounded-lg px-3 py-1.5 transition-colors hover:bg-background/60"
                 >
-                  <div className="mt-1 shrink-0">
-                    {answered ? (
-                      <Check className="h-3 w-3 text-emerald-500" />
-                    ) : (
-                      <Circle className="h-3 w-3 text-muted-foreground/30" />
-                    )}
+                  <div className="mt-1 shrink-0 w-3">
+                    {answered && <Check className="h-3 w-3 text-emerald-500" />}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-3">

@@ -3,40 +3,20 @@ import { Template } from "@/types/evaluation";
 export const defaultTemplate: Template = {
   id: "default",
   name: "Default Rental Evaluation",
-  version: 3,
+  version: 5,
   criteria: [
     // Cost
     {
-      id: "c1",
-      name: "Utilities included",
-      description:
-        "Are utilities (water, electricity, gas) included in the rent? If partial, note details in the cost field below.",
-      type: "select",
-      category: "Cost",
-      options: ["Included", "Not included", "Partial"],
-      scores: { Included: 1, "Not included": -1, Partial: 0 },
-    },
-    {
       id: "c2",
       name: "Monthly utility cost (SGD)",
-      description:
-        "Expected or average monthly utility cost if not included in rent.",
+      description: "Average monthly utilities (water, electricity, gas). If included in rent, leave blank.",
       type: "number",
       category: "Cost",
     },
     {
-      id: "c3",
-      name: "Additional costs (cleaning, aircon, etc.)",
-      description: "Are there any recurring additional costs beyond rent and utilities?",
-      type: "select",
-      category: "Cost",
-      options: ["Yes", "No"],
-      scores: { Yes: -1, No: 1 },
-    },
-    {
       id: "c4",
-      name: "Additional costs amount (SGD/mth)",
-      description: "Total monthly amount for additional costs.",
+      name: "Additional costs (SGD/mth)",
+      description: "Monthly additional costs (cleaning, aircon, etc.). Leave blank if none.",
       type: "number",
       category: "Cost",
     },
