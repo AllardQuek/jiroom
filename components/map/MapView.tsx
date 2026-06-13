@@ -41,7 +41,7 @@ import {
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
 import { CreateAnchorForm } from "@/components/anchors/CreateAnchorForm";
 import { Button } from "@/components/ui/button";
-import { Plus, MapPin, List, AlertCircle, X } from "lucide-react";
+import { Plus, MapPin, List, AlertCircle, X, ExternalLink, Eye } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const LocationSearch = dynamic(() => import("./LocationSearch"), {
@@ -52,7 +52,6 @@ const STATUS_COLORS: Record<string, string> = {
   new: "#9CA3AF",
   to_view: "#3B82F6",
   viewed: "#F59E0B",
-  shortlisted: "#22C55E",
   archived: "#D1D5DB",
 };
 
@@ -126,8 +125,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     areas: [],
     scoreMin: null,
     scoreMax: null,
-    criterionId: null,
-    criterionMinScore: null,
+    verdict: [],
   });
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [showCreateListingDialog, setShowCreateListingDialog] = useState(false);
@@ -152,6 +150,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     [filters.showAnchors, anchors]
   );
   const evaluations = useEvaluationStore((state) => state.evaluations);
+  const verdicts = useVerdictStore((state) => state.verdicts);
   const templates = useTemplateStore((state) => state.templates);
   const template = templates[0];
 
@@ -159,8 +158,6 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     () => [...new Set(listings.map((l) => l.area).filter(Boolean))] as string[],
     [listings]
   );
-  const criteriaOptions = useMemo(() => template?.criteria ?? [], [template]);
-
   const areaColorMap = useMemo(() => {
     const uniqueAreas = [
       ...new Set(listings.map((l) => l.area).filter(Boolean)),
@@ -283,11 +280,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     )
       return false;
 
-    if (
-      filters.scoreMin !== null ||
-      filters.scoreMax !== null ||
-      filters.criterionId !== null
-    ) {
+    if (filters.scoreMin !== null || filters.scoreMax !== null) {
       const evaluation = evaluations.find((e) => e.listing_id === l.id);
       const score =
         evaluation && template
@@ -304,15 +297,6 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         (score === null || score > filters.scoreMax)
       )
         return false;
-
-      if (filters.criterionId !== null) {
-        const criterionScore = evaluation?.responses[filters.criterionId];
-        if (
-          typeof criterionScore !== "number" ||
-          criterionScore < (filters.criterionMinScore ?? 1)
-        )
-          return false;
-      }
     }
 
     if (filterAnchorId && maxCommuteMinutes !== null && l.lat && l.lng) {
@@ -327,6 +311,13 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           if (minutes !== null && minutes > maxCommuteMinutes) return false;
         }
       }
+    }
+
+    if (filters.verdict.length > 0) {
+      const verdict = verdicts.find((v) => v.listing_id === l.id);
+      const verdictStatus = verdict?.status;
+      if (!verdictStatus || !filters.verdict.includes(verdictStatus))
+        return false;
     }
 
     return true;
@@ -346,6 +337,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
 
   return (
     <div className="relative w-full h-full">
+      <style>{`.gm-ui-hover-effect { display: none !important; }`}</style>
       <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
         <LocationSearch onPlaceSelect={handlePlaceSelect} />
       </div>
@@ -372,7 +364,6 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         colorMode={colorMode}
         areaColors={areaColorMap}
         areaOptions={areaOptions}
-        criteria={criteriaOptions}
       />
       <div className="absolute top-3 right-16 z-10 flex items-center gap-1.5">
         <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
@@ -502,16 +493,18 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             }}
             onCloseClick={() => setSelectedAnchor(null)}
           >
-            <AnchorInfoWindow
-              anchor={selectedAnchor}
-              onEdit={() => {
-                setShowCreateAnchorDialog(true);
-              }}
-              onDelete={() => {
-                deleteAnchor(selectedAnchor.id);
-                setSelectedAnchor(null);
-              }}
-            />
+            <div>
+              <AnchorInfoWindow
+                anchor={selectedAnchor}
+                onEdit={() => {
+                  setShowCreateAnchorDialog(true);
+                }}
+                onDelete={() => {
+                  deleteAnchor(selectedAnchor.id);
+                  setSelectedAnchor(null);
+                }}
+              />
+            </div>
           </InfoWindow>
         )}
 
@@ -634,55 +627,60 @@ function ListingPreviewCard({
       : null;
 
   return (
-    <div className="text-sm min-w-[200px] max-w-[260px] space-y-2">
-      <h3 className="font-semibold leading-snug">{listing.title}</h3>
-      <div className="flex items-baseline gap-1">
-        <span className="font-bold text-base">
-          ${listing.price.toLocaleString()}
-        </span>
-        <span className="text-muted-foreground text-xs">/mo</span>
-      </div>
-      {listing.area && (
-        <p className="text-xs text-muted-foreground">{listing.area}</p>
-      )}
-      <div className="flex items-center gap-2 text-xs">
-        <span
-          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase"
-          style={{
-            backgroundColor: STATUS_COLORS[listing.status] + "20",
-            color: STATUS_COLORS[listing.status],
-          }}
-        >
-          {listing.status.replace("_", " ")}
-        </span>
-        {score !== null && (
-          <span className="font-semibold">Score: {score}</span>
+    <div className="text-sm min-w-[200px] max-w-[260px]">
+      <div className="space-y-1.5">
+        <h3 className="font-semibold leading-tight text-[13px]" style={{ wordBreak: "break-word", overflowWrap: "break-word" }}>{listing.title}</h3>
+        <div className="flex items-baseline gap-1">
+          <span className="font-bold text-base">
+            ${listing.price.toLocaleString()}
+          </span>
+          <span className="text-muted-foreground text-[11px]">/mo</span>
+        </div>
+        {listing.area && (
+          <p className="text-[11px] text-muted-foreground">{listing.area}</p>
         )}
+        <div className="flex items-center gap-2">
+          <span
+            className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
+            style={{
+              backgroundColor: STATUS_COLORS[listing.status] + "20",
+              color: STATUS_COLORS[listing.status],
+            }}
+          >
+            {listing.status.replace("_", " ")}
+          </span>
+          {score !== null && (
+            <span className="text-xs font-semibold">Score: {score}</span>
+          )}
+        </div>
       </div>
-      <div className="flex gap-2 pt-1">
+      <div className="flex flex-wrap gap-1.5 mt-3 pt-2.5 pb-2 border-t border-border/40">
         {onViewDetails && (
           <button
             onClick={() => onViewDetails(listing.id)}
-            className="text-xs text-primary hover:underline font-medium"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
           >
-            View Details
+            <Eye size={12} />
+            Details
           </button>
         )}
         <a
           href={listing.source_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-primary hover:underline font-medium"
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
         >
-          Open source
+          <ExternalLink size={12} />
+          Source
         </a>
         <a
           href={`https://www.google.com/maps/dir/?api=1&destination=${listing.lat},${listing.lng}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-primary hover:underline font-medium"
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
         >
-          Open in Google Maps
+          <MapPin size={12} />
+          Maps
         </a>
       </div>
     </div>
@@ -701,11 +699,11 @@ function AnchorInfoWindow({
   const color = anchor.color || ANCHOR_COLORS[anchor.type];
 
   return (
-    <div className="text-sm min-w-[180px] max-w-[240px] space-y-2">
-      <h3 className="font-semibold leading-snug">{anchor.title}</h3>
-      <div className="flex items-center gap-2 text-xs">
+    <div className="text-sm" style={{ minWidth: 180, maxWidth: 280 }}>
+      <h3 className="font-semibold leading-tight text-[13px] break-words">{anchor.title}</h3>
+      <div className="flex items-center gap-2 mt-1.5">
         <span
-          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase"
+          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
           style={{
             backgroundColor: color + "20",
             color: color,
@@ -715,18 +713,18 @@ function AnchorInfoWindow({
         </span>
       </div>
       {anchor.address && (
-        <p className="text-xs text-muted-foreground">{anchor.address}</p>
+        <p className="text-[11px] text-muted-foreground mt-1">{anchor.address}</p>
       )}
-      <div className="flex gap-2 pt-1">
+      <div className="flex gap-1.5 mt-3 pt-2.5 border-t border-border/40">
         <button
           onClick={onEdit}
-          className="text-xs text-primary hover:underline font-medium"
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
         >
           Edit
         </button>
         <button
           onClick={onDelete}
-          className="text-xs text-destructive hover:underline font-medium"
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
         >
           Delete
         </button>

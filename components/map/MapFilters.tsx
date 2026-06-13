@@ -23,8 +23,7 @@ export interface Filters {
   areas: string[];
   scoreMin: number | null;
   scoreMax: number | null;
-  criterionId: string | null;
-  criterionMinScore: number | null;
+  verdict: string[];
 }
 
 interface MapFiltersProps {
@@ -33,7 +32,6 @@ interface MapFiltersProps {
   colorMode?: ColorMode;
   areaColors?: Record<string, string>;
   areaOptions?: string[];
-  criteria?: Criterion[];
 }
 
 export function MapFilters({
@@ -42,9 +40,22 @@ export function MapFilters({
   colorMode = "status",
   areaColors = {},
   areaOptions = [],
-  criteria = [],
 }: MapFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleClickOutside(e: MouseEvent) {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
 
   const toggleStatus = (value: string) => {
     const next = filters.status.includes(value)
@@ -60,6 +71,13 @@ export function MapFilters({
     onFiltersChange({ ...filters, areas: next });
   };
 
+  const toggleVerdict = (value: string) => {
+    const next = filters.verdict.includes(value)
+      ? filters.verdict.filter((v) => v !== value)
+      : [...filters.verdict, value];
+    onFiltersChange({ ...filters, verdict: next });
+  };
+
   const hasActiveFilters =
     filters.status.length > 0 ||
     filters.priceMin !== null ||
@@ -67,14 +85,10 @@ export function MapFilters({
     filters.areas.length > 0 ||
     filters.scoreMin !== null ||
     filters.scoreMax !== null ||
-    filters.criterionId !== null;
-
-  const ratingCriteria = criteria.filter(
-    (c) => c.type === "rating" || c.type === "number"
-  );
+    filters.verdict.length > 0;
 
   return (
-    <div className="absolute top-3 left-3 right-3 z-10 flex flex-col gap-2">
+    <div ref={panelRef} className="absolute top-3 left-3 z-10 flex flex-col gap-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="self-start flex items-center gap-2 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
@@ -87,7 +101,7 @@ export function MapFilters({
       </button>
 
       {isOpen && (
-        <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md space-y-3 max-h-[70vh] overflow-y-auto">
+        <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md space-y-3 max-h-[70vh] overflow-y-auto w-80 max-w-[calc(100vw-1.5rem)]">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold">Status</span>
             <button
@@ -111,6 +125,25 @@ export function MapFilters({
                 {opt.label}
               </button>
             ))}
+          </div>
+
+          <div className="border-t border-border/30 pt-3">
+            <span className="text-xs font-semibold">Verdict</span>
+            <div className="flex flex-wrap gap-1.5 mt-1.5">
+              {VERDICT_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => toggleVerdict(opt.value)}
+                  className={`text-[11px] px-2.5 py-1 rounded-full border font-medium transition-colors ${
+                    filters.verdict.includes(opt.value)
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {areaOptions.length > 0 && (
@@ -201,55 +234,6 @@ export function MapFilters({
               />
             </div>
           </div>
-
-          {ratingCriteria.length > 0 && (
-            <div className="border-t border-border/30 pt-3">
-              <span className="text-xs font-semibold">Criteria</span>
-              <div className="flex flex-col gap-2 mt-1.5">
-                <select
-                  value={filters.criterionId ?? ""}
-                  onChange={(e) =>
-                    onFiltersChange({
-                      ...filters,
-                      criterionId: e.target.value || null,
-                    })
-                  }
-                  className="w-full bg-muted/50 border border-border/50 rounded-lg px-2.5 py-1.5 text-xs outline-none focus:border-primary"
-                >
-                  <option value="">Any criterion</option>
-                  {ratingCriteria.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-                {filters.criterionId && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-[11px] text-muted-foreground whitespace-nowrap">
-                      Min rating:
-                    </span>
-                    <input
-                      type="number"
-                      min={1}
-                      max={10}
-                      step={1}
-                      placeholder="5"
-                      value={filters.criterionMinScore ?? ""}
-                      onChange={(e) =>
-                        onFiltersChange({
-                          ...filters,
-                          criterionMinScore: e.target.value
-                            ? Number(e.target.value)
-                            : null,
-                        })
-                      }
-                      className="w-16 bg-muted/50 border border-border/50 rounded-lg px-2 py-1 text-xs outline-none focus:border-primary"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
 
           <CommuteFilter />
 
