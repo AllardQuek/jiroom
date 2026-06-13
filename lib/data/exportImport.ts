@@ -1,11 +1,14 @@
-const STORE_KEYS = [
-  "listing-storage",
-  "viewing-storage",
-  "evaluation-storage",
-  "verdict-storage",
-  "template-storage",
-  "comparison-storage",
-] as const;
+function getStoreKeys(): string[] {
+  if (typeof window === "undefined") return [];
+  const keys: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.endsWith("-storage")) {
+      keys.push(key);
+    }
+  }
+  return keys.sort();
+}
 
 export interface ExportData {
   version: number;
@@ -16,7 +19,7 @@ export interface ExportData {
 export function exportAllData(): ExportData {
   const data: Record<string, unknown> = {};
 
-  for (const key of STORE_KEYS) {
+  for (const key of getStoreKeys()) {
     const raw = localStorage.getItem(key);
     if (raw) {
       try {
@@ -61,8 +64,13 @@ export function importData(json: ExportData): {
     };
   }
 
+  const storeKeys = getStoreKeys();
+  const backupKeys = Object.keys(json.data).filter(
+    (k) => k.endsWith("-storage") || storeKeys.includes(k),
+  );
+
   let count = 0;
-  for (const key of STORE_KEYS) {
+  for (const key of backupKeys) {
     if (key in json.data) {
       localStorage.setItem(key, JSON.stringify(json.data[key]));
       count++;
@@ -71,7 +79,7 @@ export function importData(json: ExportData): {
 
   return {
     success: true,
-    message: `Imported ${count} of ${STORE_KEYS.length} stores`,
+    message: `Imported ${count} store(s)`,
     storesImported: count,
   };
 }

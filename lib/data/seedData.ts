@@ -93,7 +93,7 @@ export const seedListings: Listing[] = [
     title: "Master Room @ Holland Village",
     price: 2200,
     area: "Holland Village / Buona Vista",
-    status: "shortlisted",
+    status: "viewed",
     notes: "Top choice — near work, great neighborhood, good layout",
     lat: 1.31091,
     lng: 103.79519,
@@ -337,15 +337,18 @@ export const seedComparisonIds: string[] = [ids.l3, ids.l4];
 
 const BACKUP_KEY = "user-data-backup";
 const SEED_FLAG = "seed-mode-active";
-const STORE_KEYS = [
-  "listing-storage",
-  "viewing-storage",
-  "evaluation-storage",
-  "verdict-storage",
-  "template-storage",
-  "comparison-storage",
-  "anchor-storage",
-];
+
+function getStoreKeys(): string[] {
+  if (typeof window === "undefined") return [];
+  const keys: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.endsWith("-storage")) {
+      keys.push(key);
+    }
+  }
+  return keys.sort();
+}
 
 export function isSeedModeActive(): boolean {
   if (typeof window === "undefined") return false;
@@ -366,7 +369,7 @@ export function isAnyStoreEmpty(): boolean {
 
 export function backupUserData(): boolean {
   const backup: Record<string, unknown> = {};
-  for (const key of STORE_KEYS) {
+  for (const key of getStoreKeys()) {
     const raw = localStorage.getItem(key);
     if (raw) {
       try {
@@ -386,8 +389,8 @@ export function restoreUserData(): boolean {
   if (!raw) return false;
   try {
     const backup = JSON.parse(raw) as Record<string, unknown>;
-    for (const key of STORE_KEYS) {
-      if (key in backup) {
+    for (const key of Object.keys(backup)) {
+      if (key.endsWith("-storage")) {
         localStorage.setItem(key, JSON.stringify(backup[key]));
       }
     }
