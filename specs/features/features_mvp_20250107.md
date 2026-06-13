@@ -14,7 +14,7 @@ MVP Features
 
 ### Sub-feature 1: Listing Management
 - **Goal:** Enable users to create, edit, and manage room listings from property portal URLs
-- **Scope:** Create listings from URLs, edit basic metadata (title, price, area, platform), track listing status (New, To View, Viewed, Archived, Shortlisted), open original source links. Out of scope: automated crawling, detailed property page reconstruction.
+- **Scope:** Create listings from URLs, edit basic metadata (title, price, area, platform), track listing status (New, To View, Viewed, Archived) in a drag-and-drop kanban board, open original source links. Out of scope: automated crawling, detailed property page reconstruction.
 - **Key Deliverables:** Listing creation form, listing list view, listing detail view, status management UI, source link integration
 
 ### Sub-feature 2: Evaluation Template
@@ -34,7 +34,7 @@ MVP Features
 
 ### Sub-feature 5: Verdict System
 - **Goal:** Provide a final decision system for shortlisted listings
-- **Scope:** Final decision states (Yes, Maybe, No, Undecided), user-controlled (not auto-generated), optional lightweight scoring for decision support, explainable scoring (shows contributing criteria). Out of scope: AI recommendations, collaborative decision-making.
+- **Scope:** Final decision states (Yes, Maybe, No — "undecided" is implicit when no verdict is set), user-controlled (not auto-generated), optional scoring display from evaluation (+1/0/-1), explainable scoring (shows contributing criteria). Out of scope: AI recommendations, collaborative decision-making.
 - **Key Deliverables:** Verdict selection UI, optional scoring display, verdict persistence
 
 ### Sub-feature 6: Comparison View

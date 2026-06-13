@@ -2,7 +2,7 @@
 
 ## Overview
 
-Enable users to create, edit, and manage room listings from property portal URLs. This feature provides the foundational data entry and management capabilities for the Rental Viewing Evaluator, allowing users to track shortlisted rooms discovered on external property portals.
+Enable users to create, edit, and manage room listings from property portal URLs. This feature provides the foundational data entry and management capabilities for the Rental Viewing Evaluator, allowing users to track shortlisted rooms discovered on external property portals. Listings are displayed in a kanban-style board with drag-and-drop for pipeline management.
 
 ## User Stories & Rationale
 
@@ -16,47 +16,73 @@ Enable users to create, edit, and manage room listings from property portal URLs
 
 ### Design Rationale
 
-Listings use manual data entry (paste URL, type price, etc.) rather than auto-extraction from property portal URLs because each portal has different HTML structure, making scraping fragile and costly to maintain. The manual approach is a deliberate trade-off: it takes 10-15 seconds per listing but works reliably for any source. The card-based list view was chosen over a table/grid because it's more mobile-friendly and allows richer per-item information (status badge, area, notes preview) without requiring horizontal scroll. Status (New / To View / Viewed / Shortlisted / Archived) provides a lightweight pipeline that maps to the typical renter workflow from initial discovery through final decision.
+Listings use manual data entry (paste URL, type price, etc.) rather than auto-extraction from property portal URLs because each portal has different HTML structure, making scraping fragile and costly to maintain. The manual approach is a deliberate trade-off: it takes 10-15 seconds per listing but works reliably for any source.
+
+The card-based kanban view was chosen over a table/grid because it's more mobile-friendly and allows richer per-item information (status badge, area, notes preview) without requiring horizontal scroll.
+
+**Status pipeline**: The original design included a `"shortlisted"` status alongside `"new"`, `"to_view"`, `"viewed"`, and `"archived"`. Shortlisted was removed because it duplicated the function of the verdict system — a verdict of "yes" effectively shortlists a listing, making a separate status redundant. This simplified the status model from 5 states to 4: `new → to_view → viewed → archived`.
+
+**Kanban layout evolution**: The initial layout was a flat 4-column grid treating all columns equally. It was later restructured with group headers ("To View" / "Viewed") to communicate the lifecycle distinction and a scheduled/unscheduled filter toggle in the To View column. See `specs/kanban-layout-decisions.md` for the full exploration and rationale.
 
 ## Functional Requirements
 
-### FR1: Listing List View
-- Display all listings in a card-based layout
+### FR1: Kanban Board View
+- Display all listings in a 4-column kanban grid
+- Columns: To View, Yes, Maybe, No
+- Group headers: "To View" (col 1) and "Viewed" (cols 2-4) with center-aligned labels and hairline separator
+- Scheduled/Unscheduled toggle in the To View column header (All, Unscheduled, Scheduled)
+- Drag-and-drop between columns using `@dnd-kit/core`
+- Drag overlay for visual feedback during drag
+- Mobile: single-column stack with titles inside each section
 - Each card shows: Title, Price, Status, Source URL
-- Cards should be mobile-friendly with responsive layout
-- Clicking a card navigates to the listing detail view
+- Empty column placeholder: "Drop listings here"
 
-### FR2: Listing Detail View
+### FR2: Archived Section
+- Display archived listings in a horizontal scrollable row below the kanban
+- Archived listings are not draggable into the kanban columns
+- Archived listings cannot be viewed in the kanban board (hidden from columns)
+
+### FR3: Listing Detail View (Modal)
 - Display full listing information: Title, Price, Area, Source Platform, Source URL, Status, Created Date
 - Include a dedicated "Open Source" button to open the source URL in a new tab
 - Provide options to edit or delete the listing
 - Display status prominently with visual indicator
+- Opened via clicking a listing card in the kanban
+- Handles URL-driven deep linking (`?detail=<id>` param)
 
-### FR3: Create Listing Form
+### FR4: Create Listing Form
 - Form fields: Source URL (required), Title (required), Price (required), Area (optional), Source Platform (optional), Status (default: New)
 - Manual data entry only - no URL parsing or auto-extraction
 - Form validation using Zod schemas
 - Success message after creation
-- Redirect to listing detail view after creation
+- Dialog-based (modal) rather than separate page
 
-### FR4: Edit Listing Form
+### FR5: Edit Listing Form
 - Pre-populate with existing listing data
 - All fields editable except ID and Created Date
 - Form validation using Zod schemas
 - Success message after update
-- Stay on detail view after update
+- Accessible from the listing detail modal
 
-### FR5: Delete Listing
+### FR6: Delete Listing
 - Delete confirmation dialog
 - Remove listing from store and localStorage
-- Redirect to listings list view after deletion
+- Renders confirmation dialog before deletion
 - Show success message
 
-### FR6: Status Management
-- Quick status change buttons on listing cards
-- Status options: New, To View, Viewed, Archived, Shortlisted
-- Visual color coding for different statuses
-- Status changes persist immediately
+### FR7: Status & Verdict Management (via drag-and-drop)
+- Drop into "To View" → sets listing status to `to_view`, no verdict
+- Drop into "Yes" → sets listing status to `viewed`, verdict to `yes`
+- Drop into "Maybe" → sets listing status to `viewed`, verdict to `maybe`
+- Drop into "No" → sets listing status to `viewed`, verdict to `no`
+- Verdict record created if none exists, updated otherwise
+
+### FR8: Scheduled/Unscheduled Filter
+- Toggle pills: All (default), Unscheduled, Scheduled
+- Filter applies only to the To View column
+- "Scheduled" = listing has a `Viewing` record in the viewing store
+- Purely local state, no persistence
+- Count badge updates to reflect filtered count
 
 ## Non-Functional Requirements
 
@@ -64,11 +90,13 @@ Listings use manual data entry (paste URL, type price, etc.) rather than auto-ex
 - Cards should be thumb-friendly on mobile
 - Forms should be easy to complete on mobile keyboards
 - Buttons should have adequate touch targets (min 44px)
+- On mobile, column titles render inside each droppable section (not in a shared header row)
 
 ### NFR2: Performance
 - List view should render smoothly with 50+ listings
 - Form submissions should complete within 500ms
 - No unnecessary re-renders
+- Drag-and-drop should feel instant (no async operations)
 
 ### NFR3: Type Safety
 - All components must use TypeScript
@@ -77,50 +105,91 @@ Listings use manual data entry (paste URL, type price, etc.) rather than auto-ex
 
 ## Acceptance Criteria
 
-- [ ] AC1: User can create a listing with manual data entry
-- [ ] AC2: User can view all listings in a card-based list
-- [ ] AC3: User can view full details of a listing
-- [ ] AC4: User can edit listing metadata
-- [ ] AC5: User can delete a listing with confirmation
-- [ ] AC6: User can change listing status via quick buttons
-- [ ] AC7: User can open source URL via dedicated button
-- [ ] AC8: All data persists via localStorage
-- [ ] AC9: TypeScript compilation succeeds
-- [ ] AC10: Mobile layout is responsive and usable
+- [x] AC1: User can create a listing with manual data entry
+- [x] AC2: User can view all listings in a kanban board
+- [x] AC3: User can view full details of a listing in a modal
+- [x] AC4: User can edit listing metadata
+- [x] AC5: User can delete a listing with confirmation
+- [x] AC6: User can drag listings between kanban columns
+- [x] AC7: User can filter To View column by Unscheduled
+- [x] AC8: User can open source URL via dedicated button
+- [x] AC9: All data persists via localStorage
+- [x] AC10: TypeScript compilation succeeds
+- [x] AC11: Mobile layout is responsive and usable
+- [x] AC12: Archived listings appear in scrollable section below kanban
 
 ## Out of Scope
 
 - Automated URL parsing or metadata extraction
 - Property portal integration
 - Image uploading or attachment
-- Advanced filtering or search
+- Advanced filtering or search (beyond scheduled/unscheduled toggle)
 - Bulk operations on listings
 - Listing sharing or export
+- Drag from archived back into kanban
 
 ## Dependencies
 
 - State Management (Zustand stores must be available)
 - Routing Structure (routes must be configured)
 - UI Framework Setup (shadcn/ui components must be available)
+- Viewing Tracking (viewing store for scheduled/unscheduled filter)
+- Verdict System (verdict store for Yes/Maybe/No columns)
+- `@dnd-kit/core` for drag-and-drop
 
 ## Technical Notes
 
-### Type Updates Required
-The existing `types/listing.ts` status type must be updated from:
+### Current Type Definition
+
 ```typescript
-status: "saved" | "viewed" | "rejected" | "shortlisted"
-```
-to:
-```typescript
-status: "new" | "to_view" | "viewed" | "archived" | "shortlisted"
+export interface Listing {
+  id: string;
+  source_url: string;
+  source_platform: string;
+  title: string;
+  price: number;
+  area: string;
+  status: "new" | "to_view" | "viewed" | "archived";
+  notes?: string;
+  lat?: number;
+  lng?: number;
+  googlePlaceId?: string;
+  created_at: string;
+}
 ```
 
+**Why 4 statuses (not 5)?** "shortlisted" was removed because it duplicated the verdict system. A listing with a "yes" verdict is effectively shortlisted. Keeping it as a separate status would create ambiguity between "viewed (no verdict)" and "shortlisted" — they're the same pipeline stage but with different decision outcomes.
+
 ### Component Structure
-- `components/listings/ListingCard.tsx` - Individual listing card
-- `components/listings/ListingList.tsx` - List of cards
-- `components/listings/CreateListingForm.tsx` - Create form
-- `components/listings/EditListingForm.tsx` - Edit form
-- `components/listings/ListingDetail.tsx` - Detail view
+
+- `components/listings/ListingList.tsx` — Kanban board with drag-and-drop, group headers, filter toggle
+- `components/listings/ListingCard.tsx` — Individual listing card (used in kanban, archived, and detail)
+- `components/listings/CreateListingForm.tsx` — Create form (dialog)
+- `components/listings/EditListingForm.tsx` — Edit form (dialog)
+- `components/listings/ListingDetailModal.tsx` — Detail view (dialog/modal)
+- `components/listings/ListingDetailContent.tsx` — Detail view inner content
+- `components/listings/DeleteConfirmationDialog.tsx` — Delete confirmation
+- `app/listings/ListingsPageInner.tsx` — Page wrapper with toolbar (create, export, import, seed data)
+
+### Kanban Column Structure
+
+```typescript
+interface Column {
+  id: string;
+  title: string;
+  group: "not_viewed" | "viewed";
+  filter: (listing: Listing, verdict?: Verdict) => boolean;
+  dropData: { dropStatus: ListingStatus; dropVerdict?: "yes" | "maybe" | "no" };
+}
+```
+
+Columns defined:
+| id | title | group | filter |
+|----|-------|-------|--------|
+| `to_view` | To View | `not_viewed` | `status === "new" \|\| status === "to_view"` |
+| `yes` | Yes | `viewed` | `status === "viewed" && verdict === "yes"` |
+| `maybe` | Maybe | `viewed` | `status === "viewed" && (no verdict \|\| verdict === "maybe")` |
+| `no` | No | `viewed` | `status === "viewed" && verdict === "no"` |
 
 ### Form Validation
 Use React Hook Form with Zod schemas:
@@ -129,11 +198,10 @@ Use React Hook Form with Zod schemas:
 - Title: Required, min length
 - Area: Optional string
 - Source Platform: Optional string
-- Status: Enum validation
+- Status: Enum validation (new, to_view, viewed, archived)
 
 ### Status Color Coding
 - New: Gray/neutral
 - To View: Blue/accent
 - Viewed: Green
 - Archived: Gray/dimmed
-- Shortlisted: Gold/yellow

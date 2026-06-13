@@ -2,7 +2,7 @@
 
 ## Overview
 
-Provide a final decision system for shortlisted listings. This feature enables users to make a final verdict (Yes, Maybe, No, Undecided) on listings after evaluation, with optional simple scoring display to support decision-making.
+Provide a final decision system for listings after viewing. This feature enables users to make a verdict (Yes, Maybe, No) on listings after evaluation, with optional reasoning and the scoring system's calculated score to support decision-making.
 
 ## User Stories & Rationale
 
@@ -14,26 +14,30 @@ Provide a final decision system for shortlisted listings. This feature enables u
 
 ### Design Rationale
 
-The verdict system uses 4 discrete states (Yes, Maybe, No, Undecided) rather than a continuous scale because final rental decisions are inherently categorical — you either commit, reject, or remain uncertain. "Undecided" is included as an explicit state (rather than "no verdict set") to distinguish "haven't thought about it yet" from "thought about it and can't decide." The optional reasoning field captures the *why* behind a decision, which is critical for recall weeks later when comparing multiple options. The score display is drawn from the evaluation system's calculated score (not a separate verdict score) to keep a single source of truth for quantitative assessment.
+The verdict system uses 3 discrete states (Yes, Maybe, No) rather than a continuous scale because final rental decisions are inherently categorical — you either commit, reject, or remain uncertain.
+
+**Why 3 states instead of 4?** The original design included "Undecided" as a fourth state to distinguish "haven't thought about it yet" from "thought about it and can't decide." In practice, this distinction was not actionable — both states resulted in the same user behavior (no decision made) and the same kanban placement (the "Maybe" column already catches "thought about it and can't decide"). Removing "Undecided" simplified the type system, UI, and state management without losing expressive power — "no verdict set" implicitly means undecided.
+
+The optional reasoning field captures the *why* behind a decision, which is critical for recall weeks later when comparing multiple options. The score display is drawn from the evaluation system's calculated score (see scoring-system spec) using the +1/0/-1 system — not a separate verdict score — to keep a single source of truth for quantitative assessment.
 
 ## Functional Requirements
 
 ### FR1: Verdict Status
-- Track verdict status with 4 states:
+- Track verdict status with 3 states:
   - **Yes**: User wants to proceed with this listing
   - **Maybe**: User is still considering
   - **No**: User has rejected this listing
-  - **Undecided**: User hasn't made a decision yet
+- No verdict = implicit undecided (no record in verdict store)
 - Quick status change buttons
 - Status changes persist immediately
 - Visual color coding for different statuses
 
-### FR2: Simple Scoring Display
-- Calculate weighted score from evaluation responses
-- Display score prominently in verdict section
-- Score range: 0-100 (normalized)
+### FR2: Score Display
+- Display score from evaluation system (+1/0/-1 scoring)
+- Display net score prominently in verdict section
 - Score updates when evaluation responses change
 - Score is for decision support, not automatic verdict
+- Display positive/negative/neutral breakdown counts
 
 ### FR3: Verdict Reasoning
 - Optional text field for verdict reasoning
@@ -42,14 +46,14 @@ The verdict system uses 4 discrete states (Yes, Maybe, No, Undecided) rather tha
 - Display reasoning in verdict section
 
 ### FR4: Verdict UI Integration
-- Dedicated verdict section in listing detail view
+- Dedicated verdict section in listing detail view (ListingDetailModal)
 - Clear separation from other sections
 - Mobile-friendly layout
-- Collapsible section (optional for space)
+- Collapsible section (default: expanded)
 
 ### FR5: Verdict History
 - Show when verdict was last updated
-- Show verdict status prominently
+- Show verdict status as a badge with color coding
 - Show score alongside verdict
 - Show reasoning when available
 
@@ -68,53 +72,44 @@ The verdict system uses 4 discrete states (Yes, Maybe, No, Undecided) rather tha
 
 ### NFR3: Type Safety
 - All components must use TypeScript
-- Zod schemas for form validation
 - Type-safe store operations
 
 ## Acceptance Criteria
 
-- [ ] AC1: User can set verdict status via quick buttons
-- [ ] AC2: User can add verdict reasoning
-- [ ] AC3: Score displays correctly from evaluation
-- [ ] AC4: Verdict section displays in listing detail view
-- [ ] AC5: Verdict status persists via localStorage
-- [ ] AC6: Verdict reasoning persists via localStorage
-- [ ] AC7: TypeScript compilation succeeds
-- [ ] AC8: Mobile layout is responsive and usable
+- [x] AC1: User can set verdict status via quick buttons
+- [x] AC2: User can add verdict reasoning
+- [x] AC3: Score displays correctly from evaluation
+- [x] AC4: Verdict section displays in listing detail view
+- [x] AC5: Verdict status persists via localStorage
+- [x] AC6: Verdict reasoning persists via localStorage
+- [x] AC7: TypeScript compilation succeeds
+- [x] AC8: Mobile layout is responsive and usable
 
 ## Out of Scope
 
 - Detailed score breakdown with contributing criteria
 - Automatic verdict based on score
-- Verdict history or timeline
 - Verdict comparison across listings
 - Verdict sharing or export
+- Verdict history timeline
 
 ## Dependencies
 
 - Evaluation Template (evaluation responses must exist)
+- Scoring System (score calculation from evaluation)
 - Listing Management (listing detail view must exist)
 - State Management (Zustand stores must be available)
 - UI Framework Setup (shadcn/ui components must be available)
 
 ## Technical Notes
 
-### Type Updates Required
-The existing `types/verdict.ts` Verdict type must be updated from:
+### Current Type Definition
+
 ```typescript
 export interface Verdict {
   id: string;
   listing_id: string;
-  status: "pass" | "fail" | "maybe";
-  updated_at: string;
-}
-```
-to:
-```typescript
-export interface Verdict {
-  id: string;
-  listing_id: string;
-  status: "yes" | "maybe" | "no" | "undecided";
+  status: "yes" | "maybe" | "no";
   reasoning?: string;
   score?: number; // calculated from evaluation
   updated_at: string;
@@ -122,32 +117,31 @@ export interface Verdict {
 }
 ```
 
-### Score Calculation Logic
-Simple weighted sum algorithm:
-- Fetch evaluation responses for listing
-- Fetch template with criteria weights
-- For each criterion: response_value * weight
-- Sum all weighted values
-- Normalize to 0-100 scale
-- Handle different input types:
-  - Rating 1-5: value * weight
-  - Checkbox: 1 or 0 * weight
-  - Number: normalized value * weight
-  - Text/Select: no score contribution
+**Why "undecided" was removed:** The fourth state created ambiguity. In the kanban board, listings without a verdict already fall into the "Maybe" column (the filter is `!v || v.status === "maybe"`). Adding "undecided" would require either a fourth column or special handling, neither of which added value. A listing without a verdict record is implicitly undecided.
+
+### Score Calculation
+
+Score uses the +1/0/-1 system from the scoring system (see `specs/features/scoring-system_20250610/spec.md`), not a weighted 0-100 scale:
+- Each scorable criterion contributes +1, 0, or -1
+- Net score = sum of points
+- Also tracks: positives count, negatives count, neutrals count, total answered
+- Score is `null` when no scorable responses exist
 
 ### Component Structure
-- `components/verdict/VerdictSection.tsx` - Main verdict section in listing detail
-- `components/verdict/VerdictStatusButtons.tsx` - Quick status change buttons
-- `components/verdict/VerdictReasoning.tsx` - Reasoning input and display
-- `components/verdict/ScoreDisplay.tsx` - Score calculation and display
+- `components/verdict/VerdictSection.tsx` — Main verdict section in listing detail modal
+- `components/verdict/VerdictStatusButtons.tsx` — Quick status change buttons (Yes/Maybe/No)
+- `components/verdict/VerdictReasoning.tsx` — Reasoning input and display
+- `components/verdict/ScoreDisplay.tsx` — Score calculation and display from evaluation
 
 ### Status Color Coding
-- Yes: Green
-- Maybe: Yellow/orange
+- Yes: Green (emerald)
+- Maybe: Yellow/amber
 - No: Red
-- Undecided: Gray/neutral
 
-### Form Validation
-Use React Hook Form with Zod schemas:
-- Status: Enum validation
-- Reasoning: Optional string, max length validation
+### Kanban Integration
+Verdict status drives the kanban column placement:
+- `verdict === "yes"` → "Yes" column
+- `verdict === "maybe"` or no verdict → "Maybe" column
+- `verdict === "no"` → "No" column
+
+Drag-and-drop from "To View" to a verdict column creates a verdict record if none exists.

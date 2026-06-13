@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Listing Management feature is the foundational data entry and management system for the Rental Viewing Evaluator. It enables users to create, edit, delete, and track room listings discovered on external property portals. This feature was implemented as a client-side only application using localStorage for persistence, following the MVP's no-auth architecture.
+The Listing Management feature is the foundational data entry and management system for the Rental Viewing Evaluator. It enables users to create, edit, delete, and track room listings discovered on external property portals. Listings are displayed in a kanban-style board with drag-and-drop for pipeline management. This feature was implemented as a client-side only application using localStorage for persistence, following the MVP's no-auth architecture.
 
 ## Technical Architecture
 
@@ -10,11 +10,12 @@ The Listing Management feature is the foundational data entry and management sys
 
 The feature is built around a clean component hierarchy:
 
-- **ListingCard** (`components/listings/ListingCard.tsx`): Individual listing display with status management
-- **ListingList** (`components/listings/ListingList.tsx`): Grid layout for multiple listings with empty state
-- **CreateListingForm** (`components/listings/CreateListingForm.tsx`): Form for creating new listings
-- **EditListingForm** (`components/listings/EditListingForm.tsx`): Form for editing existing listings
-- **ListingDetail** (`components/listings/ListingDetail.tsx`): Full listing information display
+- **ListingList** (`components/listings/ListingList.tsx`): Kanban board with drag-and-drop, group headers ("To View" / "Viewed"), and scheduled/unscheduled filter toggle
+- **ListingCard** (`components/listings/ListingCard.tsx`): Individual listing card used across kanban, archived, and detail views
+- **CreateListingForm** (`components/listings/CreateListingForm.tsx`): Dialog form for creating new listings
+- **EditListingForm** (`components/listings/EditListingForm.tsx`): Dialog form for editing existing listings
+- **ListingDetailModal** (`components/listings/ListingDetailModal.tsx`): Modal for full listing details and verdict/evaluation/notes
+- **ListingDetailContent** (`components/listings/ListingDetailContent.tsx`): Inner content of the detail modal
 - **DeleteConfirmationDialog** (`components/listings/DeleteConfirmationDialog.tsx`): Confirmation dialog for deletions
 
 ### State Management
@@ -26,7 +27,9 @@ We used Zustand with localStorage middleware for state persistence. The store (`
 - `deleteListing`: Remove a listing
 - `getListing`: Retrieve a specific listing by ID
 
-The localStorage middleware ensures data persists across browser sessions without requiring a backend.
+The kanban also reads from:
+- `useVerdictStore` — verdicts for Yes/Maybe/No column filtering
+- `useViewingStore` — viewings for scheduled/unscheduled filter
 
 ### Form Validation
 
@@ -39,22 +42,31 @@ Forms use React Hook Form with Zod schema validation (`lib/schemas/listingSchema
 ### Routing
 
 The feature uses Next.js 16 dynamic routing:
-- `/listings` - List view with all listings
-- `/listings/[id]` - Detail view for a specific listing
-
-**Critical Bug Fixed**: Next.js 16 changed dynamic route params from synchronous objects to async Promises. The detail page initially caused 404 errors because it treated params as a synchronous object. We fixed this by:
-1. Updating the params type to `Promise<{ id: string }>`
-2. Using `useEffect` to resolve the params on component mount
-3. Adding a loading state to prevent premature 404 rendering
+- `/listings` — Kanban board page with toolbar (create, export, import, seed data)
+- Detail is handled via a modal overlay (not a separate route), with URL-driven deep linking via `?detail=<id>` query param
 
 ### Type System
 
-The listing type was updated to support the required status workflow:
 ```typescript
-status: "new" | "to_view" | "viewed" | "archived" | "shortlisted"
+export interface Listing {
+  id: string;
+  source_url: string;
+  source_platform: string;
+  title: string;
+  price: number;
+  area: string;
+  status: "new" | "to_view" | "viewed" | "archived";
+  notes?: string;
+  lat?: number;
+  lng?: number;
+  googlePlaceId?: string;
+  created_at: string;
+}
 ```
 
-This status progression supports the rental viewing workflow: discover (new) → schedule (to_view) → visit (viewed) → decide (archived/shortlisted).
+This status progression supports the rental viewing workflow: discover (new) → schedule (to_view) → visit (viewed) → archive (archived). Verdicts (yes/maybe/no) are tracked separately via the verdict store and layered on top of the "viewed" status — a viewed listing with a "yes" verdict has been shortlisted, one with "no" has been rejected.
+
+**Why 4 statuses?** The original design included `"shortlisted"` as a 5th status. It was removed because it duplicated the verdict system's job — a "yes" verdict effectively shortlists a listing, and a separate status would create ambiguity between "viewed (no verdict)" and "viewed + shortlisted."
 
 ## Key Technical Decisions
 
@@ -83,6 +95,18 @@ The spec explicitly excluded automated URL parsing. This decision was intentiona
 - **Reliability**: No dependency on external portal APIs or scraping
 - **Privacy**: No data sent to third-party services
 
+### Why Drag-and-Drop Kanban?
+
+The kanban board was chosen over a flat list or table for several reasons:
+- **Pipeline visibility**: Users can see at a glance which stage each listing is in
+- **Direct manipulation**: Dragging between columns feels more intuitive than dropdown status selectors
+- **Spatial memory**: Users build muscle memory for where listings live
+- **Mobile fallback**: On mobile, the grid collapses to a single-column stack with titles inside each section
+
+### Why Group Headers ("To View" / "Viewed")?
+
+The flat 4-column layout didn't communicate that Yes/Maybe/No are all post-viewing decisions. Adding the "Viewed" group header over the right three columns makes the lifecycle explicit. The group headers also provide a natural place for total counts. See `specs/kanban-layout-decisions.md` for the full design exploration.
+
 ## Bugs Encountered and Fixes
 
 ### Next.js 16 Async Params Bug
@@ -91,20 +115,9 @@ The spec explicitly excluded automated URL parsing. This decision was intentiona
 
 **Root Cause**: Next.js 16 changed dynamic route params from synchronous objects to async Promises. The original implementation treated `params` as a synchronous object, causing the ID lookup to fail immediately.
 
-**Fix**:
-```typescript
-// Before (incorrect)
-const listing = listings.find((l) => l.id === params.id);
+**Fix**: Detail is now handled via a modal overlay using query params (`?detail=<id>`) instead of a dynamic route, sidestepping the issue entirely.
 
-// After (correct)
-const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
-useEffect(() => {
-  params.then(setResolvedParams);
-}, [params]);
-const listing = resolvedParams ? listings.find((l) => l.id === resolvedParams.id) : null;
-```
-
-**Lesson**: Always check the latest framework documentation for breaking changes, especially when using newer versions.
+**Lesson**: For modals/overlays, query params are simpler and more reliable than dynamic routes.
 
 ## Best Practices Applied
 
@@ -112,9 +125,9 @@ const listing = resolvedParams ? listings.find((l) => l.id === resolvedParams.id
 
 All components were designed with mobile as the primary consideration:
 - Touch-friendly card layouts (minimum 44px touch targets)
-- Responsive grid layouts that adapt to screen size
+- Responsive grid layouts that adapt to screen size (kanban collapses to single column)
 - Forms optimized for mobile keyboards
-- Status dropdowns that work well on touch screens
+- Column titles render inside droppable sections on mobile (not in shared header)
 
 ### Type Safety
 
@@ -130,7 +143,6 @@ Status indicators use color coding with accessible contrast ratios:
 - Gray for neutral states (new, archived)
 - Blue for action states (to_view)
 - Green for completion (viewed)
-- Yellow for positive outcomes (shortlisted)
 
 ### Error Handling
 
@@ -147,6 +159,7 @@ The implementation is optimized for performance:
 - React Hook Form minimizes form re-renders
 - Listing cards use stable keys for efficient list rendering
 - localStorage persistence is fast and doesn't block the UI
+- Drag-and-drop uses `@dnd-kit/core` with pointer sensor (8px activation distance to prevent accidental drags)
 
 ## Potential Pitfalls and How to Avoid Them
 
@@ -159,11 +172,11 @@ The implementation is optimized for performance:
 - Old listing archival
 - IndexedDB for larger storage
 
-### 2. Race Conditions in Status Updates
+### 2. Drag-and-Drop Consistency
 
-**Risk**: Multiple rapid status changes could cause race conditions.
+**Risk**: Dragging a listing between columns updates both listing status and verdict, but the stores are independent. A race condition could leave them out of sync.
 
-**Mitigation**: Zustand's atomic updates prevent this. Each update is applied sequentially.
+**Mitigation**: Updates happen synchronously in the same `handleDragEnd` handler. The listing status update and verdict update are both atomic operations in their respective Zustand stores.
 
 ### 3. URL Validation False Positives
 
@@ -181,22 +194,25 @@ This feature taught us the importance of staying current with framework changes.
 
 Breaking down the UI into small, focused components (ListingCard, ListingList, etc.) made the codebase easier to test, debug, and maintain. Each component has a single responsibility.
 
-### Form Validation Strategy
+### Kanban vs Flat List
 
-Using Zod for both runtime validation and TypeScript type inference was a winning combination. It eliminated the need to maintain separate validation logic and type definitions.
+Moving from a flat list to a kanban board was a significant UX improvement, but it required careful handling of mobile responsiveness. The solution (titles inside droppable sections on mobile, shared header on desktop) was more complex than expected but necessary for a good mobile experience.
 
 ## What Was Built
 
 The Listing Management feature successfully delivers:
-- ✅ Create listings with manual data entry
-- ✅ View all listings in a responsive card grid
-- ✅ View full listing details
+- ✅ Create listings with manual data entry (dialog)
+- ✅ View all listings in a kanban board with drag-and-drop
+- ✅ Group headers ("To View" / "Viewed") with hairline separator
+- ✅ Scheduled/Unscheduled filter toggle in To View column
+- ✅ View full listing details in a modal overlay
 - ✅ Edit listing metadata
 - ✅ Delete listings with confirmation
-- ✅ Quick status changes with visual feedback
-- ✅ Source URL opening in new tabs
+- ✅ Open source URL via dedicated button
+- ✅ Archived section below kanban with horizontal scroll
+- ✅ Drag-and-drop updates listing status and verdict simultaneously
+- ✅ Mobile-responsive layout (single column stack on mobile)
 - ✅ localStorage persistence across sessions
 - ✅ Full TypeScript type safety
-- ✅ Mobile-responsive design
-
-All acceptance criteria from the specification were met, and the feature is ready for production use in the MVP.
+- ✅ Export/import data functionality
+- ✅ Seed data for demo/testing

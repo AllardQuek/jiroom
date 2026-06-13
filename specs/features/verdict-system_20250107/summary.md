@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Verdict System enables users to make final decisions on shortlisted listings after evaluation. This feature provides a structured way to assign verdicts (Yes, Maybe, No, Undecided) with optional reasoning and displays a calculated score from the evaluation to support decision-making.
+The Verdict System enables users to make final decisions on listings after viewing and evaluation. This feature provides a structured way to assign verdicts (Yes, Maybe, No) with optional reasoning and displays a calculated score from the evaluation to support decision-making.
 
 ## Technical Architecture
 
@@ -10,20 +10,18 @@ The Verdict System enables users to make final decisions on shortlisted listings
 
 The feature is built around a modular component structure:
 
-- **VerdictSection** (`components/verdict/VerdictSection.tsx`): Main verdict section in listing detail view
-- **VerdictStatusButtons** (`components/verdict/VerdictStatusButtons.tsx`): Quick status change buttons with color coding
-- **ScoreDisplay** (`components/verdict/ScoreDisplay.tsx`): Score calculation and display from evaluation
+- **VerdictSection** (`components/verdict/VerdictSection.tsx`): Main verdict section in listing detail modal
+- **VerdictStatusButtons** (`components/verdict/VerdictStatusButtons.tsx`): Quick status change buttons (Yes/Maybe/No) with color coding
+- **ScoreDisplay** (`components/verdict/ScoreDisplay.tsx`): Score calculation and display from evaluation (+1/0/-1 system)
 - **VerdictReasoning** (`components/verdict/VerdictReasoning.tsx`): Text input and display for verdict reasoning
 
 ### Type System
-
-The Verdict type was updated to support the new verdict system:
 
 ```typescript
 export interface Verdict {
   id: string;
   listing_id: string;
-  status: "yes" | "maybe" | "no" | "undecided";
+  status: "yes" | "maybe" | "no";
   reasoning?: string;
   score?: number; // calculated from evaluation
   updated_at: string;
@@ -31,45 +29,44 @@ export interface Verdict {
 }
 ```
 
+Note: "undecided" was removed from the original 4-state design. It's now implicit — no verdict record means undecided.
+
 ### Score Calculation
 
-The score calculation uses a weighted sum algorithm:
-- Fetch evaluation responses for the listing
-- Fetch template with criteria weights
-- For each criterion: response_value * weight
-- Sum all weighted values
-- Normalize to 0-100 scale
-- Handle different input types:
-  - Rating 1-5: value / 5 * weight
-  - Checkbox: 1 or 0 * weight
-  - Number: normalized value * weight
-  - Text/Select: no score contribution
+Score uses the +1/0/-1 system (see scoring-system spec), not a weighted 0-100 scale:
+- Each scorable criterion contributes +1, 0, or -1
+- Net score is shown prominently with color coding (green/red/orange)
+- Breakdown: positives count (↑), negatives count (↓), neutrals (—), total answered
+- `text`-type and `"na"` responses are excluded
+- Score is `null` when no scorable responses exist
 
 ### Verdict Status
 
-Four verdict states with color coding:
-- **Yes**: Green - User wants to proceed
-- **Maybe**: Yellow/orange - User is still considering
-- **No**: Red - User has rejected
-- **Undecided**: Gray/neutral - No decision made
+Three verdict states with color coding:
+- **Yes**: Green (emerald) — User wants to proceed
+- **Maybe**: Yellow/amber — User is still considering
+- **No**: Red — User has rejected
+
+No verdict set = implicit undecided (shown as "Not set yet" in UI).
 
 ## Key Technical Decisions
 
-### Why Simple Weighted Sum?
+### Why 3 States Instead of 4?
 
-Using a weighted sum algorithm for scoring:
-- **Transparent**: Easy to understand how score is calculated
-- **Flexible**: Works with different criterion types
-- **Fast**: Instant calculation without complex algorithms
-- **Supportive**: Score supports decision-making, doesn't make it automatically
+The original design included "Undecided" as a fourth state. It was removed because:
+- **No actionable difference**: Both "undecided" and "no verdict" result in the same user behavior
+- **Kanban simplification**: Without "undecided", the kanban only needs 3 verdict columns instead of 4
+- **Less state to manage**: Fewer states means less code, fewer edge cases, less confusion
 
-### Why Separate Reasoning Field?
+The "Maybe" column catches both "still considering" and "no verdict yet" (`filter: !v || v.status === "maybe"`).
 
-Including optional reasoning:
-- **Context**: Users can explain their decision
-- **Memory**: Helps recall why a decision was made
-- **Flexibility**: Optional for quick decisions
-- **Documentation**: Provides audit trail
+### Why Score from Evaluation (Not Separate)?
+
+The score is calculated from evaluation responses rather than being a separate verdict score:
+- **Single source of truth**: Score always reflects the latest evaluation data
+- **No duplication**: Users don't need to maintain a separate score
+- **Automatic updates**: Score updates when evaluation responses change
+- **Consistency**: Same score appears in the verdict section, listing cards, and map tooltips
 
 ### Why Color-Coded Status Buttons?
 
@@ -119,7 +116,7 @@ The implementation is optimized for performance:
 
 **Risk**: Missing responses or empty templates could cause errors.
 
-**Mitigation**: Handle undefined responses gracefully and return 0 score when no data is available.
+**Mitigation**: Handle undefined responses gracefully and return null when no data is available.
 
 ### 2. Verdict Store Consistency
 
@@ -131,7 +128,7 @@ The implementation is optimized for performance:
 
 **Risk**: Score might not update when evaluation changes.
 
-**Mitigation**: Use useEffect to recalculate score when evaluation or template data changes.
+**Mitigation**: Use `useMemo` to recalculate score when evaluation or template data changes.
 
 ## Lessons Learned
 
@@ -139,14 +136,14 @@ The implementation is optimized for performance:
 
 Breaking down the verdict UI into small, focused components (VerdictSection, VerdictStatusButtons, ScoreDisplay, VerdictReasoning) made the codebase easier to test, debug, and maintain. Each component has a single responsibility.
 
-### Score Calculation Simplicity
+### Removing "Undecided" Simplified Everything
 
-Choosing a simple weighted sum over complex algorithms:
-- Faster to implement
-- Easier for users to understand
-- Fewer edge cases to handle
-- Sufficient for MVP needs
-- Can be extended later if needed
+The original 4-state design seemed more expressive, but in practice the "undecided" state created:
+- An extra state to manage in the verdict store
+- Ambiguity with "no verdict" at the UI level
+- An extra column in the kanban that would always be empty or redundant
+
+Removing it simplified the type, store, components, and kanban without losing any real user-facing capability.
 
 ### Store Helper Methods
 
@@ -159,15 +156,15 @@ Adding `getVerdictByListingId` and `getEvaluationByListingId` helper methods to 
 ## What Was Built
 
 The Verdict System feature successfully delivers:
-- ✅ Four verdict status options (Yes, Maybe, No, Undecided)
+- ✅ Three verdict status options (Yes, Maybe, No)
+- ✅ Implicit "undecided" (no verdict record = undecided)
 - ✅ Quick status change buttons with color coding
-- ✅ Score calculation from evaluation responses
+- ✅ Score calculation from evaluation responses (+1/0/-1)
 - ✅ Prominent score display with color coding
 - ✅ Optional verdict reasoning with edit functionality
-- ✅ Verdict section in listing detail view
+- ✅ Verdict section in listing detail modal
 - ✅ Collapsible functionality for space management
 - ✅ localStorage persistence across sessions
 - ✅ Full TypeScript type safety
 - ✅ Mobile-responsive design
-
-All acceptance criteria from the specification were met, and the feature is ready for production use in the MVP.
+- ✅ Kanban integration (drag-to-column creates verdict)
