@@ -3,7 +3,7 @@ import { Template } from "@/types/evaluation";
 export const defaultTemplate: Template = {
   id: "default",
   name: "Default Rental Evaluation",
-  version: 5,
+  version: 8,
   criteria: [
     // Cost
     {
@@ -38,23 +38,14 @@ export const defaultTemplate: Template = {
     {
       id: "c5",
       name: "WiFi included",
-      description: "Is WiFi provided in the rental?",
       type: "select",
       category: "Connectivity",
       options: ["Yes", "No", "Maybe"],
       scores: { Yes: 1, No: -1, Maybe: 0 },
     },
     {
-      id: "c6",
-      name: "WiFi coverage / quality notes",
-      description: "Any notes about WiFi location, coverage, or speed.",
-      type: "text",
-      category: "Connectivity",
-    },
-    {
       id: "c7",
       name: "Mobile data coverage in room",
-      description: "Is there adequate mobile data reception inside the room?",
       type: "select",
       category: "Connectivity",
       options: ["Yes", "No", "Maybe"],
@@ -64,7 +55,6 @@ export const defaultTemplate: Template = {
     {
       id: "c8",
       name: "Room windows",
-      description: "Type of window in the room.",
       type: "select",
       category: "Room",
       options: ["Window", "Indoor window", "No window"],
@@ -73,7 +63,6 @@ export const defaultTemplate: Template = {
     {
       id: "c9",
       name: "Bed size",
-      description: "Size of the bed provided.",
       type: "select",
       category: "Room",
       options: ["Single", "Super single", "Queen", "King"],
@@ -82,7 +71,6 @@ export const defaultTemplate: Template = {
     {
       id: "c10",
       name: "Walls",
-      description: "Are the walls real (brick/drywall) or partition?",
       type: "select",
       category: "Room",
       options: ["Real wall", "Partition"],
@@ -91,7 +79,6 @@ export const defaultTemplate: Template = {
     {
       id: "c11",
       name: "Furniture included",
-      description: "Is the room furnished (table, chair, bed, etc.)?",
       type: "select",
       category: "Room",
       options: ["Yes", "No", "Maybe"],
@@ -118,8 +105,7 @@ export const defaultTemplate: Template = {
     {
       id: "c14",
       name: "Bathroom / shower quality",
-      description:
-        "Is the bathroom and shower in good condition (water pressure, size, cleanliness)?",
+      description: "(water pressure, size, cleanliness)",
       type: "select",
       category: "Bathroom",
       options: ["Yes", "No", "Maybe"],
@@ -142,7 +128,6 @@ export const defaultTemplate: Template = {
     {
       id: "c16",
       name: "Washer available",
-      description: "Is a washing machine available for use?",
       type: "select",
       category: "Amenities",
       options: ["Yes", "No"],
@@ -151,7 +136,6 @@ export const defaultTemplate: Template = {
     {
       id: "c17",
       name: "Dryer available",
-      description: "Is a clothes dryer available for use?",
       type: "select",
       category: "Amenities",
       options: ["Yes", "No"],
@@ -184,7 +168,7 @@ export const defaultTemplate: Template = {
     {
       id: "c21",
       name: "Visitors allowed",
-      description: "Yes = anytime, overnight OK. Day only = day visitors only (e.g., until 10pm). No = no visitors.",
+      description: "Day only = day visitors only (e.g., until 10pm)",
       type: "select",
       category: "Household",
       options: ["Yes", "Day only", "No"],
@@ -219,14 +203,12 @@ export const defaultTemplate: Template = {
     {
       id: "c25",
       name: "Nearby food options",
-      description: "Nearby food centres, restaurants, or grocery stores.",
       type: "text",
       category: "Surroundings",
     },
     {
       id: "c26",
       name: "Nearby supermarket",
-      description: "Nearest supermarket and approximate walking distance.",
       type: "text",
       category: "Surroundings",
     },
@@ -273,8 +255,6 @@ export const defaultTemplate: Template = {
     {
       id: "c32",
       name: "Condo gates / shortcut to MRT/bus",
-      description:
-        "Are there condo gates or shortcuts that provide quicker access to MRT or bus stops?",
       type: "select",
       category: "Additional",
       options: ["Yes", "No", "Maybe"],
