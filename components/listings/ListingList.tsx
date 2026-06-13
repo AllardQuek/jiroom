@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useListingStore } from "@/store/listingStore";
 import { useVerdictStore } from "@/store/verdictStore";
+import { useViewingStore } from "@/store/viewingStore";
 import { Listing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
 import { ListingCard } from "./ListingCard";
@@ -24,7 +25,7 @@ type ListingStatus = Listing["status"];
 interface Column {
   id: string;
   title: string;
-  subtitle: string;
+  group: "not_viewed" | "viewed";
   filter: (listing: Listing, verdict?: Verdict) => boolean;
   dropData: { dropStatus: ListingStatus; dropVerdict?: "yes" | "maybe" | "no" };
 }
@@ -33,28 +34,28 @@ const columns: Column[] = [
   {
     id: "to_view",
     title: "To View",
-    subtitle: "Schedule and prepare",
+    group: "not_viewed",
     filter: (l) => l.status === "new" || l.status === "to_view",
     dropData: { dropStatus: "to_view" },
   },
   {
     id: "yes",
     title: "Yes",
-    subtitle: "Confirmed choices",
+    group: "viewed",
     filter: (l, v) => l.status === "viewed" && v?.status === "yes",
     dropData: { dropStatus: "viewed", dropVerdict: "yes" },
   },
   {
     id: "maybe",
     title: "Maybe",
-    subtitle: "On the fence or awaiting review",
+    group: "viewed",
     filter: (l, v) => l.status === "viewed" && (!v || v.status === "maybe"),
     dropData: { dropStatus: "viewed", dropVerdict: "maybe" },
   },
   {
     id: "no",
     title: "No",
-    subtitle: "Not pursuing",
+    group: "viewed",
     filter: (l, v) => l.status === "viewed" && v?.status === "no",
     dropData: { dropStatus: "viewed", dropVerdict: "no" },
   },
@@ -118,6 +119,10 @@ export function ListingList({ onListingClick }: ListingListProps) {
   const verdicts = useVerdictStore((state) => state.verdicts);
   const addVerdict = useVerdictStore((state) => state.addVerdict);
   const updateVerdict = useVerdictStore((state) => state.updateVerdict);
+  const viewings = useViewingStore((state) => state.viewings);
+  const [toViewFilter, setToViewFilter] = useState<
+    "all" | "unscheduled" | "scheduled"
+  >("all");
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const sensors = useSensors(
@@ -207,25 +212,160 @@ export function ListingList({ onListingClick }: ListingListProps) {
     >
       <div className="space-y-6 pb-24">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+          {/* Group header row */}
+          <div className="hidden lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/30">
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
+              To View
+            </span>
+            <span className="text-[11px] text-muted-foreground/40">
+              {columns
+                .filter((c) => c.group === "not_viewed")
+                .reduce((sum, col) => {
+                  return (
+                    sum +
+                    listings.filter((l) => col.filter(l, getVerdict(l.id)))
+                      .length
+                  );
+                }, 0)}
+            </span>
+          </div>
+          <div className="hidden lg:col-span-3 lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/30">
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
+              Viewed
+            </span>
+            <span className="text-[11px] text-muted-foreground/40">
+              {columns
+                .filter((c) => c.group === "viewed")
+                .reduce((sum, col) => {
+                  return (
+                    sum +
+                    listings.filter((l) => col.filter(l, getVerdict(l.id)))
+                      .length
+                  );
+                }, 0)}
+            </span>
+          </div>
+
+          {/* Column sub-header row — desktop only */}
+          {/* To View: toggle pills */}
+          <div className="hidden lg:block">
+            <div className="flex gap-1">
+              {(["all", "unscheduled", "scheduled"] as const).map((opt) => (
+                <button
+                  key={opt}
+                  type="button"
+                  onClick={() => setToViewFilter(opt)}
+                  className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                    toViewFilter === opt
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60"
+                  }`}
+                >
+                  {opt === "all"
+                    ? "All"
+                    : opt === "unscheduled"
+                      ? "Unscheduled"
+                      : "Scheduled"}
+                </button>
+              ))}
+              <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                {
+                  listings.filter((l) => {
+                    const base =
+                      l.status === "new" || l.status === "to_view";
+                    if (!base) return false;
+                    if (toViewFilter === "all") return true;
+                    const hasViewing = viewings.some(
+                      (v) => v.listing_id === l.id
+                    );
+                    return toViewFilter === "scheduled"
+                      ? hasViewing
+                      : !hasViewing;
+                  }).length
+                }
+              </span>
+            </div>
+          </div>
+          {/* Verdict: column titles */}
+          <div className="hidden lg:contents">
+            {columns
+              .filter((c) => c.group === "viewed")
+              .map((col) => (
+                <div key={col.id} className="px-3.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <h2 className="text-xs font-semibold">{col.title}</h2>
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                      {
+                        listings.filter((l) =>
+                          col.filter(l, getVerdict(l.id))
+                        ).length
+                      }
+                    </span>
+                  </div>
+                </div>
+              ))}
+          </div>
+
+          {/* Droppable columns row */}
           {columns.map((col) => {
-            const columnListings = listings.filter((l) =>
-              col.filter(l, getVerdict(l.id))
+            const extraFilter =
+              col.id === "to_view"
+                ? (l: Listing) => {
+                    if (toViewFilter === "all") return true;
+                    const hasViewing = viewings.some(
+                      (v) => v.listing_id === l.id
+                    );
+                    return toViewFilter === "scheduled"
+                      ? hasViewing
+                      : !hasViewing;
+                  }
+                : () => true;
+
+            const columnListings = listings.filter(
+              (l) => col.filter(l, getVerdict(l.id)) && extraFilter(l)
             );
 
             return (
               <DroppableColumn key={col.id} columnId={col.id}>
-                <div className="px-3.5 pt-3.5 pb-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <h2 className="text-sm font-semibold">{col.title}</h2>
-                    <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                      {columnListings.length}
-                    </span>
-                  </div>
-                  <p className="mt-0.5 text-xs text-muted-foreground/60">
-                    {col.subtitle}
-                  </p>
+                {/* Mobile-only title */}
+                <div className="lg:hidden px-3.5 pt-3.5 pb-2">
+                  {col.id === "to_view" ? (
+                    <div className="flex gap-1">
+                      {(["all", "unscheduled", "scheduled"] as const).map(
+                        (opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => setToViewFilter(opt)}
+                            className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                              toViewFilter === opt
+                                ? "bg-primary/10 text-primary"
+                                : "text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60"
+                            }`}
+                          >
+                            {opt === "all"
+                              ? "All"
+                              : opt === "unscheduled"
+                                ? "Unscheduled"
+                                : "Scheduled"}
+                          </button>
+                        )
+                      )}
+                      <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                        {columnListings.length}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between gap-2">
+                      <h2 className="text-sm font-semibold">
+                        {col.title}
+                      </h2>
+                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                        {columnListings.length}
+                      </span>
+                    </div>
+                  )}
                 </div>
-
                 <div className="flex flex-1 flex-col gap-3 p-3 pt-2">
                   {columnListings.length > 0 ? (
                     columnListings.map((listing) => (
