@@ -628,7 +628,7 @@ function ListingPreviewCard({
       : null;
 
   return (
-    <div className="text-sm min-w-[200px] max-w-[260px]">
+    <div className="text-sm min-w-[200px] max-w-[260px] pr-3">
       <div className="space-y-1.5">
         <h3 className="font-semibold leading-tight text-[13px]" style={{ wordBreak: "break-word", overflowWrap: "break-word" }}>{listing.title}</h3>
         <div className="flex items-baseline gap-1">
