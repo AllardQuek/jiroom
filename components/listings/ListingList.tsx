@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useListingStore } from "@/store/listingStore";
+import { useVerdictStore } from "@/store/verdictStore";
 import { Listing } from "@/types/listing";
+import { Verdict } from "@/types/verdict";
 import { ListingCard } from "./ListingCard";
 import { Home } from "lucide-react";
 import {
@@ -19,29 +21,42 @@ import {
 
 type ListingStatus = Listing["status"];
 
-const statusPanels: Array<{
-  statuses: ListingStatus[];
-  dropStatus: ListingStatus;
+interface Column {
+  id: string;
   title: string;
   subtitle: string;
-}> = [
+  filter: (listing: Listing, verdict?: Verdict) => boolean;
+  dropData: { dropStatus: ListingStatus; dropVerdict?: "yes" | "maybe" | "no" };
+}
+
+const columns: Column[] = [
   {
-    statuses: ["new", "to_view"],
-    dropStatus: "to_view",
+    id: "to_view",
     title: "To View",
     subtitle: "Schedule and prepare",
+    filter: (l) => l.status === "new" || l.status === "to_view",
+    dropData: { dropStatus: "to_view" },
   },
   {
-    statuses: ["viewed"],
-    dropStatus: "viewed",
-    title: "Viewed",
-    subtitle: "Evaluate and decide",
+    id: "yes",
+    title: "Yes",
+    subtitle: "Confirmed choices",
+    filter: (l, v) => l.status === "viewed" && v?.status === "yes",
+    dropData: { dropStatus: "viewed", dropVerdict: "yes" },
   },
   {
-    statuses: ["shortlisted"],
-    dropStatus: "shortlisted",
-    title: "Shortlisted",
-    subtitle: "Compare finalists",
+    id: "maybe",
+    title: "Maybe",
+    subtitle: "On the fence or awaiting review",
+    filter: (l, v) => l.status === "viewed" && (!v || v.status === "maybe"),
+    dropData: { dropStatus: "viewed", dropVerdict: "maybe" },
+  },
+  {
+    id: "no",
+    title: "No",
+    subtitle: "Not pursuing",
+    filter: (l, v) => l.status === "viewed" && v?.status === "no",
+    dropData: { dropStatus: "viewed", dropVerdict: "no" },
   },
 ];
 
@@ -74,15 +89,15 @@ function DraggableListing({
 }
 
 function DroppableColumn({
-  dropStatus,
+  columnId,
   children,
 }: {
-  dropStatus: ListingStatus;
+  columnId: string;
   children: React.ReactNode;
 }) {
   const { setNodeRef, isOver } = useDroppable({
-    id: `column-${dropStatus}`,
-    data: { dropStatus },
+    id: `column-${columnId}`,
+    data: { columnId },
   });
 
   return (
@@ -100,6 +115,9 @@ function DroppableColumn({
 export function ListingList({ onListingClick }: ListingListProps) {
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
+  const verdicts = useVerdictStore((state) => state.verdicts);
+  const addVerdict = useVerdictStore((state) => state.addVerdict);
+  const updateVerdict = useVerdictStore((state) => state.updateVerdict);
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const sensors = useSensors(
@@ -124,11 +142,29 @@ export function ListingList({ onListingClick }: ListingListProps) {
     if (!over) return;
 
     const listingId = active.id as string;
-    const dropStatus = over.data.current?.dropStatus as
-      | ListingStatus
-      | undefined;
-    if (dropStatus) {
-      updateListing(listingId, { status: dropStatus });
+    const columnId = over.data.current?.columnId as string | undefined;
+    if (!columnId) return;
+
+    const col = columns.find((c) => c.id === columnId);
+    if (!col) return;
+
+    const { dropStatus, dropVerdict } = col.dropData;
+    updateListing(listingId, { status: dropStatus });
+
+    if (dropVerdict) {
+      const existing = verdicts.find((v) => v.listing_id === listingId);
+      const now = new Date().toISOString();
+      if (existing) {
+        updateVerdict(existing.id, { status: dropVerdict, updated_at: now });
+      } else {
+        addVerdict({
+          id: crypto.randomUUID(),
+          listing_id: listingId,
+          status: dropVerdict,
+          created_at: now,
+          updated_at: now,
+        });
+      }
     }
   }
 
@@ -159,6 +195,9 @@ export function ListingList({ onListingClick }: ListingListProps) {
     (listing) => listing.status === "archived"
   );
 
+  const getVerdict = (listingId: string) =>
+    verdicts.find((v) => v.listing_id === listingId);
+
   return (
     <DndContext
       sensors={sensors}
@@ -167,26 +206,23 @@ export function ListingList({ onListingClick }: ListingListProps) {
       onDragCancel={handleDragCancel}
     >
       <div className="space-y-6 pb-24">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          {statusPanels.map((panel) => {
-            const columnListings = listings.filter((listing) =>
-              panel.statuses.includes(listing.status)
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+          {columns.map((col) => {
+            const columnListings = listings.filter((l) =>
+              col.filter(l, getVerdict(l.id))
             );
 
             return (
-              <DroppableColumn
-                key={panel.dropStatus}
-                dropStatus={panel.dropStatus}
-              >
+              <DroppableColumn key={col.id} columnId={col.id}>
                 <div className="px-3.5 pt-3.5 pb-2">
                   <div className="flex items-center justify-between gap-2">
-                    <h2 className="text-sm font-semibold">{panel.title}</h2>
+                    <h2 className="text-sm font-semibold">{col.title}</h2>
                     <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                       {columnListings.length}
                     </span>
                   </div>
                   <p className="mt-0.5 text-xs text-muted-foreground/60">
-                    {panel.subtitle}
+                    {col.subtitle}
                   </p>
                 </div>
 
