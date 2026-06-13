@@ -1,5 +1,6 @@
 "use client";
 
+import { Info } from "lucide-react";
 import { useAnchorStore } from "@/store/anchorStore";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
 
@@ -12,7 +13,15 @@ export function CommuteFilter() {
 
   return (
     <div className="border-t border-border/30 pt-3">
-      <span className="text-xs font-semibold">Commute filter</span>
+      <div className="relative group flex items-center gap-1">
+        <span className="text-xs font-semibold">Commute filter</span>
+        <Info size={12} className="text-muted-foreground/40 cursor-help" />
+        <div className="absolute left-0 top-full mt-1.5 w-64 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-50">
+          <div className="bg-background/95 backdrop-blur-sm border border-border/60 rounded-lg shadow-xl px-2.5 py-2 text-[11px] leading-relaxed text-muted-foreground">
+            Select an anchor and set a max commute time to only show listings within that travel time. Commute routes are calculated on-demand using Google Maps.
+          </div>
+        </div>
+      </div>
       <div className="flex flex-col gap-2 mt-1.5">
         <select
           value={filterAnchorId ?? ""}

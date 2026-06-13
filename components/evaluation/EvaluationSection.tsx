@@ -35,11 +35,13 @@ function SelectPills({
   scores,
   value,
   onChange,
+  onClear,
 }: {
   options: string[];
   scores?: Record<string, -1 | 0 | 1>;
   value: string | undefined;
   onChange: (value: string) => void;
+  onClear: () => void;
 }) {
   return (
     <div className="flex items-center flex-wrap gap-1 min-w-0 max-w-[180px] justify-end">
@@ -50,7 +52,7 @@ function SelectPills({
           <button
             key={option}
             type="button"
-            onClick={() => onChange(option)}
+            onClick={() => (selected ? onClear() : onChange(option))}
             className={`
               h-6 rounded-full px-2.5 text-[11px] font-medium
               transition-all duration-150 leading-none
@@ -246,7 +248,11 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
           <div className="flex items-center gap-1">
             <button
               type="button"
-              onClick={() => saveResponse(criterion.id, "true")}
+              onClick={() =>
+                value === "true"
+                  ? clearResponse(criterion.id)
+                  : saveResponse(criterion.id, "true")
+              }
               className={`h-6 rounded-full px-2.5 text-[11px] font-medium transition-all duration-150 leading-none border ${
                 value === "true"
                   ? "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-xs"
@@ -257,7 +263,11 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
             </button>
             <button
               type="button"
-              onClick={() => saveResponse(criterion.id, "false")}
+              onClick={() =>
+                value === "false"
+                  ? clearResponse(criterion.id)
+                  : saveResponse(criterion.id, "false")
+              }
               className={`h-6 rounded-full px-2.5 text-[11px] font-medium transition-all duration-150 leading-none border ${
                 value === "false"
                   ? "bg-red-50 text-red-700 border-red-200 shadow-xs"
@@ -268,7 +278,11 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
             </button>
             <button
               type="button"
-              onClick={() => saveResponse(criterion.id, "na")}
+              onClick={() =>
+                value === "na"
+                  ? clearResponse(criterion.id)
+                  : saveResponse(criterion.id, "na")
+              }
               className={`h-6 rounded-full px-2.5 text-[11px] font-medium transition-all duration-150 leading-none border ${
                 value === "na"
                   ? "bg-muted text-muted-foreground border-border/40 shadow-xs"
@@ -286,7 +300,11 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
               <button
                 key={rating}
                 type="button"
-                onClick={() => saveResponse(criterion.id, rating)}
+                onClick={() =>
+                  value === rating
+                    ? clearResponse(criterion.id)
+                    : saveResponse(criterion.id, rating)
+                }
                 className={`h-6 w-6 flex items-center justify-center rounded-full text-[11px] font-medium transition-all duration-150 leading-none ${
                   value === rating
                     ? "bg-primary/10 text-primary border border-primary/30 shadow-xs"
@@ -313,6 +331,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
             scores={criterion.scores}
             value={typeof value === "string" ? value : undefined}
             onChange={(v) => saveResponse(criterion.id, v)}
+            onClear={() => clearResponse(criterion.id)}
           />
         );
       case "text":
