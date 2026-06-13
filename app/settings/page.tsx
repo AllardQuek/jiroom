@@ -49,6 +49,7 @@ export default function SettingsPage() {
     const newTemplate: Template = {
       id: crypto.randomUUID(),
       name: "New Template",
+      version: 1,
       criteria: [],
       updated_at: new Date().toISOString(),
     };

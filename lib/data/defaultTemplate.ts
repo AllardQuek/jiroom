@@ -3,6 +3,7 @@ import { Template } from "@/types/evaluation";
 export const defaultTemplate: Template = {
   id: "default",
   name: "Default Rental Evaluation",
+  version: 3,
   criteria: [
     // Cost
     {
@@ -203,11 +204,11 @@ export const defaultTemplate: Template = {
     {
       id: "c21",
       name: "Visitors allowed",
-      description: "Are overnight or regular visitors permitted?",
+      description: "Yes = anytime, overnight OK. Day only = day visitors only (e.g., until 10pm). No = no visitors.",
       type: "select",
       category: "Household",
-      options: ["Yes", "No", "Maybe"],
-      scores: { Yes: 1, No: -1, Maybe: 0 },
+      options: ["Yes", "Day only", "No"],
+      scores: { Yes: 1, "Day only": 0, No: -1 },
     },
     {
       id: "c22",

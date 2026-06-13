@@ -10,6 +10,7 @@ export interface Evaluation {
 export interface Template {
   id: string;
   name: string;
+  version: number;
   criteria: Criterion[];
   updated_at: string;
 }
