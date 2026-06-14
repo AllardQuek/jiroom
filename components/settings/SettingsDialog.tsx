@@ -179,7 +179,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           open={isCriteriaFormOpen}
           onOpenChange={setIsCriteriaFormOpen}
         >
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingCriterion ? "Edit Criteria" : "Add Criteria"}

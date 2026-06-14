@@ -11,7 +11,6 @@ import { ViewingSection } from "@/components/viewing/ViewingSection";
 import { EvaluationSection } from "@/components/evaluation/EvaluationSection";
 import { InlineNotes } from "@/components/notes/InlineNotes";
 import { VerdictSection } from "@/components/verdict/VerdictSection";
-import { AddToCompareButton } from "@/components/comparison/AddToCompareButton";
 import {
   Dialog,
   DialogContent,
@@ -104,16 +103,11 @@ export function ListingDetailContent({
 
   return (
     <div className="space-y-5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
-          <ListingDetail
-            listing={listing}
-            onEdit={() => setIsEditDialogOpen(true)}
-            onDelete={() => setIsDeleteDialogOpen(true)}
-          />
-        </div>
-        <AddToCompareButton listingId={listing.id} />
-      </div>
+      <ListingDetail
+        listing={listing}
+        onEdit={() => setIsEditDialogOpen(true)}
+        onDelete={() => setIsDeleteDialogOpen(true)}
+      />
 
       <InlineNotes
         notes={listing.notes || ""}
@@ -138,7 +132,7 @@ export function ListingDetailContent({
       />
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Listing</DialogTitle>
           </DialogHeader>
