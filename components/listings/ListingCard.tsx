@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Listing } from "@/types/listing";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { ListingSelector } from "@/components/comparison/ListingSelector";
 import { useViewingStore } from "@/store/viewingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
@@ -20,10 +19,11 @@ import { CommuteBadge } from "@/components/distance/CommuteBadge";
 
 interface ListingCardProps {
   listing: Listing;
+  compact?: boolean;
   onClick?: (id: string) => void;
 }
 
-export function ListingCard({ listing, onClick }: ListingCardProps) {
+export function ListingCard({ listing, compact, onClick }: ListingCardProps) {
   const [showNotes, setShowNotes] = useState(false);
   const viewings = useViewingStore((state) => state.viewings);
   const evaluation = useEvaluationStore((state) =>
@@ -53,6 +53,67 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
   };
 
   const hasNotes = !!listing.notes;
+
+  if (compact) {
+    return (
+      <Card
+        className="overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-sm transition-all duration-200 rounded-lg"
+        onClick={handleClick}
+      >
+        <div className="flex items-center gap-2 px-2.5 py-2">
+          <div className="flex items-center gap-1.5 flex-1 min-w-0 text-xs">
+            <span className="font-medium truncate group-hover:text-primary transition-colors">
+              {listing.title}
+            </span>
+            {listing.area && (
+              <>
+                <span className="text-muted-foreground/30">·</span>
+                <span className="text-muted-foreground/60 truncate shrink-0 max-w-[80px]">
+                  {listing.area}
+                </span>
+              </>
+            )}
+            <span className="text-muted-foreground/30">·</span>
+            <span className="font-semibold text-primary shrink-0">
+              ${listing.price.toLocaleString()}
+            </span>
+            {score !== null && (
+              <>
+                <span className="text-muted-foreground/30">·</span>
+                <span
+                  className={`shrink-0 font-medium tabular-nums ${
+                    score.net > 0
+                      ? "text-emerald-600"
+                      : score.net < 0
+                        ? "text-red-600"
+                        : "text-muted-foreground/60"
+                  }`}
+                >
+                  {score.net > 0 ? `+${score.net}` : score.net}
+                </span>
+              </>
+            )}
+          </div>
+          <div className="flex items-center gap-2 shrink-0 text-[10px] text-muted-foreground/50">
+            {viewing?.scheduled_date ? (
+              <span>
+                {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+            ) : (
+              <span className="italic text-muted-foreground/30">No date</span>
+            )}
+            {hasNotes && <FileText size={10} className="text-muted-foreground/40" />}
+            <div onClick={(e) => e.stopPropagation()}>
+              <ListingSelector listingId={listing.id} />
+            </div>
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card
@@ -86,16 +147,6 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
             </span>
             <span className="text-xs text-muted-foreground">/mo</span>
           </div>
-
-          {viewing?.scheduled_date && (
-            <Badge
-              variant="secondary"
-              className="font-medium px-1.5 py-0.5 rounded-md text-[10px] gap-1 leading-none"
-            >
-              <CalendarDays size={10} />
-              Scheduled
-            </Badge>
-          )}
         </div>
 
         {totalCount > 0 && (
@@ -104,9 +155,13 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
               <span className="font-medium text-muted-foreground">
                 Evaluation
               </span>
-              <span className="font-semibold">
+              <span className="font-semibold tabular-nums">
                 {answeredCount}/{totalCount}
-                {score !== null ? ` · ${score}` : ""}
+                {score !== null ? (
+                  <span className={score.net > 0 ? "text-emerald-600" : score.net < 0 ? "text-red-600" : ""}>
+                    {" "}· {score.net > 0 ? `+${score.net}` : score.net}
+                  </span>
+                ) : ""}
               </span>
             </div>
             <div className="h-1 overflow-hidden rounded-full bg-muted">
@@ -146,9 +201,19 @@ export function ListingCard({ listing, onClick }: ListingCardProps) {
                 )}
               </button>
             )}
-            <p className="text-[10px] text-muted-foreground/40">
-              {new Date(listing.created_at).toLocaleDateString()}
-            </p>
+            {viewing?.scheduled_date ? (
+              <span className="text-[10px] text-muted-foreground/60" title="Scheduled viewing">
+                <CalendarDays size={10} className="inline -mt-0.5 mr-0.5" />
+                {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                })}
+              </span>
+            ) : (
+              <span className="text-[10px] text-muted-foreground/30 italic">No date set</span>
+            )}
           </div>
         </div>
 

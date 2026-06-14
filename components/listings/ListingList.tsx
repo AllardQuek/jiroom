@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useListingStore } from "@/store/listingStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { useViewingStore } from "@/store/viewingStore";
+import { useEvaluationStore } from "@/store/evaluationStore";
+import { useTemplateStore } from "@/store/templateStore";
 import { Listing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
 import { ListingCard } from "./ListingCard";
-import { Home } from "lucide-react";
+import { Home, ArrowUpDown } from "lucide-react";
+import { calculateScore } from "@/lib/utils/calculateScore";
 import {
   DndContext,
   DragOverlay,
@@ -61,15 +64,26 @@ const columns: Column[] = [
   },
 ];
 
+type SortField = "price" | "score" | "name" | "date" | "area";
+type SortDir = "asc" | "desc";
+
+interface SortConfig {
+  by: SortField;
+  dir: SortDir;
+}
+
 interface ListingListProps {
   onListingClick?: (id: string) => void;
+  compact?: boolean;
 }
 
 function DraggableListing({
   listing,
+  compact,
   onClick,
 }: {
   listing: Listing;
+  compact?: boolean;
   onClick?: (id: string) => void;
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -84,7 +98,86 @@ function DraggableListing({
       {...attributes}
       className={isDragging ? "opacity-30" : ""}
     >
-      <ListingCard listing={listing} onClick={onClick} />
+      <ListingCard listing={listing} compact={compact} onClick={onClick} />
+    </div>
+  );
+}
+
+const SORT_OPTIONS = [
+  { label: "Default", value: null },
+  { label: "Price ↓", value: { by: "price" as const, dir: "desc" as const } },
+  { label: "Price ↑", value: { by: "price" as const, dir: "asc" as const } },
+  { label: "Score ↓", value: { by: "score" as const, dir: "desc" as const } },
+  { label: "Score ↑", value: { by: "score" as const, dir: "asc" as const } },
+  { label: "Name A-Z", value: { by: "name" as const, dir: "asc" as const } },
+  { label: "Name Z-A", value: { by: "name" as const, dir: "desc" as const } },
+] as const;
+
+const ARCHIVED_SORT_OPTIONS = [
+  { label: "Default", value: null },
+  { label: "Price ↓", value: { by: "price" as const, dir: "desc" as const } },
+  { label: "Price ↑", value: { by: "price" as const, dir: "asc" as const } },
+  { label: "Name A-Z", value: { by: "name" as const, dir: "asc" as const } },
+  { label: "Name Z-A", value: { by: "name" as const, dir: "desc" as const } },
+] as const;
+
+function SortButton({
+  columnId,
+  options,
+  sortConfigs,
+  setSortConfigs,
+  openSortCol,
+  setOpenSortCol,
+}: {
+  columnId: string;
+  options: readonly { readonly label: string; readonly value: SortConfig | null }[];
+  sortConfigs: Record<string, SortConfig | null>;
+  setSortConfigs: (fn: (prev: Record<string, SortConfig | null>) => Record<string, SortConfig | null>) => void;
+  openSortCol: string | null;
+  setOpenSortCol: (id: string | null) => void;
+}) {
+  const config = sortConfigs[columnId] ?? null;
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpenSortCol(openSortCol === columnId ? null : columnId)}
+        className={`flex items-center rounded-md p-1 text-xs transition-colors ${
+          config
+            ? "bg-primary/10 text-primary"
+            : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/60"
+        }`}
+        title="Sort listings"
+      >
+        <ArrowUpDown size={12} />
+      </button>
+      {openSortCol === columnId && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpenSortCol(null)} />
+          <div className="absolute right-0 top-full z-20 mt-1 w-36 rounded-lg border bg-popover p-1 shadow-md">
+            {options.map((opt) => {
+              const isActive = JSON.stringify(config) === JSON.stringify(opt.value);
+              return (
+                <button
+                  key={opt.label}
+                  type="button"
+                  onClick={() => {
+                    setSortConfigs((prev) => ({ ...prev, [columnId]: opt.value }));
+                    setOpenSortCol(null);
+                  }}
+                  className={`w-full rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${
+                    isActive
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -113,7 +206,7 @@ function DroppableColumn({
   );
 }
 
-export function ListingList({ onListingClick }: ListingListProps) {
+export function ListingList({ onListingClick, compact }: ListingListProps) {
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
   const verdicts = useVerdictStore((state) => state.verdicts);
@@ -124,6 +217,57 @@ export function ListingList({ onListingClick }: ListingListProps) {
     "all" | "unscheduled" | "scheduled"
   >("all");
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [sortConfigs, setSortConfigs] = useState<Record<string, SortConfig | null>>({});
+  const [openSortCol, setOpenSortCol] = useState<string | null>(null);
+  const evaluations = useEvaluationStore((state) => state.evaluations);
+  const templates = useTemplateStore((state) => state.templates);
+
+  const template = templates[0];
+
+  const getScore = useCallback(
+    (listing: Listing) => {
+      if (!template) return null;
+      const ev = evaluations.find((e) => e.listing_id === listing.id);
+      if (!ev) return null;
+      return calculateScore(ev.responses, template, listing.price);
+    },
+    [evaluations, template]
+  );
+
+  const sortListings = useCallback(
+    (listings: Listing[], config: SortConfig | null) => {
+      if (!config) return listings;
+      return [...listings].sort((a, b) => {
+        let cmp = 0;
+        switch (config.by) {
+          case "price":
+            cmp = a.price - b.price;
+            break;
+          case "name":
+            cmp = a.title.localeCompare(b.title);
+            break;
+          case "date":
+            cmp =
+              new Date(a.created_at).getTime() -
+              new Date(b.created_at).getTime();
+            break;
+          case "area":
+            cmp = (a.area || "").localeCompare(b.area || "");
+            break;
+          case "score": {
+            const sa = getScore(a);
+            const sb = getScore(b);
+            const na = sa?.net ?? -Infinity;
+            const nb = sb?.net ?? -Infinity;
+            cmp = na - nb;
+            break;
+          }
+        }
+        return config.dir === "desc" ? -cmp : cmp;
+      });
+    },
+    [getScore]
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -268,39 +412,59 @@ export function ListingList({ onListingClick }: ListingListProps) {
                       : "Scheduled"}
                 </button>
               ))}
-              <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                {
-                  listings.filter((l) => {
-                    const base =
-                      l.status === "new" || l.status === "to_view";
-                    if (!base) return false;
-                    if (toViewFilter === "all") return true;
-                    const hasViewing = viewings.some(
-                      (v) => v.listing_id === l.id
-                    );
-                    return toViewFilter === "scheduled"
-                      ? hasViewing
-                      : !hasViewing;
-                  }).length
-                }
+              <span className="ml-auto flex items-center gap-1">
+                <SortButton
+                  columnId="to_view"
+                  options={SORT_OPTIONS}
+                  sortConfigs={sortConfigs}
+                  setSortConfigs={setSortConfigs}
+                  openSortCol={openSortCol}
+                  setOpenSortCol={setOpenSortCol}
+                />
+                <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  {
+                    listings.filter((l) => {
+                      const base =
+                        l.status === "new" || l.status === "to_view";
+                      if (!base) return false;
+                      if (toViewFilter === "all") return true;
+                      const hasViewing = viewings.some(
+                        (v) => v.listing_id === l.id
+                      );
+                      return toViewFilter === "scheduled"
+                        ? hasViewing
+                        : !hasViewing;
+                    }).length
+                  }
+                </span>
               </span>
             </div>
           </div>
-          {/* Verdict: column titles */}
+          {/* Verdict: column titles + sort */}
           <div className="hidden lg:contents">
             {columns
               .filter((c) => c.group === "viewed")
               .map((col) => (
                 <div key={col.id} className="px-3.5">
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center justify-between gap-1">
                     <h2 className="text-xs font-semibold">{col.title}</h2>
-                    <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                      {
-                        listings.filter((l) =>
-                          col.filter(l, getVerdict(l.id))
-                        ).length
-                      }
-                    </span>
+                    <div className="flex items-center gap-1">
+                      <SortButton
+                        columnId={col.id}
+                        options={SORT_OPTIONS}
+                        sortConfigs={sortConfigs}
+                        setSortConfigs={setSortConfigs}
+                        openSortCol={openSortCol}
+                        setOpenSortCol={setOpenSortCol}
+                      />
+                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                        {
+                          listings.filter((l) =>
+                            col.filter(l, getVerdict(l.id))
+                          ).length
+                        }
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -321,8 +485,11 @@ export function ListingList({ onListingClick }: ListingListProps) {
                   }
                 : () => true;
 
-            const columnListings = listings.filter(
-              (l) => col.filter(l, getVerdict(l.id)) && extraFilter(l)
+            const columnListings = sortListings(
+              listings.filter(
+                (l) => col.filter(l, getVerdict(l.id)) && extraFilter(l)
+              ),
+              sortConfigs[col.id] ?? null
             );
 
             return (
@@ -330,7 +497,7 @@ export function ListingList({ onListingClick }: ListingListProps) {
                 {/* Mobile-only title */}
                 <div className="lg:hidden px-3.5 pt-3.5 pb-2">
                   {col.id === "to_view" ? (
-                    <div className="flex gap-1">
+                    <div className="flex gap-1 flex-wrap">
                       {(["all", "unscheduled", "scheduled"] as const).map(
                         (opt) => (
                           <button
@@ -351,8 +518,18 @@ export function ListingList({ onListingClick }: ListingListProps) {
                           </button>
                         )
                       )}
-                      <span className="ml-auto rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                        {columnListings.length}
+                      <span className="ml-auto flex items-center gap-1">
+                        <SortButton
+                          columnId={col.id}
+                          options={SORT_OPTIONS}
+                          sortConfigs={sortConfigs}
+                          setSortConfigs={setSortConfigs}
+                          openSortCol={openSortCol}
+                          setOpenSortCol={setOpenSortCol}
+                        />
+                        <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                          {columnListings.length}
+                        </span>
                       </span>
                     </div>
                   ) : (
@@ -360,8 +537,18 @@ export function ListingList({ onListingClick }: ListingListProps) {
                       <h2 className="text-sm font-semibold">
                         {col.title}
                       </h2>
-                      <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                        {columnListings.length}
+                      <span className="flex items-center gap-1">
+                        <SortButton
+                          columnId={col.id}
+                          options={SORT_OPTIONS}
+                          sortConfigs={sortConfigs}
+                          setSortConfigs={setSortConfigs}
+                          openSortCol={openSortCol}
+                          setOpenSortCol={setOpenSortCol}
+                        />
+                        <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                          {columnListings.length}
+                        </span>
                       </span>
                     </div>
                   )}
@@ -372,6 +559,7 @@ export function ListingList({ onListingClick }: ListingListProps) {
                       <DraggableListing
                         key={listing.id}
                         listing={listing}
+                        compact={compact}
                         onClick={onListingClick}
                       />
                     ))
@@ -395,14 +583,24 @@ export function ListingList({ onListingClick }: ListingListProps) {
                   Rejected options kept out of the active workflow
                 </p>
               </div>
-              <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                {archivedListings.length}
-              </span>
+              <div className="flex items-center gap-1">
+                <SortButton
+                  columnId="archived"
+                  options={ARCHIVED_SORT_OPTIONS}
+                  sortConfigs={sortConfigs}
+                  setSortConfigs={setSortConfigs}
+                  openSortCol={openSortCol}
+                  setOpenSortCol={setOpenSortCol}
+                />
+                <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                  {archivedListings.length}
+                </span>
+              </div>
             </div>
             <div className="flex gap-3 overflow-x-auto p-3 pt-2">
-              {archivedListings.map((listing) => (
+              {sortListings(archivedListings, sortConfigs["archived"] ?? null).map((listing) => (
                 <div key={listing.id} className="w-80 shrink-0">
-                  <ListingCard listing={listing} onClick={onListingClick} />
+                  <ListingCard listing={listing} compact={compact} onClick={onListingClick} />
                 </div>
               ))}
             </div>
@@ -413,7 +611,7 @@ export function ListingList({ onListingClick }: ListingListProps) {
       <DragOverlay dropAnimation={null}>
         {activeListing ? (
           <div className="opacity-90">
-            <ListingCard listing={activeListing} />
+            <ListingCard listing={activeListing} compact={compact} />
           </div>
         ) : null}
       </DragOverlay>

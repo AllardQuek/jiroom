@@ -1,10 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, Edit2 } from "lucide-react";
-import { BulletParser } from "./BulletParser";
-import { NotesEditor } from "./NotesEditor";
+import { useState, useRef, useEffect } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
 interface InlineNotesProps {
   notes: string;
@@ -19,59 +16,57 @@ export function InlineNotes({
   updatedAt,
   label = "Notes",
 }: InlineNotesProps) {
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
+  const [localValue, setLocalValue] = useState(notes);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  if (isEditing) {
-    return (
-      <NotesEditor
-        value={notes}
-        onChange={onUpdate}
-        onSave={() => setIsEditing(false)}
-        onCancel={() => setIsEditing(false)}
-        updatedAt={updatedAt}
-      />
-    );
-  }
+  useEffect(() => {
+    setLocalValue(notes);
+  }, [notes]);
+
+  const formatTimestamp = (dateString?: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins} min ago`;
+
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  };
+
+  const handleBlur = () => {
+    if (localValue !== notes) {
+      onUpdate(localValue);
+    }
+  };
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-1.5">
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted-foreground">
           {label}
         </span>
-        <div className="flex gap-0.5">
-          <Button
-            size="icon"
-            variant="ghost"
-            className="h-5 w-5 text-muted-foreground/60 hover:text-foreground"
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            {isExpanded ? (
-              <ChevronUp className="w-3.5 h-3.5" />
-            ) : (
-              <ChevronDown className="w-3.5 h-3.5" />
-            )}
-          </Button>
-          <Button
-            size="icon"
-            variant="ghost"
-            className="h-5 w-5 text-muted-foreground/60 hover:text-foreground"
-            onClick={() => setIsEditing(true)}
-          >
-            <Edit2 className="w-3.5 h-3.5" />
-          </Button>
-        </div>
+        {updatedAt && localValue && (
+          <span className="text-[10px] text-muted-foreground/50">
+            Updated {formatTimestamp(updatedAt)}
+          </span>
+        )}
       </div>
-      {isExpanded && (
-        <div className="text-sm">
-          {notes ? (
-            <BulletParser text={notes} />
-          ) : (
-            <p className="text-xs text-muted-foreground/50 italic">No notes</p>
-          )}
-        </div>
-      )}
+      <Textarea
+        ref={textareaRef}
+        value={localValue}
+        onChange={(e) => setLocalValue(e.target.value)}
+        onBlur={handleBlur}
+        placeholder="Add notes... Use '-' for bullet points"
+        className="min-h-[60px] text-sm resize-y rounded-lg"
+      />
     </div>
   );
 }

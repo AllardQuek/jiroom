@@ -283,19 +283,19 @@ export default function MapView({ onViewDetails }: MapViewProps) {
 
     if (filters.scoreMin !== null || filters.scoreMax !== null) {
       const evaluation = evaluations.find((e) => e.listing_id === l.id);
-      const score =
+      const scoreNet =
         evaluation && template
-          ? calculateScore(evaluation.responses, template)
+          ? calculateScore(evaluation.responses, template)?.net ?? null
           : null;
 
       if (
         filters.scoreMin !== null &&
-        (score === null || score < filters.scoreMin)
+        (scoreNet === null || scoreNet < filters.scoreMin)
       )
         return false;
       if (
         filters.scoreMax !== null &&
-        (score === null || score > filters.scoreMax)
+        (scoreNet === null || scoreNet > filters.scoreMax)
       )
         return false;
     }
@@ -651,7 +651,11 @@ function ListingPreviewCard({
             {listing.status.replace("_", " ")}
           </span>
           {score !== null && (
-            <span className="text-xs font-semibold">Score: {score}</span>
+            <span className={`text-xs font-semibold tabular-nums ${
+              score.net > 0 ? "text-emerald-600" : score.net < 0 ? "text-red-600" : ""
+            }`}>
+              {score.net > 0 ? `+${score.net}` : score.net}
+            </span>
           )}
         </div>
       </div>

@@ -13,26 +13,32 @@ function scoreFromThresholds(
   return 0;
 }
 
+export interface ScoreResult {
+  net: number;
+  positives: number;
+  negatives: number;
+  neutrals: number;
+  answered: number;
+}
+
 export function calculateScore(
   responses: Record<string, number | string>,
   template: Template,
   listingPrice?: number
-): number | null {
+): ScoreResult | null {
   if (!template.criteria.length) return null;
 
-  let totalPoints = 0;
-  let totalCount = 0;
+  let net = 0;
+  let positives = 0;
+  let negatives = 0;
+  let neutrals = 0;
 
   for (const criterion of template.criteria) {
     const response = responses[criterion.id];
 
-    // Skip criteria without a response
     if (response === undefined || response === "") continue;
-
-    // Text type is always excluded from scoring
     if (criterion.type === "text") continue;
 
-    // Handle derived type (computed from other fields)
     if (criterion.type === "derived") {
       let derivedValue = listingPrice ?? 0;
       if (criterion.derivedFrom) {
@@ -45,13 +51,14 @@ export function calculateScore(
       }
       const points = scoreFromThresholds(derivedValue, criterion.thresholds);
       if (points !== null) {
-        totalPoints += points;
-        totalCount += 1;
+        net += points;
+        if (points === 1) positives++;
+        else if (points === -1) negatives++;
+        else neutrals++;
       }
       continue;
     }
 
-    // N/A responses are excluded
     if (response === "na") continue;
 
     let points: number | null = null;
@@ -76,13 +83,15 @@ export function calculateScore(
     }
 
     if (points !== null) {
-      totalPoints += points;
-      totalCount += 1;
+      net += points;
+      if (points === 1) positives++;
+      else if (points === -1) negatives++;
+      else neutrals++;
     }
   }
 
-  if (totalCount === 0) return null;
+  const answered = positives + negatives + neutrals;
+  if (answered === 0) return null;
 
-  // Shift from [-count, +count] range to [0, 100]
-  return Math.round(((totalPoints + totalCount) / (2 * totalCount)) * 100);
+  return { net, positives, negatives, neutrals, answered };
 }

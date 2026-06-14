@@ -47,7 +47,11 @@ export function MapTooltip({ listing, x, y }: MapTooltipProps) {
       </div>
       <div className="flex items-center gap-2 mt-0.5">
         {score !== null && (
-          <span className="text-xs font-semibold">Score: {score}</span>
+          <span className={`text-xs font-semibold tabular-nums ${
+            score.net > 0 ? "text-emerald-600" : score.net < 0 ? "text-red-600" : ""
+          }`}>
+            {score.net > 0 ? `+${score.net}` : score.net}
+          </span>
         )}
         {listing.area && (
           <span className="text-[10px] text-muted-foreground">

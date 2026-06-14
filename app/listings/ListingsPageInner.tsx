@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Download, Upload, FlaskConical } from "lucide-react";
+import { Plus, Download, Upload, FlaskConical, Columns3, List } from "lucide-react";
 import { ListingList } from "@/components/listings/ListingList";
 import { ListingDetailModal } from "@/components/listings/ListingDetailModal";
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
@@ -37,7 +37,17 @@ export function ListingsPageInner() {
     message: string;
   }>({ type: null, message: "" });
   const [seedMode, setSeedMode] = useState(false);
+  const [compact, setCompact] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const saved = localStorage.getItem("compact-view");
+    if (saved === "true") setCompact(true);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("compact-view", compact ? "true" : "false");
+  }, [compact]);
   const searchParams = useSearchParams();
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -136,6 +146,15 @@ export function ListingsPageInner() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setCompact(!compact)}
+            title={compact ? "Detailed view" : "Compact view"}
+            className={compact ? "text-primary" : ""}
+          >
+            {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
+          </Button>
           {selectedListingIds.length >= 2 && (
             <Button variant="outline" onClick={handleCompare}>
               Compare ({selectedListingIds.length})
@@ -193,7 +212,7 @@ export function ListingsPageInner() {
       )}
 
       <div className="mt-6">
-        <ListingList onListingClick={(id) => setSelectedListingId(id)} />
+        <ListingList compact={compact} onListingClick={(id) => setSelectedListingId(id)} />
       </div>
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>

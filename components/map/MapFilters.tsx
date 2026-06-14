@@ -176,15 +176,15 @@ export function MapFilters({
             <div className="flex items-center gap-2 mt-1.5">
               <input
                 type="number"
-                min={0}
-                max={10}
-                step={0.5}
+                min={-20}
+                max={20}
+                step={1}
                 placeholder="Min"
                 value={filters.scoreMin ?? ""}
                 onChange={(e) =>
                   onFiltersChange({
                     ...filters,
-                    scoreMin: e.target.value ? Number(e.target.value) : null,
+                    scoreMin: e.target.value !== "" ? Number(e.target.value) : null,
                   })
                 }
                 className="w-full bg-muted/50 border border-border/50 rounded-lg px-2.5 py-1.5 text-xs outline-none focus:border-primary"
@@ -192,15 +192,15 @@ export function MapFilters({
               <span className="text-xs text-muted-foreground">—</span>
               <input
                 type="number"
-                min={0}
-                max={10}
-                step={0.5}
+                min={-20}
+                max={20}
+                step={1}
                 placeholder="Max"
                 value={filters.scoreMax ?? ""}
                 onChange={(e) =>
                   onFiltersChange({
                     ...filters,
-                    scoreMax: e.target.value ? Number(e.target.value) : null,
+                    scoreMax: e.target.value !== "" ? Number(e.target.value) : null,
                   })
                 }
                 className="w-full bg-muted/50 border border-border/50 rounded-lg px-2.5 py-1.5 text-xs outline-none focus:border-primary"

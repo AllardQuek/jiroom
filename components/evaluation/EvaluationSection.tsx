@@ -359,7 +359,11 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
           {score !== null && (
             <>
               <span className="text-muted-foreground/40">·</span>
-              <span className="font-medium text-foreground">{score}</span>
+              <span className={`font-medium tabular-nums ${
+                score.net > 0 ? "text-emerald-600" : score.net < 0 ? "text-red-600" : "text-muted-foreground"
+              }`}>
+                {score.net > 0 ? `+${score.net}` : score.net}
+              </span>
             </>
           )}
         </div>

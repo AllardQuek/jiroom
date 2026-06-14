@@ -8,7 +8,7 @@ import { useEvaluationStore } from "@/store/evaluationStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { useViewingStore } from "@/store/viewingStore";
 import { ComparisonColumn } from "./ComparisonColumn";
-import { calculateScore } from "@/lib/utils/calculateScore";
+import { calculateScore, ScoreResult } from "@/lib/utils/calculateScore";
 import { Button } from "@/components/ui/button";
 import { GitCompareArrows, X, ChevronDown, LayoutList } from "lucide-react";
 import Link from "next/link";
@@ -57,7 +57,10 @@ export function ComparisonTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedListings, evaluations, template]
   );
-  const bestScore = Math.max(...scores.filter((s) => s !== null), -1);
+  const bestNet = Math.max(
+    ...scores.filter((s): s is ScoreResult => s !== null).map((s) => s.net),
+    -Infinity
+  );
 
   if (selectedListings.length === 0) {
     return (
@@ -162,7 +165,7 @@ export function ComparisonTable() {
                 viewings.find((v) => v.listing_id === listing.id) ?? null
               }
               score={scores[index]}
-              isWinner={scores[index] === bestScore && bestScore > 0}
+              isWinner={scores[index] !== null && scores[index]!.net === bestNet && bestNet > 0}
               showCriteria={showCriteria}
               categoryFilter={categoryFilter}
               onRemove={() => removeFromComparison(listing.id)}

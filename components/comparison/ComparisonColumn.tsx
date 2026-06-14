@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo } from "react";
 import { Listing } from "@/types/listing";
 import { Template, Criterion, Evaluation } from "@/types/evaluation";
 import { Verdict } from "@/types/verdict";
 import { Viewing } from "@/types/listing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScoreResult } from "@/lib/utils/calculateScore";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { X, Star, ExternalLink, Check, Minus } from "lucide-react";
@@ -17,7 +18,7 @@ interface ComparisonColumnProps {
   evaluation: Evaluation | undefined;
   verdict: Verdict | null;
   viewing: Viewing | null;
-  score: number | null;
+  score: ScoreResult | null;
   isWinner: boolean;
   showCriteria: boolean;
   categoryFilter: string;
@@ -101,41 +102,29 @@ function CriterionValue({
   }
 }
 
-function ScoreRing({ score }: { score: number | null }) {
-  const [animated, setAnimated] = useState(false);
+function formatNet(net: number) {
+  return net > 0 ? `+${net}` : `${net}`;
+}
 
-  useEffect(() => {
-    const t = setTimeout(() => setAnimated(true), 200);
-    return () => clearTimeout(t);
-  }, []);
-
-  const circumference = 2 * Math.PI * 28;
-  const fill =
-    score !== null
-      ? `${(score / 100) * circumference} ${circumference}`
-      : `0 ${circumference}`;
-
-  const ringColor =
-    score === null
-      ? "#e7e5e4"
-      : score >= 70
-        ? "#059669"
-        : score >= 40
-          ? "#d97706"
-          : "#dc2626";
+function ScoreRing({ score }: { score: ScoreResult | null }) {
+  const net = score?.net ?? null;
 
   const labelColor =
-    score === null
+    net === null
       ? "#d4d4d4"
-      : score >= 70
+      : net >= 4
         ? "#059669"
-        : score >= 40
-          ? "#d97706"
-          : "#dc2626";
+        : net >= 1
+          ? "#65a30d"
+          : net === 0
+            ? "#a8a29e"
+            : net >= -2
+              ? "#d97706"
+              : "#dc2626";
 
   return (
     <div className="relative w-16 h-16 shrink-0">
-      <svg className="w-16 h-16 -rotate-90" viewBox="0 0 64 64">
+      <svg className="w-16 h-16" viewBox="0 0 64 64">
         <circle
           cx="32"
           cy="32"
@@ -144,28 +133,22 @@ function ScoreRing({ score }: { score: number | null }) {
           stroke="#e7e5e4"
           strokeWidth="4"
         />
-        <circle
-          cx="32"
-          cy="32"
-          r="28"
-          fill="none"
-          stroke={ringColor}
-          strokeWidth="4"
-          strokeLinecap="round"
-          strokeDasharray={animated ? fill : `0 ${circumference}`}
-          style={{
-            transition: "stroke-dasharray 1s cubic-bezier(0.4, 0, 0.2, 1)",
-          }}
-        />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
         <span
-          className="text-lg font-bold tabular-nums leading-none"
+          className="text-xl font-bold tabular-nums leading-none"
           style={{ color: labelColor }}
         >
-          {score !== null ? score : "—"}
+          {net !== null ? formatNet(net) : "—"}
         </span>
       </div>
+      {score && (
+        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[10px] text-muted-foreground/50 whitespace-nowrap">
+          {score.positives > 0 && <span className="text-emerald-600/60">{score.positives}↑</span>}
+          {score.negatives > 0 && <span className="text-red-600/60">{score.negatives}↓</span>}
+          {score.neutrals > 0 && <span className="text-muted-foreground/40">{score.neutrals}—</span>}
+        </div>
+      )}
     </div>
   );
 }
