@@ -20,10 +20,11 @@ import { CommuteBadge } from "@/components/distance/CommuteBadge";
 interface ListingCardProps {
   listing: Listing;
   compact?: boolean;
+  compareMode?: boolean;
   onClick?: (id: string) => void;
 }
 
-export function ListingCard({ listing, compact, onClick }: ListingCardProps) {
+export function ListingCard({ listing, compact, compareMode, onClick }: ListingCardProps) {
   const [showNotes, setShowNotes] = useState(false);
   const viewings = useViewingStore((state) => state.viewings);
   const evaluation = useEvaluationStore((state) =>
@@ -106,9 +107,11 @@ export function ListingCard({ listing, compact, onClick }: ListingCardProps) {
               <span className="italic text-muted-foreground/30">No date</span>
             )}
             {hasNotes && <FileText size={10} className="text-muted-foreground/40" />}
-            <div onClick={(e) => e.stopPropagation()}>
-              <ListingSelector listingId={listing.id} />
-            </div>
+            {compareMode && (
+              <div onClick={(e) => e.stopPropagation()}>
+                <ListingSelector listingId={listing.id} />
+              </div>
+            )}
           </div>
         </div>
       </Card>
@@ -132,12 +135,14 @@ export function ListingCard({ listing, compact, onClick }: ListingCardProps) {
               </p>
             )}
           </div>
-          <div
-            className="flex flex-col items-end gap-2 shrink-0"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <ListingSelector listingId={listing.id} />
-          </div>
+          {compareMode && (
+            <div
+              className="flex flex-col items-end gap-2 shrink-0"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <ListingSelector listingId={listing.id} />
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-between">

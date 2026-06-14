@@ -9,11 +9,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Download, Upload, FlaskConical, Columns3, List } from "lucide-react";
+import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings } from "lucide-react";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 import { ListingList } from "@/components/listings/ListingList";
 import { ListingDetailModal } from "@/components/listings/ListingDetailModal";
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
 import { useComparisonStore } from "@/store/comparisonStore";
+import { SettingsDialog } from "@/components/settings/SettingsDialog";
 import {
   exportAllData,
   downloadData,
@@ -38,6 +45,8 @@ export function ListingsPageInner() {
   }>({ type: null, message: "" });
   const [seedMode, setSeedMode] = useState(false);
   const [compact, setCompact] = useState(false);
+  const [compareMode, setCompareMode] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -137,7 +146,7 @@ export function ListingsPageInner() {
   }
 
   return (
-    <div className="p-4 pr-14">
+    <div className="p-4">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Listings</h1>
@@ -145,50 +154,89 @@ export function ListingsPageInner() {
             Track each room from first save to final decision.
           </p>
         </div>
+        <TooltipProvider delayDuration={300}>
         <div className="flex flex-wrap gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setCompact(!compact)}
-            title={compact ? "Detailed view" : "Compact view"}
-            className={compact ? "text-primary" : ""}
-          >
-            {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
-          </Button>
-          {selectedListingIds.length >= 2 && (
-            <Button variant="outline" onClick={handleCompare}>
+          {compareMode && selectedListingIds.length >= 2 && (
+            <Button variant="default" onClick={handleCompare}>
               Compare ({selectedListingIds.length})
             </Button>
           )}
+          <Button
+            variant={compareMode ? "default" : "outline"}
+            onClick={() => setCompareMode(!compareMode)}
+          >
+            {compareMode ? "Done" : "Compare"}
+          </Button>
           <Button onClick={() => setIsCreateDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Add listing
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleExport}
-            title="Export data"
-          >
-            <Download className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => fileRef.current?.click()}
-            title="Import data"
-          >
-            <Upload className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleToggleSeed}
-            title={seedMode ? "Switch to your data" : "Switch to sample data"}
-            className={seedMode ? "text-amber-500" : ""}
-          >
-            <FlaskConical className="h-4 w-4" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setCompact(!compact)}
+                className={compact ? "text-primary" : ""}
+              >
+                {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {compact ? "Detailed view" : "Compact view"}
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleExport}
+              >
+                <Download className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Export data</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => fileRef.current?.click()}
+              >
+                <Upload className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Import data</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleToggleSeed}
+                className={seedMode ? "text-amber-500" : ""}
+              >
+                <FlaskConical className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {seedMode ? "Switch to your data" : "Switch to sample data"}
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSettingsOpen(true)}
+              >
+                <Settings className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Evaluation templates</TooltipContent>
+          </Tooltip>
           <input
             ref={fileRef}
             type="file"
@@ -197,6 +245,7 @@ export function ListingsPageInner() {
             className="hidden"
           />
         </div>
+        </TooltipProvider>
       </div>
 
       {backupStatus.type && (
@@ -212,7 +261,7 @@ export function ListingsPageInner() {
       )}
 
       <div className="mt-6">
-        <ListingList compact={compact} onListingClick={(id) => setSelectedListingId(id)} />
+        <ListingList compact={compact} compareMode={compareMode} onListingClick={(id) => setSelectedListingId(id)} />
       </div>
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -232,6 +281,8 @@ export function ListingsPageInner() {
         open={!!selectedListingId}
         onClose={() => setSelectedListingId(null)}
       />
+
+      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
     </div>
   );
 }

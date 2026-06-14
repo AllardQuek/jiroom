@@ -1,9 +1,8 @@
 "use client";
 
 import { useTemplateStore } from "@/store/templateStore";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, FileText } from "lucide-react";
 
 interface TemplateListProps {
   onEdit: (id: string) => void;
@@ -20,10 +19,18 @@ export function TemplateList({
 
   if (templates.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground mb-4">No templates yet</p>
-        <Button onClick={onCreate}>
-          <Plus className="w-4 h-4 mr-2" />
+      <div className="flex flex-col items-center gap-3 py-10 text-center">
+        <div className="rounded-full bg-muted/50 p-3">
+          <FileText size={20} className="text-muted-foreground/50" />
+        </div>
+        <div>
+          <p className="text-sm font-medium">No templates</p>
+          <p className="text-xs text-muted-foreground/60 mt-0.5">
+            Create one to start scoring listings
+          </p>
+        </div>
+        <Button size="sm" onClick={onCreate}>
+          <Plus className="w-4 h-4 mr-1.5" />
           Create Template
         </Button>
       </div>
@@ -31,48 +38,44 @@ export function TemplateList({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Templates</h2>
-        <Button onClick={onCreate}>
-          <Plus className="w-4 h-4 mr-2" />
-          Create Template
-        </Button>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {templates.map((template) => (
-          <Card key={template.id}>
-            <CardHeader>
-              <CardTitle className="text-lg">{template.name}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
-                {template.criteria.length} criteria
+    <div className="space-y-1">
+      {templates.map((template) => (
+        <div
+          key={template.id}
+          className="group flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/60"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border bg-background">
+              <FileText size={14} className="text-muted-foreground/60" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium truncate">{template.name}</p>
+              <p className="text-xs text-muted-foreground/50">
+                {template.criteria.length} criterion
+                {template.criteria.length !== 1 ? "ia" : ""}
               </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onEdit(template.id)}
-                  className="flex-1"
-                >
-                  <Pencil className="w-4 h-4 mr-1" />
-                  Edit
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onDelete(template.id)}
-                  className="text-destructive hover:text-destructive"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            </div>
+          </div>
+          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onEdit(template.id)}
+              className="h-7 w-7"
+            >
+              <Pencil size={12} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onDelete(template.id)}
+              className="h-7 w-7 text-muted-foreground/50 hover:text-destructive"
+            >
+              <Trash2 size={12} />
+            </Button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

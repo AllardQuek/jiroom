@@ -75,15 +75,18 @@ interface SortConfig {
 interface ListingListProps {
   onListingClick?: (id: string) => void;
   compact?: boolean;
+  compareMode?: boolean;
 }
 
 function DraggableListing({
   listing,
   compact,
+  compareMode,
   onClick,
 }: {
   listing: Listing;
   compact?: boolean;
+  compareMode?: boolean;
   onClick?: (id: string) => void;
 }) {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -98,7 +101,7 @@ function DraggableListing({
       {...attributes}
       className={isDragging ? "opacity-30" : ""}
     >
-      <ListingCard listing={listing} compact={compact} onClick={onClick} />
+      <ListingCard listing={listing} compact={compact} compareMode={compareMode} onClick={onClick} />
     </div>
   );
 }
@@ -206,7 +209,7 @@ function DroppableColumn({
   );
 }
 
-export function ListingList({ onListingClick, compact }: ListingListProps) {
+export function ListingList({ onListingClick, compact, compareMode }: ListingListProps) {
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
   const verdicts = useVerdictStore((state) => state.verdicts);
@@ -560,6 +563,7 @@ export function ListingList({ onListingClick, compact }: ListingListProps) {
                         key={listing.id}
                         listing={listing}
                         compact={compact}
+                        compareMode={compareMode}
                         onClick={onListingClick}
                       />
                     ))
@@ -600,7 +604,7 @@ export function ListingList({ onListingClick, compact }: ListingListProps) {
             <div className="flex gap-3 overflow-x-auto p-3 pt-2">
               {sortListings(archivedListings, sortConfigs["archived"] ?? null).map((listing) => (
                 <div key={listing.id} className="w-80 shrink-0">
-                  <ListingCard listing={listing} compact={compact} onClick={onListingClick} />
+                  <ListingCard listing={listing} compact={compact} compareMode={compareMode} onClick={onListingClick} />
                 </div>
               ))}
             </div>
@@ -611,7 +615,7 @@ export function ListingList({ onListingClick, compact }: ListingListProps) {
       <DragOverlay dropAnimation={null}>
         {activeListing ? (
           <div className="opacity-90">
-            <ListingCard listing={activeListing} compact={compact} />
+            <ListingCard listing={activeListing} compact={compact} compareMode={compareMode} />
           </div>
         ) : null}
       </DragOverlay>
