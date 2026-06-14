@@ -20,7 +20,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 pb-[env(safe-area-inset-bottom,0px)]">
       <div className="flex items-center h-20 max-w-lg mx-auto px-2">
         {tabs.map((tab) => {
           const isActive =

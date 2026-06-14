@@ -3,6 +3,7 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Providers from "@/components/Providers";
+import FloatingActions from "@/components/FloatingActions";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -25,6 +26,15 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col pb-16">
         <Providers>{children}</Providers>
         <Navigation />
+        <FloatingActions />
+        <a
+          href="https://github.com/AllardQuek/rental-room-rater"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-[calc(7rem+env(safe-area-inset-bottom,0px))] left-4 z-40 rounded-full border border-border/40 bg-background/80 backdrop-blur-sm px-3 py-1.5 text-xs leading-none text-muted-foreground/60 hover:text-muted-foreground hover:border-border/60 transition-colors"
+        >
+          🏡-cooked on GitHub
+        </a>
       </body>
     </html>
   );
