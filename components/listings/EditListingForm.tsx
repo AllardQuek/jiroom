@@ -9,6 +9,7 @@ import {
 } from "@/lib/schemas/listingSchema";
 import { useListingStore } from "@/store/listingStore";
 import { Listing } from "@/types/listing";
+import { normalizeUrl } from "@/lib/utils/url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin } from "lucide-react";
@@ -92,7 +93,31 @@ export function EditListingForm({
             <FormItem>
               <FormLabel>Source URL *</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/listing" {...field} />
+                <Input
+                  placeholder="https://example.com/listing"
+                  {...field}
+                  onBlur={(e) => {
+                    const normalized = normalizeUrl(e.target.value);
+                    if (normalized !== e.target.value) {
+                      field.onChange(normalized);
+                    }
+                    field.onBlur();
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Listing title" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

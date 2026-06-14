@@ -47,7 +47,7 @@ function DaySection({
 }) {
   return (
     <div className="space-y-3">
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm pb-2 pt-4 -mx-4 px-4">
+      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm pb-2 pt-4 -mx-4 px-4 lg:static lg:z-auto lg:bg-transparent lg:backdrop-blur-none lg:mx-0 lg:px-0">
         <div className="flex items-baseline gap-2">
           <h2
             className={`text-base font-bold ${isPast ? "text-muted-foreground/60" : ""}`}
@@ -57,7 +57,7 @@ function DaySection({
           </h2>
           <span className="text-xs text-muted-foreground">{dateLabel}</span>
         </div>
-        <div className={`h-px mt-2 ${isPast ? "bg-border/30" : "bg-border"}`} />
+        <div className={`h-px mt-2 ${isPast ? "bg-border/30" : "bg-border"} lg:hidden`} />
       </div>
 
       <div className="space-y-3">
@@ -259,7 +259,7 @@ export default function SchedulePage() {
           });
         }
       }
-      groups.push(...pastGroups);
+      groups.push(...pastGroups.reverse());
     }
 
     return groups;
@@ -298,7 +298,7 @@ export default function SchedulePage() {
         </p>
       </header>
 
-      <div className="space-y-6">
+      <div className="space-y-6 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-4 lg:space-y-0 lg:items-start">
         {groupedDays.map((group) => (
           <DaySection
             key={group.date.toISOString()}

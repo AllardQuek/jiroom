@@ -13,6 +13,7 @@ import {
   FileText,
   ChevronDown,
   ChevronUp,
+  ExternalLink,
 } from "lucide-react";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import { CommuteBadge } from "@/components/distance/CommuteBadge";
@@ -63,6 +64,17 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
       >
         <div className="flex items-center gap-2 px-2.5 py-2">
           <div className="flex items-center gap-1.5 flex-1 min-w-0 text-xs">
+            {listing.source_url && (
+              <a
+                href={listing.source_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="shrink-0 text-muted-foreground/40 hover:text-primary transition-colors"
+              >
+                <ExternalLink size={10} />
+              </a>
+            )}
             <span className="font-medium truncate group-hover:text-primary transition-colors">
               {listing.title}
             </span>
@@ -130,8 +142,19 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
               {listing.title}
             </h3>
             {listing.source_platform && (
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 flex items-center gap-1">
                 {listing.source_platform}
+                {listing.source_url && (
+                  <a
+                    href={listing.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="hover:text-primary transition-colors"
+                  >
+                    <ExternalLink size={10} />
+                  </a>
+                )}
               </p>
             )}
           </div>

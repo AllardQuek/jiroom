@@ -34,21 +34,21 @@ export function ListingDetail({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
           <h2 className="text-lg font-semibold leading-snug">
             {listing.title}
           </h2>
-          <p className="mt-0.5 text-sm text-muted-foreground">
-            {listing.source_platform || "No source"}
-          </p>
+          <Badge
+            variant="outline"
+            className={`shrink-0 font-medium ${statusColor}`}
+          >
+            {statusLabel}
+          </Badge>
         </div>
-        <Badge
-          variant="outline"
-          className={`shrink-0 font-medium ${statusColor}`}
-        >
-          {statusLabel}
-        </Badge>
+        <p className="mt-0.5 text-sm text-muted-foreground">
+          {listing.source_platform || "No source"}
+        </p>
       </div>
 
       <div className="flex items-baseline gap-1">

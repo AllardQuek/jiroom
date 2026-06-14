@@ -17,11 +17,18 @@ export const useListingStore = create<ListingState>()(
       addListing: (listing) =>
         set((state) => ({ listings: [...state.listings, listing] })),
       updateListing: (id, updates) =>
-        set((state) => ({
-          listings: state.listings.map((listing) =>
-            listing.id === id ? { ...listing, ...updates } : listing
-          ),
-        })),
+        set((state) => {
+          const idx = state.listings.findIndex((l) => l.id === id);
+          if (idx === -1) return state;
+          const updated = { ...state.listings[idx], ...updates };
+          return {
+            listings: [
+              updated,
+              ...state.listings.slice(0, idx),
+              ...state.listings.slice(idx + 1),
+            ],
+          };
+        }),
       deleteListing: (id) =>
         set((state) => ({
           listings: state.listings.filter((listing) => listing.id !== id),
