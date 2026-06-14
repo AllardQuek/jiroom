@@ -187,9 +187,11 @@ function SortButton({
 
 function DroppableColumn({
   columnId,
+  className,
   children,
 }: {
   columnId: string;
+  className?: string;
   children: React.ReactNode;
 }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -200,7 +202,7 @@ function DroppableColumn({
   return (
     <section
       ref={setNodeRef}
-      className={`flex min-h-[560px] flex-col rounded-xl bg-muted/30 transition-colors ${
+      className={`flex min-h-[560px] flex-col rounded-xl bg-muted/30 transition-colors ${className ?? ""} ${
         isOver ? "bg-primary/5 ring-2 ring-primary/30" : ""
       }`}
     >
@@ -360,7 +362,7 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
       <div className="space-y-6 pb-24">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
           {/* Group header row */}
-          <div className="hidden lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/30">
+          <div className="hidden lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/80">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
               To View
             </span>
@@ -376,7 +378,7 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
                 }, 0)}
             </span>
           </div>
-          <div className="hidden lg:col-span-3 lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/30">
+          <div className="hidden lg:col-span-3 lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/80">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
               Viewed
             </span>
@@ -496,7 +498,11 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
             );
 
             return (
-              <DroppableColumn key={col.id} columnId={col.id}>
+              <DroppableColumn
+                key={col.id}
+                columnId={col.id}
+                className={col.id === "to_view" ? "relative after:content-[''] after:hidden after:lg:block after:absolute after:right-[-8px] after:top-0 after:w-px after:h-full after:bg-border/80" : ""}
+              >
                 {/* Mobile-only title */}
                 <div className="lg:hidden px-3.5 pt-3.5 pb-2">
                   {col.id === "to_view" ? (
@@ -568,7 +574,7 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
                       />
                     ))
                   ) : (
-                    <div className="flex min-h-32 items-center justify-center rounded-lg border border-dashed border-border/40 bg-background/40 p-4 text-center text-xs text-muted-foreground/50">
+                    <div className="flex min-h-32 items-center justify-center rounded-lg border border-dashed border-border/80 bg-background/40 p-4 text-center text-xs text-muted-foreground/50">
                       Drop listings here
                     </div>
                   )}
