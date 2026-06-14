@@ -8,9 +8,14 @@ import {
   type ListingFormData,
 } from "@/lib/schemas/listingSchema";
 import { useListingStore } from "@/store/listingStore";
+import { useEvaluationStore } from "@/store/evaluationStore";
+import { useTemplateStore } from "@/store/templateStore";
+import { normalizeUrl, normalizeForComparison } from "@/lib/utils/url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sparkles, Globe, MapPin } from "lucide-react";
+import { Globe, MapPin, FileText, ChevronDown, ChevronRight } from "lucide-react";
+import { InlineEvaluation } from "@/components/evaluation/InlineEvaluation";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -31,7 +36,8 @@ interface CreateListingFormProps {
 
 const extractFromUrl = (url: string) => {
   try {
-    const urlObj = new URL(url);
+    const normalized = /^https?:\/\//i.test(url) ? url : "https://" + url;
+    const urlObj = new URL(normalized);
     let platform = "";
     let title = "";
 
@@ -139,8 +145,22 @@ export function CreateListingForm({
   defaultValues: defaultValuesProp,
 }: CreateListingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [evalResponses, setEvalResponses] = useState<
+    Record<string, number | string>
+  >({});
   const addListing = useListingStore((state) => state.addListing);
+  const addEvaluation = useEvaluationStore((state) => state.addEvaluation);
+  const templates = useTemplateStore((state) => state.templates);
+  const initializeTemplates = useTemplateStore(
+    (state) => state.initializeTemplates
+  );
   const listings = useListingStore((state) => state.listings);
+
+  useEffect(() => {
+    initializeTemplates();
+  }, [initializeTemplates]);
+
+  const template = templates[0];
 
   const form = useForm<ListingFormData>({
     resolver: zodResolver(
@@ -152,6 +172,7 @@ export function CreateListingForm({
       price: 0,
       area: "",
       source_platform: "",
+      notes: "",
       status: "to_view",
       ...defaultValuesProp,
     },
@@ -162,9 +183,18 @@ export function CreateListingForm({
     name: "source_url",
   });
 
-  const isDuplicateUrl = listings.some(
-    (l) => l.source_url === sourceUrl && sourceUrl !== ""
-  );
+  const priceValue = useWatch({
+    control: form.control,
+    name: "price",
+  });
+
+  const isDuplicateUrl = sourceUrl
+    ? listings.some((l) => {
+        const normalizedExisting = normalizeForComparison(l.source_url);
+        const normalizedInput = normalizeForComparison(sourceUrl);
+        return normalizedExisting === normalizedInput && normalizedInput !== "";
+      })
+    : false;
 
   const areaOptions = [
     ...new Set(listings.map((l) => l.area).filter(Boolean)),
@@ -188,18 +218,61 @@ export function CreateListingForm({
     }
   }, [sourceUrl, form]);
 
+  const handleEvalResponse = (id: string, value: number | string) => {
+    setEvalResponses((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleEvalClear = (id: string) => {
+    setEvalResponses((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+  };
+
+  const evalAnsweredCount = template
+    ? template.criteria.filter((c) => {
+        if (c.type === "derived") {
+          return (
+            priceValue > 0 ||
+            c.derivedFrom?.some((id) => {
+              const v = evalResponses[id];
+              return v !== undefined && v !== "";
+            })
+          );
+        }
+        const v = evalResponses[c.id];
+        return v !== undefined && v !== "";
+      }).length
+    : 0;
+
   const onSubmit = async (data: ListingFormData) => {
     setIsSubmitting(true);
     try {
+      const listingId = crypto.randomUUID();
       const newListing = {
-        id: crypto.randomUUID(),
+        id: listingId,
         ...data,
         source_platform: data.source_platform || "",
         area: data.area || "",
         created_at: new Date().toISOString(),
       };
       addListing(newListing);
+
+      if (template && evalAnsweredCount > 0) {
+        const now = new Date().toISOString();
+        addEvaluation({
+          id: crypto.randomUUID(),
+          listing_id: listingId,
+          template_id: template.id,
+          responses: evalResponses,
+          created_at: now,
+          updated_at: now,
+        });
+      }
+
       form.reset();
+      setEvalResponses({});
       onSuccess?.();
     } catch (error) {
       console.error("Failed to create listing:", error);
@@ -224,8 +297,14 @@ export function CreateListingForm({
                 <FormControl>
                   <Input
                     placeholder="Paste link from PropertyGuru, 99.co, etc."
-
                     {...field}
+                    onBlur={(e) => {
+                      const normalized = normalizeUrl(e.target.value);
+                      if (normalized !== e.target.value) {
+                        field.onChange(normalized);
+                      }
+                      field.onBlur();
+                    }}
                   />
                 </FormControl>
                 <FormDescription>
@@ -242,19 +321,30 @@ export function CreateListingForm({
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center gap-2">
+                  Title
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Auto-filled from URL" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Auto-filled from URL or location &mdash; edit to differentiate
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-muted" />
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground font-semibold flex items-center gap-1">
-                <Sparkles
-                  size={12}
-                  className="text-yellow-500 fill-yellow-500"
-                />
-                Refined Details
-              </span>
-            </div>
+
           </div>
 
           <div className="grid grid-cols-1 gap-4">
@@ -338,11 +428,62 @@ export function CreateListingForm({
                 )}
               />
             </div>
-
           </div>
+
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center gap-2">
+                  <FileText size={14} className="text-primary" />
+                  Listing Notes
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Add any general observations, contact details, or thoughts about this listing..."
+                    className="resize-none min-h-[100px]"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
-        <div className="flex flex-row-reverse gap-3 pt-4 border-t">
+        {template && (
+          <div className="border-t pt-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold">
+                  Evaluation <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+                </span>
+                {evalAnsweredCount > 0 && (
+                  <span className="text-[11px] bg-primary/10 text-primary rounded-full px-2 py-0.5 font-medium">
+                    {evalAnsweredCount}
+                  </span>
+                )}
+              </div>
+              {evalAnsweredCount > 0 && (
+                <div className="text-xs text-muted-foreground">
+                  {evalAnsweredCount}/{template.criteria.length}
+                </div>
+              )}
+            </div>
+            
+            <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+              <InlineEvaluation
+                responses={evalResponses}
+                onResponse={handleEvalResponse}
+                onClearResponse={handleEvalClear}
+                listingPrice={priceValue > 0 ? priceValue : undefined}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-row-reverse gap-3 pt-6 border-t sticky bottom-0 bg-background/95 backdrop-blur-sm pb-2">
           <Button
             type="submit"
             disabled={isSubmitting}
