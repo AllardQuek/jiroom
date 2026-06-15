@@ -96,12 +96,16 @@ export function VerdictSection({
 
           <VerdictStatusButtons
             currentStatus={verdict.status}
-            onStatusChange={(status) =>
-              onVerdictUpdate({
-                status: status as "yes" | "maybe" | "no",
-                updated_at: new Date().toISOString(),
-              })
-            }
+            onStatusChange={(status) => {
+              if (status === verdict.status) {
+                onVerdictDelete?.();
+              } else {
+                onVerdictUpdate({
+                  status: status as "yes" | "maybe" | "no",
+                  updated_at: new Date().toISOString(),
+                });
+              }
+            }}
           />
 
           <VerdictReasoning
