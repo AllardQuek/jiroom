@@ -107,7 +107,7 @@ export const seedListings: Listing[] = [
     title: "Common Room @ Clementi",
     price: 750,
     area: "Clementi / West Coast",
-    status: "archived",
+    status: "viewed",
     notes: "Too far from MRT, decided not to pursue",
     lat: 1.31618,
     lng: 103.76494,
@@ -389,9 +389,15 @@ export function restoreUserData(): boolean {
   if (!raw) return false;
   try {
     const backup = JSON.parse(raw) as Record<string, unknown>;
-    for (const key of Object.keys(backup)) {
-      if (key.endsWith("-storage")) {
-        localStorage.setItem(key, JSON.stringify(backup[key]));
+    const backupKeys = new Set(
+      Object.keys(backup).filter((k) => k.endsWith("-storage"))
+    );
+    for (const key of backupKeys) {
+      localStorage.setItem(key, JSON.stringify(backup[key]));
+    }
+    for (const key of getStoreKeys()) {
+      if (!backupKeys.has(key)) {
+        localStorage.removeItem(key);
       }
     }
     localStorage.removeItem(BACKUP_KEY);

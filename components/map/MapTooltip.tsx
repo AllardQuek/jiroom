@@ -22,11 +22,6 @@ export function MapTooltip({ listing, x, y }: MapTooltipProps) {
       ? calculateScore(evaluation.responses, template)
       : null;
 
-  const notesPreview =
-    listing.notes && listing.notes.length > 80
-      ? listing.notes.slice(0, 80) + "…"
-      : listing.notes;
-
   return (
     <div
       className="fixed z-[2000] bg-background/95 backdrop-blur-sm border border-border/60 rounded-lg shadow-xl px-3 py-2 text-sm pointer-events-none select-none"
@@ -59,11 +54,6 @@ export function MapTooltip({ listing, x, y }: MapTooltipProps) {
           </span>
         )}
       </div>
-      {notesPreview && (
-        <p className="text-[11px] text-muted-foreground mt-1 leading-tight max-w-[200px] line-clamp-2">
-          {notesPreview}
-        </p>
-      )}
     </div>
   );
 }
