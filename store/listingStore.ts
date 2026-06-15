@@ -38,6 +38,18 @@ export const useListingStore = create<ListingState>()(
     {
       name: "listing-storage",
       storage: createJSONStorage(() => localStorage),
+      version: 1,
+      migrate: (persisted: unknown, version: number) => {
+        const state = persisted as {
+          listings?: Array<Record<string, unknown>>;
+        };
+        if (version < 1 && state.listings) {
+          state.listings = state.listings.map((l) =>
+            l.status === "archived" ? { ...l, status: "viewed" } : l
+          );
+        }
+        return state as unknown as Partial<ListingState>;
+      },
     }
   )
 );

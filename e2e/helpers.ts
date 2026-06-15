@@ -97,7 +97,7 @@ export function seedLocalStorage(page: Page) {
         title: "Common Room @ Clementi",
         price: 750,
         area: "Clementi / West Coast",
-        status: "archived",
+        status: "viewed",
         notes: "Too far from MRT, decided not to pursue",
         lat: 1.3151,
         lng: 103.7655,

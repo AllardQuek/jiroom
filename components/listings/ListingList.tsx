@@ -101,7 +101,12 @@ function DraggableListing({
       {...attributes}
       className={isDragging ? "opacity-30" : ""}
     >
-      <ListingCard listing={listing} compact={compact} compareMode={compareMode} onClick={onClick} />
+      <ListingCard
+        listing={listing}
+        compact={compact}
+        compareMode={compareMode}
+        onClick={onClick}
+      />
     </div>
   );
 }
@@ -116,14 +121,6 @@ const SORT_OPTIONS = [
   { label: "Name Z-A", value: { by: "name" as const, dir: "desc" as const } },
 ] as const;
 
-const ARCHIVED_SORT_OPTIONS = [
-  { label: "Default", value: null },
-  { label: "Price ↓", value: { by: "price" as const, dir: "desc" as const } },
-  { label: "Price ↑", value: { by: "price" as const, dir: "asc" as const } },
-  { label: "Name A-Z", value: { by: "name" as const, dir: "asc" as const } },
-  { label: "Name Z-A", value: { by: "name" as const, dir: "desc" as const } },
-] as const;
-
 function SortButton({
   columnId,
   options,
@@ -133,9 +130,16 @@ function SortButton({
   setOpenSortCol,
 }: {
   columnId: string;
-  options: readonly { readonly label: string; readonly value: SortConfig | null }[];
+  options: readonly {
+    readonly label: string;
+    readonly value: SortConfig | null;
+  }[];
   sortConfigs: Record<string, SortConfig | null>;
-  setSortConfigs: (fn: (prev: Record<string, SortConfig | null>) => Record<string, SortConfig | null>) => void;
+  setSortConfigs: (
+    fn: (
+      prev: Record<string, SortConfig | null>
+    ) => Record<string, SortConfig | null>
+  ) => void;
   openSortCol: string | null;
   setOpenSortCol: (id: string | null) => void;
 }) {
@@ -144,7 +148,9 @@ function SortButton({
     <div className="relative">
       <button
         type="button"
-        onClick={() => setOpenSortCol(openSortCol === columnId ? null : columnId)}
+        onClick={() =>
+          setOpenSortCol(openSortCol === columnId ? null : columnId)
+        }
         className={`flex items-center rounded-md p-1 text-xs transition-colors ${
           config
             ? "bg-primary/10 text-primary"
@@ -156,16 +162,23 @@ function SortButton({
       </button>
       {openSortCol === columnId && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpenSortCol(null)} />
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setOpenSortCol(null)}
+          />
           <div className="absolute right-0 top-full z-20 mt-1 w-36 rounded-lg border bg-popover p-1 shadow-md">
             {options.map((opt) => {
-              const isActive = JSON.stringify(config) === JSON.stringify(opt.value);
+              const isActive =
+                JSON.stringify(config) === JSON.stringify(opt.value);
               return (
                 <button
                   key={opt.label}
                   type="button"
                   onClick={() => {
-                    setSortConfigs((prev) => ({ ...prev, [columnId]: opt.value }));
+                    setSortConfigs((prev) => ({
+                      ...prev,
+                      [columnId]: opt.value,
+                    }));
                     setOpenSortCol(null);
                   }}
                   className={`w-full rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${
@@ -211,7 +224,11 @@ function DroppableColumn({
   );
 }
 
-export function ListingList({ onListingClick, compact, compareMode }: ListingListProps) {
+export function ListingList({
+  onListingClick,
+  compact,
+  compareMode,
+}: ListingListProps) {
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
   const verdicts = useVerdictStore((state) => state.verdicts);
@@ -222,7 +239,9 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
     "all" | "unscheduled" | "scheduled"
   >("all");
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [sortConfigs, setSortConfigs] = useState<Record<string, SortConfig | null>>({});
+  const [sortConfigs, setSortConfigs] = useState<
+    Record<string, SortConfig | null>
+  >({});
   const [openSortCol, setOpenSortCol] = useState<string | null>(null);
   const evaluations = useEvaluationStore((state) => state.evaluations);
   const templates = useTemplateStore((state) => state.templates);
@@ -345,10 +364,6 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
     );
   }
 
-  const archivedListings = listings.filter(
-    (listing) => listing.status === "archived"
-  );
-
   const getVerdict = (listingId: string) =>
     verdicts.find((v) => v.listing_id === listingId);
 
@@ -429,8 +444,7 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
                 <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                   {
                     listings.filter((l) => {
-                      const base =
-                        l.status === "new" || l.status === "to_view";
+                      const base = l.status === "new" || l.status === "to_view";
                       if (!base) return false;
                       if (toViewFilter === "all") return true;
                       const hasViewing = viewings.some(
@@ -501,7 +515,11 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
               <DroppableColumn
                 key={col.id}
                 columnId={col.id}
-                className={col.id === "to_view" ? "relative after:content-[''] after:hidden after:lg:block after:absolute after:right-[-8px] after:top-0 after:w-px after:h-full after:bg-border/80" : ""}
+                className={
+                  col.id === "to_view"
+                    ? "relative after:content-[''] after:hidden after:lg:block after:absolute after:right-[-8px] after:top-0 after:w-px after:h-full after:bg-border/80"
+                    : ""
+                }
               >
                 {/* Mobile-only title */}
                 <div className="lg:hidden px-3.5 pt-3.5 pb-2">
@@ -543,9 +561,7 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
                     </div>
                   ) : (
                     <div className="flex items-center justify-between gap-2">
-                      <h2 className="text-sm font-semibold">
-                        {col.title}
-                      </h2>
+                      <h2 className="text-sm font-semibold">{col.title}</h2>
                       <span className="flex items-center gap-1">
                         <SortButton
                           columnId={col.id}
@@ -583,45 +599,16 @@ export function ListingList({ onListingClick, compact, compareMode }: ListingLis
             );
           })}
         </div>
-
-        {archivedListings.length > 0 && (
-          <section className="rounded-xl bg-muted/30">
-            <div className="flex items-center justify-between gap-3 px-3.5 pt-3.5 pb-2">
-              <div>
-                <h2 className="text-sm font-semibold">Archived</h2>
-                <p className="mt-0.5 text-xs text-muted-foreground/60">
-                  Rejected options kept out of the active workflow
-                </p>
-              </div>
-              <div className="flex items-center gap-1">
-                <SortButton
-                  columnId="archived"
-                  options={ARCHIVED_SORT_OPTIONS}
-                  sortConfigs={sortConfigs}
-                  setSortConfigs={setSortConfigs}
-                  openSortCol={openSortCol}
-                  setOpenSortCol={setOpenSortCol}
-                />
-                <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                  {archivedListings.length}
-                </span>
-              </div>
-            </div>
-            <div className="flex gap-3 overflow-x-auto p-3 pt-2">
-              {sortListings(archivedListings, sortConfigs["archived"] ?? null).map((listing) => (
-                <div key={listing.id} className="w-80 shrink-0">
-                  <ListingCard listing={listing} compact={compact} compareMode={compareMode} onClick={onListingClick} />
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
       </div>
 
       <DragOverlay dropAnimation={null}>
         {activeListing ? (
           <div className="opacity-90">
-            <ListingCard listing={activeListing} compact={compact} compareMode={compareMode} />
+            <ListingCard
+              listing={activeListing}
+              compact={compact}
+              compareMode={compareMode}
+            />
           </div>
         ) : null}
       </DragOverlay>

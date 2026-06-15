@@ -158,7 +158,8 @@ export function EditListingForm({
             placeId={listing.googlePlaceId}
           />
           <p className="text-[0.8rem] text-muted-foreground mt-1.5">
-            Updates the listing title and map coordinates from the selected place
+            Updates the listing title and map coordinates from the selected
+            place
           </p>
         </div>
 
@@ -219,8 +220,6 @@ export function EditListingForm({
                   <SelectItem value="new">New</SelectItem>
                   <SelectItem value="to_view">To View</SelectItem>
                   <SelectItem value="viewed">Viewed</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
-
                 </SelectContent>
               </Select>
               <FormMessage />

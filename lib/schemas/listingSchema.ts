@@ -3,7 +3,11 @@ import { normalizeUrl } from "@/lib/utils/url";
 
 const urlPreprocess = z.preprocess(
   (val) => (typeof val === "string" ? normalizeUrl(val) : val),
-  z.string().url("Please enter a valid URL — make sure it starts with http:// or https://")
+  z
+    .string()
+    .url(
+      "Please enter a valid URL — make sure it starts with http:// or https://"
+    )
 );
 
 export const listingSchema = z.object({
@@ -15,9 +19,7 @@ export const listingSchema = z.object({
   price: z.number().positive("Price must be a positive number"),
   area: z.string().optional(),
   source_platform: z.string().optional(),
-  status: z
-    .enum(["new", "to_view", "viewed", "archived"])
-    .default("new"),
+  status: z.enum(["new", "to_view", "viewed"]).default("new"),
   lat: z.number().optional(),
   lng: z.number().optional(),
   googlePlaceId: z.string().optional(),

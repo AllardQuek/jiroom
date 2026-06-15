@@ -33,7 +33,6 @@ test.describe("M1a — Map UX Enhancements", () => {
     await expect(page.getByText("To View").first()).toBeVisible();
     await expect(page.getByText("Viewed").first()).toBeVisible();
     await expect(page.getByText("Shortlisted").first()).toBeVisible();
-    await expect(page.getByText("Archived").first()).toBeVisible();
   });
 
   test("area chips appear in filter panel", async ({ page }) => {
