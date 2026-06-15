@@ -127,6 +127,8 @@ export function ListingsPageInner() {
         const json = JSON.parse(event.target?.result as string) as ExportData;
         const result = importData(json);
         if (result.success) {
+          localStorage.removeItem("seed-mode-active");
+          localStorage.removeItem("user-data-backup");
           setBackupStatus({
             type: "success",
             message: "Restored. Reloading...",
