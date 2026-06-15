@@ -19,6 +19,7 @@ import {
   isToday,
   isTomorrow,
   isPast,
+  addMinutes,
   startOfDay,
   isSameDay,
 } from "date-fns";
@@ -207,7 +208,7 @@ export default function SchedulePage() {
       if (isNaN(date.getTime())) continue;
       const day = startOfDay(date);
 
-      if (isPast(date) && !isToday(date)) {
+      if (isPast(addMinutes(date, 30))) {
         past.push(viewing);
         continue;
       }
