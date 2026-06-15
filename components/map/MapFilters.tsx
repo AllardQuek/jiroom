@@ -2,15 +2,12 @@
 
 import { useState, useRef, useEffect } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
-import type { ColorMode } from "./MarkerColorToggle";
-import { AreaLegend } from "./AreaLegend";
 import { CommuteFilter } from "@/components/distance/CommuteFilter";
 
 const STATUS_OPTIONS = [
   { value: "new", label: "New" },
   { value: "to_view", label: "To View" },
   { value: "viewed", label: "Viewed" },
-  { value: "archived", label: "Archived" },
 ] as const;
 
 const VERDICT_OPTIONS = [
@@ -33,7 +30,6 @@ export interface Filters {
 interface MapFiltersProps {
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
-  colorMode?: ColorMode;
   areaColors?: Record<string, string>;
   areaOptions?: string[];
 }
@@ -41,7 +37,6 @@ interface MapFiltersProps {
 export function MapFilters({
   filters,
   onFiltersChange,
-  colorMode = "status",
   areaColors = {},
   areaOptions = [],
 }: MapFiltersProps) {
@@ -92,20 +87,23 @@ export function MapFilters({
     filters.verdict.length > 0;
 
   return (
-    <div ref={panelRef} className="absolute top-3 left-3 z-10 flex flex-col gap-2">
+    <div
+      ref={panelRef}
+      className="absolute max-sm:top-3 max-sm:right-28 sm:top-16 sm:left-3 z-10 flex flex-col gap-2"
+    >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="self-start flex items-center gap-2 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
+        className="self-start flex items-center gap-2 bg-background/90 backdrop-blur-sm border border-border/50 rounded-xl max-sm:rounded-lg max-sm:px-2.5 max-sm:py-2 px-5 py-3 text-sm font-semibold shadow-md hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <SlidersHorizontal size={14} />
-        Filters
+        <SlidersHorizontal size={18} />
+        <span className="hidden sm:inline">Filters</span>
         {hasActiveFilters && (
           <span className="h-2 w-2 rounded-full bg-primary" />
         )}
       </button>
 
       {isOpen && (
-        <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md space-y-3 max-h-[70vh] overflow-y-auto w-80 max-w-[calc(100vw-1.5rem)]">
+        <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md space-y-3 max-h-[70vh] overflow-y-auto w-80 max-sm:w-[calc(100vw-2rem)] max-sm:fixed max-sm:inset-x-4 max-sm:top-24 max-sm:max-h-[60vh]">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold">Status</span>
             <button
@@ -164,6 +162,12 @@ export function MapFilters({
                         : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
                     }`}
                   >
+                    {areaColors[area] && (
+                      <span
+                        className="h-2 w-2 rounded-full mr-1 inline-block"
+                        style={{ backgroundColor: areaColors[area] }}
+                      />
+                    )}
                     {area}
                   </button>
                 ))}
@@ -184,7 +188,8 @@ export function MapFilters({
                 onChange={(e) =>
                   onFiltersChange({
                     ...filters,
-                    scoreMin: e.target.value !== "" ? Number(e.target.value) : null,
+                    scoreMin:
+                      e.target.value !== "" ? Number(e.target.value) : null,
                   })
                 }
                 className="w-full bg-muted/50 border border-border/50 rounded-lg px-2.5 py-1.5 text-xs outline-none focus:border-primary"
@@ -200,7 +205,8 @@ export function MapFilters({
                 onChange={(e) =>
                   onFiltersChange({
                     ...filters,
-                    scoreMax: e.target.value !== "" ? Number(e.target.value) : null,
+                    scoreMax:
+                      e.target.value !== "" ? Number(e.target.value) : null,
                   })
                 }
                 className="w-full bg-muted/50 border border-border/50 rounded-lg px-2.5 py-1.5 text-xs outline-none focus:border-primary"
@@ -261,8 +267,6 @@ export function MapFilters({
               </button>
             </div>
           </div>
-
-          {colorMode === "area" && <AreaLegend areaColors={areaColors} />}
         </div>
       )}
     </div>

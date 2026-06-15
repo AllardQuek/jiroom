@@ -42,7 +42,16 @@ import {
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
 import { CreateAnchorForm } from "@/components/anchors/CreateAnchorForm";
 import { Button } from "@/components/ui/button";
-import { Plus, MapPin, List, AlertCircle, X, ExternalLink, Eye } from "lucide-react";
+import {
+  Plus,
+  MapPin,
+  List,
+  AlertCircle,
+  X,
+  ExternalLink,
+  Eye,
+  Menu,
+} from "lucide-react";
 import dynamic from "next/dynamic";
 
 const LocationSearch = dynamic(() => import("./LocationSearch"), {
@@ -53,7 +62,6 @@ const STATUS_COLORS: Record<string, string> = {
   new: "#9CA3AF",
   to_view: "#3B82F6",
   viewed: "#F59E0B",
-  archived: "#D1D5DB",
 };
 
 const AREA_PALETTE = [
@@ -133,6 +141,8 @@ export default function MapView({ onViewDetails }: MapViewProps) {
   const [showCreateAnchorDialog, setShowCreateAnchorDialog] = useState(false);
   const [dismissNoCoords, setDismissNoCoords] = useState(false);
   const [showAnchorPanel, setShowAnchorPanel] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
   const [hoveredMarker, setHoveredMarker] = useState<{
     listing: Listing;
     x: number;
@@ -145,7 +155,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       ("ontouchstart" in window || navigator.maxTouchPoints > 0),
     []
   );
-  const [colorMode, setColorMode] = useState<ColorMode>("status");
+  const [colorMode, setColorMode] = useState<ColorMode>("area");
   const visibleAnchors = useMemo(
     () => (filters.showAnchors ? anchors : []),
     [filters.showAnchors, anchors]
@@ -184,6 +194,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       !selectedListing ||
       !selectedListing.lat ||
       !selectedListing.lng ||
+      !travelMode ||
       !routesLib ||
       visibleAnchors.length === 0
     ) {
@@ -285,7 +296,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       const evaluation = evaluations.find((e) => e.listing_id === l.id);
       const scoreNet =
         evaluation && template
-          ? calculateScore(evaluation.responses, template)?.net ?? null
+          ? (calculateScore(evaluation.responses, template)?.net ?? null)
           : null;
 
       if (
@@ -300,7 +311,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         return false;
     }
 
-    if (filterAnchorId && maxCommuteMinutes !== null && l.lat && l.lng) {
+    if (filterAnchorId && maxCommuteMinutes !== null && travelMode && l.lat && l.lng) {
       const filterAnchor = anchors.find((a) => a.id === filterAnchorId);
       if (filterAnchor) {
         const key = `${l.lat},${l.lng}`;
@@ -336,18 +347,31 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     setShowAnchorPanel(false);
   }, []);
 
+  useEffect(() => {
+    if (!showMobileMenu) return;
+    function handleClickOutside(e: MouseEvent) {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target as Node)) {
+        setShowMobileMenu(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showMobileMenu]);
+
   return (
     <div className="relative w-full h-full">
       <style>{`.gm-ui-hover-effect { display: none !important; }`}</style>
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
+      <div className="absolute top-16 sm:top-3 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
         <LocationSearch onPlaceSelect={handlePlaceSelect} />
       </div>
       {listingsWithoutCoords.length > 0 && !dismissNoCoords && (
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
+        <div className="absolute max-sm:top-[60px] sm:top-16 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-md px-4">
           <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg px-3 py-2 text-xs text-amber-800 dark:text-amber-200 shadow-sm">
             <AlertCircle size={14} className="shrink-0" />
             <span className="flex-1">
-              {listingsWithoutCoords.length} listing{listingsWithoutCoords.length > 1 ? "s" : ""} without map coordinates — edit to add a location
+              {listingsWithoutCoords.length} listing
+              {listingsWithoutCoords.length > 1 ? "s" : ""} without map
+              coordinates — edit to add a location
             </span>
             <button
               type="button"
@@ -362,20 +386,46 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       <MapFilters
         filters={filters}
         onFiltersChange={setFilters}
-        colorMode={colorMode}
         areaColors={areaColorMap}
         areaOptions={areaOptions}
       />
-      <div className="absolute top-3 right-16 z-10 flex items-center gap-1.5">
-        <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
-        <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
+      <div ref={mobileMenuRef} className="absolute top-3 right-16 sm:right-16 z-10">
         <button
-          onClick={() => setShowAnchorPanel(true)}
-          className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+          className="sm:hidden flex items-center justify-center bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg p-2.5 shadow-sm hover:bg-background transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <List size={14} />
-          Anchors
+          <Menu size={16} />
         </button>
+        {showMobileMenu && (
+          <div className="sm:hidden absolute right-0 top-full mt-2 bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md w-56 space-y-3">
+            <div>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">Marker color</p>
+              <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">Route mode</p>
+              <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
+            </div>
+            <button
+              onClick={() => { setSelectedListing(null); setShowAnchorPanel(true); setShowMobileMenu(false); }}
+              className="w-full flex items-center justify-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
+            >
+              <List size={14} />
+              Anchors
+            </button>
+          </div>
+        )}
+        <div className="hidden sm:flex items-center gap-1.5">
+          <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
+          <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
+          <button
+            onClick={() => { setSelectedListing(null); setShowAnchorPanel(true); }}
+            className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
+          >
+            <List size={14} />
+            Anchors
+          </button>
+        </div>
       </div>
       <Map
         defaultCenter={{ lat: 1.3521, lng: 103.8198 }}
@@ -389,32 +439,62 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           setRouteResults({});
         }}
       >
-        {filteredListings.map((listing) => (
-          <AdvancedMarker
-            key={listing.id}
-            position={{ lat: listing.lat!, lng: listing.lng! }}
-            onClick={() => {
-              setSelectedListing(listing);
-              setSelectedAnchor(null);
-              setHoveredMarker(null);
-            }}
-            onMouseEnter={
-              !isTouchDevice ? (e) => handleMouseEnter(listing, e) : undefined
-            }
-            onMouseLeave={!isTouchDevice ? handleMouseLeave : undefined}
-          >
-            <Pin
-              background={
-                colorMode === "area"
-                  ? areaColorMap[listing.area] || "#6B7280"
-                  : STATUS_COLORS[listing.status] || "#9CA3AF"
+          {filteredListings.map((listing) => {
+            const isSelected = selectedListing?.id === listing.id;
+            return (
+            <AdvancedMarker
+              key={listing.id}
+              position={{ lat: listing.lat!, lng: listing.lng! }}
+              onClick={() => {
+                setSelectedListing(listing);
+                setSelectedAnchor(null);
+                setShowAnchorPanel(false);
+                setHoveredMarker(null);
+              }}
+              onMouseEnter={
+                !isTouchDevice ? (e) => handleMouseEnter(listing, e) : undefined
               }
-              borderColor="#374151"
-              glyphColor="#FFFFFF"
-              scale={1.2}
-            />
-          </AdvancedMarker>
-        ))}
+              onMouseLeave={!isTouchDevice ? handleMouseLeave : undefined}
+            >
+              {isSelected ? (
+                <div className="relative">
+                  <div className="absolute inset-0 animate-ping rounded-full opacity-30"
+                    style={{
+                      backgroundColor: colorMode === "area"
+                        ? areaColorMap[listing.area] || "#6B7280"
+                        : STATUS_COLORS[listing.status] || "#9CA3AF",
+                      width: 48,
+                      height: 48,
+                      left: -10,
+                      top: -10,
+                    }}
+                  />
+                  <Pin
+                    background={
+                      colorMode === "area"
+                        ? areaColorMap[listing.area] || "#6B7280"
+                        : STATUS_COLORS[listing.status] || "#9CA3AF"
+                    }
+                    borderColor="#000000"
+                    glyphColor="#FFFFFF"
+                    scale={1.6}
+                  />
+                </div>
+              ) : (
+              <Pin
+                background={
+                  colorMode === "area"
+                    ? areaColorMap[listing.area] || "#6B7280"
+                    : STATUS_COLORS[listing.status] || "#9CA3AF"
+                }
+                borderColor="#374151"
+                glyphColor="#FFFFFF"
+                scale={1.2}
+              />
+              )}
+            </AdvancedMarker>
+            );
+          })}
 
         {selectedListing &&
           visibleAnchors.map((anchor) => {
@@ -457,33 +537,46 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         )}
 
         {selectedListing && (
-          <InfoWindow
-            position={{
-              lat: selectedListing.lat!,
-              lng: selectedListing.lng!,
-            }}
-            onCloseClick={() => setSelectedListing(null)}
-          >
-            <div>
-              <ListingPreviewCard
-                listing={selectedListing}
-                onViewDetails={onViewDetails}
-              />
-              <CommuteInfo
-                anchors={visibleAnchors}
-                routes={routeResults}
-                travelModeLabel={
-                  travelMode === "TRANSIT"
-                    ? "Transit"
-                    : travelMode === "DRIVING"
-                      ? "Driving"
-                      : travelMode === "WALKING"
-                        ? "Walking"
-                        : "Biking"
-                }
-              />
+          <>
+            <div
+              className="fixed inset-0 z-30 sm:hidden"
+              onClick={() => setSelectedListing(null)}
+            />
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_rgba(0,0,0,0.1)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-96 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
+              <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
+                <h2 className="text-sm font-semibold">Listing Details</h2>
+                <button
+                  onClick={() => setSelectedListing(null)}
+                  className="p-1 -mr-1 text-muted-foreground hover:text-foreground"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-4">
+                <ListingPreviewCard
+                  listing={selectedListing}
+                  onViewDetails={onViewDetails}
+                />
+                {visibleAnchors.some((a) => a.id in routeResults) && (
+                  <CommuteInfo
+                    anchors={visibleAnchors}
+                    routes={routeResults}
+                    travelModeLabel={
+                      travelMode === "TRANSIT"
+                        ? "Transit"
+                        : travelMode === "DRIVING"
+                          ? "Driving"
+                          : travelMode === "WALKING"
+                            ? "Walking"
+                            : travelMode === "BICYCLING"
+                              ? "Biking"
+                              : ""
+                    }
+                  />
+                )}
+              </div>
             </div>
-          </InfoWindow>
+          </>
         )}
 
         {selectedAnchor && (
@@ -511,6 +604,9 @@ export default function MapView({ onViewDetails }: MapViewProps) {
 
         {searchResult && (
           <MapController lat={searchResult.lat} lng={searchResult.lng} />
+        )}
+        {selectedAnchor && (
+          <MapController key={selectedAnchor.id} lat={selectedAnchor.lat} lng={selectedAnchor.lng} />
         )}
       </Map>
 
@@ -610,6 +706,12 @@ export default function MapView({ onViewDetails }: MapViewProps) {
   );
 }
 
+const VERDICT_STYLES: Record<string, { label: string; fg: string; bg: string }> = {
+  yes: { label: "Yes", fg: "#059669", bg: "#05966920" },
+  maybe: { label: "Maybe", fg: "#D97706", bg: "#D9770620" },
+  no: { label: "No", fg: "#DC2626", bg: "#DC262620" },
+};
+
 function ListingPreviewCard({
   listing,
   onViewDetails,
@@ -626,46 +728,64 @@ function ListingPreviewCard({
     evaluation && template
       ? calculateScore(evaluation.responses, template)
       : null;
+  const verdict = useVerdictStore((s) =>
+    s.verdicts.find((v) => v.listing_id === listing.id)
+  );
+  const verdictStyle = verdict ? VERDICT_STYLES[verdict.status] : null;
 
   return (
-    <div className="text-sm min-w-[200px] max-w-[260px] pr-3">
-      <div className="space-y-1.5">
-        <h3 className="font-semibold leading-tight text-[13px]" style={{ wordBreak: "break-word", overflowWrap: "break-word" }}>{listing.title}</h3>
-        <div className="flex items-baseline gap-1">
-          <span className="font-bold text-base">
+    <div className="text-sm min-w-[180px] max-w-[260px]">
+      <div className="space-y-0.5">
+        <h3
+          className="font-semibold leading-tight text-[12px]"
+          style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+        >
+          {listing.title}
+        </h3>
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-sm">
             ${listing.price.toLocaleString()}
           </span>
-          <span className="text-muted-foreground text-[11px]">/mo</span>
-        </div>
-        {listing.area && (
-          <p className="text-[11px] text-muted-foreground">{listing.area}</p>
-        )}
-        <div className="flex items-center gap-2">
           <span
-            className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
+            className="px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider"
             style={{
-              backgroundColor: STATUS_COLORS[listing.status] + "20",
-              color: STATUS_COLORS[listing.status],
+              backgroundColor: verdictStyle
+                ? verdictStyle.bg
+                : STATUS_COLORS[listing.status] + "20",
+              color: verdictStyle
+                ? verdictStyle.fg
+                : STATUS_COLORS[listing.status],
             }}
           >
-            {listing.status.replace("_", " ")}
+            {verdictStyle ? verdictStyle.label : listing.status.replace("_", " ")}
           </span>
           {score !== null && (
-            <span className={`text-xs font-semibold tabular-nums ${
-              score.net > 0 ? "text-emerald-600" : score.net < 0 ? "text-red-600" : ""
-            }`}>
+            <span
+              className={`text-[11px] font-semibold tabular-nums ${
+                score.net > 0
+                  ? "text-emerald-600"
+                  : score.net < 0
+                    ? "text-red-600"
+                    : ""
+              }`}
+            >
               {score.net > 0 ? `+${score.net}` : score.net}
             </span>
           )}
         </div>
+        {listing.notes && (
+          <p className="text-[10px] text-muted-foreground mt-1.5 leading-relaxed whitespace-pre-wrap">
+            {listing.notes}
+          </p>
+        )}
       </div>
-      <div className="flex flex-wrap gap-1.5 mt-3 pt-2.5 pb-2 border-t border-border/40">
+      <div className="flex gap-1.5 mt-2 pt-2 border-t border-border/40">
         {onViewDetails && (
           <button
             onClick={() => onViewDetails(listing.id)}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
           >
-            <Eye size={12} />
+            <Eye size={10} />
             Details
           </button>
         )}
@@ -673,19 +793,10 @@ function ListingPreviewCard({
           href={listing.source_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
+          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
         >
-          <ExternalLink size={12} />
+          <ExternalLink size={10} />
           Source
-        </a>
-        <a
-          href={`https://www.google.com/maps/dir/?api=1&destination=${listing.lat},${listing.lng}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
-        >
-          <MapPin size={12} />
-          Maps
         </a>
       </div>
     </div>
@@ -705,7 +816,9 @@ function AnchorInfoWindow({
 
   return (
     <div className="text-sm" style={{ minWidth: 180, maxWidth: 280 }}>
-      <h3 className="font-semibold leading-tight text-[13px] break-words">{anchor.title}</h3>
+      <h3 className="font-semibold leading-tight text-[13px] break-words">
+        {anchor.title}
+      </h3>
       <div className="flex items-center gap-2 mt-1.5">
         <span
           className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
@@ -718,7 +831,9 @@ function AnchorInfoWindow({
         </span>
       </div>
       {anchor.address && (
-        <p className="text-[11px] text-muted-foreground mt-1">{anchor.address}</p>
+        <p className="text-[11px] text-muted-foreground mt-1">
+          {anchor.address}
+        </p>
       )}
       <div className="flex gap-1.5 mt-3 pt-2.5 border-t border-border/40">
         <button
