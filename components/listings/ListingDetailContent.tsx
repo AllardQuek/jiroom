@@ -41,6 +41,7 @@ export function ListingDetailContent({
   const verdicts = useVerdictStore((state) => state.verdicts);
   const addVerdict = useVerdictStore((state) => state.addVerdict);
   const updateVerdict = useVerdictStore((state) => state.updateVerdict);
+  const deleteVerdict = useVerdictStore((state) => state.deleteVerdict);
 
   const listing = listings.find((l) => l.id === listingId) ?? null;
   const viewing = listing
@@ -103,6 +104,12 @@ export function ListingDetailContent({
     updateListing(listing!.id, { status: "viewed" });
   };
 
+  const handleVerdictDelete = () => {
+    if (verdict) {
+      deleteVerdict(verdict.id);
+    }
+  };
+
   return (
     <div className="space-y-5">
       <ListingDetail
@@ -131,6 +138,7 @@ export function ListingDetailContent({
         listingId={listing.id}
         onVerdictUpdate={handleVerdictUpdate}
         onVerdictCreate={handleVerdictCreate}
+        onVerdictDelete={handleVerdictDelete}
       />
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

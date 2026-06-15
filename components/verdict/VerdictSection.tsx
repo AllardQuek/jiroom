@@ -14,6 +14,7 @@ interface VerdictSectionProps {
   listingId: string;
   onVerdictUpdate: (updates: Partial<Verdict>) => void;
   onVerdictCreate: (verdict: Verdict) => void;
+  onVerdictDelete?: () => void;
 }
 
 const statusLabels: Record<string, string> = {
@@ -33,6 +34,7 @@ export function VerdictSection({
   listingId,
   onVerdictUpdate,
   onVerdictCreate,
+  onVerdictDelete,
 }: VerdictSectionProps) {
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -111,6 +113,16 @@ export function VerdictSection({
               })
             }
           />
+
+          {onVerdictDelete && (
+            <button
+              type="button"
+              onClick={onVerdictDelete}
+              className="text-xs text-muted-foreground/50 hover:text-destructive transition-colors"
+            >
+              Clear verdict
+            </button>
+          )}
         </div>
       )}
     </div>
