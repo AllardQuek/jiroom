@@ -17,10 +17,18 @@ export default function AnchorMarker({ anchor, onClick }: AnchorMarkerProps) {
       position={{ lat: anchor.lat, lng: anchor.lng }}
       onClick={onClick}
     >
-      <div
-        className="w-4 h-4 rotate-45 border-2 border-white shadow-md cursor-pointer"
-        style={{ backgroundColor: color }}
-      />
+      <div className="relative flex items-center justify-center cursor-pointer drop-shadow-lg">
+        <div
+          className="w-7 h-7 rotate-45 border-[3px] bg-white rounded-sm"
+          style={{ borderColor: color }}
+        />
+        <span
+          className="absolute text-[11px] font-bold leading-none pointer-events-none"
+          style={{ color }}
+        >
+          A
+        </span>
+      </div>
     </AdvancedMarker>
   );
 }
