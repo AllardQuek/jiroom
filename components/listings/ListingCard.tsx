@@ -34,6 +34,9 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
   const templates = useTemplateStore((state) => state.templates);
 
   const viewing = viewings.find((v) => v.listing_id === listing.id);
+  const isViewingOverdue = viewing?.scheduled_date
+    ? new Date(viewing.scheduled_date).getTime() + 30 * 60 * 1000 < Date.now()
+    : false;
   const template = templates[0];
   const answeredCount = template
     ? template.criteria.filter(
@@ -109,7 +112,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
           </div>
           <div className="flex items-center gap-2 shrink-0 text-[10px] text-muted-foreground/50">
             {viewing?.scheduled_date ? (
-              <span>
+              <span className={isViewingOverdue ? "text-amber-500 font-medium" : ""}>
                 {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -132,7 +135,9 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
 
   return (
     <Card
-      className="overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-md transition-all duration-200 rounded-xl"
+      className={`overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-md transition-all duration-200 rounded-xl ${
+        isViewingOverdue ? "border-l-amber-400 border-l-2" : ""
+      }`}
       onClick={handleClick}
     >
       <div className="p-3.5 space-y-3">
@@ -230,7 +235,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
               </button>
             )}
             {viewing?.scheduled_date ? (
-              <span className="text-[10px] text-muted-foreground/60" title="Scheduled viewing">
+              <span className={`text-[10px] ${isViewingOverdue ? "text-amber-500 font-semibold" : "text-muted-foreground/60"}`} title="Scheduled viewing">
                 <CalendarDays size={10} className="inline -mt-0.5 mr-0.5" />
                 {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
                   month: "short",
@@ -238,6 +243,11 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                   hour: "numeric",
                   minute: "2-digit",
                 })}
+                {isViewingOverdue && (
+                  <span className="ml-1.5 text-[9px] bg-amber-100 text-amber-700 rounded-full px-1.5 py-0.5 font-semibold">
+                    Overdue
+                  </span>
+                )}
               </span>
             ) : (
               <span className="text-[10px] text-muted-foreground/30 italic">No date set</span>

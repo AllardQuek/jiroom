@@ -95,10 +95,12 @@ export function ListingDetailContent({
     if (verdict) {
       updateVerdict(verdict.id, updates);
     }
+    updateListing(listing!.id, { status: "viewed" });
   };
 
   const handleVerdictCreate = (newVerdict: Verdict) => {
     addVerdict(newVerdict);
+    updateListing(listing!.id, { status: "viewed" });
   };
 
   return (
