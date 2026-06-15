@@ -20,7 +20,7 @@ Listings use manual data entry (paste URL, type price, etc.) rather than auto-ex
 
 The card-based kanban view was chosen over a table/grid because it's more mobile-friendly and allows richer per-item information (status badge, area, notes preview) without requiring horizontal scroll.
 
-**Status pipeline**: The original design included a `"shortlisted"` status alongside `"new"`, `"to_view"`, `"viewed"`, and `"archived"`. Shortlisted was removed because it duplicated the function of the verdict system — a verdict of "yes" effectively shortlists a listing, making a separate status redundant. This simplified the status model from 5 states to 4: `new → to_view → viewed → archived`.
+**Status pipeline**: The original design included a `"shortlisted"` status alongside `"new"`, `"to_view"`, `"viewed"`, and `"archived"`. Shortlisted was removed because it duplicated the function of the verdict system — a verdict of "yes" effectively shortlists a listing, making a separate status redundant. The `"archived"` status was later removed because it duplicated the "No" verdict — a listing with a "No" verdict is effectively rejected, and the archive section below the kanban added unnecessary complexity. This simplified the status model from 5 states to 3: `new → to_view → viewed`. Listings are removed from the active workflow via the "No" verdict column. A localStorage migration (version 0 → 1) converts any existing `archived` listings to `viewed` on hydration.
 
 **Kanban layout evolution**: The initial layout was a flat 4-column grid treating all columns equally. It was later restructured with group headers ("To View" / "Viewed") to communicate the lifecycle distinction and a scheduled/unscheduled filter toggle in the To View column. See `specs/kanban-layout-decisions.md` for the full exploration and rationale.
 
@@ -37,10 +37,10 @@ The card-based kanban view was chosen over a table/grid because it's more mobile
 - Each card shows: Title, Price, Status, Source URL
 - Empty column placeholder: "Drop listings here"
 
-### FR2: Archived Section
-- Display archived listings in a horizontal scrollable row below the kanban
-- Archived listings are not draggable into the kanban columns
-- Archived listings cannot be viewed in the kanban board (hidden from columns)
+### FR2: Verdict-Based Pipeline (replaces archived section)
+- The "No" verdict column serves as the rejection zone — listings with a "No" verdict remain in the kanban's "Viewed" group under the "No" column
+- No separate archive section exists below the kanban
+- Removing a listing from the active workflow is done by dragging it to the "No" column (or via the "No" verdict in the listing detail)
 
 ### FR3: Listing Detail View (Modal)
 - Display full listing information: Title, Price, Area, Source Platform, Source URL, Status, Created Date
@@ -116,7 +116,7 @@ The card-based kanban view was chosen over a table/grid because it's more mobile
 - [x] AC9: All data persists via localStorage
 - [x] AC10: TypeScript compilation succeeds
 - [x] AC11: Mobile layout is responsive and usable
-- [x] AC12: Archived listings appear in scrollable section below kanban
+- [x] AC12: "No" verdict column serves as the rejection zone (archived section removed)
 
 ## Out of Scope
 
@@ -149,7 +149,7 @@ export interface Listing {
   title: string;
   price: number;
   area: string;
-  status: "new" | "to_view" | "viewed" | "archived";
+   status: "new" | "to_view" | "viewed";
   notes?: string;
   lat?: number;
   lng?: number;

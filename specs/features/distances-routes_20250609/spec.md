@@ -40,7 +40,8 @@ Routes are computed on-demand (when a listing is clicked), not pre-fetched for a
 - **FR1.1**: Route calculation SHALL use the Google Maps Directions API via `useMapsLibrary("routes")`
 - **FR1.2**: The primary travel mode SHALL be `TRANSIT` (Singapore MRT/bus)
 - **FR1.3**: The user MAY switch to `DRIVING`, `WALKING`, or `BICYCLING` modes
-- **FR1.4**: The departure time SHALL be set to "now" (`new Date()`) for real-time transit schedules
+- **FR1.4**: The user MAY deselect all travel modes by clicking the active mode again, setting it to `null`. When `null`, no routes are calculated or displayed on the map.
+- **FR1.5**: The departure time SHALL be set to "now" (`new Date()`) for real-time transit schedules
 
 ### FR2: Per-Listing Route Display
 - **FR2.1**: Clicking a listing SHALL trigger Directions API calls from that listing to ALL anchors simultaneously
@@ -58,14 +59,19 @@ Routes are computed on-demand (when a listing is clicked), not pre-fetched for a
 - **FR3.3**: Loading state SHALL show per-anchor while Directions API responds
 
 ### FR4: Travel Mode Toggle
-- **FR4.1**: A travel mode selector SHALL appear in the filter bar or as a floating control
-- **FR4.2**: Options: Transit (default), Driving, Walking, Cycling
-- **FR4.3**: Changing the travel mode SHALL re-fetch all routes for the currently selected listing
+- **FR4.1**: A travel mode selector SHALL appear near the map controls as a pill button group
+- **FR4.2**: Options: Transit, Driving, Walking, Cycling — all optional, none selected by default
+- **FR4.3**: Clicking the active mode SHALL deselect it (set to `null`)
+- **FR4.4**: Changing the travel mode SHALL re-fetch all routes for the currently selected listing
+- **FR4.5**: When no mode is selected, no route lines or commute info SHALL appear on the map
 
 ### FR5: Map Route Polylines
 - **FR5.1**: Each route SHALL render as a `Polyline` on the map using `@vis.gl/react-google-maps`
 - **FR5.2**: The polyline SHALL follow the actual road/transit path (from Directions API), NOT a straight line
-- **FR5.3**: Polylines SHALL use the anchor's type color with ~50% opacity
+- **FR5.3**: Polylines SHALL use the anchor's type color with a two-layer rendering:
+  - Background glow: `strokeWeight={9}` at 15% opacity
+  - Main line: `strokeWeight={4}` at 85% opacity on top
+  This creates a halo effect that distinguishes route lines from road network lines on the map.
 - **FR5.4**: A label (duration) SHALL appear at the midpoint of each polyline
 
 ### FR6: Anchor-Centric Filtering

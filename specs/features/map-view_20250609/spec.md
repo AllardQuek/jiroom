@@ -61,12 +61,12 @@ See `plan.md` for implementation details. The following sections document M1a en
 
 ### FR7: Area-Based Marker Coloring
 - **FR7.1**: The map SHALL support two coloring modes, toggled via a button in the filter panel:
-  - **By Status** (default): markers colored by listing status (existing M1 behavior)
-  - **By Area**: markers colored by geographic area (e.g. Tampines, Simei, Clementi)
+  - **By Area** (default): markers colored by geographic area (e.g. Tampines, Simei, Clementi). Default changed from "By Status" because most listings share the same status ("viewed"), making status-based coloring less informative.
+  - **By Status**: markers colored by listing status
 - **FR7.2**: In "By Area" mode, areas SHALL be auto-detected from the `area` field on each listing
 - **FR7.3**: Each unique area SHALL receive a distinct color from a predefined palette
 - **FR7.4**: Listings without an `area` value SHALL default to a neutral "Unknown" gray
-- **FR7.5**: A legend SHALL appear in the filter panel showing the area → color mapping
+- **FR7.5**: Each area filter chip SHALL include a color dot matching the area's marker color, replacing the separate legend
 
 ### FR8: Enhanced Filters
 - **FR8.1**: The filter panel SHALL include an **Area** filter showing all unique areas as checkable chips
@@ -91,6 +91,36 @@ See `plan.md` for implementation details. The following sections document M1a en
 - Batch geocoding existing listings without coordinates
 - Google Takeout import (archived)
 
+### M1b — InfoWindow & Anchor UX Improvements
+
+#### FR9: Compact Listing InfoWindow
+- **FR9.1**: Clicking a listing marker SHALL open a compact Google Maps InfoWindow showing:
+  - Listing title (truncated, 12px)
+  - Price (bold, formatted)
+  - Verdict badge (Yes/Maybe/No) if available, falling back to viewing status badge (New/To View/Viewed)
+  - Score (if evaluated)
+  - "Details" button (navigates to listing detail)
+  - "Source" button (opens source URL in new tab)
+- **FR9.2**: Commute info to anchors SHALL appear below the listing card, only when routes are calculated
+- **FR9.3**: Commute info items SHALL show anchor name, colored dot, and duration
+- **FR9.4**: The hover tooltip (FR6) SHALL continue to show the full preview (including area and notes)
+- **FR9.5**: InfoWindow width SHALL be capped at 280px
+
+#### FR10: Anchor Panel Positioning
+- **FR10.1**: On mobile (<640px), the anchor panel SHALL remain a full-width bottom sheet sliding up
+- **FR10.2**: On desktop (≥640px), the anchor panel SHALL appear as a floating panel at the top-right (`top-14`, `right-4`) with a 384px max-width, positioned near the "Anchors" trigger button
+- **FR10.3**: The panel SHALL fade in on desktop (animate-fade-in) vs. slide-up on mobile
+- **FR10.4**: Selecting an anchor from the panel SHALL pan and zoom the map to the anchor's position
+
+#### FR11: Anchor Marker Visual
+- **FR11.1**: Anchor markers SHALL use a 28px white diamond shape with a 3px colored border (type-specific color)
+- **FR11.2**: A bold "A" letter SHALL appear inside the diamond, colored to match the border
+- **FR11.3**: Anchor colors SHALL be distinct from the AREA_PALETTE and STATUS_COLORS to avoid confusion: rose (`#E11D48`), fuchsia (`#D946EF`), sky (`#0EA5E9`), orange (`#F97316`), stone (`#78716C`)
+
+### Seed Data Cleanup on Restore
+
+When toggling out of seed mode (`restoreUserData`), any localStorage `*-storage` keys that were created by seed data but don't exist in the user backup SHALL be removed. This prevents stale seed data (e.g. anchor-storage with seed anchors) from leaking into user mode after restoration.
+
 ### Data Model Changes
 
 No new fields. The existing `area` string field and evaluation store scores are sufficient.
@@ -102,8 +132,11 @@ components/
   map/
     MapTooltip.tsx            # Shared hover tooltip overlay
     MarkerColorToggle.tsx     # "By Status" / "By Area" toggle
-    AreaLegend.tsx            # Color legend for area mode
-    MapFilters.tsx            # Updated: area chips, score range, criteria filter
+    AreaLegend.tsx            # Removed — color dots on area chips replace this
+    MapFilters.tsx            # Updated: area chips with color dots, score range, criteria filter
+    AnchorMarker.tsx          # Updated: 28px white diamond with colored border + "A"
+    AnchorPanel.tsx           # Updated: top-right floating panel on desktop
+    RoutePolyline.tsx         # Updated: two-layer glow rendering
 ```
 
 ### Technical Notes
