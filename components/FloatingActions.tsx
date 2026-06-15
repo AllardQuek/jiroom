@@ -43,7 +43,7 @@ export default function FloatingActions() {
           <Button
             variant="outline"
             size="icon"
-            className="rounded-full shadow-lg hover:shadow-xl transition-shadow bg-background border-border size-10"
+            className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
           >
             <Bug className="size-4" />
           </Button>
@@ -51,7 +51,7 @@ export default function FloatingActions() {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full shadow-lg hover:shadow-xl transition-shadow bg-background border-border size-10"
+          className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
           onClick={() => setHelpOpen(true)}
           aria-label="Open help"
         >
