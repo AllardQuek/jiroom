@@ -27,18 +27,18 @@ export function CommuteInfo({
   if (visibleAnchors.length === 0) return null;
 
   return (
-    <div className="border-t border-border/30 pt-2 mt-2">
-      <span className="text-xs font-semibold text-muted-foreground block mb-1.5">
+    <div className="border-t border-border/30 pt-2.5 mt-2.5 pb-2 pr-2">
+      <span className="text-xs font-semibold text-muted-foreground block mb-2">
         Commute ({travelModeLabel})
       </span>
-      <div className="space-y-1">
+      <div className="space-y-2">
         {visibleAnchors.map((anchor) => {
           const data = routes[anchor.id];
           const color = anchor.color || ANCHOR_COLORS[anchor.type];
           const duration = data?.result?.durationText;
 
           return (
-            <div key={anchor.id} className="flex items-center gap-2 text-xs">
+            <div key={anchor.id} className="flex items-center gap-3 text-xs">
               <span
                 className="h-2 w-2 rounded-full flex-shrink-0"
                 style={{ backgroundColor: color }}

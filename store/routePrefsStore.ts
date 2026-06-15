@@ -4,10 +4,10 @@ import { persist, createJSONStorage } from "zustand/middleware";
 export type TravelMode = "TRANSIT" | "DRIVING" | "WALKING" | "BICYCLING";
 
 interface RoutePrefsState {
-  travelMode: TravelMode;
+  travelMode: TravelMode | null;
   filterAnchorId: string | null;
   maxCommuteMinutes: number | null;
-  setTravelMode: (mode: TravelMode) => void;
+  setTravelMode: (mode: TravelMode | null) => void;
   setFilterAnchor: (id: string | null) => void;
   setMaxCommute: (minutes: number | null) => void;
 }
@@ -15,7 +15,7 @@ interface RoutePrefsState {
 export const useRoutePrefsStore = create<RoutePrefsState>()(
   persist(
     (set) => ({
-      travelMode: "TRANSIT",
+      travelMode: null,
       filterAnchorId: null,
       maxCommuteMinutes: null,
       setTravelMode: (mode) => set({ travelMode: mode }),

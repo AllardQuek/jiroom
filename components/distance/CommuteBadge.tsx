@@ -18,7 +18,7 @@ export function CommuteBadge({ listing }: CommuteBadgeProps) {
     state.anchors.find((a) => a.id === filterAnchorId)
   );
 
-  if (!filterAnchorId || !listing.lat || !listing.lng || !anchor) return null;
+  if (!filterAnchorId || !listing.lat || !listing.lng || !anchor || !travelMode) return null;
 
   const originKey = `${listing.lat},${listing.lng}`;
   const destKey = `${anchor.lat},${anchor.lng}`;

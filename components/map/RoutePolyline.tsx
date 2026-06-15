@@ -25,8 +25,14 @@ export function RoutePolyline({ data, color, label }: RoutePolylineProps) {
       <Polyline
         path={path}
         strokeColor={color}
-        strokeOpacity={0.55}
-        strokeWeight={3.5}
+        strokeOpacity={0.15}
+        strokeWeight={9}
+      />
+      <Polyline
+        path={path}
+        strokeColor={color}
+        strokeOpacity={0.85}
+        strokeWeight={4}
       />
       {label && midPoint && (
         <AdvancedMarker position={midPoint} title={label}>
