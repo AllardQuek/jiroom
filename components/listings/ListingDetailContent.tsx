@@ -107,6 +107,7 @@ export function ListingDetailContent({
   const handleVerdictDelete = () => {
     if (verdict) {
       deleteVerdict(verdict.id);
+      updateListing(listing!.id, { status: "to_view" });
     }
   };
 

@@ -49,7 +49,7 @@ export function VerdictSection({
         </div>
         <p className="text-sm text-muted-foreground mb-3">Not set yet</p>
         <VerdictStatusButtons
-          currentStatus="maybe"
+          currentStatus=""
           onStatusChange={(status) => {
             const newVerdict: Verdict = {
               id: crypto.randomUUID(),
