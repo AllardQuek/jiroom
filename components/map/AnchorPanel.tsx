@@ -44,7 +44,7 @@ export default function AnchorPanel({
         className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px]"
         onClick={onClose}
       />
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_rgba(0,0,0,0.1)] max-h-[60dvh] flex flex-col animate-slide-up">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_rgba(0,0,0,0.1)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-96 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
         <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
           <div className="flex items-center gap-2">
             <button
