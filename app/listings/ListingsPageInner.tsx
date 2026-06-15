@@ -71,6 +71,13 @@ export function ListingsPageInner() {
   }, [searchParams, router]);
 
   useEffect(() => {
+    if (sessionStorage.getItem("import-completed")) {
+      sessionStorage.removeItem("import-completed");
+      localStorage.removeItem("seed-mode-active");
+      localStorage.removeItem("user-data-backup");
+      setSeedMode(false);
+      return;
+    }
     if (isAnyStoreEmpty()) {
       loadSeedData();
       window.location.reload();
@@ -127,8 +134,7 @@ export function ListingsPageInner() {
         const json = JSON.parse(event.target?.result as string) as ExportData;
         const result = importData(json);
         if (result.success) {
-          localStorage.removeItem("seed-mode-active");
-          localStorage.removeItem("user-data-backup");
+          sessionStorage.setItem("import-completed", "true");
           setBackupStatus({
             type: "success",
             message: "Restored. Reloading...",
