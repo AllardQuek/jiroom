@@ -5,6 +5,7 @@ import { Listing } from "@/types/listing";
 import { Card } from "@/components/ui/card";
 import { ListingSelector } from "@/components/comparison/ListingSelector";
 import { useViewingStore } from "@/store/viewingStore";
+import { useVerdictStore } from "@/store/verdictStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import {
@@ -28,13 +29,15 @@ interface ListingCardProps {
 export function ListingCard({ listing, compact, compareMode, onClick }: ListingCardProps) {
   const [showNotes, setShowNotes] = useState(false);
   const viewings = useViewingStore((state) => state.viewings);
+  const verdicts = useVerdictStore((state) => state.verdicts);
   const evaluation = useEvaluationStore((state) =>
     state.getEvaluationByListingId(listing.id)
   );
   const templates = useTemplateStore((state) => state.templates);
 
   const viewing = viewings.find((v) => v.listing_id === listing.id);
-  const isViewingOverdue = viewing?.scheduled_date
+  const hasVerdict = verdicts.some((v) => v.listing_id === listing.id);
+  const isViewingOverdue = !hasVerdict && viewing?.scheduled_date
     ? new Date(viewing.scheduled_date).getTime() + 30 * 60 * 1000 < Date.now()
     : false;
   const template = templates[0];
