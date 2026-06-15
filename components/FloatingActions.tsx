@@ -33,7 +33,7 @@ export default function FloatingActions() {
 
   return (
     <>
-      <div className="fixed bottom-[calc(7rem+env(safe-area-inset-bottom,0px))] right-4 z-40 flex items-center gap-2">
+      <div className="hidden sm:flex fixed bottom-[calc(7rem+env(safe-area-inset-bottom,0px))] right-4 z-40 items-center gap-2">
         <a
           href={GITHUB_ISSUES_URL}
           target="_blank"
