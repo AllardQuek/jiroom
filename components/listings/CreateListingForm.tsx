@@ -10,11 +10,13 @@ import {
 import { useListingStore } from "@/store/listingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
+import { useViewingStore } from "@/store/viewingStore";
 import { normalizeUrl, normalizeForComparison } from "@/lib/utils/url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Globe, MapPin, FileText, ChevronDown, ChevronRight } from "lucide-react";
 import { InlineEvaluation } from "@/components/evaluation/InlineEvaluation";
+import { ScheduleViewingForm } from "@/components/viewing/ScheduleViewingForm";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
@@ -148,8 +150,10 @@ export function CreateListingForm({
   const [evalResponses, setEvalResponses] = useState<
     Record<string, number | string>
   >({});
+  const [viewingDate, setViewingDate] = useState<string | undefined>(undefined);
   const addListing = useListingStore((state) => state.addListing);
   const addEvaluation = useEvaluationStore((state) => state.addEvaluation);
+  const addViewing = useViewingStore((state) => state.addViewing);
   const templates = useTemplateStore((state) => state.templates);
   const initializeTemplates = useTemplateStore(
     (state) => state.initializeTemplates
@@ -268,6 +272,16 @@ export function CreateListingForm({
           responses: evalResponses,
           created_at: now,
           updated_at: now,
+        });
+      }
+
+      if (viewingDate) {
+        const now = new Date().toISOString();
+        addViewing({
+          id: crypto.randomUUID(),
+          listing_id: listingId,
+          scheduled_date: viewingDate,
+          created_at: now,
         });
       }
 
@@ -450,6 +464,31 @@ export function CreateListingForm({
               </FormItem>
             )}
           />
+        </div>
+
+        <div className="border-t pt-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold">
+                Schedule Viewing <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+              </span>
+              {viewingDate && (
+                <span className="text-[11px] bg-primary/10 text-primary rounded-full px-2 py-0.5 font-medium">
+                  Set
+                </span>
+              )}
+            </div>
+          </div>
+          
+          <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+            <ScheduleViewingForm
+              listingId=""
+              onCancel={() => setViewingDate(undefined)}
+              onSubmit={(data) => {
+                setViewingDate(data.scheduled_date);
+              }}
+            />
+          </div>
         </div>
 
         {template && (
