@@ -150,23 +150,12 @@ export function ScheduleViewingForm({
           </div>
 
           <div className="flex gap-2 pt-1">
-            {onCancel && (selectedDate || viewing?.scheduled_date) && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onCancel}
-                size="sm"
-                className="flex-1 h-8 text-xs"
-              >
-                Cancel
-              </Button>
-            )}
             <Button
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
               size="sm"
-              className={onCancel && (selectedDate || viewing?.scheduled_date) ? "flex-1 h-8 text-xs" : "flex-1 h-8 text-xs"}
+              className="flex-1 h-8 text-xs"
             >
               {isSubmitting ? "Saving..." : viewing ? "Update" : "Schedule"}
             </Button>
