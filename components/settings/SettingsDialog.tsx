@@ -11,11 +11,16 @@ import { Button } from "@/components/ui/button";
 import { Template, Criterion } from "@/types/evaluation";
 import { Plus } from "lucide-react";
 import { useTemplateStore } from "@/store/templateStore";
+import { useAgentQuestionStore } from "@/store/agentQuestionStore";
+import { AgentQuestionTemplate } from "@/types/agentQuestion";
 import { TemplateList } from "@/components/template/TemplateList";
 import { TemplateEditor } from "@/components/template/TemplateEditor";
 import { CriteriaForm } from "@/components/template/CriteriaForm";
 import { DeleteConfirmationDialog } from "@/components/listings/DeleteConfirmationDialog";
 import { CriterionFormData } from "@/lib/schemas/templateSchema";
+import { AgentQuestionList } from "@/components/agentQuestions/AgentQuestionList";
+import { AgentQuestionEditor } from "@/components/agentQuestions/AgentQuestionEditor";
+import { TenantProfileForm } from "@/components/tenantProfile/TenantProfileForm";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -31,6 +36,14 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
   const deleteTemplate = useTemplateStore((state) => state.deleteTemplate);
 
+  const initializeAgentQuestions = useAgentQuestionStore(
+    (state) => state.initializeTemplates
+  );
+  const agentTemplates = useAgentQuestionStore((state) => state.templates);
+  const addAgentTemplate = useAgentQuestionStore((state) => state.addTemplate);
+  const updateAgentTemplate = useAgentQuestionStore((state) => state.updateTemplate);
+  const deleteAgentTemplate = useAgentQuestionStore((state) => state.deleteTemplate);
+
   const [editingTemplateId, setEditingTemplateId] = useState<string | null>(
     null
   );
@@ -43,11 +56,16 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   );
   const [addingToCategory, setAddingToCategory] = useState<string | null>(null);
 
+  const [editingAgentTemplateId, setEditingAgentTemplateId] = useState<string | null>(null);
+  const [deletingAgentTemplateId, setDeletingAgentTemplateId] = useState<string | null>(null);
+
   useEffect(() => {
     initializeTemplates();
-  }, [initializeTemplates]);
+    initializeAgentQuestions();
+  }, [initializeTemplates, initializeAgentQuestions]);
 
   const editingTemplate = templates.find((t) => t.id === editingTemplateId);
+  const editingAgentTemplate = agentTemplates.find((t) => t.id === editingAgentTemplateId);
 
   const handleCreateTemplate = () => {
     const newTemplate: Template = {
@@ -66,6 +84,24 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
       deleteTemplate(deletingTemplateId);
       setDeletingTemplateId(null);
     }
+  };
+
+  const handleDeleteAgentTemplate = () => {
+    if (deletingAgentTemplateId) {
+      deleteAgentTemplate(deletingAgentTemplateId);
+      setDeletingAgentTemplateId(null);
+    }
+  };
+
+  const handleCreateAgentTemplate = () => {
+    const newTemplate: AgentQuestionTemplate = {
+      id: crypto.randomUUID(),
+      name: "New Question Template",
+      questions: [],
+      updated_at: new Date().toISOString(),
+    };
+    addAgentTemplate(newTemplate);
+    setEditingAgentTemplateId(newTemplate.id);
   };
 
   const handleAddCriteria = (categoryId: string) => {
@@ -134,6 +170,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       setEditingTemplateId(null);
+      setEditingAgentTemplateId(null);
     }
     onOpenChange(open);
   };
@@ -142,24 +179,65 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
-          <DialogHeader className="pb-2">
-            <div className="flex items-center justify-between gap-2 pr-8">
-              <DialogTitle className="text-base">Evaluation Templates</DialogTitle>
-              <Button size="sm" variant="outline" onClick={handleCreateTemplate} className="h-7 text-xs shrink-0">
-                <Plus className="w-3.5 h-3.5 mr-1" />
-                New
-              </Button>
-            </div>
+          <DialogHeader className="pb-4">
+            <DialogTitle className="text-base">Settings</DialogTitle>
             <p className="text-xs text-muted-foreground/60">
-              Criteria used to score and compare listings
+              Manage templates and profile
             </p>
           </DialogHeader>
 
-          <TemplateList
-            onEdit={setEditingTemplateId}
-            onCreate={handleCreateTemplate}
-            onDelete={setDeletingTemplateId}
-          />
+          <div className="space-y-6">
+            {/* Evaluation Templates Section */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold">Evaluation Templates</h3>
+                <Button size="sm" variant="outline" onClick={handleCreateTemplate} className="h-7 text-xs shrink-0">
+                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  New
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground/50">
+                Criteria used to score and compare listings
+              </p>
+              <TemplateList
+                onEdit={setEditingTemplateId}
+                onCreate={handleCreateTemplate}
+                onDelete={setDeletingTemplateId}
+              />
+            </div>
+
+            <div className="border-t border-border/80" />
+
+            {/* Agent Questions Section */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold">Agent Questions</h3>
+                <Button size="sm" variant="outline" onClick={handleCreateAgentTemplate} className="h-7 text-xs shrink-0">
+                  <Plus className="w-3.5 h-3.5 mr-1" />
+                  New
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground/50">
+                Question templates to send to property agents
+              </p>
+              <AgentQuestionList
+                onEdit={setEditingAgentTemplateId}
+                onCreate={handleCreateAgentTemplate}
+                onDelete={setDeletingAgentTemplateId}
+              />
+            </div>
+
+            <div className="border-t border-border/80" />
+
+            {/* Tenant Profile Section */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold">Tenant Profile</h3>
+              <p className="text-xs text-muted-foreground/50">
+                Your details to share with property agents
+              </p>
+              <TenantProfileForm />
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -171,6 +249,14 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           onAddCriteria={handleAddCriteria}
           onEditCriteria={handleEditCriteria}
           onDeleteCriteria={handleDeleteCriteria}
+        />
+      )}
+
+      {editingAgentTemplate && (
+        <AgentQuestionEditor
+          template={editingAgentTemplate}
+          open={!!editingAgentTemplateId}
+          onOpenChange={(open) => !open && setEditingAgentTemplateId(null)}
         />
       )}
 
@@ -215,6 +301,15 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           onOpenChange={(open) => !open && setDeletingTemplateId(null)}
           onConfirm={handleDeleteTemplate}
           listingTitle={editingTemplate?.name || "Template"}
+        />
+      )}
+
+      {deletingAgentTemplateId && (
+        <DeleteConfirmationDialog
+          open={!!deletingAgentTemplateId}
+          onOpenChange={(open) => !open && setDeletingAgentTemplateId(null)}
+          onConfirm={handleDeleteAgentTemplate}
+          listingTitle={editingAgentTemplate?.name || "Template"}
         />
       )}
     </>

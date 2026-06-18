@@ -3,13 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings } from "lucide-react";
+import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings, MessageSquare, User, Check, X } from "lucide-react";
 import {
   Tooltip,
   TooltipTrigger,
@@ -20,6 +21,8 @@ import { ListingList } from "@/components/listings/ListingList";
 import { ListingDetailModal } from "@/components/listings/ListingDetailModal";
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
 import { useComparisonStore } from "@/store/comparisonStore";
+import { useAgentQuestionStore } from "@/store/agentQuestionStore";
+import { useTenantProfileStore } from "@/store/tenantProfileStore";
 import { SettingsDialog } from "@/components/settings/SettingsDialog";
 import {
   exportAllData,
@@ -47,6 +50,10 @@ export function ListingsPageInner() {
   const [compact, setCompact] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
   const router = useRouter();
 
   useEffect(() => {
@@ -88,9 +95,72 @@ export function ListingsPageInner() {
   const selectedListingIds = useComparisonStore(
     (state) => state.selectedListingIds
   );
+  const getActiveTemplate = useAgentQuestionStore((state) => state.getActiveTemplate);
+  const initializeAgentQuestions = useAgentQuestionStore((state) => state.initializeTemplates);
+  const getProfile = useTenantProfileStore((state) => state.getProfile);
+
+  useEffect(() => {
+    initializeAgentQuestions();
+  }, [initializeAgentQuestions]);
 
   const handleCompare = () => {
     router.push("/compare");
+  };
+
+  const showCopyStatus = (type: "success" | "error", message: string) => {
+    setCopyStatus({ type, message });
+    setTimeout(() => setCopyStatus({ type: null, message: "" }), 3000);
+  };
+
+  const handleCopyQuestions = () => {
+    const template = getActiveTemplate();
+    if (!template) {
+      showCopyStatus("error", "No active question template");
+      return;
+    }
+
+    const text = template.questions.join("\n");
+    navigator.clipboard.writeText(text).then(() => {
+      showCopyStatus("success", "Questions copied to clipboard");
+    }).catch(() => {
+      showCopyStatus("error", "Failed to copy");
+    });
+  };
+
+  const handleCopyProfile = () => {
+    const profile = getProfile();
+
+    const fieldLabels: Record<keyof typeof profile, string> = {
+      name: "Name",
+      occupation: "Occupation",
+      nationality: "Nationality",
+      noOfPax: "No. of Pax",
+      gender: "Gender",
+      pets: "Any pets?",
+      cooking: "Cooking",
+      pass: "Pass",
+      workLocation: "Work Location",
+      moveInDate: "Move in date",
+      leaseDuration: "Lease duration",
+      budget: "Budget",
+      viewing: "Viewing",
+    };
+
+    const lines = Object.entries(profile)
+      .filter(([_, value]) => value && value.trim() !== "")
+      .map(([key, value]) => `${fieldLabels[key as keyof typeof profile]}: ${value}`);
+
+    if (lines.length === 0) {
+      showCopyStatus("error", "Profile is empty");
+      return;
+    }
+
+    const text = lines.join("\n");
+    navigator.clipboard.writeText(text).then(() => {
+      showCopyStatus("success", "Profile copied to clipboard");
+    }).catch(() => {
+      showCopyStatus("error", "Failed to copy");
+    });
   };
 
   function handleToggleSeed() {
@@ -158,9 +228,24 @@ export function ListingsPageInner() {
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Listings</h1>
-          <p className="text-sm text-muted-foreground">
-            Track each room from first save to final decision.
-          </p>
+          <div className="flex items-center gap-2 mt-1">
+            <p className="text-sm text-muted-foreground">
+              Track each room from first save to final decision.
+            </p>
+            {(backupStatus.type || copyStatus.type) && (
+              <Badge
+                variant={(backupStatus.type === "success" || copyStatus.type === "success") ? "default" : "destructive"}
+                className={`text-xs animate-in fade-in slide-in-from-left-2 duration-300 ${(backupStatus.type === "success" || copyStatus.type === "success") ? "bg-[var(--success)] hover:bg-[var(--success)]/80" : ""}`}
+              >
+                {(backupStatus.type === "success" || copyStatus.type === "success") ? (
+                  <Check className="w-3 h-3 mr-1" />
+                ) : (
+                  <X className="w-3 h-3 mr-1" />
+                )}
+                {backupStatus.message || copyStatus.message}
+              </Badge>
+            )}
+          </div>
         </div>
         <TooltipProvider delayDuration={300}>
         <div className="flex flex-wrap gap-2">
@@ -175,6 +260,22 @@ export function ListingsPageInner() {
           >
             {compareMode ? "Done" : "Compare"}
           </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="outline" size="icon" onClick={handleCopyQuestions}>
+                <MessageSquare className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Copy questions to clipboard</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="outline" size="icon" onClick={handleCopyProfile}>
+                <User className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Copy profile to clipboard</TooltipContent>
+          </Tooltip>
           <Button onClick={() => setIsCreateDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Add listing
@@ -255,18 +356,6 @@ export function ListingsPageInner() {
         </div>
         </TooltipProvider>
       </div>
-
-      {backupStatus.type && (
-        <div
-          className={`mb-4 text-xs flex items-center gap-1.5 ${
-            backupStatus.type === "success"
-              ? "text-emerald-600"
-              : "text-destructive"
-          }`}
-        >
-          {backupStatus.message}
-        </div>
-      )}
 
       <div className="mt-6">
         <ListingList compact={compact} compareMode={compareMode} onListingClick={(id) => setSelectedListingId(id)} />
