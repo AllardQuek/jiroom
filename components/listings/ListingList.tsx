@@ -423,7 +423,14 @@ export function ListingList({
                     ))
                   ) : (
                     <div className="flex min-h-32 items-center justify-center rounded-lg border border-dashed border-border/80 bg-background/40 p-4 text-center text-xs text-muted-foreground/50">
-                      Drop listings here
+                      {col.id === "to_view" ? (
+                        <>
+                          No listings to view. Tap + to add your first rental.
+                          <span className="block mt-1 opacity-70">Use filters above to view all, unscheduled, or scheduled</span>
+                        </>
+                      ) : (
+                        "No viewed listings yet"
+                      )}
                     </div>
                   )}
                 </div>
