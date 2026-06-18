@@ -6,6 +6,8 @@ import { TenantProfile } from "@/types/tenantProfile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react";
 
 interface TenantProfileFormProps {
   onSave?: () => void;
@@ -39,6 +41,7 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
   const updateProfile = useTenantProfileStore((state) => state.updateProfile);
 
   const [formData, setFormData] = useState<TenantProfile>(profile);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
 
   useEffect(() => {
     setFormData(profile);
@@ -50,7 +53,9 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
 
   const handleSave = () => {
     updateProfile(formData);
+    setSaveStatus("saved");
     onSave?.();
+    setTimeout(() => setSaveStatus("idle"), 2000);
   };
 
   return (
@@ -72,7 +77,13 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
         ))}
       </div>
 
-      <div className="flex items-center justify-end pt-2 border-t">
+      <div className="flex items-center justify-end pt-2 border-t gap-2">
+        {saveStatus === "saved" && (
+          <span className="text-xs text-success flex items-center gap-1 animate-in fade-in duration-300">
+            <Check className="w-3 h-3" />
+            Saved
+          </span>
+        )}
         <Button size="sm" onClick={handleSave}>
           Save Profile
         </Button>
