@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/select";
 import PlaceAutocomplete from "@/components/map/PlaceAutocomplete";
 import { CreatableSelect } from "@/components/listings/AreaSelect";
-import { PriceInput } from "@/components/listings/CreateListingForm";
+import { PriceInput } from "@/components/listings/PriceInput";
 
 interface EditListingFormProps {
   listing: Listing;
@@ -55,9 +55,7 @@ export function EditListingForm({
   ] as string[];
 
   const form = useForm<ListingFormData>({
-    resolver: zodResolver(
-      listingSchema
-    ) as unknown as import("react-hook-form").Resolver<ListingFormData>,
+    resolver: zodResolver(listingSchema) as any,
     defaultValues: {
       source_url: listing.source_url,
       title: listing.title,

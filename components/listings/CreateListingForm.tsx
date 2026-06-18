@@ -12,6 +12,7 @@ import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { useViewingStore } from "@/store/viewingStore";
 import { normalizeUrl, normalizeForComparison } from "@/lib/utils/url";
+import { extractFromUrl } from "@/lib/utils/urlExtract";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Globe, MapPin, FileText, ChevronDown, ChevronRight } from "lucide-react";
@@ -29,116 +30,12 @@ import {
 } from "@/components/ui/form";
 import PlaceAutocomplete from "@/components/map/PlaceAutocomplete";
 import { CreatableSelect } from "@/components/listings/AreaSelect";
+import { PriceInput } from "./PriceInput";
 
 interface CreateListingFormProps {
   onSuccess?: () => void;
   onCancel?: () => void;
   defaultValues?: Partial<ListingFormData>;
-}
-
-const extractFromUrl = (url: string) => {
-  try {
-    const normalized = /^https?:\/\//i.test(url) ? url : "https://" + url;
-    const urlObj = new URL(normalized);
-    let platform = "";
-    let title = "";
-
-    const hostname = urlObj.hostname.toLowerCase();
-
-    // Platform detection
-    if (hostname.includes("propertyguru")) platform = "PropertyGuru";
-    else if (hostname.includes("99.co")) platform = "99.co";
-    else if (hostname.includes("carousell")) platform = "Carousell";
-    else if (hostname.includes("ohmyhome")) platform = "Ohmyhome";
-    else if (hostname.includes("facebook")) platform = "FB Marketplace";
-    else platform = hostname.replace("www.", "").split(".")[0];
-
-    // Title and Price extraction from slug
-    const pathParts = urlObj.pathname.split("/").filter(Boolean);
-    const lastPart = pathParts[pathParts.length - 1] || "";
-    const parts = lastPart.split(/[-_]/);
-
-    // 1. Identify "Type" keywords (HDB for Rent, etc)
-    const typeMatch = lastPart.match(
-      /^(hdb|condo|apartment|landed|room|studio)(?:-for)?(?:-rent|-sale)?/i
-    );
-    const typePrefix = typeMatch ? typeMatch[0].replace(/-/g, " ") : "";
-
-    // 2. Try to find an address-like pattern (Number + Name)
-    const addressMatch = lastPart.match(
-      /(\d+-[a-zA-Z0-9-]*-(?:street|st|road|rd|avenue|ave|lane|ln|drive|dr|way|crescent|cres|walk|place|pl|grove|grv|link|view|heights|sq|square|way)[-a-zA-Z0-9-]*)/i
-    );
-
-    let addressPart = "";
-    if (addressMatch) {
-      addressPart = addressMatch[0]
-        .split(/[-_]/)
-        .filter((part) => !part.match(/^\d{8,}$/)) // remove long numeric IDs at the end
-        .join(" ");
-    }
-
-    if (typePrefix || addressPart) {
-      const combined = `${typePrefix} ${addressPart}`.trim();
-      title = combined
-        .split(/\s+/)
-        .map(
-          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        )
-        .join(" ");
-    } else {
-      // 3. Fallback to general slug cleanup
-      title = parts
-        .filter((part) => !part.match(/^\d+$/)) // remove numeric IDs
-        .filter(
-          (part) =>
-            !["hdb", "condo", "apartment", "rent", "for"].includes(
-              part.toLowerCase()
-            )
-        ) // remove generic rent words
-        .filter((part) => part.length > 2)
-        .map(
-          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        )
-        .join(" ");
-    }
-
-    return { platform, title };
-  } catch {
-    return { platform: "", title: "" };
-  }
-};
-
-export function PriceInput({
-  field,
-}: {
-  field: {
-    value: number | undefined;
-    onChange: (v: number | undefined) => void;
-    onBlur: () => void;
-    ref: React.Ref<HTMLInputElement>;
-    name: string;
-  };
-}) {
-  const [text, setText] = useState(
-    () => (field.value ? String(field.value) : "")
-  );
-
-  return (
-    <Input
-      type="text"
-      inputMode="numeric"
-      placeholder="0"
-      value={text}
-      onChange={(e) => {
-        const cleaned = e.target.value.replace(/\D/g, "");
-        setText(cleaned);
-        field.onChange(cleaned === "" ? undefined : Number(cleaned));
-      }}
-      onBlur={field.onBlur}
-      ref={field.ref}
-      name={field.name}
-    />
-  );
 }
 
 export function CreateListingForm({
@@ -167,9 +64,7 @@ export function CreateListingForm({
   const template = templates[0];
 
   const form = useForm<ListingFormData>({
-    resolver: zodResolver(
-      listingSchema
-    ) as unknown as import("react-hook-form").Resolver<ListingFormData>,
+    resolver: zodResolver(listingSchema) as any,
     defaultValues: {
       source_url: "",
       title: "",
