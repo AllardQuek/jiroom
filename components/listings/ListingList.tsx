@@ -215,7 +215,7 @@ function DroppableColumn({
   return (
     <section
       ref={setNodeRef}
-      className={`flex min-h-[560px] flex-col rounded-xl bg-muted/30 transition-colors ${className ?? ""} ${
+      className={`flex min-h-[200px] lg:min-h-[560px] flex-col rounded-xl bg-muted/30 transition-colors ${className ?? ""} ${
         isOver ? "bg-primary/5 ring-2 ring-primary/30" : ""
       }`}
     >

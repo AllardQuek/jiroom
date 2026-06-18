@@ -123,7 +123,7 @@ function TextNote({ value, onChange, onClear }: {
         }}
         placeholder="..."
         className={`
-          h-7 min-h-0 text-xs py-1 resize-none rounded-lg
+          min-h-[60px] sm:min-h-[80px] text-xs py-2 resize-y rounded-lg
           transition-all duration-150
           ${hasContent
             ? "bg-amber-50/30 dark:bg-amber-950/10 border-amber-200/40 dark:border-amber-800/30"

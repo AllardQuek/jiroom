@@ -456,7 +456,7 @@ export function CreateListingForm({
                 <FormControl>
                   <Textarea
                     placeholder="Add any general observations, contact details, or thoughts about this listing..."
-                    className="resize-none min-h-[100px]"
+                    className="resize-y min-h-[120px] sm:min-h-[150px]"
                     {...field}
                   />
                 </FormControl>
@@ -466,7 +466,7 @@ export function CreateListingForm({
           />
         </div>
 
-        <div className="border-t pt-6">
+        <div className="border-t pt-8 mt-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">
@@ -483,6 +483,9 @@ export function CreateListingForm({
           <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
             <ScheduleViewingForm
               listingId=""
+              isScheduled={!!viewingDate}
+              scheduledDate={viewingDate}
+              viewing={viewingDate ? { scheduled_date: viewingDate, id: "", listing_id: "", created_at: "" } : undefined}
               onCancel={() => setViewingDate(undefined)}
               onSubmit={(data) => {
                 setViewingDate(data.scheduled_date);
@@ -492,7 +495,7 @@ export function CreateListingForm({
         </div>
 
         {template && (
-          <div className="border-t pt-6">
+          <div className="border-t pt-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold">
@@ -522,19 +525,19 @@ export function CreateListingForm({
           </div>
         )}
 
-        <div className="flex flex-row-reverse gap-3 pt-6 border-t sticky bottom-0 bg-background/95 backdrop-blur-sm pb-2">
+        <div className="flex flex-row-reverse gap-3 pt-6 sticky bottom-0 bg-background backdrop-blur-xl z-50 pb-6 shadow-2xl border border-neutral-200/50 dark:border-neutral-800/50 rounded-xl mx-[-16px] px-4">
           <Button
             type="submit"
             disabled={isSubmitting}
             className="flex-1 font-bold"
           >
-            {isSubmitting ? "Saving..." : "Add to My Workspace"}
+            {isSubmitting ? "Saving..." : "Add Listing"}
           </Button>
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             onClick={onCancel}
-            className="flex-1"
+            className="flex-1 bg-muted/50 hover:bg-muted"
           >
             Cancel
           </Button>
