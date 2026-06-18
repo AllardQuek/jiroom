@@ -39,7 +39,6 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
   const updateProfile = useTenantProfileStore((state) => state.updateProfile);
 
   const [formData, setFormData] = useState<TenantProfile>(profile);
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
 
   useEffect(() => {
     setFormData(profile);
@@ -47,19 +46,10 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
 
   const handleChange = (field: keyof TenantProfile, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    setSaveStatus("idle");
   };
 
   const handleSave = () => {
     updateProfile(formData);
-    setSaveStatus("saved");
-    onSave?.();
-    setTimeout(() => setSaveStatus("idle"), 2000);
-  };
-
-  const handleCancel = () => {
-    setFormData(profile);
-    setSaveStatus("idle");
     onSave?.();
   };
 
@@ -84,7 +74,7 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
 
       <div className="flex items-center justify-end pt-2 border-t">
         <Button size="sm" onClick={handleSave}>
-          {saveStatus === "saved" ? "Saved!" : "Save Profile"}
+          Save Profile
         </Button>
       </div>
     </div>
