@@ -103,7 +103,7 @@ export function TemplateEditor({
               + Add criteria
             </Button>
             <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={handleCancel}>
+              <Button variant="outline" size="sm" onClick={handleCancel}>
                 Cancel
               </Button>
               <Button size="sm" onClick={handleSave}>

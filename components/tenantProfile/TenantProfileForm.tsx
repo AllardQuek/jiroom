@@ -83,7 +83,7 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
       </div>
 
       <div className="flex items-center justify-end gap-2 pt-2 border-t">
-        <Button variant="ghost" size="sm" onClick={handleCancel}>
+        <Button variant="outline" size="sm" onClick={handleCancel}>
           Cancel
         </Button>
         <Button size="sm" onClick={handleSave}>
