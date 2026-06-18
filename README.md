@@ -2,14 +2,20 @@
 
 A mobile-first web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, track viewing statuses, and make final decisions through visual comparison tools.
 
+**Current Version: v1.0.0** - [View Release Notes](https://github.com/AllardQuek/rental-room-rater/releases/tag/v1.0.0)
+
 ## Features
 
 - **Listing Management**: Save, edit, and track room listings from property portals
-- **Evaluation Template**: Customizable evaluation criteria with weighted scoring
-- **Viewing Tracking**: Schedule viewings and track status (To View, Upcoming, Viewed, Skipped, Cancelled)
-- **Notes & Comments**: Freeform notes with bullet-style input support
-- **Verdict System**: Final decision states (Yes, Maybe, No, Undecided) with lightweight scoring
-- **Comparison View**: Side-by-side comparison of up to 3 listings
+- **Evaluation System**: Customizable evaluation templates with multiple criteria types (text, rating, checkbox, select, number)
+- **Viewing Tracking**: Schedule viewings with date/time selection and track status
+- **Verdict System**: Final decision states (Yes, Maybe, No) with visual categorization
+- **Map Integration**: Interactive Google Maps integration for visual property location display
+- **Distance Calculation**: Calculate commute times and distances from custom anchor points
+- **Anchors/POI**: Define custom anchor points (home, work, gym, etc.) for distance calculations
+- **Comparison View**: Side-by-side comparison of up to 3 listings with key metrics
+- **Drag & Drop**: Intuitive drag-and-drop interface for moving listings between categories
+- **Mobile Responsive**: Fully responsive design optimized for mobile and desktop usage
 
 ## Tech Stack
 
@@ -109,7 +115,7 @@ room-rater/
 
 ## Data Persistence
 
-All data is stored locally in the browser using localStorage via Zustand middleware. No authentication or backend is required for the MVP.
+All data is stored locally in the browser using localStorage via Zustand middleware. This architecture is designed for personal/single-user use without the complexity of user accounts, authentication, or cloud synchronization. Data can be cleared if localStorage is cleared by the user.
 
 ## Browser Support
 
@@ -117,6 +123,10 @@ All data is stored locally in the browser using localStorage via Zustand middlew
 - Firefox (latest)
 - Safari (latest)
 - Edge (latest)
+
+## Releases
+
+See [CHANGELOG.md](https://github.com/AllardQuek/rental-room-rater/blob/main/CHANGELOG.md) for detailed release notes and change history.
 
 ## License
 
