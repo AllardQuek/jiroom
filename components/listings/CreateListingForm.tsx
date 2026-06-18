@@ -155,6 +155,7 @@ export function CreateListingForm({
         source_platform: data.source_platform || "",
         area: data.area || "",
         created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       };
       addListing(newListing);
 

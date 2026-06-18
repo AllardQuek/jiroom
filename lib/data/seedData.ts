@@ -57,6 +57,7 @@ export const seedListings: Listing[] = [
     lng: 103.84383,
     googlePlaceId: "ChIJTxTEcecZ2jERVySfJurj8Ok",
     created_at: daysAgo(5),
+    updated_at: daysAgo(5),
   },
   {
     id: ids.l2,
@@ -71,6 +72,7 @@ export const seedListings: Listing[] = [
     lng: 103.95679,
     googlePlaceId: "ChIJ0e4CNAQ92jERy_T_mqOSB48",
     created_at: daysAgo(2),
+    updated_at: daysAgo(2),
   },
   {
     id: ids.l3,
@@ -85,6 +87,7 @@ export const seedListings: Listing[] = [
     lng: 103.83755,
     googlePlaceId: "ChIJIX6wyp0Z2jERXBArtuk8cAg",
     created_at: daysAgo(14),
+    updated_at: daysAgo(14),
   },
   {
     id: ids.l4,
@@ -99,6 +102,7 @@ export const seedListings: Listing[] = [
     lng: 103.79519,
     googlePlaceId: "ChIJIQ4seGoa2jERoXJVVkJefFs",
     created_at: daysAgo(10),
+    updated_at: daysAgo(10),
   },
   {
     id: ids.l5,
@@ -113,6 +117,7 @@ export const seedListings: Listing[] = [
     lng: 103.76494,
     googlePlaceId: "ChIJV4YgZpAa2jERoKTarqz3AAU",
     created_at: daysAgo(20),
+    updated_at: daysAgo(20),
   },
   {
     id: ids.l6,
@@ -127,6 +132,7 @@ export const seedListings: Listing[] = [
     lng: 103.8552,
     googlePlaceId: "ChIJj7TW9LoZ2jERQgNlXkKhASQ",
     created_at: daysAgo(1),
+    updated_at: daysAgo(1),
   },
   {
     id: ids.l7,
@@ -141,6 +147,7 @@ export const seedListings: Listing[] = [
     lng: 103.90496,
     googlePlaceId: "ChIJicht9G0Y2jER1DYdsrIIJw8",
     created_at: daysAgo(1),
+    updated_at: daysAgo(1),
   },
   {
     id: ids.l8,
@@ -155,6 +162,7 @@ export const seedListings: Listing[] = [
     lng: 103.92734,
     googlePlaceId: "ChIJpVt39rMi2jERD2-YBlmmdLU",
     created_at: daysAgo(3),
+    updated_at: daysAgo(3),
   },
 ];
 
