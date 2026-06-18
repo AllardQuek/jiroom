@@ -6,8 +6,6 @@ import {
   AdvancedMarker,
   InfoWindow,
   Pin,
-  useMap,
-  useMapsLibrary,
 } from "@vis.gl/react-google-maps";
 import { useListingStore } from "@/store/listingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
@@ -26,11 +24,7 @@ import { RoutePolyline } from "./RoutePolyline";
 import { TravelModeToggle } from "./TravelModeToggle";
 import { CommuteInfo, type RouteData } from "@/components/distance/CommuteInfo";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
-import {
-  getCachedRoute,
-  setCachedRoute,
-  type RouteResultData,
-} from "@/lib/utils/routeCache";
+import { getCachedRoute } from "@/lib/utils/routeCache";
 import AnchorMarker from "./AnchorMarker";
 import AnchorPanel from "./AnchorPanel";
 import {
@@ -48,11 +42,13 @@ import {
   List,
   AlertCircle,
   X,
-  ExternalLink,
-  Eye,
   Menu,
 } from "lucide-react";
 import dynamic from "next/dynamic";
+import { ListingPreviewCard } from "./ListingPreviewCard";
+import { AnchorInfoWindow } from "./AnchorInfoWindow";
+import { MapController } from "./MapController";
+import { useRouteCalculator } from "./hooks/useRouteCalculator";
 
 const LocationSearch = dynamic(() => import("./LocationSearch"), {
   ssr: false,
@@ -105,19 +101,6 @@ interface SearchResult {
   lat: number;
   lng: number;
   googlePlaceId: string;
-}
-
-function MapController({ lat, lng }: { lat: number; lng: number }) {
-  const map = useMap();
-  const calledRef = useRef(false);
-  useEffect(() => {
-    if (map && !calledRef.current) {
-      calledRef.current = true;
-      map.panTo({ lat, lng });
-      map.setZoom(16);
-    }
-  }, [map, lat, lng]);
-  return null;
 }
 
 export default function MapView({ onViewDetails }: MapViewProps) {
@@ -184,79 +167,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
   const setTravelMode = useRoutePrefsStore((s) => s.setTravelMode);
   const filterAnchorId = useRoutePrefsStore((s) => s.filterAnchorId);
   const maxCommuteMinutes = useRoutePrefsStore((s) => s.maxCommuteMinutes);
-  const routesLib = useMapsLibrary("routes");
-  const [routeResults, setRouteResults] = useState<Record<string, RouteData>>(
-    {}
-  );
 
-  useEffect(() => {
-    if (
-      !selectedListing ||
-      !selectedListing.lat ||
-      !selectedListing.lng ||
-      !travelMode ||
-      !routesLib ||
-      visibleAnchors.length === 0
-    ) {
-      return;
-    }
-
-    const targets = visibleAnchors;
-    const listing = selectedListing;
-    const RouteClass = (
-      routesLib as unknown as { Route: typeof google.maps.routes.Route }
-    ).Route;
-
-    const initial: Record<string, RouteData> = {};
-    targets.forEach((a) => {
-      initial[a.id] = { result: null, error: null, loading: true };
-    });
-    setRouteResults(initial);
-
-    targets.forEach(async (anchor) => {
-      const originKey = `${listing.lat},${listing.lng}`;
-      const destKey = `${anchor.lat},${anchor.lng}`;
-
-      const cached = getCachedRoute(originKey, destKey, travelMode);
-      if (cached) {
-        initial[anchor.id] = { result: cached, error: null, loading: false };
-        setRouteResults({ ...initial });
-        return;
-      }
-
-      try {
-        const { routes } = await RouteClass.computeRoutes({
-          origin: { lat: listing.lat!, lng: listing.lng! },
-          destination: { lat: anchor.lat, lng: anchor.lng },
-          travelMode: travelMode as google.maps.TravelMode,
-          departureTime: travelMode === "TRANSIT" ? new Date() : undefined,
-          fields: ["path", "legs"],
-        });
-
-        const route = routes?.[0];
-        if (!route) throw new Error("No route");
-
-        const routeData: RouteResultData = {
-          path: route.path ?? [],
-          durationText: route.legs?.[0]?.localizedValues?.duration ?? "",
-        };
-
-        setCachedRoute(originKey, destKey, travelMode, routeData);
-        initial[anchor.id] = {
-          result: routeData,
-          error: null,
-          loading: false,
-        };
-      } catch {
-        initial[anchor.id] = {
-          result: null,
-          error: "No route",
-          loading: false,
-        };
-      }
-      setRouteResults({ ...initial });
-    });
-  }, [selectedListing, travelMode, visibleAnchors, routesLib]);
+  const routeResults = useRouteCalculator({
+    selectedListing,
+    visibleAnchors,
+  });
 
   const handleMouseEnter = useCallback((listing: Listing, e: Event) => {
     const mouseEvent = e as MouseEvent;
@@ -436,7 +351,6 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         onClick={() => {
           setSelectedListing(null);
           setSelectedAnchor(null);
-          setRouteResults({});
         }}
       >
           {filteredListings.map((listing) => {
@@ -702,153 +616,6 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         onClose={() => setShowAnchorPanel(false)}
         onAnchorSelect={handleAnchorSelect}
       />
-    </div>
-  );
-}
-
-const VERDICT_STYLES: Record<string, { label: string; fg: string; bg: string }> = {
-  yes: { label: "Yes", fg: "#059669", bg: "#05966920" },
-  maybe: { label: "Maybe", fg: "#D97706", bg: "#D9770620" },
-  no: { label: "No", fg: "#DC2626", bg: "#DC262620" },
-};
-
-function ListingPreviewCard({
-  listing,
-  onViewDetails,
-}: {
-  listing: Listing;
-  onViewDetails?: (id: string) => void;
-}) {
-  const evaluation = useEvaluationStore((state) =>
-    state.getEvaluationByListingId(listing.id)
-  );
-  const templates = useTemplateStore((state) => state.templates);
-  const template = templates[0];
-  const score =
-    evaluation && template
-      ? calculateScore(evaluation.responses, template)
-      : null;
-  const verdict = useVerdictStore((s) =>
-    s.verdicts.find((v) => v.listing_id === listing.id)
-  );
-  const verdictStyle = verdict ? VERDICT_STYLES[verdict.status] : null;
-
-  return (
-    <div className="text-sm min-w-[180px] max-w-[260px]">
-      <div className="space-y-0.5">
-        <h3
-          className="font-semibold leading-tight text-[12px]"
-          style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
-        >
-          {listing.title}
-        </h3>
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-sm">
-            ${listing.price.toLocaleString()}
-          </span>
-          <span
-            className="px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider"
-            style={{
-              backgroundColor: verdictStyle
-                ? verdictStyle.bg
-                : STATUS_COLORS[listing.status] + "20",
-              color: verdictStyle
-                ? verdictStyle.fg
-                : STATUS_COLORS[listing.status],
-            }}
-          >
-            {verdictStyle ? verdictStyle.label : listing.status.replace("_", " ")}
-          </span>
-          {score !== null && (
-            <span
-              className={`text-[11px] font-semibold tabular-nums ${
-                score.net > 0
-                  ? "text-emerald-600"
-                  : score.net < 0
-                    ? "text-red-600"
-                    : ""
-              }`}
-            >
-              {score.net > 0 ? `+${score.net}` : score.net}
-            </span>
-          )}
-        </div>
-        {listing.notes && (
-          <p className="text-[10px] text-muted-foreground mt-1.5 leading-relaxed whitespace-pre-wrap">
-            {listing.notes}
-          </p>
-        )}
-      </div>
-      <div className="flex gap-1.5 mt-2 pt-2 border-t border-border/40">
-        {onViewDetails && (
-          <button
-            onClick={() => onViewDetails(listing.id)}
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-          >
-            <Eye size={10} />
-            Details
-          </button>
-        )}
-        <a
-          href={listing.source_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-muted/60 text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
-        >
-          <ExternalLink size={10} />
-          Source
-        </a>
-      </div>
-    </div>
-  );
-}
-
-function AnchorInfoWindow({
-  anchor,
-  onEdit,
-  onDelete,
-}: {
-  anchor: Anchor;
-  onEdit: () => void;
-  onDelete: () => void;
-}) {
-  const color = anchor.color || ANCHOR_COLORS[anchor.type];
-
-  return (
-    <div className="text-sm" style={{ minWidth: 180, maxWidth: 280 }}>
-      <h3 className="font-semibold leading-tight text-[13px] break-words">
-        {anchor.title}
-      </h3>
-      <div className="flex items-center gap-2 mt-1.5">
-        <span
-          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
-          style={{
-            backgroundColor: color + "20",
-            color: color,
-          }}
-        >
-          {anchor.type.replace("_", " ")}
-        </span>
-      </div>
-      {anchor.address && (
-        <p className="text-[11px] text-muted-foreground mt-1">
-          {anchor.address}
-        </p>
-      )}
-      <div className="flex gap-1.5 mt-3 pt-2.5 border-t border-border/40">
-        <button
-          onClick={onEdit}
-          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-        >
-          Edit
-        </button>
-        <button
-          onClick={onDelete}
-          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
-        >
-          Delete
-        </button>
-      </div>
     </div>
   );
 }
