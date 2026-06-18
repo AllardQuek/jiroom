@@ -172,7 +172,7 @@ export function CreateAnchorForm({
           </Button>
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             onClick={onCancel}
             className="flex-1"
           >
