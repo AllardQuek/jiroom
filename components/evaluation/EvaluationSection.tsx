@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { Check, Hash, Type, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { useListingStore } from "@/store/listingStore";
@@ -112,7 +112,7 @@ function TextNote({ value, onChange, onClear }: {
   const hasContent = value !== undefined && value !== "";
   return (
     <div className="relative">
-      <Textarea
+      <AutoResizeTextarea
         value={typeof value === "string" ? value : ""}
         onChange={(event) => {
           if (event.target.value === "") {
@@ -123,7 +123,7 @@ function TextNote({ value, onChange, onClear }: {
         }}
         placeholder="..."
         className={`
-          min-h-[60px] sm:min-h-[80px] text-xs py-2 resize-y rounded-lg
+          text-xs py-2 rounded-lg
           transition-all duration-150
           ${hasContent
             ? "bg-amber-50/30 dark:bg-amber-950/10 border-amber-200/40 dark:border-amber-800/30"

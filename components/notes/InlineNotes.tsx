@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Textarea } from "@/components/ui/textarea";
+import { useState, useEffect } from "react";
+import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
 interface InlineNotesProps {
   notes: string;
@@ -17,7 +17,6 @@ export function InlineNotes({
   label = "Notes",
 }: InlineNotesProps) {
   const [localValue, setLocalValue] = useState(notes);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setLocalValue(notes);
@@ -59,13 +58,12 @@ export function InlineNotes({
           </span>
         )}
       </div>
-      <Textarea
-        ref={textareaRef}
+      <AutoResizeTextarea
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}
         onBlur={handleBlur}
         placeholder="Add notes... Use '-' for bullet points"
-        className="min-h-[60px] text-sm resize-y rounded-lg"
+        className="text-sm rounded-lg"
       />
     </div>
   );

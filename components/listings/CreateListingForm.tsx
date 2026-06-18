@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Globe, MapPin, FileText, ChevronDown, ChevronRight } from "lucide-react";
 import { InlineEvaluation } from "@/components/evaluation/InlineEvaluation";
 import { ScheduleViewingForm } from "@/components/viewing/ScheduleViewingForm";
-import { Textarea } from "@/components/ui/textarea";
+import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 import {
   Form,
   FormControl,
@@ -454,9 +454,8 @@ export function CreateListingForm({
                   Listing Notes
                 </FormLabel>
                 <FormControl>
-                  <Textarea
+                  <AutoResizeTextarea
                     placeholder="Add any general observations, contact details, or thoughts about this listing..."
-                    className="resize-y min-h-[120px] sm:min-h-[150px]"
                     {...field}
                   />
                 </FormControl>
