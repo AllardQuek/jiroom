@@ -15,12 +15,25 @@ export const useListingStore = create<ListingState>()(
     (set, get) => ({
       listings: [],
       addListing: (listing) =>
-        set((state) => ({ listings: [...state.listings, listing] })),
+        set((state) => ({
+          listings: [
+            ...state.listings,
+            {
+              ...listing,
+              created_at: listing.created_at || new Date().toISOString(),
+              updated_at: listing.updated_at || new Date().toISOString(),
+            },
+          ],
+        })),
       updateListing: (id, updates) =>
         set((state) => {
           const idx = state.listings.findIndex((l) => l.id === id);
           if (idx === -1) return state;
-          const updated = { ...state.listings[idx], ...updates };
+          const updated = {
+            ...state.listings[idx],
+            ...updates,
+            updated_at: new Date().toISOString(),
+          };
           return {
             listings: [
               updated,
@@ -38,7 +51,7 @@ export const useListingStore = create<ListingState>()(
     {
       name: "listing-storage",
       storage: createJSONStorage(() => localStorage),
-      version: 1,
+      version: 2,
       migrate: (persisted: unknown, version: number) => {
         const state = persisted as {
           listings?: Array<Record<string, unknown>>;
@@ -47,6 +60,12 @@ export const useListingStore = create<ListingState>()(
           state.listings = state.listings.map((l) =>
             l.status === "archived" ? { ...l, status: "viewed" } : l
           );
+        }
+        if (version < 2 && state.listings) {
+          state.listings = state.listings.map((l) => ({
+            ...l,
+            updated_at: (l.updated_at as string) || new Date().toISOString(),
+          }));
         }
         return state as unknown as Partial<ListingState>;
       },

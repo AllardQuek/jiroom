@@ -3,7 +3,7 @@ import { Listing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
 import { calculateScore } from "@/lib/utils/calculateScore";
 
-type SortField = "price" | "score" | "name" | "date" | "area";
+type SortField = "price" | "score" | "name" | "date" | "area" | "created_date" | "modified_date";
 type SortDir = "asc" | "desc";
 
 interface SortConfig {
@@ -102,6 +102,10 @@ function compareListings(
       return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
     case "area":
       return (a.area || "").localeCompare(b.area || "");
+    case "created_date":
+      return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+    case "modified_date":
+      return new Date(a.updated_at || 0).getTime() - new Date(b.updated_at || 0).getTime();
     case "score": {
       const evalA = evaluations.find((e) => e.listing_id === a.id);
       const evalB = evaluations.find((e) => e.listing_id === b.id);

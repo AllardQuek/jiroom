@@ -79,6 +79,7 @@ export function useListingDragDrop({
             updateVerdict(existingVerdict.id, { status: dropData.dropVerdict });
           } else {
             addVerdict({
+              id: crypto.randomUUID(),
               listing_id: listingId,
               status: dropData.dropVerdict,
               created_at: new Date().toISOString(),

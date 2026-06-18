@@ -61,7 +61,7 @@ const columns: Column[] = [
   },
 ];
 
-type SortField = "price" | "score" | "name" | "date" | "area";
+type SortField = "price" | "score" | "name" | "date" | "area" | "created_date" | "modified_date";
 type SortDir = "asc" | "desc";
 
 interface SortConfig {
@@ -77,12 +77,16 @@ interface ListingListProps {
 
 const SORT_OPTIONS = [
   { label: "Default", value: null },
-  { label: "Price ↓", value: { by: "price" as const, dir: "desc" as const } },
-  { label: "Price ↑", value: { by: "price" as const, dir: "asc" as const } },
-  { label: "Score ↓", value: { by: "score" as const, dir: "desc" as const } },
-  { label: "Score ↑", value: { by: "score" as const, dir: "asc" as const } },
+  { label: "Highest Price", value: { by: "price" as const, dir: "desc" as const } },
+  { label: "Lowest Price", value: { by: "price" as const, dir: "asc" as const } },
+  { label: "Highest Score", value: { by: "score" as const, dir: "desc" as const } },
+  { label: "Lowest Score", value: { by: "score" as const, dir: "asc" as const } },
   { label: "Name A-Z", value: { by: "name" as const, dir: "asc" as const } },
   { label: "Name Z-A", value: { by: "name" as const, dir: "desc" as const } },
+  { label: "Newest First", value: { by: "created_date" as const, dir: "desc" as const } },
+  { label: "Oldest First", value: { by: "created_date" as const, dir: "asc" as const } },
+  { label: "Recently Modified", value: { by: "modified_date" as const, dir: "desc" as const } },
+  { label: "Least Recently Modified", value: { by: "modified_date" as const, dir: "asc" as const } },
 ] as const;
 
 export function ListingList({
@@ -143,6 +147,16 @@ export function ListingList({
             break;
           case "area":
             cmp = (a.area || "").localeCompare(b.area || "");
+            break;
+          case "created_date":
+            cmp =
+              new Date(a.created_at).getTime() -
+              new Date(b.created_at).getTime();
+            break;
+          case "modified_date":
+            cmp =
+              new Date(a.updated_at).getTime() -
+              new Date(b.updated_at).getTime();
             break;
           case "score": {
             const sa = getScore(a);
@@ -332,6 +346,7 @@ export function ListingList({
               <DroppableColumn
                 key={col.id}
                 columnId={col.id}
+                dropData={col.dropData}
                 className={
                   col.id === "to_view"
                     ? "relative after:content-[''] after:hidden after:lg:block after:absolute after:right-[-8px] after:top-0 after:w-px after:h-full after:bg-border/80"

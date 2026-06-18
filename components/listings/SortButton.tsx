@@ -1,6 +1,6 @@
 import { ArrowUpDown } from "lucide-react";
 
-type SortField = "price" | "score" | "name" | "date" | "area";
+type SortField = "price" | "score" | "name" | "date" | "area" | "created_date" | "modified_date";
 type SortDir = "asc" | "desc";
 
 interface SortConfig {

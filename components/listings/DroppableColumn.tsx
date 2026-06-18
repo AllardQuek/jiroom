@@ -7,6 +7,7 @@ interface DroppableColumnProps {
   columnId: string;
   className?: string;
   children: React.ReactNode;
+  dropData?: any;
 }
 
 /**
@@ -31,10 +32,11 @@ export function DroppableColumn({
   columnId,
   className,
   children,
+  dropData,
 }: DroppableColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: `column-${columnId}`,
-    data: { columnId },
+    data: { columnId, ...dropData },
   });
 
   return (
