@@ -10,7 +10,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings, MessageSquare, User, Check, X } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings, MessageSquare, User, Check, X, MoreVertical } from "lucide-react";
 import {
   Tooltip,
   TooltipTrigger,
@@ -248,111 +254,163 @@ export function ListingsPageInner() {
           </div>
         </div>
         <TooltipProvider delayDuration={300}>
-        <div className="flex flex-wrap gap-2">
-          {compareMode && selectedListingIds.length >= 2 && (
-            <Button variant="default" onClick={handleCompare}>
-              Compare ({selectedListingIds.length})
+        <div className="flex items-center justify-between gap-2">
+          {/* Left side: Listing-specific actions */}
+          <div className="flex flex-wrap gap-2 items-center">
+            {compareMode && selectedListingIds.length >= 2 && (
+              <Button variant="default" onClick={handleCompare} className="hidden sm:flex">
+                Compare ({selectedListingIds.length})
+              </Button>
+            )}
+            <Button
+              variant={compareMode ? "default" : "outline"}
+              onClick={() => setCompareMode(!compareMode)}
+              size="sm"
+              className="shrink-0"
+            >
+              {compareMode ? "Done" : "Compare"}
             </Button>
-          )}
-          <Button
-            variant={compareMode ? "default" : "outline"}
-            onClick={() => setCompareMode(!compareMode)}
-          >
-            {compareMode ? "Done" : "Compare"}
-          </Button>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={handleCopyQuestions}>
-                <MessageSquare className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Copy questions to clipboard</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={handleCopyProfile}>
-                <User className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Copy profile to clipboard</TooltipContent>
-          </Tooltip>
-          <Button onClick={() => setIsCreateDialogOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add listing
-          </Button>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setCompact(!compact)}
-                className={compact ? "text-primary" : ""}
-              >
-                {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {compact ? "Detailed view" : "Compact view"}
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleExport}
-              >
-                <Download className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Export data</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => fileRef.current?.click()}
-              >
-                <Upload className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Import data</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleToggleSeed}
-                className={seedMode ? "text-amber-500" : ""}
-              >
-                <FlaskConical className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              {seedMode ? "Switch to your data" : "Switch to sample data"}
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setSettingsOpen(true)}
-              >
-                <Settings className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Evaluation templates</TooltipContent>
-          </Tooltip>
-          <input
-            ref={fileRef}
-            type="file"
-            accept=".json"
-            onChange={handleImport}
-            className="hidden"
-          />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon" onClick={handleCopyQuestions} className="shrink-0">
+                  <MessageSquare className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Copy questions to clipboard</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon" onClick={handleCopyProfile} className="shrink-0">
+                  <User className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Copy profile to clipboard</TooltipContent>
+            </Tooltip>
+          </div>
+          
+          {/* Right side: Primary actions and utilities */}
+          <div className="flex flex-wrap gap-2 items-center">
+            <Button onClick={() => setIsCreateDialogOpen(true)} size="sm" className="shrink-0">
+              <Plus className="mr-2 h-4 w-4 hidden sm:inline-block" />
+              <span className="hidden sm:inline">Add listing</span>
+              <Plus className="sm:hidden h-4 w-4" />
+            </Button>
+            <div className="hidden sm:flex">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setCompact(!compact)}
+                    className={compact ? "text-primary shrink-0" : "shrink-0"}
+                  >
+                    {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {compact ? "Detailed view" : "Compact view"}
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            
+            {/* Mobile menu for secondary actions */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="sm:hidden shrink-0">
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {compareMode && selectedListingIds.length >= 2 && (
+                  <DropdownMenuItem onClick={handleCompare}>
+                    Compare ({selectedListingIds.length})
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem onClick={() => setCompact(!compact)}>
+                  {compact ? <Columns3 className="mr-2 h-4 w-4" /> : <List className="mr-2 h-4 w-4" />}
+                  {compact ? "Detailed view" : "Compact view"}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleExport}>
+                  <Download className="mr-2 h-4 w-4" />
+                  Export data
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => fileRef.current?.click()}>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Import data
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleToggleSeed} className={seedMode ? "text-amber-500" : ""}>
+                  <FlaskConical className="mr-2 h-4 w-4" />
+                  {seedMode ? "Switch to your data" : "Switch to sample data"}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSettingsOpen(true)}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
+            {/* Desktop secondary actions */}
+            <div className="hidden sm:flex gap-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleExport}
+                  >
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Export data</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => fileRef.current?.click()}
+                  >
+                    <Upload className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Import data</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleToggleSeed}
+                    className={seedMode ? "text-amber-500" : ""}
+                  >
+                    <FlaskConical className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {seedMode ? "Switch to your data" : "Switch to sample data"}
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setSettingsOpen(true)}
+                  >
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Evaluation templates</TooltipContent>
+              </Tooltip>
+            </div>
+            <input
+              ref={fileRef}
+              type="file"
+              accept=".json"
+              onChange={handleImport}
+              className="hidden"
+            />
+          </div>
         </div>
         </TooltipProvider>
       </div>

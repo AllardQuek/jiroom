@@ -44,7 +44,11 @@ export function downloadData(exportData: ExportData): void {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `rental-room-rater-backup-${new Date().toISOString().split("T")[0]}.json`;
+  const localDate = new Date();
+  const year = localDate.getFullYear();
+  const month = String(localDate.getMonth() + 1).padStart(2, '0');
+  const day = String(localDate.getDate()).padStart(2, '0');
+  a.download = `rental-room-rater-backup-${year}-${month}-${day}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
