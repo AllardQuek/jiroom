@@ -1,146 +1,19 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import { Check, Hash } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
+import { useEffect } from "react";
+import { Check } from "lucide-react";
 import { useTemplateStore } from "@/store/templateStore";
 import { Criterion, Template } from "@/types/evaluation";
 import { calculateScore as calcScore } from "@/lib/utils/calculateScore";
+import { hasResponse, groupCriteriaByCategory } from "./shared/evaluationHelpers";
+import { SelectPills, NumberBadge, TextNote } from "./shared/EvaluationInputs";
+import { useDerivedTotal } from "./shared/useDerivedTotal";
 
 interface InlineEvaluationProps {
   responses: Record<string, number | string>;
   onResponse: (criterionId: string, value: number | string) => void;
   onClearResponse: (criterionId: string) => void;
   listingPrice?: number;
-}
-
-const hasResponse = (value: number | string | undefined) =>
-  value !== undefined && value !== "";
-
-const groupCriteriaByCategory = (template: Template) =>
-  template.criteria.reduce(
-    (groups, criterion) => {
-      if (!groups[criterion.category]) {
-        groups[criterion.category] = [];
-      }
-      groups[criterion.category].push(criterion);
-      return groups;
-    },
-    {} as Record<string, Criterion[]>
-  );
-
-function SelectPills({
-  options,
-  scores,
-  value,
-  onChange,
-  onClear,
-}: {
-  options: string[];
-  scores?: Record<string, -1 | 0 | 1>;
-  value: string | undefined;
-  onChange: (value: string) => void;
-  onClear: () => void;
-}) {
-  return (
-    <div className="flex items-center flex-wrap gap-1 min-w-0 max-w-[180px] justify-end">
-      {options.map((option) => {
-        const selected = value === option;
-        const score = scores?.[option] ?? 0;
-        return (
-          <button
-            key={option}
-            type="button"
-            onClick={() => (selected ? onClear() : onChange(option))}
-            className={`
-              h-6 rounded-full px-2.5 text-[11px] font-medium
-              transition-all duration-150 leading-none
-              ${
-                selected
-                  ? score === 1
-                      ? "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-xs"
-                      : score === -1
-                        ? "bg-red-50 text-red-700 border-red-200 shadow-xs"
-                        : "bg-primary/10 text-primary border-primary/30 shadow-xs"
-                  : "bg-transparent text-muted-foreground/60 border border-border/30 hover:border-border/60 hover:text-foreground/80"
-              }
-            `}
-            style={selected ? { borderWidth: 1 } : { borderWidth: 1 }}
-          >
-            {option}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function NumberBadge({
-  value,
-  onChange,
-  onClear,
-}: {
-  value: number | string | undefined;
-  onChange: (value: number) => void;
-  onClear: () => void;
-}) {
-  return (
-    <div className="flex items-center gap-1">
-      <span className="flex items-center justify-center h-5 w-5 rounded-full bg-muted/80 text-[10px] text-muted-foreground/60 font-medium">
-        <Hash className="h-2.5 w-2.5" />
-      </span>
-      <Input
-        type="number"
-        value={typeof value === "number" ? value : ""}
-        onChange={(event) => {
-          const nextValue = event.target.value;
-          if (nextValue === "") {
-            onClear();
-            return;
-          }
-          onChange(Number(nextValue));
-        }}
-        className="h-7 w-[72px] text-xs rounded-lg [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-        placeholder="..."
-      />
-    </div>
-  );
-}
-
-function TextNote({
-  value,
-  onChange,
-  onClear,
-}: {
-  value: string | undefined;
-  onChange: (value: string) => void;
-  onClear: () => void;
-}) {
-  const hasContent = value !== undefined && value !== "";
-  return (
-    <div className="relative">
-      <AutoResizeTextarea
-        value={typeof value === "string" ? value : ""}
-        onChange={(event) => {
-          if (event.target.value === "") {
-            onClear();
-            return;
-          }
-          onChange(event.target.value);
-        }}
-        placeholder="..."
-        className={`
-          text-xs py-2 rounded-lg
-          transition-all duration-150
-          ${hasContent
-            ? "bg-amber-50/30 dark:bg-amber-950/10 border-amber-200/40 dark:border-amber-800/30"
-            : "border-dashed border-border/40"
-          }
-        `}
-      />
-    </div>
-  );
 }
 
 export function InlineEvaluation({
@@ -182,19 +55,7 @@ export function InlineEvaluation({
   const groupedCriteria = groupCriteriaByCategory(template);
 
   const derivedCriterion = template.criteria.find((c) => c.type === "derived");
-  const derivedTotal = useMemo(() => {
-    if (!derivedCriterion || listingPrice === undefined) return null;
-    let total = listingPrice;
-    if (derivedCriterion.derivedFrom) {
-      for (const depId of derivedCriterion.derivedFrom) {
-        const depResponse = responses[depId];
-        if (depResponse !== undefined && depResponse !== "") {
-          total += Number(depResponse) || 0;
-        }
-      }
-    }
-    return total;
-  }, [derivedCriterion, listingPrice, responses]);
+  const derivedTotal = useDerivedTotal(derivedCriterion, listingPrice, responses);
 
   const renderInput = (criterion: Criterion) => {
     const value = responses[criterion.id];
