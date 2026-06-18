@@ -44,9 +44,7 @@ export function CreateAnchorForm({
   const updateAnchor = useAnchorStore((state) => state.updateAnchor);
 
   const form = useForm<AnchorFormData>({
-    resolver: zodResolver(
-      anchorSchema
-    ) as unknown as import("react-hook-form").Resolver<AnchorFormData>,
+    resolver: zodResolver(anchorSchema) as any,
     defaultValues: {
       title: "",
       type: "other",

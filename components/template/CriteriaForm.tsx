@@ -43,9 +43,7 @@ export function CriteriaForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CriterionFormData>({
-    resolver: zodResolver(
-      createCriterionSchema
-    ) as unknown as import("react-hook-form").Resolver<CriterionFormData>,
+    resolver: zodResolver(createCriterionSchema) as any,
     defaultValues: {
       name: "",
       description: "",
