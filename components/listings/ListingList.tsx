@@ -9,18 +9,15 @@ import { useTemplateStore } from "@/store/templateStore";
 import { Listing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
 import { ListingCard } from "./ListingCard";
-import { Home, ArrowUpDown } from "lucide-react";
+import { DraggableListing } from "./DraggableListing";
+import { SortButton } from "./SortButton";
+import { DroppableColumn } from "./DroppableColumn";
+import { useListingDragDrop } from "./hooks/useListingDragDrop";
+import { Home } from "lucide-react";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import {
   DndContext,
   DragOverlay,
-  useDraggable,
-  useDroppable,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type DragStartEvent,
 } from "@dnd-kit/core";
 
 type ListingStatus = Listing["status"];
@@ -78,39 +75,6 @@ interface ListingListProps {
   compareMode?: boolean;
 }
 
-function DraggableListing({
-  listing,
-  compact,
-  compareMode,
-  onClick,
-}: {
-  listing: Listing;
-  compact?: boolean;
-  compareMode?: boolean;
-  onClick?: (id: string) => void;
-}) {
-  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-    id: listing.id,
-    data: { listing },
-  });
-
-  return (
-    <div
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      className={isDragging ? "opacity-30" : ""}
-    >
-      <ListingCard
-        listing={listing}
-        compact={compact}
-        compareMode={compareMode}
-        onClick={onClick}
-      />
-    </div>
-  );
-}
-
 const SORT_OPTIONS = [
   { label: "Default", value: null },
   { label: "Price ↓", value: { by: "price" as const, dir: "desc" as const } },
@@ -120,109 +84,6 @@ const SORT_OPTIONS = [
   { label: "Name A-Z", value: { by: "name" as const, dir: "asc" as const } },
   { label: "Name Z-A", value: { by: "name" as const, dir: "desc" as const } },
 ] as const;
-
-function SortButton({
-  columnId,
-  options,
-  sortConfigs,
-  setSortConfigs,
-  openSortCol,
-  setOpenSortCol,
-}: {
-  columnId: string;
-  options: readonly {
-    readonly label: string;
-    readonly value: SortConfig | null;
-  }[];
-  sortConfigs: Record<string, SortConfig | null>;
-  setSortConfigs: (
-    fn: (
-      prev: Record<string, SortConfig | null>
-    ) => Record<string, SortConfig | null>
-  ) => void;
-  openSortCol: string | null;
-  setOpenSortCol: (id: string | null) => void;
-}) {
-  const config = sortConfigs[columnId] ?? null;
-  return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() =>
-          setOpenSortCol(openSortCol === columnId ? null : columnId)
-        }
-        className={`flex items-center rounded-md p-1 text-xs transition-colors ${
-          config
-            ? "bg-primary/10 text-primary"
-            : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/60"
-        }`}
-        title="Sort listings"
-      >
-        <ArrowUpDown size={12} />
-      </button>
-      {openSortCol === columnId && (
-        <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setOpenSortCol(null)}
-          />
-          <div className="absolute right-0 top-full z-20 mt-1 w-36 rounded-lg border bg-popover p-1 shadow-md">
-            {options.map((opt) => {
-              const isActive =
-                JSON.stringify(config) === JSON.stringify(opt.value);
-              return (
-                <button
-                  key={opt.label}
-                  type="button"
-                  onClick={() => {
-                    setSortConfigs((prev) => ({
-                      ...prev,
-                      [columnId]: opt.value,
-                    }));
-                    setOpenSortCol(null);
-                  }}
-                  className={`w-full rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${
-                    isActive
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-foreground hover:bg-muted"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              );
-            })}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-function DroppableColumn({
-  columnId,
-  className,
-  children,
-}: {
-  columnId: string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  const { setNodeRef, isOver } = useDroppable({
-    id: `column-${columnId}`,
-    data: { columnId },
-  });
-
-  return (
-    <section
-      ref={setNodeRef}
-      className={`flex min-h-[200px] lg:min-h-[560px] flex-col rounded-xl bg-muted/30 transition-colors ${className ?? ""} ${
-        isOver ? "bg-primary/5 ring-2 ring-primary/30" : ""
-      }`}
-    >
-      {children}
-    </section>
-  );
-}
 
 export function ListingList({
   onListingClick,
@@ -238,7 +99,6 @@ export function ListingList({
   const [toViewFilter, setToViewFilter] = useState<
     "all" | "unscheduled" | "scheduled"
   >("all");
-  const [activeId, setActiveId] = useState<string | null>(null);
   const [sortConfigs, setSortConfigs] = useState<
     Record<string, SortConfig | null>
   >({});
@@ -247,6 +107,12 @@ export function ListingList({
   const templates = useTemplateStore((state) => state.templates);
 
   const template = templates[0];
+
+  const { activeId, sensors, handleDragStart, handleDragEnd } = useListingDragDrop({
+    updateListing,
+    updateVerdict,
+    addVerdict,
+  });
 
   const getScore = useCallback(
     (listing: Listing) => {
@@ -293,57 +159,9 @@ export function ListingList({
     [getScore]
   );
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    })
-  );
-
   const activeListing = activeId
     ? listings.find((l) => l.id === activeId)
     : null;
-
-  function handleDragStart(event: DragStartEvent) {
-    setActiveId(event.active.id as string);
-  }
-
-  function handleDragEnd(event: DragEndEvent) {
-    setActiveId(null);
-    const { active, over } = event;
-    if (!over) return;
-
-    const listingId = active.id as string;
-    const columnId = over.data.current?.columnId as string | undefined;
-    if (!columnId) return;
-
-    const col = columns.find((c) => c.id === columnId);
-    if (!col) return;
-
-    const { dropStatus, dropVerdict } = col.dropData;
-    updateListing(listingId, { status: dropStatus });
-
-    if (dropVerdict) {
-      const existing = verdicts.find((v) => v.listing_id === listingId);
-      const now = new Date().toISOString();
-      if (existing) {
-        updateVerdict(existing.id, { status: dropVerdict, updated_at: now });
-      } else {
-        addVerdict({
-          id: crypto.randomUUID(),
-          listing_id: listingId,
-          status: dropVerdict,
-          created_at: now,
-          updated_at: now,
-        });
-      }
-    }
-  }
-
-  function handleDragCancel() {
-    setActiveId(null);
-  }
 
   if (listings.length === 0) {
     return (
@@ -372,7 +190,6 @@ export function ListingList({
       sensors={sensors}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      onDragCancel={handleDragCancel}
     >
       <div className="space-y-6 pb-24">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
