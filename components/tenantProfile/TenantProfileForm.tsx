@@ -82,10 +82,7 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
         ))}
       </div>
 
-      <div className="flex items-center justify-end gap-2 pt-2 border-t">
-        <Button variant="outline" size="sm" onClick={handleCancel}>
-          Cancel
-        </Button>
+      <div className="flex items-center justify-end pt-2 border-t">
         <Button size="sm" onClick={handleSave}>
           {saveStatus === "saved" ? "Saved!" : "Save Profile"}
         </Button>
