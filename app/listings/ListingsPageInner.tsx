@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -61,6 +61,7 @@ export function ListingsPageInner() {
     message: string;
   }>({ type: null, message: "" });
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const saved = localStorage.getItem("compact-view");
@@ -108,6 +109,12 @@ export function ListingsPageInner() {
   useEffect(() => {
     initializeAgentQuestions();
   }, [initializeAgentQuestions]);
+
+  useEffect(() => {
+    if (pathname === "/listings") {
+      setCompareMode(false);
+    }
+  }, [pathname]);
 
   const handleCompare = () => {
     router.push("/compare");
@@ -262,14 +269,16 @@ export function ListingsPageInner() {
                 Compare ({selectedListingIds.length})
               </Button>
             )}
-            <Button
-              variant={compareMode ? "default" : "outline"}
-              onClick={() => setCompareMode(!compareMode)}
-              size="sm"
-              className="shrink-0"
-            >
-              {compareMode ? "Done" : "Compare"}
-            </Button>
+            {!compareMode && (
+              <Button
+                variant="outline"
+                onClick={() => setCompareMode(true)}
+                size="sm"
+                className="shrink-0"
+              >
+                Compare
+              </Button>
+            )}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" onClick={handleCopyQuestions} className="shrink-0">
@@ -324,6 +333,11 @@ export function ListingsPageInner() {
                 {compareMode && selectedListingIds.length >= 2 && (
                   <DropdownMenuItem onClick={handleCompare}>
                     Compare ({selectedListingIds.length})
+                  </DropdownMenuItem>
+                )}
+                {!compareMode && (
+                  <DropdownMenuItem onClick={() => setCompareMode(true)}>
+                    Compare
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem onClick={() => setCompact(!compact)}>
