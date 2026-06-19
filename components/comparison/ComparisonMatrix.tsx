@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { Listing, Viewing } from "@/types/listing";
 import { Template, Criterion, Evaluation } from "@/types/evaluation";
@@ -8,6 +8,17 @@ import { Verdict } from "@/types/verdict";
 import { ScoreResult } from "@/lib/utils/calculateScore";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { X, Star, Check, Minus } from "lucide-react";
 
 function CriterionValue({
@@ -15,11 +26,13 @@ function CriterionValue({
   value,
   listingPrice,
   responses,
+  isMobile,
 }: {
   criterion: Criterion;
   value: number | string | undefined;
   listingPrice?: number;
   responses?: Record<string, number | string>;
+  isMobile: boolean;
 }) {
   if (criterion.type === "derived") {
     if (listingPrice === undefined) {
@@ -79,10 +92,38 @@ function CriterionValue({
     case "select":
     case "text":
     default:
-      return (
-        <span className="text-foreground text-sm text-right">
+      const isTextTruncated = String(value).length > 50;
+      const displayText = isTextTruncated ? String(value).slice(0, 50) + "..." : String(value);
+
+      if (!isTextTruncated) {
+        return (
+          <span className="text-foreground text-sm text-left whitespace-nowrap">
+            {value}
+          </span>
+        );
+      }
+
+      const interactiveContent = (
+        <div className="text-foreground text-sm text-left cursor-pointer hover:bg-muted/50 active:bg-muted/70 transition-colors whitespace-nowrap">
+          {displayText}
+        </div>
+      );
+
+      return isMobile ? (
+        <span className="text-foreground text-sm text-left">
           {value}
         </span>
+      ) : (
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger>
+              {interactiveContent}
+            </TooltipTrigger>
+            <TooltipContent align="center" collisionPadding={16}>
+              <p>{value}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       );
   }
 }
@@ -181,6 +222,45 @@ export function ComparisonMatrix({
   scores,
   onRemove,
 }: ComparisonMatrixProps) {
+  const [isMobile, setIsMobile] = useState(false);
+  const [criteriaColumnWidth, setCriteriaColumnWidth] = useState(170);
+
+  useEffect(() => {
+    // Load saved width from localStorage
+    const savedWidth = localStorage.getItem('criteria-column-width');
+    if (savedWidth) {
+      setCriteriaColumnWidth(Number(savedWidth));
+    }
+
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startWidth = criteriaColumnWidth;
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const newWidth = Math.max(120, Math.min(300, startWidth + deltaX));
+      setCriteriaColumnWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      localStorage.setItem('criteria-column-width', criteriaColumnWidth.toString());
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
   const bestNet = Math.max(
     ...scores.filter((s): s is ScoreResult => s !== null).map((s) => s.net),
     -Infinity
@@ -225,7 +305,7 @@ export function ComparisonMatrix({
   gridItems.push(
     <div
       key="h-criteria"
-      className="sticky left-0 z-20 bg-background px-2 py-2.5 border-b border-border/40 font-semibold text-xs text-muted-foreground uppercase tracking-wider"
+      className="bg-background px-2 py-2.5 border-b border-border/40 font-semibold text-xs text-muted-foreground uppercase tracking-wider"
     >
       Criteria
     </div>
@@ -321,7 +401,7 @@ export function ComparisonMatrix({
     gridItems.push(
       <div
         key={`cat-${category}`}
-        className="col-span-full flex items-center gap-3 px-2 py-2 bg-muted/40"
+        className="flex items-center gap-3 px-2 py-2 bg-muted/40"
       >
         <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           {category}
@@ -329,6 +409,16 @@ export function ComparisonMatrix({
         <span className="h-px flex-1 bg-border/20" />
       </div>
     );
+
+    // Add empty cells for the remaining columns in the category header row
+    for (let i = 0; i < numCols; i++) {
+      gridItems.push(
+        <div
+          key={`cat-empty-${category}-${i}`}
+          className="bg-muted/40 min-h-[38px]"
+        />
+      );
+    }
 
     criteria.forEach((criterion) => {
       const isEven = rowParity % 2 === 0;
@@ -345,15 +435,38 @@ export function ComparisonMatrix({
       const rowBg = isEven ? "bg-muted/[0.03]" : "";
 
       // Criterion name cell
+      const criterionCellContent = (
+        <div
+          className={`px-2 py-2.5 text-sm leading-snug flex items-center min-h-[38px] ${
+            isMobile ? "" : "cursor-pointer hover:bg-muted/50 active:bg-muted/70 transition-colors"
+          } ${
+            isUnansweredEverywhere ? "text-muted-foreground/40" : "text-foreground"
+          }`}
+        >
+          <span className={isMobile ? "" : "truncate"}>{criterion.name}</span>
+        </div>
+      );
+
       gridItems.push(
         <div
           key={`n-${criterion.id}`}
-          className={`sticky left-0 z-10 ${rowBg || "bg-background"} px-2 py-2.5 text-sm leading-snug flex items-center min-h-[38px] ${
-            isUnansweredEverywhere ? "text-muted-foreground/40" : "text-foreground"
-          }`}
+          className={`bg-background ${rowBg || ""}`}
           style={{ borderLeft: `2px solid ${accent}` }}
         >
-          <span className="truncate">{criterion.name}</span>
+          {isMobile ? (
+            criterionCellContent
+          ) : (
+            <TooltipProvider delayDuration={300}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  {criterionCellContent}
+                </TooltipTrigger>
+                <TooltipContent side="top" align="start" collisionPadding={16}>
+                  <p>{criterion.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
       );
 
@@ -366,7 +479,7 @@ export function ComparisonMatrix({
         gridItems.push(
           <div
             key={`v-${criterion.id}-${listing.id}`}
-            className={`${rowBg || "bg-background"} px-2 py-2.5 flex items-center justify-end min-h-[38px] ${
+            className={`${rowBg || "bg-background"} px-2 py-2.5 flex items-center justify-start min-h-[38px] overflow-hidden ${
               answered ? "" : "opacity-30"
             }`}
           >
@@ -375,6 +488,7 @@ export function ComparisonMatrix({
               value={value}
               listingPrice={listing.price}
               responses={responses}
+              isMobile={isMobile}
             />
           </div>
         );
@@ -385,10 +499,15 @@ export function ComparisonMatrix({
   return (
     <div className="overflow-x-auto rounded-lg border border-border/15 max-w-5xl mx-auto">
       <div
-        className="grid min-w-[500px] gap-px bg-border/12"
-        style={{ gridTemplateColumns: `170px repeat(${numCols}, 1fr)` }}
+        className="grid min-w-[500px] gap-px bg-border/12 relative"
+        style={{ gridTemplateColumns: `${criteriaColumnWidth}px repeat(${numCols}, 1fr)` }}
       >
         {gridItems}
+        <div
+          className="absolute top-0 bottom-0 left-0 w-1 bg-transparent hover:bg-primary cursor-col-resize z-[100] transition-colors"
+          style={{ left: `${criteriaColumnWidth}px` }}
+          onMouseDown={handleResizeStart}
+        />
       </div>
     </div>
   );
