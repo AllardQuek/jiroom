@@ -345,7 +345,7 @@ export function ComparisonMatrix({
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 shrink-0 -mt-0.5 -mr-1"
+            className="h-6 w-6 shrink-0 -mt-0.5 -mr-1 hover:bg-muted/50"
             onClick={() => onRemove(listing.id)}
             aria-label="Remove from comparison"
           >
