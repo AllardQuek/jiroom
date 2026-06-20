@@ -110,7 +110,7 @@ function CriterionValue({
       );
 
       return isMobile ? (
-        <span className="text-foreground text-sm text-left">
+        <span className="text-foreground text-sm text-left whitespace-pre-wrap">
           {value}
         </span>
       ) : (
@@ -120,7 +120,7 @@ function CriterionValue({
               {interactiveContent}
             </TooltipTrigger>
             <TooltipContent align="center" collisionPadding={16}>
-              <p>{value}</p>
+              <p className="whitespace-pre-wrap">{value}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
