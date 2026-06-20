@@ -6,6 +6,7 @@ import { Listing, Viewing } from "@/types/listing";
 import { Template, Criterion, Evaluation } from "@/types/evaluation";
 import { Verdict } from "@/types/verdict";
 import { ScoreResult } from "@/lib/utils/calculateScore";
+import { SCORE_COLORS, ACCENT_COLORS, getScoreColors, getAccentColors } from "@/lib/constants/colors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { X, Star, Check, Minus } from "lucide-react";
+import { useTheme } from "next-themes";
 
 function CriterionValue({
   criterion,
@@ -133,20 +135,29 @@ function formatNet(net: number) {
 }
 
 function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const resolvedTheme = (theme as 'light' | 'dark') || 'light';
   const net = score?.net ?? null;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const scoreColors = mounted ? getScoreColors(resolvedTheme) : SCORE_COLORS;
 
   const ringColor =
     net === null
-      ? "#d4d4d4"
+      ? scoreColors.null
       : net >= 4
-        ? "#059669"
+        ? scoreColors.excellent
         : net >= 1
-          ? "#65a30d"
+          ? scoreColors.good
           : net === 0
-            ? "#a8a29e"
+            ? scoreColors.neutral
             : net >= -2
-              ? "#d97706"
-              : "#dc2626";
+              ? scoreColors.fair
+              : scoreColors.poor;
 
   if (!score) {
     return (
@@ -222,6 +233,13 @@ export function ComparisonMatrix({
   scores,
   onRemove,
 }: ComparisonMatrixProps) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const resolvedTheme = (theme as 'light' | 'dark') || 'light';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [isMobile, setIsMobile] = useState(false);
   const [criteriaColumnWidth, setCriteriaColumnWidth] = useState(170);
 
@@ -294,10 +312,7 @@ export function ComparisonMatrix({
 
   if (numCols === 0) return null;
 
-  const accentColors = [
-    "#2dd4bf", "#60a5fa", "#f59e0b", "#a78bfa",
-    "#f472b6", "#34d399", "#fb923c", "#22d3ee",
-  ];
+  const accentColors = mounted ? getAccentColors(resolvedTheme) : ACCENT_COLORS;
 
   const gridItems: React.ReactNode[] = [];
 
@@ -345,7 +360,7 @@ export function ComparisonMatrix({
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 shrink-0 -mt-0.5 -mr-1 hover:bg-muted/50"
+            className="h-6 w-6 shrink-0 -mt-0.5 -mr-1"
             onClick={() => onRemove(listing.id)}
             aria-label="Remove from comparison"
           >

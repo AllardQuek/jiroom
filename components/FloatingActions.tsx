@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Bug, CircleHelp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HelpDialog from "@/components/HelpDialog";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const GITHUB_ISSUES_URL =
   "https://github.com/AllardQuek/rental-room-rater/issues/new";
@@ -33,12 +34,14 @@ export default function FloatingActions() {
 
   return (
     <>
-      <div className="hidden sm:flex fixed bottom-[calc(7rem+env(safe-area-inset-bottom,0px))] right-4 z-40 items-center gap-2">
+      <div className="fixed bottom-[calc(7rem+env(safe-area-inset-bottom,0px))] right-4 z-40 items-center gap-2">
+        <ThemeToggle />
         <a
           href={GITHUB_ISSUES_URL}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Report an issue on GitHub"
+          className="hidden sm:block"
         >
           <Button
             variant="outline"

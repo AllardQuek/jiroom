@@ -13,7 +13,7 @@ import { useTemplateStore } from "@/store/templateStore";
 import { useAnchorStore } from "@/store/anchorStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
-import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
+import { ANCHOR_COLORS, STATUS_COLORS, AREA_PALETTE, getAnchorColors, getStatusColors, getAreaPalette } from "@/lib/constants/colors";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
 import { MapFilters, type Filters } from "./MapFilters";
@@ -49,31 +49,11 @@ import { ListingPreviewCard } from "./ListingPreviewCard";
 import { AnchorInfoWindow } from "./AnchorInfoWindow";
 import { MapController } from "./MapController";
 import { useRouteCalculator } from "./hooks/useRouteCalculator";
+import { useTheme } from "next-themes";
 
 const LocationSearch = dynamic(() => import("./LocationSearch"), {
   ssr: false,
 });
-
-const STATUS_COLORS: Record<string, string> = {
-  new: "#9CA3AF",
-  to_view: "#3B82F6",
-  viewed: "#F59E0B",
-};
-
-const AREA_PALETTE = [
-  "#3B82F6",
-  "#EF4444",
-  "#10B981",
-  "#F59E0B",
-  "#8B5CF6",
-  "#EC4899",
-  "#06B6D4",
-  "#F97316",
-  "#84CC16",
-  "#6366F1",
-  "#14B8A6",
-  "#A855F7",
-];
 
 function parseDurationToMinutes(text: string): number | null {
   const parts = text.match(/(\d+)\s*(hour|hr|h|min|mins?)/gi);
@@ -104,6 +84,14 @@ interface SearchResult {
 }
 
 export default function MapView({ onViewDetails }: MapViewProps) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const resolvedTheme = (theme as 'light' | 'dark') || 'light';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const listings = useListingStore((state) => state.listings);
   const anchors = useAnchorStore((state) => state.anchors);
   const deleteAnchor = useAnchorStore((state) => state.deleteAnchor);
@@ -153,15 +141,22 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     [listings]
   );
   const areaColorMap = useMemo(() => {
+    if (!mounted) return {};
     const uniqueAreas = [
       ...new Set(listings.map((l) => l.area).filter(Boolean)),
     ] as string[];
     const map: Record<string, string> = {};
+    const palette = getAreaPalette(resolvedTheme);
     uniqueAreas.forEach((area, i) => {
-      map[area] = AREA_PALETTE[i % AREA_PALETTE.length];
+      map[area] = palette[i % palette.length];
     });
     return map;
-  }, [listings]);
+  }, [listings, resolvedTheme, mounted]);
+
+  const statusColors = useMemo(() => {
+    if (!mounted) return STATUS_COLORS;
+    return getStatusColors(resolvedTheme);
+  }, [resolvedTheme, mounted]);
 
   const travelMode = useRoutePrefsStore((s) => s.travelMode);
   const setTravelMode = useRoutePrefsStore((s) => s.setTravelMode);
@@ -376,7 +371,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
                     style={{
                       backgroundColor: colorMode === "area"
                         ? areaColorMap[listing.area] || "#6B7280"
-                        : STATUS_COLORS[listing.status] || "#9CA3AF",
+                        : statusColors[listing.status] || "#9CA3AF",
                       width: 48,
                       height: 48,
                       left: -10,
@@ -387,7 +382,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
                     background={
                       colorMode === "area"
                         ? areaColorMap[listing.area] || "#6B7280"
-                        : STATUS_COLORS[listing.status] || "#9CA3AF"
+                        : statusColors[listing.status] || "#9CA3AF"
                     }
                     borderColor="#000000"
                     glyphColor="#FFFFFF"
@@ -399,7 +394,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
                 background={
                   colorMode === "area"
                     ? areaColorMap[listing.area] || "#6B7280"
-                    : STATUS_COLORS[listing.status] || "#9CA3AF"
+                    : statusColors[listing.status] || "#9CA3AF"
                 }
                 borderColor="#374151"
                 glyphColor="#FFFFFF"
@@ -456,7 +451,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
               className="fixed inset-0 z-30 sm:hidden"
               onClick={() => setSelectedListing(null)}
             />
-            <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_rgba(0,0,0,0.1)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-96 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_var(--shadow-panel)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-96 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
               <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
                 <h2 className="text-sm font-semibold">Listing Details</h2>
                 <button

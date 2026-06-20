@@ -2,20 +2,11 @@ import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
+import { STATUS_COLORS, VERDICT_STYLES, getStatusColors, getVerdictStyles } from "@/lib/constants/colors";
 import { Listing } from "@/types/listing";
 import { Eye, ExternalLink } from "lucide-react";
-
-const STATUS_COLORS: Record<string, string> = {
-  new: "#9CA3AF",
-  to_view: "#3B82F6",
-  viewed: "#F59E0B",
-};
-
-const VERDICT_STYLES: Record<string, { label: string; fg: string; bg: string }> = {
-  yes: { label: "Yes", fg: "#059669", bg: "#05966920" },
-  maybe: { label: "Maybe", fg: "#D97706", bg: "#D9770620" },
-  no: { label: "No", fg: "#DC2626", bg: "#DC262620" },
-};
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 interface ListingPreviewCardProps {
   listing: Listing;
@@ -40,6 +31,14 @@ interface ListingPreviewCardProps {
  * ```
  */
 export function ListingPreviewCard({ listing, onViewDetails }: ListingPreviewCardProps) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const resolvedTheme = (theme as 'light' | 'dark') || 'light';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const evaluation = useEvaluationStore((state) =>
     state.getEvaluationByListingId(listing.id)
   );
@@ -52,7 +51,9 @@ export function ListingPreviewCard({ listing, onViewDetails }: ListingPreviewCar
   const verdict = useVerdictStore((s) =>
     s.verdicts.find((v) => v.listing_id === listing.id)
   );
-  const verdictStyle = verdict ? VERDICT_STYLES[verdict.status] : null;
+  const statusColors = mounted ? getStatusColors(resolvedTheme) : STATUS_COLORS;
+  const verdictStyles = mounted ? getVerdictStyles(resolvedTheme) : VERDICT_STYLES;
+  const verdictStyle = verdict ? verdictStyles[verdict.status] : null;
 
   return (
     <div className="text-sm min-w-[180px] max-w-[260px]">

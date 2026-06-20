@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Providers from "@/components/Providers";
 import FloatingActions from "@/components/FloatingActions";
+import { ThemeProvider } from "next-themes";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -22,19 +23,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`h-full antialiased ${dmSans.variable}`}>
+    <html lang="en" className={`h-full antialiased ${dmSans.variable}`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col pb-16">
-        <Providers>{children}</Providers>
-        <Navigation />
-        <FloatingActions />
-        <a
-          href="https://github.com/AllardQuek/rental-room-rater"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden sm:block fixed bottom-[calc(7rem+env(safe-area-inset-bottom,0px))] left-4 z-40 rounded-full border border-border/40 bg-background/80 backdrop-blur-sm px-3 py-1.5 text-xs leading-none text-muted-foreground/60 hover:text-muted-foreground hover:border-border/60 transition-colors"
-        >
-          🏡-cooked on GitHub
-        </a>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <Providers>{children}</Providers>
+          <Navigation />
+          <FloatingActions />
+          <a
+            href="https://github.com/AllardQuek/rental-room-rater"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:block fixed bottom-[calc(7rem+env(safe-area-inset-bottom,0px))] left-4 z-40 rounded-full border border-border/40 bg-background/80 backdrop-blur-sm px-3 py-1.5 text-xs leading-none text-muted-foreground/60 hover:text-muted-foreground hover:border-border/60 transition-colors"
+          >
+            🏡-cooked on GitHub
+          </a>
+        </ThemeProvider>
       </body>
     </html>
   );
