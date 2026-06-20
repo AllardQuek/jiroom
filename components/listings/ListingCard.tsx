@@ -260,7 +260,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
 
         {showNotes && hasNotes && (
           <div
-            className="rounded-lg bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground"
+            className="rounded-lg bg-muted/50 p-3 text-xs leading-relaxed text-muted-foreground whitespace-pre-wrap"
             onClick={(event) => event.stopPropagation()}
           >
             {listing.notes}
