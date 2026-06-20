@@ -10,12 +10,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings, MessageSquare, User, Check, X, MoreVertical } from "lucide-react";
 import {
   Tooltip,
@@ -60,6 +54,7 @@ export function ListingsPageInner() {
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -323,45 +318,57 @@ export function ListingsPageInner() {
             </div>
             
             {/* Mobile menu for secondary actions */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="sm:hidden shrink-0">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {compareMode && selectedListingIds.length >= 2 && (
-                  <DropdownMenuItem onClick={handleCompare}>
-                    Compare ({selectedListingIds.length})
-                  </DropdownMenuItem>
-                )}
-                {!compareMode && (
-                  <DropdownMenuItem onClick={() => setCompareMode(true)}>
-                    Compare
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuItem onClick={() => setCompact(!compact)}>
-                  {compact ? <Columns3 className="mr-2 h-4 w-4" /> : <List className="mr-2 h-4 w-4" />}
-                  {compact ? "Detailed view" : "Compact view"}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleExport}>
-                  <Download className="mr-2 h-4 w-4" />
-                  Export data
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => fileRef.current?.click()}>
-                  <Upload className="mr-2 h-4 w-4" />
-                  Import data
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleToggleSeed} className={seedMode ? "text-amber-500" : ""}>
-                  <FlaskConical className="mr-2 h-4 w-4" />
-                  {seedMode ? "Switch to your data" : "Switch to sample data"}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSettingsOpen(true)}>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="relative">
+              <Button
+                variant="outline"
+                size="icon"
+                className="sm:hidden shrink-0"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+              {mobileMenuOpen && (
+                <div
+                  className="absolute right-0 top-12 bg-card border border-border rounded-lg shadow-lg p-2 min-w-[200px] z-50 transition-all duration-300 animate-fade-in"
+                >
+                  <button
+                    onClick={() => { setCompact(!compact); setMobileMenuOpen(false); }}
+                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
+                  >
+                    {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
+                    {compact ? "Detailed view" : "Compact view"}
+                  </button>
+                  <button
+                    onClick={() => { handleExport(); setMobileMenuOpen(false); }}
+                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
+                  >
+                    <Download className="h-4 w-4" />
+                    Export data
+                  </button>
+                  <button
+                    onClick={() => { fileRef.current?.click(); setMobileMenuOpen(false); }}
+                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
+                  >
+                    <Upload className="h-4 w-4" />
+                    Import data
+                  </button>
+                  <button
+                    onClick={() => { handleToggleSeed(); }}
+                    className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left ${seedMode ? "text-amber-500" : ""}`}
+                  >
+                    <FlaskConical className="h-4 w-4" />
+                    {seedMode ? "Switch to your data" : "Switch to sample data"}
+                  </button>
+                  <button
+                    onClick={() => { setSettingsOpen(true); setMobileMenuOpen(false); }}
+                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
+                  >
+                    <Settings className="h-4 w-4" />
+                    Settings
+                  </button>
+                </div>
+              )}
+            </div>
             
             {/* Desktop secondary actions */}
             <div className="hidden sm:flex gap-1">
