@@ -98,7 +98,7 @@ export function SortButton({
                   className={`w-full rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${
                     isActive
                       ? "bg-primary/10 text-primary font-medium"
-                      : "text-foreground hover:bg-muted"
+                      : "text-foreground hover:bg-muted/80"
                   }`}
                 >
                   {opt.label}

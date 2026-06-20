@@ -307,7 +307,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       <div ref={mobileMenuRef} className="absolute top-3 right-16 sm:right-16 z-10">
         <button
           onClick={() => setShowMobileMenu(!showMobileMenu)}
-          className="sm:hidden flex items-center justify-center bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg p-2.5 shadow-sm hover:bg-background transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="sm:hidden flex items-center justify-center bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg p-2.5 shadow-sm hover:bg-muted/50 transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Menu size={16} />
         </button>
@@ -323,7 +323,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             </div>
             <button
               onClick={() => { setSelectedListing(null); setShowAnchorPanel(true); setShowMobileMenu(false); }}
-              className="w-full flex items-center justify-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
+              className="w-full flex items-center justify-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-muted/50 transition-colors"
             >
               <List size={14} />
               Anchors
@@ -335,7 +335,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
           <button
             onClick={() => { setSelectedListing(null); setShowAnchorPanel(true); }}
-            className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-background transition-colors"
+            className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-muted/50 transition-colors"
           >
             <List size={14} />
             Anchors

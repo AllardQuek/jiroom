@@ -93,7 +93,7 @@ export function MapFilters({
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="self-start flex items-center gap-2 bg-background/90 backdrop-blur-sm border border-border/50 rounded-xl max-sm:rounded-lg max-sm:px-2.5 max-sm:py-2 px-5 py-3 text-sm font-semibold shadow-md hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="self-start flex items-center gap-2 bg-background/90 backdrop-blur-sm border border-border/50 rounded-xl max-sm:rounded-lg max-sm:px-2.5 max-sm:py-2 px-5 py-3 text-sm font-semibold shadow-md hover:bg-muted/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <SlidersHorizontal size={18} />
         <span className="hidden sm:inline">Filters</span>
