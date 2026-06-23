@@ -11,13 +11,13 @@ interface MarkerColorToggleProps {
 
 export function MarkerColorToggle({ mode, onChange }: MarkerColorToggleProps) {
   return (
-    <div className="flex items-center gap-1 bg-muted/40 rounded-lg p-0.5 border border-border/40">
+    <div className="flex items-center gap-1 bg-muted/60 rounded-lg p-0.5 border border-border/40">
       <button
         onClick={() => onChange("status")}
         className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
           mode === "status"
             ? "bg-background text-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-foreground hover:bg-muted/80"
         }`}
       >
         <ListChecks size={12} />
@@ -28,7 +28,7 @@ export function MarkerColorToggle({ mode, onChange }: MarkerColorToggleProps) {
         className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
           mode === "area"
             ? "bg-background text-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-foreground hover:bg-muted/80"
         }`}
       >
         <Palette size={12} />

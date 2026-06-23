@@ -17,7 +17,7 @@ const OPTIONS: { value: TravelMode; label: string }[] = [
 export function TravelModeToggle({ mode, onChange }: TravelModeToggleProps) {
   return (
     <div className="relative group">
-      <div className="flex items-center gap-0.5 bg-muted/40 rounded-lg p-0.5 border border-border/40">
+      <div className="flex items-center gap-0.5 bg-muted/60 rounded-lg p-0.5 border border-border/40">
         {OPTIONS.map((opt) => (
             <button
             key={opt.value}
@@ -25,7 +25,7 @@ export function TravelModeToggle({ mode, onChange }: TravelModeToggleProps) {
             className={`px-2 py-1 rounded-md text-[11px] font-medium transition-colors ${
               mode === opt.value
                 ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
+                : "text-foreground hover:bg-muted/80"
             }`}
           >
             {opt.label}

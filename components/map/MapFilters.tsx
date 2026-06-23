@@ -123,7 +123,7 @@ export function MapFilters({
                 className={`text-[11px] px-2.5 py-1 rounded-full border font-medium transition-colors ${
                   filters.status.includes(opt.value)
                     ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
+                    : "bg-background/95 text-foreground border-border/50 hover:bg-muted/80"
                 }`}
               >
                 {opt.label}
@@ -141,7 +141,7 @@ export function MapFilters({
                   className={`text-[11px] px-2.5 py-1 rounded-full border font-medium transition-colors ${
                     filters.verdict.includes(opt.value)
                       ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
+                      : "bg-background/95 text-foreground border-border/50 hover:bg-muted/80"
                   }`}
                 >
                   {opt.label}
@@ -161,7 +161,7 @@ export function MapFilters({
                     className={`text-[11px] px-2.5 py-1 rounded-full border font-medium transition-colors ${
                       filters.areas.includes(area)
                         ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
+                        : "bg-background/95 text-foreground border-border/50 hover:bg-muted/80"
                     }`}
                   >
                     {areaColors[area] && (
@@ -262,7 +262,7 @@ export function MapFilters({
                 className={`text-[11px] px-2.5 py-1 rounded-full border font-medium transition-colors ${
                   filters.showAnchors
                     ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
+                    : "bg-background/95 text-foreground border-border/50 hover:bg-muted/80"
                 }`}
               >
                 Show anchors
@@ -283,7 +283,7 @@ export function MapFilters({
                 className={`text-[11px] px-2.5 py-1 rounded-full border font-medium transition-colors ${
                   filters.hideTaken
                     ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
+                    : "bg-background/95 text-foreground border-border/50 hover:bg-muted/80"
                 }`}
               >
                 Hide taken
