@@ -354,7 +354,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             const isSelected = selectedListing?.id === listing.id;
             return (
             <AdvancedMarker
-              key={listing.id}
+              key={`${listing.id}-${isSelected ? 'selected' : 'unselected'}`}
               position={{ lat: listing.lat!, lng: listing.lng! }}
               onClick={() => {
                 setSelectedListing(listing);
