@@ -103,6 +103,7 @@ export function ListingList({
   const [toViewFilter, setToViewFilter] = useState<
     "all" | "unscheduled" | "scheduled"
   >("all");
+  const [hideTaken, setHideTaken] = useState(false);
   const [sortConfigs, setSortConfigs] = useState<
     Record<string, SortConfig | null>
   >({});
@@ -199,6 +200,8 @@ export function ListingList({
   const getVerdict = (listingId: string) =>
     verdicts.find((v) => v.listing_id === listingId);
 
+  const filteredListings = listings.filter((l) => !hideTaken || !l.is_taken);
+
   return (
     <DndContext
       sensors={sensors}
@@ -206,6 +209,19 @@ export function ListingList({
       onDragEnd={handleDragEnd}
     >
       <div className="space-y-6 pb-24">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+              <input
+                type="checkbox"
+                checked={hideTaken}
+                onChange={(e) => setHideTaken(e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+              />
+              <span>Hide taken listings</span>
+            </label>
+          </div>
+        </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
           {/* Group header row */}
           <div className="hidden lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/80">
@@ -218,7 +234,7 @@ export function ListingList({
                 .reduce((sum, col) => {
                   return (
                     sum +
-                    listings.filter((l) => col.filter(l, getVerdict(l.id)))
+                    filteredListings.filter((l) => col.filter(l, getVerdict(l.id)))
                       .length
                   );
                 }, 0)}
@@ -234,7 +250,7 @@ export function ListingList({
                 .reduce((sum, col) => {
                   return (
                     sum +
-                    listings.filter((l) => col.filter(l, getVerdict(l.id)))
+                    filteredListings.filter((l) => col.filter(l, getVerdict(l.id)))
                       .length
                   );
                 }, 0)}
@@ -274,7 +290,7 @@ export function ListingList({
                 />
                 <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                   {
-                    listings.filter((l) => {
+                    filteredListings.filter((l) => {
                       const base = l.status === "new" || l.status === "to_view";
                       if (!base) return false;
                       if (toViewFilter === "all") return true;
@@ -336,7 +352,7 @@ export function ListingList({
                 : () => true;
 
             const columnListings = sortListings(
-              listings.filter(
+              filteredListings.filter(
                 (l) => col.filter(l, getVerdict(l.id)) && extraFilter(l)
               ),
               sortConfigs[col.id] ?? null

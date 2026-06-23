@@ -25,6 +25,7 @@ export interface Filters {
   scoreMin: number | null;
   scoreMax: number | null;
   verdict: string[];
+  hideTaken: boolean;
 }
 
 interface MapFiltersProps {
@@ -84,7 +85,8 @@ export function MapFilters({
     filters.areas.length > 0 ||
     filters.scoreMin !== null ||
     filters.scoreMax !== null ||
-    filters.verdict.length > 0;
+    filters.verdict.length > 0 ||
+    filters.hideTaken;
 
   return (
     <div
@@ -264,6 +266,27 @@ export function MapFilters({
                 }`}
               >
                 Show anchors
+              </button>
+            </div>
+          </div>
+
+          <div className="border-t border-border/30 pt-3">
+            <span className="text-xs font-semibold">Taken Listings</span>
+            <div className="flex items-center gap-2 mt-1.5">
+              <button
+                onClick={() =>
+                  onFiltersChange({
+                    ...filters,
+                    hideTaken: !filters.hideTaken,
+                  })
+                }
+                className={`text-[11px] px-2.5 py-1 rounded-full border font-medium transition-colors ${
+                  filters.hideTaken
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-background text-muted-foreground border-border/50 hover:border-primary/30"
+                }`}
+              >
+                Hide taken
               </button>
             </div>
           </div>

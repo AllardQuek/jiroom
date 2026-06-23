@@ -51,7 +51,7 @@ export const useListingStore = create<ListingState>()(
     {
       name: "listing-storage",
       storage: createJSONStorage(() => localStorage),
-      version: 2,
+      version: 3,
       migrate: (persisted: unknown, version: number) => {
         const state = persisted as {
           listings?: Array<Record<string, unknown>>;
@@ -65,6 +65,13 @@ export const useListingStore = create<ListingState>()(
           state.listings = state.listings.map((l) => ({
             ...l,
             updated_at: (l.updated_at as string) || new Date().toISOString(),
+          }));
+        }
+        if (version < 3 && state.listings) {
+          state.listings = state.listings.map((l) => ({
+            ...l,
+            is_taken: (l.is_taken as boolean) ?? false,
+            taken_date: (l.taken_date as string) || undefined,
           }));
         }
         return state as unknown as Partial<ListingState>;

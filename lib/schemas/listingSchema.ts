@@ -24,6 +24,8 @@ export const listingSchema = z.object({
   lng: z.number().optional(),
   googlePlaceId: z.string().optional(),
   notes: z.string().optional(),
+  is_taken: z.boolean().optional().default(false),
+  taken_date: z.string().optional(),
 });
 
 export type ListingFormData = z.infer<typeof listingSchema>;

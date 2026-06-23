@@ -16,6 +16,14 @@ import {
   ChevronUp,
   ExternalLink,
 } from "lucide-react";
+import { TakenBadge } from "./TakenBadge";
+import { TakenTooltip } from "./TakenTooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import { CommuteBadge } from "@/components/distance/CommuteBadge";
 
@@ -61,88 +69,108 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
   };
 
   const hasNotes = !!listing.notes;
+  const isTaken = listing.is_taken;
 
   if (compact) {
     return (
-      <Card
-        className="overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-sm transition-all duration-200 rounded-lg"
-        onClick={handleClick}
-      >
-        <div className="flex items-center gap-2 px-2.5 py-2">
-          <div className="flex items-center gap-1.5 flex-1 min-w-0 text-xs">
-            {listing.source_url && (
-              <a
-                href={listing.source_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="shrink-0 text-muted-foreground/40 hover:text-primary transition-colors"
-              >
-                <ExternalLink size={10} />
-              </a>
-            )}
-            <span className="font-medium truncate group-hover:text-primary transition-colors">
-              {listing.title}
-            </span>
-            {listing.area && (
-              <>
-                <span className="text-muted-foreground/30">·</span>
-                <span className="text-muted-foreground/60 truncate shrink-0 max-w-[80px]">
-                  {listing.area}
-                </span>
-              </>
-            )}
-            <span className="text-muted-foreground/30">·</span>
-            <span className="font-semibold text-primary shrink-0">
-              ${listing.price.toLocaleString()}
-            </span>
-            {score !== null && (
-              <>
-                <span className="text-muted-foreground/30">·</span>
-                <span
-                  className={`shrink-0 font-medium tabular-nums ${
-                    score.net > 0
-                      ? "text-emerald-600"
-                      : score.net < 0
-                        ? "text-red-600"
-                        : "text-muted-foreground/60"
-                  }`}
-                >
-                  {score.net > 0 ? `+${score.net}` : score.net}
-                </span>
-              </>
-            )}
-          </div>
-          <div className="flex items-center gap-2 shrink-0 text-[10px] text-muted-foreground/50">
-            {viewing?.scheduled_date ? (
-              <span className={isViewingOverdue ? "text-amber-500 font-medium" : ""}>
-                {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                })}
-              </span>
-            ) : (
-              <span className="italic text-muted-foreground/30">No date</span>
-            )}
-            {hasNotes && <FileText size={10} className="text-muted-foreground/40" />}
-            {compareMode && (
-              <div onClick={(e) => e.stopPropagation()}>
-                <ListingSelector listingId={listing.id} />
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Card
+              className={`overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-sm transition-all duration-200 rounded-lg ${
+                isTaken ? "opacity-50" : ""
+              }`}
+              onClick={handleClick}
+            >
+              <div className="flex items-center gap-2 px-2.5 py-2">
+                <div className="flex items-center gap-1.5 flex-1 min-w-0 text-xs">
+                  {listing.source_url && (
+                    <a
+                      href={listing.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="shrink-0 text-muted-foreground/40 hover:text-primary transition-colors"
+                    >
+                      <ExternalLink size={10} />
+                    </a>
+                  )}
+                  <span className="font-medium truncate group-hover:text-primary transition-colors">
+                    {listing.title}
+                  </span>
+                  {listing.area && (
+                    <>
+                      <span className="text-muted-foreground/30">·</span>
+                      <span className="text-muted-foreground/60 truncate shrink-0 max-w-[80px]">
+                        {listing.area}
+                      </span>
+                    </>
+                  )}
+                  <span className="text-muted-foreground/30">·</span>
+                  <span className="font-semibold text-primary shrink-0">
+                    ${listing.price.toLocaleString()}
+                  </span>
+                  {score !== null && (
+                    <>
+                      <span className="text-muted-foreground/30">·</span>
+                      <span
+                        className={`shrink-0 font-medium tabular-nums ${
+                          score.net > 0
+                            ? "text-emerald-600"
+                            : score.net < 0
+                              ? "text-red-600"
+                              : "text-muted-foreground/60"
+                        }`}
+                      >
+                        {score.net > 0 ? `+${score.net}` : score.net}
+                      </span>
+                    </>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 shrink-0 text-[10px] text-muted-foreground/50">
+                  {viewing?.scheduled_date ? (
+                    <span className={isViewingOverdue ? "text-amber-500 font-medium" : ""}>
+                      {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  ) : (
+                    <span className="italic text-muted-foreground/30">No date</span>
+                  )}
+                  {isTaken && <TakenBadge takenDate={listing.taken_date} />}
+                  {hasNotes && <FileText size={10} className="text-muted-foreground/40" />}
+                  {compareMode && (
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <ListingSelector listingId={listing.id} />
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
-        </div>
-      </Card>
+            </Card>
+          </TooltipTrigger>
+          {isTaken && (
+            <TooltipContent>
+              <TakenTooltip takenDate={listing.taken_date} />
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
     );
   }
 
   return (
-    <Card
-      className={`overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-md transition-all duration-200 rounded-xl ${
-        isViewingOverdue ? "border-l-amber-400 border-l-2" : ""
-      }`}
-      onClick={handleClick}
-    >
+    <TooltipProvider delayDuration={300}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Card
+            className={`overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-md transition-all duration-200 rounded-xl ${
+              isViewingOverdue ? "border-l-amber-400 border-l-2" : ""
+            } ${
+              isTaken ? "opacity-50" : ""
+            }`}
+            onClick={handleClick}
+          >
       <div className="p-3.5 space-y-3">
         <div className="flex justify-between items-start gap-3">
           <div className="space-y-1 flex-1 min-w-0">
@@ -219,6 +247,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
             <CommuteBadge listing={listing} />
           </div>
           <div className="flex items-center gap-2">
+            {isTaken && <TakenBadge takenDate={listing.taken_date} />}
             {hasNotes && (
               <button
                 type="button"
@@ -268,5 +297,13 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
         )}
       </div>
     </Card>
+    </TooltipTrigger>
+    {isTaken && (
+      <TooltipContent>
+        <TakenTooltip takenDate={listing.taken_date} />
+      </TooltipContent>
+    )}
+  </Tooltip>
+</TooltipProvider>
   );
 }

@@ -12,6 +12,14 @@ import {
   ArrowRight,
   Home,
 } from "lucide-react";
+import { TakenBadge } from "@/components/listings/TakenBadge";
+import { TakenTooltip } from "@/components/listings/TakenTooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Link from "next/link";
 import {
   format,
@@ -72,13 +80,18 @@ function DaySection({
               onClick={() => onListingClick(viewing.listing_id)}
               className="w-full text-left"
             >
-              <Card
-                className={`transition-all duration-200 group w-full ${
-                  isPast
-                    ? "opacity-50 border-border/30 hover:opacity-70"
-                    : "hover:shadow-md active:scale-[0.99] border-border/50"
-                }`}
-              >
+              <TooltipProvider delayDuration={300}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Card
+                      className={`transition-all duration-200 group w-full ${
+                        isPast
+                          ? "opacity-50 border-border/30 hover:opacity-70"
+                          : "hover:shadow-md active:scale-[0.99] border-border/50"
+                      } ${
+                        viewing.listing.is_taken ? "opacity-50" : ""
+                      }`}
+                    >
                 <CardContent className="p-0">
                   <div className="flex items-center gap-4 px-4 py-4 min-w-0">
                     <div className="text-center shrink-0">
@@ -132,6 +145,7 @@ function DaySection({
                         )}
                       </div>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        {viewing.listing.is_taken && <TakenBadge takenDate={viewing.listing.taken_date} />}
                         <span
                           className={`font-semibold ${
                             isPast
@@ -163,7 +177,15 @@ function DaySection({
                     />
                   </div>
                 </CardContent>
-              </Card>
+                  </Card>
+                  </TooltipTrigger>
+                  {viewing.listing.is_taken && (
+                    <TooltipContent>
+                      <TakenTooltip takenDate={viewing.listing.taken_date} />
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
             </button>
           );
         })}

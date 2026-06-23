@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -12,7 +12,7 @@ import { Listing } from "@/types/listing";
 import { normalizeUrl } from "@/lib/utils/url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MapPin } from "lucide-react";
+import { MapPin, XCircle } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -66,8 +66,19 @@ export function EditListingForm({
       lat: listing.lat,
       lng: listing.lng,
       googlePlaceId: listing.googlePlaceId,
+      is_taken: listing.is_taken ?? false,
+      taken_date: listing.taken_date,
     },
   });
+
+  const isTaken = form.watch("is_taken");
+
+  // Auto-set taken_date when is_taken is enabled
+  useEffect(() => {
+    if (isTaken && !form.getValues("taken_date")) {
+      form.setValue("taken_date", new Date().toISOString());
+    }
+  }, [isTaken, form]);
 
   const onSubmit = async (data: ListingFormData) => {
     setIsSubmitting(true);
@@ -224,6 +235,57 @@ export function EditListingForm({
             </FormItem>
           )}
         />
+
+        <div className="border-t pt-4 mt-4">
+          <FormField
+            control={form.control}
+            name="is_taken"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base flex items-center gap-2">
+                    <XCircle size={16} className="text-muted-foreground" />
+                    Mark as taken
+                  </FormLabel>
+                  <p className="text-[0.8rem] text-muted-foreground">
+                    This listing is no longer available
+                  </p>
+                </div>
+                <FormControl>
+                  <input
+                    type="checkbox"
+                    checked={field.value}
+                    onChange={field.onChange}
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {isTaken && (
+            <FormField
+              control={form.control}
+              name="taken_date"
+              render={({ field }) => (
+                <FormItem className="mt-3">
+                  <FormLabel>Date</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
+                      onChange={(e) => {
+                        const date = e.target.value ? new Date(e.target.value).toISOString() : '';
+                        field.onChange(date);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+        </div>
 
         <div className="flex gap-2 justify-end">
           {onCancel && (

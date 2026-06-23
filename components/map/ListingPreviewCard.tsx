@@ -7,6 +7,14 @@ import { Listing } from "@/types/listing";
 import { Eye, ExternalLink } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import { TakenBadge } from "@/components/listings/TakenBadge";
+import { TakenTooltip } from "@/components/listings/TakenTooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ListingPreviewCardProps {
   listing: Listing;
@@ -54,9 +62,15 @@ export function ListingPreviewCard({ listing, onViewDetails }: ListingPreviewCar
   const statusColors = mounted ? getStatusColors(resolvedTheme) : STATUS_COLORS;
   const verdictStyles = mounted ? getVerdictStyles(resolvedTheme) : VERDICT_STYLES;
   const verdictStyle = verdict ? verdictStyles[verdict.status] : null;
+  const isTaken = listing.is_taken;
 
   return (
-    <div className="text-sm min-w-[180px] max-w-[260px]">
+    <TooltipProvider delayDuration={300}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className={`text-sm min-w-[180px] max-w-[260px] ${
+            isTaken ? "opacity-50" : ""
+          }`}>
       <div className="space-y-0.5">
         <h3
           className="font-semibold leading-tight text-[12px]"
@@ -81,6 +95,7 @@ export function ListingPreviewCard({ listing, onViewDetails }: ListingPreviewCar
           >
             {verdictStyle ? verdictStyle.label : listing.status.replace("_", " ")}
           </span>
+          {isTaken && <TakenBadge takenDate={listing.taken_date} />}
           {score !== null && (
             <span
               className={`text-[11px] font-semibold tabular-nums ${
@@ -121,6 +136,14 @@ export function ListingPreviewCard({ listing, onViewDetails }: ListingPreviewCar
           Source
         </a>
       </div>
-    </div>
+        </div>
+        </TooltipTrigger>
+        {isTaken && (
+          <TooltipContent>
+            <TakenTooltip takenDate={listing.taken_date} />
+          </TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
   );
 }

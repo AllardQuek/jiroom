@@ -106,6 +106,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     scoreMin: null,
     scoreMax: null,
     verdict: [],
+    hideTaken: false,
   });
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [showCreateListingDialog, setShowCreateListingDialog] = useState(false);
@@ -192,6 +193,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
 
   const filteredListings = listings.filter((l) => {
     if (!l.lat || !l.lng) return false;
+    if (filters.hideTaken && l.is_taken) return false;
     if (filters.status.length > 0 && !filters.status.includes(l.status))
       return false;
     if (filters.priceMin !== null && l.price < filters.priceMin) return false;

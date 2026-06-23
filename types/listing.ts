@@ -10,6 +10,8 @@ export interface Listing {
   lat?: number;
   lng?: number;
   googlePlaceId?: string;
+  is_taken?: boolean;
+  taken_date?: string;
   created_at: string;
   updated_at: string;
 }
