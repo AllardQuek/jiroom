@@ -87,23 +87,14 @@ export function ListingsPageInner() {
       setSeedMode(false);
       return;
     }
-    if (isAnyStoreEmpty()) {
-      loadSeedData();
-      window.location.reload();
-    } else {
-      setSeedMode(isSeedModeActive());
-    }
+    // Seed data loading is now handled in useStoreInitialization hook
+    setSeedMode(isSeedModeActive());
   }, []);
   const selectedListingIds = useComparisonStore(
     (state) => state.selectedListingIds
   );
   const getActiveTemplate = useAgentQuestionStore((state) => state.getActiveTemplate);
-  const initializeAgentQuestions = useAgentQuestionStore((state) => state.initializeTemplates);
   const getProfile = useTenantProfileStore((state) => state.getProfile);
-
-  useEffect(() => {
-    initializeAgentQuestions();
-  }, [initializeAgentQuestions]);
 
   useEffect(() => {
     if (pathname === "/listings") {

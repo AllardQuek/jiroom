@@ -21,14 +21,9 @@ export function ComparisonTable() {
   );
   const listings = useListingStore((s) => s.listings);
   const templates = useTemplateStore((s) => s.templates);
-  const initializeTemplates = useTemplateStore((s) => s.initializeTemplates);
   const evaluations = useEvaluationStore((s) => s.evaluations);
   const verdicts = useVerdictStore((s) => s.verdicts);
   const viewings = useViewingStore((s) => s.viewings);
-
-  useEffect(() => {
-    initializeTemplates();
-  }, [initializeTemplates]);
 
   const selectedListings = useMemo(
     () => listings.filter((l) => selectedListingIds.includes(l.id)),

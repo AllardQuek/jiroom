@@ -23,13 +23,6 @@ export function InlineEvaluation({
   listingPrice,
 }: InlineEvaluationProps) {
   const templates = useTemplateStore((state) => state.templates);
-  const initializeTemplates = useTemplateStore(
-    (state) => state.initializeTemplates
-  );
-
-  useEffect(() => {
-    initializeTemplates();
-  }, [initializeTemplates]);
 
   const template = templates[0];
 

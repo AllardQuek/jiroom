@@ -18,35 +18,56 @@ function stripSingapore(text: string): string {
 
 export function runMigrations(): void {
   if (typeof window === "undefined") return;
+  
+  // Check migration flag first to avoid unnecessary localStorage iteration
   if (localStorage.getItem(MIGRATION_FLAG)) return;
 
-  for (const storeKey of getStoreKeys()) {
-    const raw = localStorage.getItem(storeKey);
-    if (!raw) continue;
-    try {
-      const data = JSON.parse(raw);
-      const listings = data.state?.listings;
-      if (listings && Array.isArray(listings)) {
-        let changed = false;
-        for (const listing of listings) {
-          if (listing.title) {
-            const cleaned = stripSingapore(listing.title);
-            if (cleaned !== listing.title) {
-              listing.title = cleaned;
-              changed = true;
+  try {
+    const storeKeys = getStoreKeys();
+    let hasChanges = false;
+
+    for (const storeKey of storeKeys) {
+      const raw = localStorage.getItem(storeKey);
+      if (!raw) continue;
+      
+      try {
+        const data = JSON.parse(raw);
+        const listings = data.state?.listings;
+        
+        if (listings && Array.isArray(listings)) {
+          let storeChanged = false;
+          for (const listing of listings) {
+            if (listing.title) {
+              const cleaned = stripSingapore(listing.title);
+              if (cleaned !== listing.title) {
+                listing.title = cleaned;
+                storeChanged = true;
+                hasChanges = true;
+              }
             }
           }
+          
+          // Only write back if changes were made
+          if (storeChanged) {
+            localStorage.setItem(storeKey, JSON.stringify(data));
+          }
         }
-        if (changed) {
-          localStorage.setItem(storeKey, JSON.stringify(data));
+      } catch (parseError) {
+        // Skip unparseable stores - log in development
+        if (process.env.NODE_ENV === "development") {
+          console.warn(`Failed to parse store ${storeKey} during migration:`, parseError);
         }
       }
-    } catch {
-      // skip unparseable stores
     }
-  }
 
-  localStorage.setItem(MIGRATION_FLAG, "true");
+    // Only set flag if migration completed successfully
+    if (hasChanges || storeKeys.length > 0) {
+      localStorage.setItem(MIGRATION_FLAG, "true");
+    }
+  } catch (error) {
+    // If migration fails, log error but don't crash the app
+    console.error("Migration failed:", error);
+  }
 }
 
 export function cleanTitle(title: string): string {

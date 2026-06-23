@@ -52,14 +52,7 @@ export function CreateListingForm({
   const addEvaluation = useEvaluationStore((state) => state.addEvaluation);
   const addViewing = useViewingStore((state) => state.addViewing);
   const templates = useTemplateStore((state) => state.templates);
-  const initializeTemplates = useTemplateStore(
-    (state) => state.initializeTemplates
-  );
   const listings = useListingStore((state) => state.listings);
-
-  useEffect(() => {
-    initializeTemplates();
-  }, [initializeTemplates]);
 
   const template = templates[0];
 

@@ -28,17 +28,11 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
-  const initializeTemplates = useTemplateStore(
-    (state) => state.initializeTemplates
-  );
   const templates = useTemplateStore((state) => state.templates);
   const addTemplate = useTemplateStore((state) => state.addTemplate);
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
   const deleteTemplate = useTemplateStore((state) => state.deleteTemplate);
 
-  const initializeAgentQuestions = useAgentQuestionStore(
-    (state) => state.initializeTemplates
-  );
   const agentTemplates = useAgentQuestionStore((state) => state.templates);
   const addAgentTemplate = useAgentQuestionStore((state) => state.addTemplate);
   const updateAgentTemplate = useAgentQuestionStore((state) => state.updateTemplate);
@@ -58,11 +52,6 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
   const [editingAgentTemplateId, setEditingAgentTemplateId] = useState<string | null>(null);
   const [deletingAgentTemplateId, setDeletingAgentTemplateId] = useState<string | null>(null);
-
-  useEffect(() => {
-    initializeTemplates();
-    initializeAgentQuestions();
-  }, [initializeTemplates, initializeAgentQuestions]);
 
   const editingTemplate = templates.find((t) => t.id === editingTemplateId);
   const editingAgentTemplate = agentTemplates.find((t) => t.id === editingAgentTemplateId);

@@ -18,9 +18,6 @@ interface EvaluationSectionProps {
 
 export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   const templates = useTemplateStore((state) => state.templates);
-  const initializeTemplates = useTemplateStore(
-    (state) => state.initializeTemplates
-  );
   const listings = useListingStore((state) => state.listings);
   const evaluation = useEvaluationStore((state) =>
     state.getEvaluationByListingId(listingId)
@@ -32,10 +29,6 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   const deleteEvaluation = useEvaluationStore(
     (state) => state.deleteEvaluation
   );
-
-  useEffect(() => {
-    initializeTemplates();
-  }, [initializeTemplates]);
 
   const template = templates[0];
   const listing = listings.find((l) => l.id === listingId);
