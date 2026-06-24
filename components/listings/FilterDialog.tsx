@@ -69,7 +69,18 @@ export function FilterDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="area">Area</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="area">Area</Label>
+              {filters.areas.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => handleFilterChange("areas", [])}
+                  className="text-xs text-primary hover:underline"
+                >
+                  Clear selection
+                </button>
+              )}
+            </div>
             <select
               id="area"
               multiple
