@@ -13,7 +13,7 @@ import { DraggableListing } from "./DraggableListing";
 import { SortButton } from "./SortButton";
 import { DroppableColumn } from "./DroppableColumn";
 import { useListingDragDrop } from "./hooks/useListingDragDrop";
-import { Home } from "lucide-react";
+import { Home, ChevronDown } from "lucide-react";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import {
   DndContext,
@@ -110,10 +110,25 @@ export function ListingList({
     Record<string, SortConfig | null>
   >({});
   const [openSortCol, setOpenSortCol] = useState<string | null>(null);
+  const [expandedColumns, setExpandedColumns] = useState<
+    Record<string, boolean>
+  >({
+    to_view: true,
+    yes: true,
+    maybe: true,
+    no: true,
+  });
   const evaluations = useEvaluationStore((state) => state.evaluations);
   const templates = useTemplateStore((state) => state.templates);
 
   const template = templates[0];
+
+  const toggleColumn = (columnId: string) => {
+    setExpandedColumns((prev) => ({
+      ...prev,
+      [columnId]: !prev[columnId],
+    }));
+  };
 
   const { activeId, sensors, handleDragStart, handleDragEnd } = useListingDragDrop({
     updateListing,
@@ -359,6 +374,7 @@ export function ListingList({
                 key={col.id}
                 columnId={col.id}
                 dropData={col.dropData}
+                collapsed={!expandedColumns[col.id]}
                 className={
                   col.id === "to_view"
                     ? "relative after:content-[''] after:hidden after:lg:block after:absolute after:right-[-8px] after:top-0 after:w-px after:h-full after:bg-border/80"
@@ -369,6 +385,15 @@ export function ListingList({
                 <div className="lg:hidden px-3.5 pt-3.5 pb-2">
                   {col.id === "to_view" ? (
                     <div className="flex gap-1 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={() => toggleColumn(col.id)}
+                        className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60"
+                      >
+                        <ChevronDown 
+                          className={`w-4 h-4 transition-transform duration-300 ease-in-out ${expandedColumns[col.id] ? 'rotate-180' : ''}`} 
+                        />
+                      </button>
                       {(["all", "unscheduled", "scheduled"] as const).map(
                         (opt) => (
                           <button
@@ -405,7 +430,18 @@ export function ListingList({
                     </div>
                   ) : (
                     <div className="flex items-center justify-between gap-2">
-                      <h2 className="text-sm font-semibold">{col.title}</h2>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleColumn(col.id)}
+                          className="flex items-center justify-center rounded-md p-1 text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60 transition-colors"
+                        >
+                          <ChevronDown 
+                            className={`w-4 h-4 transition-transform duration-300 ease-in-out ${expandedColumns[col.id] ? 'rotate-180' : ''}`} 
+                          />
+                        </button>
+                        <h2 className="text-sm font-semibold">{col.title}</h2>
+                      </div>
                       <span className="flex items-center gap-1">
                         <SortButton
                           columnId={col.id}
@@ -422,22 +458,30 @@ export function ListingList({
                     </div>
                   )}
                 </div>
-                <div className="flex flex-1 flex-col gap-3 p-3 pt-2">
-                  {columnListings.length > 0 ? (
-                    columnListings.map((listing) => (
-                      <DraggableListing
-                        key={listing.id}
-                        listing={listing}
-                        compact={compact}
-                        compareMode={compareMode}
-                        onClick={onListingClick}
-                      />
-                    ))
-                  ) : (
-                    <div className="flex min-h-32 items-center justify-center rounded-lg border border-dashed border-border/80 bg-background/40 p-4 text-center text-xs text-muted-foreground/50">
-                      {col.id === "to_view" ? "No listings yet. Tap + to add your first listing" : "No viewed listings yet"}
-                    </div>
-                  )}
+                <div 
+                  className="overflow-hidden transition-all duration-300 ease-out"
+                  style={{
+                    maxHeight: expandedColumns[col.id] ? '2000px' : '0px',
+                    opacity: expandedColumns[col.id] ? '1' : '0'
+                  }}
+                >
+                  <div className="flex flex-1 flex-col gap-3 p-3 pt-2">
+                    {columnListings.length > 0 ? (
+                      columnListings.map((listing) => (
+                        <DraggableListing
+                          key={listing.id}
+                          listing={listing}
+                          compact={compact}
+                          compareMode={compareMode}
+                          onClick={onListingClick}
+                        />
+                      ))
+                    ) : (
+                      <div className="flex min-h-32 items-center justify-center rounded-lg border border-dashed border-border/80 bg-background/40 p-4 text-center text-xs text-muted-foreground/50">
+                        {col.id === "to_view" ? "No listings yet. Tap + to add your first listing" : "No viewed listings yet"}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </DroppableColumn>
             );

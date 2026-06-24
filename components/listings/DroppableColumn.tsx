@@ -8,6 +8,7 @@ interface DroppableColumnProps {
   className?: string;
   children: React.ReactNode;
   dropData?: any;
+  collapsed?: boolean;
 }
 
 /**
@@ -33,6 +34,7 @@ export function DroppableColumn({
   className,
   children,
   dropData,
+  collapsed,
 }: DroppableColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: `column-${columnId}`,
@@ -45,6 +47,7 @@ export function DroppableColumn({
       className={`flex min-h-[200px] lg:min-h-[560px] flex-col rounded-xl bg-muted/30 transition-colors ${className ?? ""} ${
         isOver ? "bg-primary/5 ring-2 ring-primary/30" : ""
       }`}
+      style={collapsed ? { minHeight: 'auto' } : undefined}
     >
       {children}
     </section>
