@@ -240,7 +240,7 @@ export function ListingsPageInner() {
           <h1 className="text-2xl font-bold">Listings</h1>
           <div className="flex items-center gap-2 mt-1">
             <p className="text-sm text-muted-foreground">
-              Track each room from first save to final decision.
+              JIRA for rental search. Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">?</kbd> for help.
             </p>
             {(backupStatus.type || copyStatus.type) && (
               <Badge
@@ -304,8 +304,8 @@ export function ListingsPageInner() {
           
           {/* Right side: Primary actions and utilities */}
           <div className="flex flex-wrap gap-2 items-center">
-            <Button onClick={() => setIsCreateDialogOpen(true)} size="sm" className="shrink-0">
-              <Plus className="mr-2 h-4 w-4 hidden sm:inline-block" />
+            <Button onClick={() => setIsCreateDialogOpen(true)} size="sm" className="shrink-0" style={{ backgroundColor: '#7e5be9', color: 'white' }}>
+              <Plus className="h-4 w-4 hidden sm:inline-block" />
               <span className="hidden sm:inline">Add listing</span>
               <Plus className="sm:hidden h-4 w-4" />
             </Button>

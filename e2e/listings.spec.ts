@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 test("page title and description are visible", async ({ page }) => {
   await expect(page.locator("h1").filter({ hasText: "Listings" })).toBeVisible();
   await expect(
-    page.getByText("Track each room from first save to final decision.")
+    page.getByText("JIRA for rental search. Press ? for help.")
   ).toBeVisible();
 });
 
