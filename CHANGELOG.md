@@ -5,6 +5,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2025-06-25
+
+### Added
+- **HelpDialog Getting Started**: 3-step quick start guide for first-time users
+- **HelpDialog Settings Section**: Comprehensive Settings Dialog documentation covering Evaluation Templates, Agent Questions, and Tenant Profile
+- **HelpDialog Pages Overview**: Table comparing all 4 pages with purposes and key features
+- **HelpDialog Scoring System**: Detailed scoring explanation with score range table and criterion types
+- **HelpDialog Keyboard Shortcuts**: Table showing `?` to toggle help dialog
+- **HelpDialog Data Management**: Export/import and sample data documentation
+- **README Quick Start**: Immediate value 3-step guide for new users
+- **README How It Works**: ASCII diagram showing rental search workflow
+- **README Feature Tables**: Restructured features with Core Features, Data Management, and Additional Features tables
+- **README Pages Overview**: Table comparing all 4 pages
+- **README Scoring System**: Score range table with meanings and criterion types explanation
+- **README Keyboard Shortcuts**: Table of available shortcuts
+- **Listings Keyboard Shortcut Tip**: Added "Press ? for help" tip on Listings page
+
+### Changed
+- **HelpDialog**: Complete rewrite with verified, accurate information and UX improvements
+  - Fixed inaccurate Settings/Template Editor references
+  - Corrected Anchors section (removed non-existent anchor list view)
+  - Applied visual hierarchy with bolding, bullet points, spacing
+  - Added concrete examples throughout
+  - Used action-oriented language
+- **README**: Comprehensive enhancement for better documentation
+  - Enhanced with tables for scannability
+  - Added diagrams for workflow visualization
+  - Better organization with clear hierarchy
+  - Removed outdated screenshots section
+- **Listings Branding**: Updated description to "JIRA for rental search" - concise and clear
+- **Add Listing Button**: Changed color to #7e5be9 (custom purple)
+- **Button Icon**: Removed redundant mr-2 (gap-2 handles spacing)
+
+### Fixed
+- **HelpDialog**: Corrected all feature descriptions to match actual app behavior
+- **HelpDialog**: Fixed inaccurate navigation references (Settings/Template pages redirect)
+- **E2E Test**: Updated to match new branding text
+
+### Removed
+- **README Version**: Removed version mention from README to reduce maintenance burden
+
+[2.0.0]: https://github.com/AllardQuek/rental-room-rater/releases/tag/v2.0.0
+[1.0.0]: https://github.com/AllardQuek/rental-room-rater/releases/tag/v1.0.0
+
 ## [1.0.0] - 2025-06-18
 
 ### Added

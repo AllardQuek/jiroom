@@ -2,8 +2,6 @@
 
 A mobile-first web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, track viewing statuses, and make final decisions through visual comparison tools.
 
-**Current Version: v1.0.0** - [View Release Notes](https://github.com/AllardQuek/rental-room-rater/releases/tag/v1.0.0)
-
 ## Quick Start
 
 1. **Add a listing**: Click "Add listing" on Listings page, paste URL from PropertyGuru/99.co
