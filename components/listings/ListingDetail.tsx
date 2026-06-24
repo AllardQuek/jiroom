@@ -2,6 +2,8 @@ import { Listing } from "@/types/listing";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Edit3, Trash2 } from "lucide-react";
+import { useEvaluationStore } from "@/store/evaluationStore";
+import { getDisplayPrice } from "@/lib/utils";
 
 interface ListingDetailProps {
   listing: Listing;
@@ -29,6 +31,11 @@ export function ListingDetail({
   const statusColor =
     statusColors[listing.status] || "bg-stone-100 text-stone-500";
   const statusLabel = statusLabels[listing.status] || listing.status;
+  const evaluation = useEvaluationStore((state) =>
+    state.getEvaluationByListingId(listing.id)
+  );
+  const displayPrice = getDisplayPrice(listing, evaluation);
+  const isNegotiated = listing.negotiated_price !== undefined;
 
   return (
     <div className="space-y-4">
@@ -50,8 +57,8 @@ export function ListingDetail({
       </div>
 
       <div className="flex items-baseline gap-1">
-        <span className="text-3xl font-bold tracking-tight text-primary">
-          ${listing.price.toLocaleString()}
+        <span className={`text-3xl font-bold tracking-tight ${isNegotiated ? "text-emerald-600" : "text-primary"}`}>
+          ${displayPrice.toLocaleString()}
         </span>
         <span className="text-sm text-muted-foreground">/month</span>
       </div>

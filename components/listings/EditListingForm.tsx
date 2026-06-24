@@ -60,6 +60,7 @@ export function EditListingForm({
       source_url: listing.source_url,
       title: listing.title,
       price: listing.price,
+      negotiated_price: listing.negotiated_price,
       area: listing.area,
       source_platform: listing.source_platform,
       status: listing.status,
@@ -138,7 +139,21 @@ export function EditListingForm({
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Price *</FormLabel>
+              <FormLabel>Initial Price *</FormLabel>
+              <FormControl>
+                <PriceInput field={field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="negotiated_price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Negotiated Price</FormLabel>
               <FormControl>
                 <PriceInput field={field} />
               </FormControl>

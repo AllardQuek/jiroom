@@ -17,6 +17,7 @@ export const listingSchema = z.object({
     .min(1, "Title is required")
     .min(3, "Title must be at least 3 characters"),
   price: z.number().positive("Price must be a positive number"),
+  negotiated_price: z.number().positive("Negotiated price must be a positive number").optional(),
   area: z.string().optional(),
   source_platform: z.string().optional(),
   status: z.enum(["new", "to_view", "viewed"]).default("new"),

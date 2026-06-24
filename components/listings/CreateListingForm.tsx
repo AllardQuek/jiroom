@@ -62,6 +62,7 @@ export function CreateListingForm({
       source_url: "",
       title: "",
       price: 0,
+      negotiated_price: undefined,
       area: "",
       source_platform: "",
       notes: "",
@@ -78,6 +79,11 @@ export function CreateListingForm({
   const priceValue = useWatch({
     control: form.control,
     name: "price",
+  });
+
+  const negotiatedPriceValue = useWatch({
+    control: form.control,
+    name: "negotiated_price",
   });
 
   const isDuplicateUrl = sourceUrl
@@ -303,7 +309,7 @@ export function CreateListingForm({
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monthly Price ($)</FormLabel>
+                    <FormLabel>Initial Price ($)</FormLabel>
                     <FormControl>
                       <PriceInput field={field} />
                     </FormControl>
@@ -312,6 +318,22 @@ export function CreateListingForm({
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="negotiated_price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Negotiated Price ($)</FormLabel>
+                    <FormControl>
+                      <PriceInput field={field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
               <FormField
                 control={form.control}
                 name="source_platform"
@@ -407,7 +429,7 @@ export function CreateListingForm({
                 responses={evalResponses}
                 onResponse={handleEvalResponse}
                 onClearResponse={handleEvalClear}
-                listingPrice={priceValue > 0 ? priceValue : undefined}
+                listingPrice={(negotiatedPriceValue ?? priceValue) > 0 ? (negotiatedPriceValue ?? priceValue) : undefined}
               />
             </div>
           </div>

@@ -6,6 +6,7 @@ import { Listing, Viewing } from "@/types/listing";
 import { Template, Criterion, Evaluation } from "@/types/evaluation";
 import { Verdict } from "@/types/verdict";
 import { ScoreResult } from "@/lib/utils/calculateScore";
+import { getDisplayPrice } from "@/lib/utils";
 import { SCORE_COLORS, ACCENT_COLORS, getScoreColors, getAccentColors } from "@/lib/constants/colors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -490,6 +491,8 @@ export function ComparisonMatrix({
         const responses = getResponses(listing.id);
         const value = responses[criterion.id];
         const answered = value !== undefined && value !== "";
+        const evaluation = evaluations.find((e) => e.listing_id === listing.id);
+        const displayPrice = getDisplayPrice(listing, evaluation);
 
         gridItems.push(
           <div
@@ -501,7 +504,7 @@ export function ComparisonMatrix({
             <CriterionValue
               criterion={criterion}
               value={value}
-              listingPrice={listing.price}
+              listingPrice={displayPrice}
               responses={responses}
               isMobile={isMobile}
             />

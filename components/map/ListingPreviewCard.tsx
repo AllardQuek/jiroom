@@ -2,6 +2,7 @@ import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
+import { getDisplayPrice } from "@/lib/utils";
 import { STATUS_COLORS, VERDICT_STYLES, getStatusColors, getVerdictStyles } from "@/lib/constants/colors";
 import { Listing } from "@/types/listing";
 import { Eye, ExternalLink } from "lucide-react";
@@ -52,9 +53,11 @@ export function ListingPreviewCard({ listing, onViewDetails }: ListingPreviewCar
   );
   const templates = useTemplateStore((state) => state.templates);
   const template = templates[0];
+  const displayPrice = getDisplayPrice(listing, evaluation);
+  const isNegotiated = listing.negotiated_price !== undefined;
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template)
+      ? calculateScore(evaluation.responses, template, displayPrice)
       : null;
   const verdict = useVerdictStore((s) =>
     s.verdicts.find((v) => v.listing_id === listing.id)
@@ -79,8 +82,8 @@ export function ListingPreviewCard({ listing, onViewDetails }: ListingPreviewCar
           {listing.title}
         </h3>
         <div className="flex items-center gap-2">
-          <span className="font-bold text-sm">
-            ${listing.price.toLocaleString()}
+          <span className={`font-bold text-sm ${isNegotiated ? "text-emerald-600" : ""}`}>
+            ${displayPrice.toLocaleString()}
           </span>
           <span
             className="px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider"

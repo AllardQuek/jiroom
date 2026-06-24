@@ -19,6 +19,11 @@ export interface ListingFilters {
   priceMax: number | null;
 }
 
+// Helper function to get the effective price for filtering/sorting
+export function getEffectivePrice(listing: { price: number; negotiated_price?: number }): number {
+  return listing.negotiated_price ?? listing.price;
+}
+
 interface FilterDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;

@@ -3,6 +3,7 @@
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
+import { getDisplayPrice } from "@/lib/utils";
 import { Listing } from "@/types/listing";
 
 interface MapTooltipProps {
@@ -17,9 +18,11 @@ export function MapTooltip({ listing, x, y }: MapTooltipProps) {
   );
   const templates = useTemplateStore((state) => state.templates);
   const template = templates[0];
+  const displayPrice = getDisplayPrice(listing, evaluation);
+  const isNegotiated = listing.negotiated_price !== undefined;
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template)
+      ? calculateScore(evaluation.responses, template, displayPrice)
       : null;
 
   return (
@@ -35,8 +38,8 @@ export function MapTooltip({ listing, x, y }: MapTooltipProps) {
         {listing.title}
       </div>
       <div className="flex items-baseline gap-1 mt-0.5">
-        <span className="font-bold text-base">
-          ${listing.price.toLocaleString()}
+        <span className={`font-bold text-base ${isNegotiated ? "text-emerald-600" : ""}`}>
+          ${displayPrice.toLocaleString()}
         </span>
         <span className="text-muted-foreground text-[10px]">/mo</span>
       </div>

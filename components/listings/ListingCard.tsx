@@ -25,6 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { calculateScore } from "@/lib/utils/calculateScore";
+import { getDisplayPrice } from "@/lib/utils";
 import { CommuteBadge } from "@/components/distance/CommuteBadge";
 
 interface ListingCardProps {
@@ -59,9 +60,13 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
   const totalCount = template?.criteria.length ?? 0;
   const completionPercent =
     totalCount > 0 ? Math.round((answeredCount / totalCount) * 100) : 0;
+
+  const displayPrice = getDisplayPrice(listing, evaluation);
+  const isNegotiated = listing.negotiated_price !== undefined;
+
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, listing.price)
+      ? calculateScore(evaluation.responses, template, displayPrice)
       : null;
 
   const handleClick = () => {
@@ -107,8 +112,8 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                     </>
                   )}
                   <span className="text-muted-foreground/30">·</span>
-                  <span className="font-semibold text-primary shrink-0">
-                    ${listing.price.toLocaleString()}
+                  <span className={`font-semibold shrink-0 ${isNegotiated ? "text-emerald-600" : "text-primary"}`}>
+                    ${displayPrice.toLocaleString()}
                   </span>
                   {score !== null && (
                     <>
@@ -206,8 +211,8 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
 
         <div className="flex items-center justify-between">
           <div className="flex items-baseline gap-1">
-            <span className="text-xl font-bold text-primary">
-              ${listing.price.toLocaleString()}
+            <span className={`text-xl font-bold ${isNegotiated ? "text-emerald-600" : "text-primary"}`}>
+              ${displayPrice.toLocaleString()}
             </span>
             <span className="text-xs text-muted-foreground">/mo</span>
           </div>

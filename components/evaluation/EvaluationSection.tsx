@@ -42,7 +42,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   }
 
   const responses = evaluation?.responses ?? {};
-  const listingPrice = listing?.price;
+  const listingPrice = listing?.negotiated_price ?? listing?.price;
   const score = evaluation ? calcScore(responses, template, listingPrice) : null;
 
   const answeredCount = template.criteria.filter((criterion) => {
@@ -61,9 +61,30 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
 
   const saveResponse = (criterionId: string, value: number | string) => {
     const now = new Date().toISOString();
+    
+    // Calculate derived total (c0) when saving cost fields (c2 or c4)
+    let updatedResponses: Record<string, number | string>;
+    if (criterionId === "c2" || criterionId === "c4") {
+      const utilityCost = criterionId === "c2" ? Number(value || 0) : Number(evaluation?.responses["c2"] || 0);
+      const additionalCost = criterionId === "c4" ? Number(value || 0) : Number(evaluation?.responses["c4"] || 0);
+      const totalCost = (listingPrice || 0) + utilityCost + additionalCost;
+      
+      if (evaluation) {
+        updatedResponses = { ...evaluation.responses, [criterionId]: value, c0: totalCost };
+      } else {
+        updatedResponses = { [criterionId]: value, c0: totalCost };
+      }
+    } else {
+      if (evaluation) {
+        updatedResponses = { ...evaluation.responses, [criterionId]: value };
+      } else {
+        updatedResponses = { [criterionId]: value };
+      }
+    }
+    
     if (evaluation) {
       updateEvaluation(evaluation.id, {
-        responses: { ...evaluation.responses, [criterionId]: value },
+        responses: updatedResponses,
         updated_at: now,
       });
       return;
@@ -72,7 +93,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
       id: crypto.randomUUID(),
       listing_id: listingId,
       template_id: template.id,
-      responses: { [criterionId]: value },
+      responses: updatedResponses,
       created_at: now,
       updated_at: now,
     };
@@ -83,6 +104,21 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
     if (!evaluation) return;
     const nextResponses = { ...evaluation.responses };
     delete nextResponses[criterionId];
+    
+    // Recalculate c0 when clearing cost fields (c2 or c4)
+    if (criterionId === "c2" || criterionId === "c4") {
+      const utilityCost = Number(evaluation.responses["c2"] || 0);
+      const additionalCost = Number(evaluation.responses["c4"] || 0);
+      const totalCost = (listingPrice || 0) + utilityCost + additionalCost;
+      
+      // Only include c0 if there are still costs
+      if (utilityCost > 0 || additionalCost > 0) {
+        nextResponses["c0"] = totalCost;
+      } else {
+        delete nextResponses["c0"];
+      }
+    }
+    
     if (Object.keys(nextResponses).length === 0) {
       deleteEvaluation(evaluation.id);
       return;

@@ -9,6 +9,7 @@ import { useVerdictStore } from "@/store/verdictStore";
 import { useViewingStore } from "@/store/viewingStore";
 import { ComparisonMatrix } from "./ComparisonMatrix";
 import { calculateScore } from "@/lib/utils/calculateScore";
+import { getDisplayPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { GitCompareArrows, X, LayoutList } from "lucide-react";
 import Link from "next/link";
@@ -36,7 +37,8 @@ export function ComparisonTable() {
     const evaluation = evaluations.find((e) => e.listing_id === listingId);
     const listing = listings.find((l) => l.id === listingId);
     if (!evaluation || !template) return null;
-    return calculateScore(evaluation.responses, template, listing?.price);
+    const displayPrice = listing ? getDisplayPrice(listing, evaluation) : undefined;
+    return calculateScore(evaluation.responses, template, displayPrice);
   };
 
   const scores = useMemo(

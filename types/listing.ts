@@ -4,6 +4,7 @@ export interface Listing {
   source_platform: string;
   title: string;
   price: number;
+  negotiated_price?: number;
   area: string;
   status: "new" | "to_view" | "viewed";
   notes?: string; // listing-level notes

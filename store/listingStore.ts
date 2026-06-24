@@ -51,7 +51,7 @@ export const useListingStore = create<ListingState>()(
     {
       name: "listing-storage",
       storage: createJSONStorage(() => localStorage),
-      version: 3,
+      version: 4,
       migrate: (persisted: unknown, version: number) => {
         const state = persisted as {
           listings?: Array<Record<string, unknown>>;
@@ -74,6 +74,7 @@ export const useListingStore = create<ListingState>()(
             taken_date: (l.taken_date as string) || undefined,
           }));
         }
+        // Version 4: Added negotiated_price field (optional, no migration needed)
         return state as unknown as Partial<ListingState>;
       },
     }

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Listing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
 import { calculateScore } from "@/lib/utils/calculateScore";
+import { getDisplayPrice } from "@/lib/utils";
 
 type SortField = "price" | "score" | "name" | "date" | "area" | "created_date" | "modified_date";
 type SortDir = "asc" | "desc";
@@ -95,7 +96,11 @@ function compareListings(
 ): number {
   switch (config.by) {
     case "price":
-      return a.price - b.price;
+      const evalA = evaluations.find((e) => e.listing_id === a.id);
+      const evalB = evaluations.find((e) => e.listing_id === b.id);
+      const priceA = getDisplayPrice(a, evalA);
+      const priceB = getDisplayPrice(b, evalB);
+      return priceA - priceB;
     case "name":
       return a.title.localeCompare(b.title);
     case "date":
@@ -109,8 +114,10 @@ function compareListings(
     case "score": {
       const evalA = evaluations.find((e) => e.listing_id === a.id);
       const evalB = evaluations.find((e) => e.listing_id === b.id);
-      const scoreA = evalA && template ? calculateScore(evalA.responses, template) : null;
-      const scoreB = evalB && template ? calculateScore(evalB.responses, template) : null;
+      const priceA = getDisplayPrice(a, evalA);
+      const priceB = getDisplayPrice(b, evalB);
+      const scoreA = evalA && template ? calculateScore(evalA.responses, template, priceA) : null;
+      const scoreB = evalB && template ? calculateScore(evalB.responses, template, priceB) : null;
       const netA = scoreA?.net ?? 0;
       const netB = scoreB?.net ?? 0;
       return netA - netB;
