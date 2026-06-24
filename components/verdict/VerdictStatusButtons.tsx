@@ -14,9 +14,9 @@ const statusLabels: Record<string, string> = {
 };
 
 const statusColors: Record<string, string> = {
-  yes: "bg-green-500 hover:bg-green-600",
-  maybe: "bg-yellow-500 hover:bg-yellow-600",
-  no: "bg-red-500 hover:bg-red-600",
+  yes: "bg-emerald-700 text-white border-emerald-800 hover:bg-emerald-800",
+  maybe: "bg-amber-700 text-white border-amber-800 hover:bg-amber-800",
+  no: "bg-red-700 text-white border-red-800 hover:bg-red-800",
 };
 
 export function VerdictStatusButtons({
@@ -35,9 +35,9 @@ export function VerdictStatusButtons({
         <Button
           key={status}
           size="sm"
-          variant={currentStatus === status ? "default" : "outline"}
+          variant="outline"
           className={
-            currentStatus === status ? statusColors[status] : "border-gray-300"
+            currentStatus === status ? statusColors[status] : "border-border text-foreground hover:bg-muted"
           }
           onClick={() => onStatusChange(status)}
         >

@@ -88,10 +88,6 @@ export function VerdictSection({
 
       {isExpanded && (
         <div className="space-y-3">
-          <Badge variant="outline" className={statusColors[verdict.status]}>
-            {statusLabels[verdict.status]}
-          </Badge>
-
           <ScoreDisplay listingId={listingId} />
 
           <VerdictStatusButtons

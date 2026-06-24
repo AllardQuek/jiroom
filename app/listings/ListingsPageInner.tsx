@@ -245,7 +245,7 @@ export function ListingsPageInner() {
             {(backupStatus.type || copyStatus.type) && (
               <Badge
                 variant={(backupStatus.type === "success" || copyStatus.type === "success") ? "default" : "destructive"}
-                className={`text-xs animate-in fade-in slide-in-from-left-2 duration-300 ${(backupStatus.type === "success" || copyStatus.type === "success") ? "bg-[var(--success)] hover:bg-[var(--success)]/80" : ""}`}
+                className={`text-xs animate-in fade-in slide-in-from-left-2 duration-300 ${(backupStatus.type === "success" || copyStatus.type === "success") ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-red-600 text-white hover:bg-red-700"}`}
               >
                 {(backupStatus.type === "success" || copyStatus.type === "success") ? (
                   <Check className="w-3 h-3 mr-1" />

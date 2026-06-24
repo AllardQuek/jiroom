@@ -212,7 +212,7 @@ export function InlineEvaluation({
                   key={criterion.id}
                   className="group flex items-start gap-3 rounded-lg px-3 py-1.5 transition-colors hover:bg-muted/30"
                 >
-                  <div className="mt-1 shrink-0 w-3">
+                  <div className="self-center shrink-0 w-3">
                     {answered && <Check className="h-3 w-3 text-emerald-500" />}
                   </div>
                   <div className="min-w-0 flex-1">
