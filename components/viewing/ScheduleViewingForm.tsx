@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Viewing } from "@/types/listing";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import {
   Select,
   SelectContent,
@@ -52,8 +53,8 @@ export function ScheduleViewingForm({
 }: ScheduleViewingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const initial = parseExistingDate(viewing?.scheduled_date);
-  const [selectedDate, setSelectedDate] = useState<string>(
-    viewing?.scheduled_date ? viewing.scheduled_date.split('T')[0] : ""
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(
+    viewing?.scheduled_date
   );
   const [hour, setHour] = useState(initial.hour);
   const [minute, setMinute] = useState(initial.minute);
@@ -64,10 +65,12 @@ export function ScheduleViewingForm({
     try {
       let scheduled_date: string | undefined;
       if (selectedDate) {
+        const date = new Date(selectedDate);
         let hour24 = parseInt(hour);
         if (ampm === "PM" && hour24 !== 12) hour24 += 12;
         if (ampm === "AM" && hour24 === 12) hour24 = 0;
-        scheduled_date = `${selectedDate}T${String(hour24).padStart(2, "0")}:${minute}:00`;
+        date.setHours(hour24, parseInt(minute), 0, 0);
+        scheduled_date = date.toISOString();
       }
       onSubmit({ listing_id: listingId, scheduled_date });
     } finally {
@@ -96,11 +99,10 @@ export function ScheduleViewingForm({
               <label className="text-xs font-medium text-muted-foreground">
                 Date
               </label>
-              <input
-                type="date"
+              <DatePicker
                 value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                onChange={setSelectedDate}
+                placeholder="Select date"
               />
             </div>
 

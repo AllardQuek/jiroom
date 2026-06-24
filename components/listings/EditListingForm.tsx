@@ -12,6 +12,8 @@ import { Listing } from "@/types/listing";
 import { normalizeUrl } from "@/lib/utils/url";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { DatePicker } from "@/components/ui/date-picker";
 import { MapPin, XCircle } from "lucide-react";
 import {
   Form,
@@ -251,14 +253,14 @@ export function EditListingForm({
           )}
         />
 
-        <div className="border-t pt-4 mt-4">
+        <div className="mt-4">
           <FormField
             control={form.control}
             name="is_taken"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
+              <FormItem className="flex flex-row items-center justify-between py-2">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base flex items-center gap-2">
+                  <FormLabel className="text-base flex items-center gap-2 cursor-pointer">
                     <XCircle size={16} className="text-muted-foreground" />
                     Mark as taken
                   </FormLabel>
@@ -267,11 +269,9 @@ export function EditListingForm({
                   </p>
                 </div>
                 <FormControl>
-                  <input
-                    type="checkbox"
+                  <Switch
                     checked={field.value}
-                    onChange={field.onChange}
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    onCheckedChange={field.onChange}
                   />
                 </FormControl>
               </FormItem>
@@ -283,16 +283,13 @@ export function EditListingForm({
               control={form.control}
               name="taken_date"
               render={({ field }) => (
-                <FormItem className="mt-3">
+                <FormItem>
                   <FormLabel>Date</FormLabel>
                   <FormControl>
-                    <Input
-                      type="date"
-                      value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
-                      onChange={(e) => {
-                        const date = e.target.value ? new Date(e.target.value).toISOString() : '';
-                        field.onChange(date);
-                      }}
+                    <DatePicker
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Select date taken"
                     />
                   </FormControl>
                   <FormMessage />
