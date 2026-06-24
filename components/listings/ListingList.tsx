@@ -19,6 +19,7 @@ import {
   DndContext,
   DragOverlay,
 } from "@dnd-kit/core";
+import type { ListingFilters } from "./FilterDialog";
 
 type ListingStatus = Listing["status"];
 
@@ -73,6 +74,7 @@ interface ListingListProps {
   onListingClick?: (id: string) => void;
   compact?: boolean;
   compareMode?: boolean;
+  filters?: ListingFilters;
 }
 
 const SORT_OPTIONS = [
@@ -93,6 +95,7 @@ export function ListingList({
   onListingClick,
   compact,
   compareMode,
+  filters,
 }: ListingListProps) {
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
@@ -103,7 +106,6 @@ export function ListingList({
   const [toViewFilter, setToViewFilter] = useState<
     "all" | "unscheduled" | "scheduled"
   >("all");
-  const [hideTaken, setHideTaken] = useState(false);
   const [sortConfigs, setSortConfigs] = useState<
     Record<string, SortConfig | null>
   >({});
@@ -200,7 +202,14 @@ export function ListingList({
   const getVerdict = (listingId: string) =>
     verdicts.find((v) => v.listing_id === listingId);
 
-  const filteredListings = listings.filter((l) => !hideTaken || !l.is_taken);
+  const filteredListings = listings.filter((l) => {
+    if (!filters) return true;
+    if (filters.hideTaken && l.is_taken) return false;
+    if (filters.areas.length > 0 && (!l.area || !filters.areas.includes(l.area))) return false;
+    if (filters.priceMin !== null && l.price < filters.priceMin) return false;
+    if (filters.priceMax !== null && l.price > filters.priceMax) return false;
+    return true;
+  });
 
   return (
     <DndContext
@@ -209,19 +218,6 @@ export function ListingList({
       onDragEnd={handleDragEnd}
     >
       <div className="space-y-6 pb-24">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
-              <input
-                type="checkbox"
-                checked={hideTaken}
-                onChange={(e) => setHideTaken(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-              />
-              <span>Hide taken listings</span>
-            </label>
-          </div>
-        </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
           {/* Group header row */}
           <div className="hidden lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/80">

@@ -250,7 +250,7 @@ export function MapFilters({
           <CommuteFilter />
 
           <div className="border-t border-border/30 pt-3">
-            <span className="text-xs font-semibold">Anchors</span>
+            <span className="text-xs font-semibold">Display</span>
             <div className="flex items-center gap-2 mt-1.5">
               <button
                 onClick={() =>
@@ -267,12 +267,6 @@ export function MapFilters({
               >
                 Show anchors
               </button>
-            </div>
-          </div>
-
-          <div className="border-t border-border/30 pt-3">
-            <span className="text-xs font-semibold">Taken Listings</span>
-            <div className="flex items-center gap-2 mt-1.5">
               <button
                 onClick={() =>
                   onFiltersChange({

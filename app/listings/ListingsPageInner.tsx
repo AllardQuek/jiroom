@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings, MessageSquare, User, Check, X, MoreVertical } from "lucide-react";
+import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings, MessageSquare, User, Check, X, MoreVertical, Filter } from "lucide-react";
 import {
   Tooltip,
   TooltipTrigger,
@@ -18,11 +18,14 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import { ListingList } from "@/components/listings/ListingList";
+import { FilterDialog } from "@/components/listings/FilterDialog";
+import type { ListingFilters } from "@/components/listings/FilterDialog";
 import { ListingDetailModal } from "@/components/listings/ListingDetailModal";
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
 import { useComparisonStore } from "@/store/comparisonStore";
 import { useAgentQuestionStore } from "@/store/agentQuestionStore";
 import { useTenantProfileStore } from "@/store/tenantProfileStore";
+import { useListingStore } from "@/store/listingStore";
 import { SettingsDialog } from "@/components/settings/SettingsDialog";
 import {
   exportAllData,
@@ -55,6 +58,14 @@ export function ListingsPageInner() {
     message: string;
   }>({ type: null, message: "" });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const listings = useListingStore((state) => state.listings);
+  const [filters, setFilters] = useState<ListingFilters>({
+    hideTaken: false,
+    areas: [],
+    priceMin: null,
+    priceMax: null,
+  });
   const router = useRouter();
   const pathname = usePathname();
 
@@ -255,6 +266,14 @@ export function ListingsPageInner() {
                 Compare ({selectedListingIds.length})
               </Button>
             )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon" onClick={() => setFilterOpen(true)} className="shrink-0">
+                  <Filter className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Filter listings</TooltipContent>
+            </Tooltip>
             {!compareMode && (
               <Button
                 variant="outline"
@@ -428,8 +447,21 @@ export function ListingsPageInner() {
       </div>
 
       <div className="mt-6">
-        <ListingList compact={compact} compareMode={compareMode} onListingClick={(id) => setSelectedListingId(id)} />
+        <ListingList 
+          compact={compact} 
+          compareMode={compareMode} 
+          onListingClick={(id) => setSelectedListingId(id)}
+          filters={filters}
+        />
       </div>
+
+      <FilterDialog
+        open={filterOpen}
+        onOpenChange={setFilterOpen}
+        filters={filters}
+        onFiltersChange={setFilters}
+        areas={Array.from(new Set(listings.map((l: any) => l.area).filter(Boolean)))}
+      />
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="max-w-lg max-h-[90dvh] overflow-y-auto">
