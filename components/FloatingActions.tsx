@@ -7,7 +7,7 @@ import HelpDialog from "@/components/HelpDialog";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const GITHUB_ISSUES_URL =
-  "https://github.com/AllardQuek/rental-room-rater/issues/new";
+  "https://github.com/AllardQuek/jiroom/issues/new";
 
 export default function FloatingActions() {
   const [helpOpen, setHelpOpen] = useState(false);

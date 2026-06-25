@@ -21,15 +21,15 @@ export default function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
         </DialogHeader>
 
         <div className="space-y-6 text-sm">
-          <Section title="What is Room Rater?">
+          <Section title="What is JIRoom?">
             <p>
               <a
-                href="https://github.com/AllardQuek/rental-room-rater"
+                href="https://github.com/AllardQuek/jiroom"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline underline-offset-2 hover:text-foreground transition-colors"
               >
-                Room Rater
+                JIRoom
               </a>
               {" "}keeps your rental search organised in one place — no more
               juggling browser tabs, spreadsheet notes, and forgotten links.

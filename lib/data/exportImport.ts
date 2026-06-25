@@ -48,7 +48,7 @@ export function downloadData(exportData: ExportData): void {
   const year = localDate.getFullYear();
   const month = String(localDate.getMonth() + 1).padStart(2, '0');
   const day = String(localDate.getDate()).padStart(2, '0');
-  a.download = `rental-room-rater-backup-${year}-${month}-${day}.json`;
+  a.download = `jiroom-backup-${year}-${month}-${day}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

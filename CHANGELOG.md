@@ -46,8 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - **README Version**: Removed version mention from README to reduce maintenance burden
 
-[2.0.0]: https://github.com/AllardQuek/rental-room-rater/releases/tag/v2.0.0
-[1.0.0]: https://github.com/AllardQuek/rental-room-rater/releases/tag/v1.0.0
+[2.0.0]: https://github.com/AllardQuek/jiroom/releases/tag/v2.0.0
+[1.0.0]: https://github.com/AllardQuek/jiroom/releases/tag/v1.0.0
 
 ## [1.0.0] - 2025-06-18
 
@@ -82,4 +82,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-user collaboration and cloud sync are planned for future iterations
 - Suitable for personal rental property hunting and comparison workflows
 
-[1.0.0]: https://github.com/AllardQuek/rental-room-rater/releases/tag/v1.0.0
+[1.0.0]: https://github.com/AllardQuek/jiroom/releases/tag/v1.0.0

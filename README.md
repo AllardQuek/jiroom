@@ -1,4 +1,4 @@
-# Rental Room Rater
+# JIRoom
 
 A mobile-first web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, track viewing statuses, and make final decisions through visual comparison tools.
 
@@ -24,7 +24,7 @@ Discovery → Evaluation → Decision
 
 **Your Rental Search Workflow:**
 
-1. **Discover** → Find rooms on PropertyGuru/99.co, paste URLs into Room Rater
+1. **Discover** → Find rooms on PropertyGuru/99.co, paste URLs into JIRoom
 2. **Evaluate** → Fill evaluation criteria during/after viewings, scores calculate automatically
 3. **Schedule** → Set viewing dates, track upcoming appointments
 4. **Compare** → Side-by-side comparison of top candidates
@@ -115,8 +115,8 @@ Each scorable criterion contributes +1 (good), 0 (neutral), or -1 (bad). The net
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/AllardQuek/rental-room-rater.git
-cd rental-room-rater
+git clone https://github.com/AllardQuek/jiroom.git
+cd jiroom
 ```
 
 2. Install dependencies:
@@ -238,7 +238,7 @@ All data is stored locally in your browser using localStorage via Zustand middle
 
 ## Releases
 
-See [CHANGELOG.md](https://github.com/AllardQuek/rental-room-rater/blob/main/CHANGELOG.md) for detailed release notes and change history.
+See [CHANGELOG.md](https://github.com/AllardQuek/jiroom/blob/main/CHANGELOG.md) for detailed release notes and change history.
 
 ## License
 
