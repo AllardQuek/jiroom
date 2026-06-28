@@ -1,17 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { FormControl } from "@/components/ui/form"
 
 interface DatePickerProps {
   value?: string
@@ -26,45 +16,39 @@ export function DatePicker({
   placeholder = "Pick a date",
   className,
 }: DatePickerProps) {
-  const [open, setOpen] = React.useState(false)
+  // Convert ISO string to YYYY-MM-DD format for date input
+  const formatDateForInput = (isoString?: string): string => {
+    if (!isoString) return ""
+    const date = new Date(isoString)
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const day = String(date.getDate()).padStart(2, "0")
+    return `${year}-${month}-${day}`
+  }
 
-  // Parse ISO string to Date object
-  const date = value ? new Date(value) : undefined
-
-  const handleSelect = (selectedDate: Date | undefined) => {
-    if (selectedDate) {
-      // Convert to ISO string
-      onChange(selectedDate.toISOString())
-    } else {
+  // Convert YYYY-MM-DD from date input back to ISO string
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value
+    if (!inputValue) {
       onChange(undefined)
+      return
     }
-    setOpen(false)
+    
+    // Parse YYYY-MM-DD and create ISO string at midnight
+    const [year, month, day] = inputValue.split("-").map(Number)
+    const date = new Date(year, month - 1, day)
+    onChange(date.toISOString())
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <FormControl>
-          <Button
-            variant="outline"
-            className={cn(
-              "w-full pl-3 text-left font-normal h-10",
-              !date && "text-muted-foreground",
-              className
-            )}
-          >
-            {date ? format(date, "PPP") : <span>{placeholder}</span>}
-            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-          </Button>
-        </FormControl>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={handleSelect}
-        />
-      </PopoverContent>
-    </Popover>
+    <input
+      type="date"
+      value={formatDateForInput(value)}
+      onChange={handleDateChange}
+      className={cn(
+        "w-full h-10 px-3 py-2 text-sm border border-input rounded-md bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+    />
   )
 }
