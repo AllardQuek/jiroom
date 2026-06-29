@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
+import { usePathname } from 'next/navigation';
 import {
   LayoutList,
   GitCompareArrows,
@@ -11,12 +12,13 @@ import {
 
 export default function Navigation() {
   const pathname = usePathname();
+  const t = useTranslations('navigation');
 
   const tabs = [
-    { name: "Listings", href: "/listings", icon: LayoutList },
-    { name: "Map", href: "/map", icon: Map },
-    { name: "Compare", href: "/compare", icon: GitCompareArrows },
-    { name: "Schedule", href: "/schedule", icon: CalendarDays },
+    { name: t('listings'), href: "/listings", icon: LayoutList },
+    { name: t('map'), href: "/map", icon: Map },
+    { name: t('compare'), href: "/compare", icon: GitCompareArrows },
+    { name: t('schedule'), href: "/schedule", icon: CalendarDays },
   ];
 
   return (

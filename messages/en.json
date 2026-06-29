@@ -1,0 +1,291 @@
+{
+  "common": {
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "done": "Done",
+    "copy": "Copy",
+    "copied": "Copied!"
+  },
+  "navigation": {
+    "listings": "Listings",
+    "map": "Map",
+    "compare": "Compare",
+    "schedule": "Schedule"
+  },
+  "listings": {
+    "title": "Listings",
+    "addListing": "Add listing",
+    "addColumn": {
+      "toView": "To View",
+      "yes": "Yes",
+      "maybe": "Maybe",
+      "no": "No"
+    },
+    "filter": {
+      "title": "Filter Listings",
+      "area": "Area",
+      "priceRange": "Price Range",
+      "minPrice": "Min Price",
+      "maxPrice": "Max Price",
+      "minScore": "Min Score",
+      "hideTaken": "Hide taken listings",
+      "apply": "Apply Filters",
+      "reset": "Reset"
+    },
+    "sort": {
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low",
+      "scoreDesc": "Score: High to Low",
+      "scoreAsc": "Score: Low to High",
+      "dateDesc": "Date: Newest",
+      "dateAsc": "Date: Oldest",
+      "nameAsc": "Name: A-Z",
+      "nameDesc": "Name: Z-A"
+    },
+    "card": {
+      "viewDetails": "View details",
+      "scheduleViewing": "Schedule viewing",
+      "evaluate": "Evaluate",
+      "taken": "Taken"
+    },
+    "form": {
+      "addTitle": "Add Listing",
+      "editTitle": "Edit Listing",
+      "url": "Listing URL",
+      "urlPlaceholder": "Paste PropertyGuru or 99.co URL",
+      "name": "Listing Name",
+      "namePlaceholder": "e.g., HDB in Tampines",
+      "price": "Monthly Rent",
+      "pricePlaceholder": "e.g., 1500",
+      "area": "Area",
+      "areaPlaceholder": "e.g., Tampines",
+      "address": "Address",
+      "addressPlaceholder": "Full address",
+      "submit": "Save Listing",
+      "cancel": "Cancel"
+    },
+    "delete": {
+      "title": "Delete Listing",
+      "confirm": "Are you sure you want to delete this listing?",
+      "cannotUndo": "This action cannot be undone."
+    }
+  },
+  "evaluation": {
+    "title": "Evaluation",
+    "score": "Score",
+    "criteria": "Criteria",
+    "response": "Response",
+    "notAnswered": "Not answered",
+    "scoreRanges": {
+      "great": "Great - Excellent fit",
+      "good": "Good - Strong contender",
+      "neutral": "Neutral - Mixed pros/cons",
+      "belowAverage": "Below average - Major concerns",
+      "poor": "Poor - Deal-breakers"
+    }
+  },
+  "map": {
+    "title": "Map",
+    "searchPlaceholder": "Search location...",
+    "addListing": "Add Listing",
+    "addAnchor": "Add Anchor",
+    "commute": {
+      "title": "Commute",
+      "driving": "Driving",
+      "transit": "Transit",
+      "walking": "Walking",
+      "biking": "Biking"
+    },
+    "anchor": {
+      "title": "Anchors",
+      "add": "Add Anchor",
+      "name": "Name",
+      "type": "Type",
+      "types": {
+        "home": "Home",
+        "work": "Work",
+        "school": "School",
+        "mrt": "MRT Station",
+        "other": "Other"
+      }
+    }
+  },
+  "compare": {
+    "title": "Compare",
+    "selectListings": "Select up to 3 listings to compare",
+    "noSelection": "Select listings from the Listings page to compare",
+    "highestScore": "Highest Score"
+  },
+  "schedule": {
+    "title": "Schedule",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "noViewings": "No viewings scheduled",
+    "viewingDetails": "Viewing Details"
+  },
+  "settings": {
+    "title": "Settings",
+    "evaluationTemplate": {
+      "title": "Evaluation Template",
+      "customize": "Customize Criteria",
+      "addCriterion": "Add Criterion",
+      "category": "Category",
+      "categories": {
+        "cost": "Cost",
+        "room": "Room",
+        "bathroom": "Bathroom",
+        "kitchen": "Kitchen",
+        "location": "Location",
+        "building": "Building",
+        "other": "Other"
+      },
+      "type": "Type",
+      "types": {
+        "checkbox": "Checkbox",
+        "rating": "Rating 1-5",
+        "number": "Number",
+        "select": "Select",
+        "text": "Text",
+        "derived": "Derived"
+      }
+    },
+    "agentQuestions": {
+      "title": "Agent Questions",
+      "addQuestion": "Add Question",
+      "copy": "Copy to Clipboard"
+    },
+    "tenantProfile": {
+      "title": "Tenant Profile",
+      "name": "Name",
+      "occupation": "Occupation",
+      "budget": "Budget",
+      "moveInDate": "Move-in Date",
+      "leaseDuration": "Lease Duration",
+      "copy": "Copy to Clipboard"
+    },
+    "data": {
+      "title": "Data Management",
+      "export": "Export Data",
+      "import": "Import Data",
+      "loadSample": "Load Sample Data",
+      "clearAll": "Clear All Data"
+    }
+  },
+  "help": {
+    "title": "Help & Guide",
+    "whatIsJIRoom": "What is JIRoom?",
+    "whatIsJIRoomDescription": "JIRoom keeps your rental search organised in one place — no more juggling browser tabs, spreadsheet notes, and forgotten links. Track listings from any portal, evaluate them consistently, schedule viewings, compare options side-by-side, and judge locations by commute times to the places that matter.",
+    "privacy": "Everything stays in your browser. No sign-up, no server, no ads.",
+    "gettingStarted": "Getting Started",
+    "quickStart": "Quick Start (3 steps)",
+    "step1": "Add a listing: Click \"Add listing\" on Listings page, paste URL from PropertyGuru/99.co",
+    "step2": "Evaluate: Click listing card, fill evaluation criteria, see score calculate automatically",
+    "step3": "Decide: Set verdict (Yes/Maybe/No) to move to decision columns",
+    "tip": "Tip: Use the sample data (flask icon 🧪) to explore features before adding your own listings.",
+    "pages": "Pages",
+    "listingsPage": {
+      "title": "Listings — Your main workspace",
+      "columns": "Columns: To View (new listings), Yes/Maybe/No (your decisions after viewing)",
+      "actions": "Actions: Drag cards between columns, click card to evaluate/schedule/notes",
+      "tools": "Tools: Filter by area/price/score, Sort by price/score/date, Toggle compact view",
+      "compare": "Compare: Check boxes to select up to 3 listings, then click \"Compare\""
+    },
+    "mapPage": {
+      "title": "Map — Visual location view",
+      "markers": "Markers: All listings shown as pins, color-coded by status or area",
+      "commute": "Commute: Click a listing to see travel times to your anchors",
+      "addFromMap": "Add from map: Search any location → click \"Listing\" or \"Anchor\" button",
+      "filter": "Filter: Toggle marker colors, change travel mode (driving/transit/walking/biking)"
+    },
+    "comparePage": {
+      "title": "Compare — Side-by-side evaluation",
+      "select": "Select up to 3 listings via checkboxes on Listings page",
+      "view": "View key criteria, scores, and verdicts side-by-side",
+      "highlight": "Top-scored listing highlighted with badge"
+    },
+    "schedulePage": {
+      "title": "Schedule — Your viewing timeline",
+      "grouped": "Upcoming and past viewings grouped by day",
+      "click": "Click any entry to see full listing details",
+      "scheduleDirectly": "Schedule/reschedule directly from listing cards"
+    },
+    "settingsDialog": {
+      "title": "Settings Dialog",
+      "access": "Access: Settings icon (⚙️) on Listings page toolbar",
+      "evaluationTemplates": {
+        "title": "Evaluation Templates",
+        "customize": "Customize criteria for scoring listings",
+        "addRemove": "Add/remove/reorder criteria by category (Cost, Room, Bathroom, etc.)",
+        "types": "Criterion types: checkbox, rating 1-5, number with thresholds, select dropdown, text notes",
+        "example": "Example: Add \"Has aircon\" as checkbox → +1 if yes, -1 if no"
+      },
+      "agentQuestions": {
+        "title": "Agent Questions",
+        "create": "Create question templates to send property agents",
+        "example": "Example: \"Visitors allowed?\", \"Aircon hours?\", \"Current tenants?\"",
+        "copy": "Copy to clipboard for easy sharing via WhatsApp/email"
+      },
+      "tenantProfile": {
+        "title": "Tenant Profile",
+        "store": "Store your details to share with agents",
+        "fields": "Fields: name, occupation, budget, move-in date, lease duration, etc.",
+        "copy": "Copy to clipboard for quick sharing"
+      }
+    },
+    "scoring": {
+      "title": "Scoring",
+      "howItWorks": "How it works",
+      "contribution": "Each answered criterion contributes +1 (good), 0 (neutral), or -1 (bad)",
+      "netScore": "Net score = total good points - total bad points",
+      "textFields": "Text fields and unanswered questions don't affect score",
+      "scoreRanges": "Score ranges"
+    },
+    "anchors": {
+      "title": "Anchors",
+      "whatAre": "What are anchors?",
+      "description": "Your important locations: home, work, school, MRT stations. Set them once to evaluate commute times for all listings.",
+      "howToAdd": "How to add anchors",
+      "step1": "Go to Map page",
+      "step2": "Search a location (e.g., \"Raffles Place MRT\")",
+      "step3": "Click the purple \"Anchor\" button that appears",
+      "step4": "Give it a name and type (e.g., \"Office\" → \"work\")",
+      "manage": "Manage anchors",
+      "click": "Click \"Anchors\" button (top-right of Map page) to view/edit/delete",
+      "markers": "Diamond markers on map show your anchor locations"
+    },
+    "dataManagement": {
+      "title": "Data Management",
+      "yourControl": "Your data, your control",
+      "stored": "All data stored in your browser (no server, no sign-up)",
+      "private": "Private and local - nothing leaves your device",
+      "backup": "Backup & transfer",
+      "export": "Export: Download button on Listings page → saves all data as JSON file",
+      "import": "Import: Upload button → restore from backup or transfer between devices",
+      "tryIt": "Try it out",
+      "click": "Click flask icon (🧪) on Listings page to load sample data",
+      "explore": "Explore all features with demo listings",
+      "switch": "Switch back to your data anytime"
+    },
+    "keyboardShortcuts": {
+      "title": "Keyboard Shortcuts",
+      "toggleHelp": "Press ? to toggle this help dialog from any page."
+    }
+  },
+  "language": {
+    "switch": "Switch Language",
+    "current": "Current Language"
+  }
+}
