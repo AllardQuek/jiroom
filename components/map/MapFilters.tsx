@@ -3,18 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { CommuteFilter } from "@/components/distance/CommuteFilter";
-
-const STATUS_OPTIONS = [
-  { value: "new", label: "New" },
-  { value: "to_view", label: "To View" },
-  { value: "viewed", label: "Viewed" },
-] as const;
-
-const VERDICT_OPTIONS = [
-  { value: "yes", label: "Yes" },
-  { value: "maybe", label: "Maybe" },
-  { value: "no", label: "No" },
-] as const;
+import { useTranslations } from 'next-intl';
 
 export interface Filters {
   status: string[];
@@ -41,8 +30,21 @@ export function MapFilters({
   areaColors = {},
   areaOptions = [],
 }: MapFiltersProps) {
+  const t = useTranslations('map.filters');
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+
+  const STATUS_OPTIONS = [
+    { value: "new", label: t('statusOptions.new') },
+    { value: "to_view", label: t('statusOptions.toView') },
+    { value: "viewed", label: t('statusOptions.viewed') },
+  ] as const;
+
+  const VERDICT_OPTIONS = [
+    { value: "yes", label: t('verdictOptions.yes') },
+    { value: "maybe", label: t('verdictOptions.maybe') },
+    { value: "no", label: t('verdictOptions.no') },
+  ] as const;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -98,7 +100,7 @@ export function MapFilters({
         className="self-start flex items-center gap-2 bg-background/90 backdrop-blur-sm border border-border/50 rounded-xl max-sm:rounded-lg max-sm:px-2.5 max-sm:py-2 px-5 py-3 text-sm font-semibold shadow-md hover:bg-muted/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <SlidersHorizontal size={18} />
-        <span className="hidden sm:inline">Filters</span>
+        <span className="hidden sm:inline">{t('title')}</span>
         {hasActiveFilters && (
           <span className="h-2 w-2 rounded-full bg-primary" />
         )}
@@ -107,7 +109,7 @@ export function MapFilters({
       {isOpen && (
         <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md space-y-3 max-h-[70vh] overflow-y-auto w-80 max-sm:w-[calc(100vw-2rem)] max-sm:fixed max-sm:inset-x-4 max-sm:top-24 max-sm:max-h-[60vh]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold">Status</span>
+            <span className="text-xs font-semibold">{t('status')}</span>
             <button
               onClick={() => setIsOpen(false)}
               className="text-muted-foreground hover:text-foreground"
@@ -132,7 +134,7 @@ export function MapFilters({
           </div>
 
           <div className="border-t border-border/30 pt-3">
-            <span className="text-xs font-semibold">Verdict</span>
+            <span className="text-xs font-semibold">{t('verdict')}</span>
             <div className="flex flex-wrap gap-1.5 mt-1.5">
               {VERDICT_OPTIONS.map((opt) => (
                 <button
@@ -152,7 +154,7 @@ export function MapFilters({
 
           {areaOptions.length > 0 && (
             <div className="border-t border-border/30 pt-3">
-              <span className="text-xs font-semibold">Area</span>
+              <span className="text-xs font-semibold">{t('area')}</span>
               <div className="flex flex-wrap gap-1.5 mt-1.5">
                 {areaOptions.map((area) => (
                   <button
@@ -178,14 +180,14 @@ export function MapFilters({
           )}
 
           <div className="border-t border-border/30 pt-3">
-            <span className="text-xs font-semibold">Score</span>
+            <span className="text-xs font-semibold">{t('score')}</span>
             <div className="flex items-center gap-2 mt-1.5">
               <input
                 type="number"
                 min={-20}
                 max={20}
                 step={1}
-                placeholder="Min"
+                placeholder={t('min')}
                 value={filters.scoreMin ?? ""}
                 onChange={(e) =>
                   onFiltersChange({
@@ -202,7 +204,7 @@ export function MapFilters({
                 min={-20}
                 max={20}
                 step={1}
-                placeholder="Max"
+                placeholder={t('max')}
                 value={filters.scoreMax ?? ""}
                 onChange={(e) =>
                   onFiltersChange({
@@ -217,11 +219,11 @@ export function MapFilters({
           </div>
 
           <div className="border-t border-border/30 pt-3">
-            <span className="text-xs font-semibold">Price range</span>
+            <span className="text-xs font-semibold">{t('priceRange')}</span>
             <div className="flex items-center gap-2 mt-1.5">
               <input
                 type="number"
-                placeholder="Min"
+                placeholder={t('min')}
                 value={filters.priceMin ?? ""}
                 onChange={(e) =>
                   onFiltersChange({
@@ -234,7 +236,7 @@ export function MapFilters({
               <span className="text-xs text-muted-foreground">—</span>
               <input
                 type="number"
-                placeholder="Max"
+                placeholder={t('max')}
                 value={filters.priceMax ?? ""}
                 onChange={(e) =>
                   onFiltersChange({
@@ -250,7 +252,7 @@ export function MapFilters({
           <CommuteFilter />
 
           <div className="border-t border-border/30 pt-3">
-            <span className="text-xs font-semibold">Display</span>
+            <span className="text-xs font-semibold">{t('display')}</span>
             <div className="flex items-center gap-2 mt-1.5">
               <button
                 onClick={() =>
@@ -265,7 +267,7 @@ export function MapFilters({
                     : "bg-background/95 text-foreground border-border/50 hover:bg-muted/80"
                 }`}
               >
-                Show anchors
+                {t('showAnchors')}
               </button>
               <button
                 onClick={() =>
@@ -280,7 +282,7 @@ export function MapFilters({
                     : "bg-background/95 text-foreground border-border/50 hover:bg-muted/80"
                 }`}
               >
-                Hide taken
+                {t('hideTaken')}
               </button>
             </div>
           </div>
