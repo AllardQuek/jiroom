@@ -182,8 +182,6 @@
     "listingDetails": "Listing Details",
     "addNewListing": "Add New Listing",
     "editAnchor": "Edit Anchor",
-    "markerColor": "Marker color",
-    "routeMode": "Route mode",
     "listing": "Listing",
     "anchor": "Anchor",
     "noCoordsWarning": "{count} listing without map coordinates — edit to add a location",
@@ -207,6 +205,49 @@
         "mrt": "MRT Station",
         "other": "Other"
       }
+    },
+    "filters": {
+      "title": "Filters",
+      "status": "Status",
+      "verdict": "Verdict",
+      "area": "Area",
+      "score": "Score",
+      "priceRange": "Price range",
+      "min": "Min",
+      "max": "Max",
+      "display": "Display",
+      "showAnchors": "Show anchors",
+      "hideTaken": "Hide taken",
+      "statusOptions": {
+        "new": "New",
+        "toView": "To View",
+        "viewed": "Viewed"
+      },
+      "verdictOptions": {
+        "yes": "Yes",
+        "maybe": "Maybe",
+        "no": "No"
+      }
+    },
+    "markerColor": {
+      "byStatus": "By Status",
+      "byArea": "By Area"
+    },
+    "travelMode": {
+      "transit": "Transit",
+      "drive": "Drive",
+      "walk": "Walk",
+      "bike": "Bike",
+      "hoverTitle": "Route mode",
+      "hoverDescription": "Commute routes are calculated on-demand using Google Maps when you click a listing on the map. Set up anchors first via the Anchors panel to see routes."
+    },
+    "commuteFilter": {
+      "title": "Commute filter",
+      "anyAnchor": "Any anchor",
+      "maxCommute": "Max commute:",
+      "min": "min",
+      "hint": "Select an anchor and set a max commute time to only show listings within that travel time. Commute routes are calculated on-demand using Google Maps.",
+      "setMaxHint": "Set a max commute time to filter listings on the map"
     }
   },
   "compare": {

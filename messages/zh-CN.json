@@ -182,8 +182,6 @@
     "listingDetails": "房源详情",
     "addNewListing": "添加新房源",
     "editAnchor": "编辑锚点",
-    "markerColor": "标记颜色",
-    "routeMode": "路线模式",
     "listing": "房源",
     "anchor": "锚点",
     "noCoordsWarning": "{count} 个房源缺少地图坐标 \u2014 编辑以添加位置",
@@ -207,6 +205,49 @@
         "mrt": "地铁站",
         "other": "其他"
       }
+    },
+    "filters": {
+      "title": "筛选",
+      "status": "状态",
+      "verdict": "结论",
+      "area": "区域",
+      "score": "评分",
+      "priceRange": "价格范围",
+      "min": "最低",
+      "max": "最高",
+      "display": "显示",
+      "showAnchors": "显示锚点",
+      "hideTaken": "隐藏已租",
+      "statusOptions": {
+        "new": "新",
+        "toView": "待看",
+        "viewed": "已看"
+      },
+      "verdictOptions": {
+        "yes": "满意",
+        "maybe": "考虑中",
+        "no": "不满意"
+      }
+    },
+    "markerColor": {
+      "byStatus": "按状态",
+      "byArea": "按区域"
+    },
+    "travelMode": {
+      "transit": "公共交通",
+      "drive": "驾车",
+      "walk": "步行",
+      "bike": "骑行",
+      "hoverTitle": "路线模式",
+      "hoverDescription": "点击地图上的房源时，使用 Google Maps 按需计算通勤路线。请先通过锚点面板设置锚点以查看路线。"
+    },
+    "commuteFilter": {
+      "title": "通勤筛选",
+      "anyAnchor": "任意锚点",
+      "maxCommute": "最长通勤：",
+      "min": "分钟",
+      "hint": "选择一个锚点并设置最长通勤时间，只显示该行程时间内的房源。通勤路线使用 Google Maps 按需计算。",
+      "setMaxHint": "设置最长通勤时间以筛选地图上的房源"
     }
   },
   "compare": {
