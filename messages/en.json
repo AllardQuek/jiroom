@@ -27,7 +27,62 @@
   },
   "listings": {
     "title": "Listings",
+    "subtitle": "JIRA for rental search. Press <key>?</key> for help.",
     "addListing": "Add listing",
+    "addNew": "Add New Listing",
+    "compare": "Compare",
+    "compareCount": "Compare ({count})",
+    "filterListings": "Filter listings",
+    "copyQuestions": "Copy questions to clipboard",
+    "copyProfile": "Copy profile to clipboard",
+    "detailedView": "Detailed view",
+    "compactView": "Compact view",
+    "exportData": "Export data",
+    "importData": "Import data",
+    "switchToSample": "Switch to sample data",
+    "switchToYours": "Switch to your data",
+    "settings": "Settings",
+    "evaluationTemplates": "Evaluation templates",
+    "sampleDataLoaded": "Sample data loaded. Reloading...",
+    "dataRestored": "Your data restored. Reloading...",
+    "noDataToRestore": "No user data to restore",
+    "backupDownloaded": "Backup downloaded",
+    "exportFailed": "Export failed",
+    "restoredReloading": "Restored. Reloading...",
+    "invalidFile": "Invalid file",
+    "noActiveTemplate": "No active question template",
+    "questionsCopied": "Questions copied to clipboard",
+    "profileCopied": "Profile copied to clipboard",
+    "profileEmpty": "Profile is empty",
+    "failedToCopy": "Failed to copy",
+    "columns": {
+      "toView": "To View",
+      "viewed": "Viewed",
+      "all": "All",
+      "unscheduled": "Unscheduled",
+      "scheduled": "Scheduled"
+    },
+    "emptyState": {
+      "title": "Your hunting journey starts here",
+      "description": "Keep track of all the potential rooms you find. Add a listing to begin comparing and rating them."
+    },
+    "emptyColumn": {
+      "toView": "No listings yet. Tap + to add your first listing",
+      "viewed": "No viewed listings yet"
+    },
+    "sortOptions": {
+      "default": "Default",
+      "highestPrice": "Highest Price",
+      "lowestPrice": "Lowest Price",
+      "highestScore": "Highest Score",
+      "lowestScore": "Lowest Score",
+      "nameAZ": "Name A-Z",
+      "nameZA": "Name Z-A",
+      "newestFirst": "Newest First",
+      "oldestFirst": "Oldest First",
+      "recentlyModified": "Recently Modified",
+      "leastRecentlyModified": "Least Recently Modified"
+    },
     "addColumn": {
       "toView": "To View",
       "yes": "Yes",
@@ -37,13 +92,15 @@
     "filter": {
       "title": "Filter Listings",
       "area": "Area",
-      "priceRange": "Price Range",
-      "minPrice": "Min Price",
-      "maxPrice": "Max Price",
+      "priceRange": "Price range",
+      "minPrice": "Min",
+      "maxPrice": "Max",
       "minScore": "Min Score",
       "hideTaken": "Hide taken listings",
       "apply": "Apply Filters",
-      "reset": "Reset"
+      "reset": "Reset",
+      "clearSelection": "Clear selection",
+      "multipleHint": "Hold Ctrl/Cmd to select multiple areas"
     },
     "sort": {
       "priceAsc": "Price: Low to High",
@@ -59,7 +116,15 @@
       "viewDetails": "View details",
       "scheduleViewing": "Schedule viewing",
       "evaluate": "Evaluate",
-      "taken": "Taken"
+      "taken": "Taken",
+      "evaluation": "Evaluation",
+      "perMonth": "/mo",
+      "noArea": "No area",
+      "noMap": "no map",
+      "noDate": "No date",
+      "noDateSet": "No date set",
+      "overdue": "Overdue",
+      "notes": "Notes"
     },
     "form": {
       "addTitle": "Add Listing",
@@ -81,6 +146,14 @@
       "title": "Delete Listing",
       "confirm": "Are you sure you want to delete this listing?",
       "cannotUndo": "This action cannot be undone."
+    },
+    "detail": {
+      "title": "Listing Details",
+      "editTitle": "Edit Listing",
+      "deleting": "Deleting...",
+      "notFound": "Listing not found. It may have been deleted.",
+      "backToListings": "Back to Listings",
+      "listingNotes": "Listing Notes"
     }
   },
   "evaluation": {
@@ -89,6 +162,10 @@
     "criteria": "Criteria",
     "response": "Response",
     "notAnswered": "Not answered",
+    "noTemplate": "No evaluation template found. Create one in Settings first.",
+    "yes": "Yes",
+    "no": "No",
+    "na": "N/A",
     "scoreRanges": {
       "great": "Great - Excellent fit",
       "good": "Good - Strong contender",
@@ -102,6 +179,15 @@
     "searchPlaceholder": "Search location...",
     "addListing": "Add Listing",
     "addAnchor": "Add Anchor",
+    "listingDetails": "Listing Details",
+    "addNewListing": "Add New Listing",
+    "editAnchor": "Edit Anchor",
+    "markerColor": "Marker color",
+    "routeMode": "Route mode",
+    "listing": "Listing",
+    "anchor": "Anchor",
+    "noCoordsWarning": "{count} listing without map coordinates — edit to add a location",
+    "noCoordsWarningPlural": "{count} listings without map coordinates — edit to add a location",
     "commute": {
       "title": "Commute",
       "driving": "Driving",
@@ -109,7 +195,7 @@
       "walking": "Walking",
       "biking": "Biking"
     },
-    "anchor": {
+    "anchors": {
       "title": "Anchors",
       "add": "Add Anchor",
       "name": "Name",
@@ -125,19 +211,48 @@
   },
   "compare": {
     "title": "Compare",
-    "selectListings": "Select up to 3 listings to compare",
-    "noSelection": "Select listings from the Listings page to compare",
-    "highestScore": "Highest Score"
+    "selectListings": "Select 2–3 listings from your board to compare them side by side.",
+    "noSelection": "No listings selected",
+    "highestScore": "Highest Score",
+    "criteria": "Criteria",
+    "best": "Best",
+    "noScores": "No scores",
+    "listingCount": "{count} listing",
+    "listingsCount": "{count} listings",
+    "criteriaCount": "{count} criteria",
+    "clear": "Clear",
+    "removeFromComparison": "Remove from comparison",
+    "yes": "Yes",
+    "no": "No",
+    "maybe": "Maybe",
+    "na": "N/A"
   },
   "schedule": {
-    "title": "Schedule",
+    "title": "Your Schedule",
     "upcoming": "Upcoming",
     "past": "Past",
     "noViewings": "No viewings scheduled",
-    "viewingDetails": "Viewing Details"
+    "noViewingsDescription": "Any upcoming viewings you schedule will appear here for easy access.",
+    "browseListings": "Browse Listings",
+    "viewingDetails": "Viewing Details",
+    "viewingsCount": "{count} viewing scheduled",
+    "viewingsCountPlural": "{count} viewings scheduled",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "pastPrefix": "Past —"
   },
   "settings": {
     "title": "Settings",
+    "manageDescription": "Manage templates and profile",
+    "new": "New",
+    "evaluationTemplatesTitle": "Evaluation Templates",
+    "evaluationTemplatesDescription": "Criteria used to score and compare listings",
+    "agentQuestionsTitle": "Agent Questions",
+    "agentQuestionsDescription": "Question templates to send to property agents",
+    "tenantProfileTitle": "Tenant Profile",
+    "tenantProfileDescription": "Your details to share with property agents",
+    "editCriteria": "Edit Criteria",
+    "addCriteria": "Add Criteria",
     "evaluationTemplate": {
       "title": "Evaluation Template",
       "customize": "Customize Criteria",
