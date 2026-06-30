@@ -4,6 +4,7 @@ import { Viewing } from "@/types/listing";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Eye } from "lucide-react";
 import { useState } from "react";
+import { useLocale } from 'next-intl';
 import { ScheduleViewingForm } from "./ScheduleViewingForm";
 
 interface ViewingSectionProps {
@@ -20,10 +21,11 @@ export function ViewingSection({
   onViewingCreate,
 }: ViewingSectionProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const locale = useLocale();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(locale, {
       month: "short",
       day: "numeric",
       year: "numeric",

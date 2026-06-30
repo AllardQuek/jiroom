@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLocale } from 'next-intl';
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
 interface InlineNotesProps {
@@ -17,6 +18,7 @@ export function InlineNotes({
   label = "Notes",
 }: InlineNotesProps) {
   const [localValue, setLocalValue] = useState(notes);
+  const locale = useLocale();
 
   useEffect(() => {
     setLocalValue(notes);
@@ -32,7 +34,7 @@ export function InlineNotes({
     if (diffMins < 1) return "Just now";
     if (diffMins < 60) return `${diffMins} min ago`;
 
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(locale, {
       month: "short",
       day: "numeric",
       hour: "numeric",

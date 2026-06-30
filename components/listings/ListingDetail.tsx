@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Edit3, Trash2 } from "lucide-react";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { getDisplayPrice } from "@/lib/utils";
+import { useLocale } from 'next-intl';
 
 interface ListingDetailProps {
   listing: Listing;
@@ -28,6 +29,7 @@ export function ListingDetail({
   onEdit,
   onDelete,
 }: ListingDetailProps) {
+  const locale = useLocale();
   const statusColor =
     statusColors[listing.status] || "bg-stone-100 text-stone-500";
   const statusLabel = statusLabels[listing.status] || listing.status;
@@ -72,7 +74,7 @@ export function ListingDetail({
         )}
         <span className="flex items-center gap-1.5">
           <span className="h-1 w-1 rounded-full bg-muted-foreground/40" />
-          Added {new Date(listing.created_at).toLocaleDateString()}
+          Added {new Date(listing.created_at).toLocaleDateString(locale)}
         </span>
       </div>
 
