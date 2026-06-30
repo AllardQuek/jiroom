@@ -14,13 +14,14 @@ import {
 } from "lucide-react";
 import { TakenBadge } from "@/components/listings/TakenBadge";
 import { TakenTooltip } from "@/components/listings/TakenTooltip";
+import { useTranslations } from 'next-intl';
+import { Link as I18nLink } from '@/i18n/navigation';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Link from "next/link";
 import {
   format,
   parseISO,
@@ -47,12 +48,14 @@ function DaySection({
   viewings,
   onListingClick,
   isPast,
+  pastPrefix,
 }: {
   label: string;
   dateLabel: string;
   viewings: ViewingWithListing[];
   onListingClick: (id: string) => void;
   isPast: boolean;
+  pastPrefix?: string;
 }) {
   return (
     <div className="space-y-3">
@@ -61,7 +64,7 @@ function DaySection({
           <h2
             className={`text-base font-bold ${isPast ? "text-muted-foreground/60" : ""}`}
           >
-            {isPast ? "Past — " : ""}
+            {isPast ? `${pastPrefix} ` : ""}
             {label}
           </h2>
           <span className="text-xs text-muted-foreground">{dateLabel}</span>
@@ -195,6 +198,7 @@ function DaySection({
 }
 
 export default function SchedulePage() {
+  const t = useTranslations('schedule');
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
     null
   );
@@ -241,9 +245,9 @@ export default function SchedulePage() {
       } else {
         let label: string;
         if (isToday(day)) {
-          label = "Today";
+          label = t('today');
         } else if (isTomorrow(day)) {
-          label = "Tomorrow";
+          label = t('tomorrow');
         } else {
           label = format(day, "EEEE");
         }
@@ -297,17 +301,17 @@ export default function SchedulePage() {
           <CalendarDays size={48} className="text-muted-foreground" />
         </div>
         <div className="space-y-2">
-          <h2 className="text-xl font-bold">No viewings scheduled</h2>
+          <h2 className="text-xl font-bold">{t('noViewings')}</h2>
           <p className="text-muted-foreground max-w-xs">
-            Any upcoming viewings you schedule will appear here for easy access.
+            {t('noViewingsDescription')}
           </p>
         </div>
-        <Link href="/listings">
+        <I18nLink href="/listings">
           <Button variant="outline">
             <Home className="h-4 w-4 mr-1.5" />
-            Browse Listings
+            {t('browseListings')}
           </Button>
-        </Link>
+        </I18nLink>
       </div>
     );
   }
@@ -315,9 +319,9 @@ export default function SchedulePage() {
   return (
     <div className="p-4 pb-24 space-y-2">
       <header className="pb-2">
-        <h1 className="text-2xl font-bold">Your Schedule</h1>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
         <p className="text-sm text-muted-foreground">
-          {totalCount} viewing{totalCount !== 1 ? "s" : ""} scheduled
+          {totalCount === 1 ? t('viewingsCount', { count: totalCount }) : t('viewingsCountPlural', { count: totalCount })}
         </p>
       </header>
 
@@ -330,6 +334,7 @@ export default function SchedulePage() {
             viewings={group.viewings}
             onListingClick={setSelectedListingId}
             isPast={group.isPast}
+            pastPrefix={t('pastPrefix')}
           />
         ))}
       </div>
