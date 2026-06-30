@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Code Duplication**: Extracted shared getStoreKeys utility to eliminate duplicate code
 - **Date Locale**: Replaced hardcoded "en-US" with dynamic locale in 6 components
 - **Migration Lifecycle**: Moved runMigrations to useEffect for proper lifecycle management
+- **Theme Flickering**: Removed mounted patterns and CSS transitions that caused flickering during theme toggles on listing cards and UI elements
+- **Close Button Timing**: Synchronized FloatingActions transition timings to fix close button timing mismatch
 
 ### Architecture
 - **Middleware**: Added Proxy.ts middleware for locale detection and routing
