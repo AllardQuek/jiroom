@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Template, Criterion } from "@/types/evaluation";
 import { Plus } from "lucide-react";
+import { useTranslations } from 'next-intl';
 import { useTemplateStore } from "@/store/templateStore";
 import { useAgentQuestionStore } from "@/store/agentQuestionStore";
 import { AgentQuestionTemplate } from "@/types/agentQuestion";
@@ -28,6 +29,7 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
+  const t = useTranslations('settings');
   const templates = useTemplateStore((state) => state.templates);
   const addTemplate = useTemplateStore((state) => state.addTemplate);
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
@@ -169,9 +171,9 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader className="pb-4">
-            <DialogTitle className="text-base">Settings</DialogTitle>
+            <DialogTitle className="text-base">{t('title')}</DialogTitle>
             <p className="text-xs text-muted-foreground/60">
-              Manage templates and profile
+              {t('manageDescription')}
             </p>
           </DialogHeader>
 
@@ -179,14 +181,14 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             {/* Evaluation Templates Section */}
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">Evaluation Templates</h3>
+                <h3 className="text-sm font-semibold">{t('evaluationTemplatesTitle')}</h3>
                 <Button size="sm" variant="outline" onClick={handleCreateTemplate} className="h-7 text-xs shrink-0">
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  New
+                  {t('new')}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground/50">
-                Criteria used to score and compare listings
+                {t('evaluationTemplatesDescription')}
               </p>
               <TemplateList
                 onEdit={setEditingTemplateId}
@@ -200,14 +202,14 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             {/* Agent Questions Section */}
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">Agent Questions</h3>
+                <h3 className="text-sm font-semibold">{t('agentQuestionsTitle')}</h3>
                 <Button size="sm" variant="outline" onClick={handleCreateAgentTemplate} className="h-7 text-xs shrink-0">
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  New
+                  {t('new')}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground/50">
-                Question templates to send to property agents
+                {t('agentQuestionsDescription')}
               </p>
               <AgentQuestionList
                 onEdit={setEditingAgentTemplateId}
@@ -220,9 +222,9 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
             {/* Tenant Profile Section */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold">Tenant Profile</h3>
+              <h3 className="text-sm font-semibold">{t('tenantProfileTitle')}</h3>
               <p className="text-xs text-muted-foreground/50">
-                Your details to share with property agents
+                {t('tenantProfileDescription')}
               </p>
               <TenantProfileForm />
             </div>
@@ -257,7 +259,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {editingCriterion ? "Edit Criteria" : "Add Criteria"}
+                {editingCriterion ? t('editCriteria') : t('addCriteria')}
               </DialogTitle>
             </DialogHeader>
             <CriteriaForm

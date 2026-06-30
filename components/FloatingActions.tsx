@@ -5,6 +5,7 @@ import { Bug, CircleHelp, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HelpDialog from "@/components/HelpDialog";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const GITHUB_ISSUES_URL =
   "https://github.com/AllardQuek/jiroom/issues/new";
@@ -41,6 +42,7 @@ export default function FloatingActions() {
             menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
           }`}
         >
+          <LanguageSwitcher />
           <ThemeToggle />
           <a
             href={GITHUB_ISSUES_URL}

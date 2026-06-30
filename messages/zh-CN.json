@@ -1,0 +1,447 @@
+{
+  "common": {
+    "add": "添加",
+    "edit": "编辑",
+    "delete": "删除",
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "close": "关闭",
+    "search": "搜索",
+    "filter": "筛选",
+    "sort": "排序",
+    "loading": "加载中...",
+    "noResults": "未找到结果",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "done": "完成",
+    "copy": "复制",
+    "copied": "已复制！"
+  },
+  "navigation": {
+    "listings": "房源列表",
+    "map": "地图",
+    "compare": "对比",
+    "schedule": "看房安排"
+  },
+  "listings": {
+    "title": "房源列表",
+    "subtitle": "租房搜索利器。按 <key>?</key> 获取帮助。",
+    "addListing": "添加房源",
+    "addNew": "添加新房源",
+    "compare": "对比",
+    "compareCount": "对比 ({count})",
+    "filterListings": "筛选房源",
+    "copyQuestions": "复制问题到剪贴板",
+    "copyProfile": "复制资料到剪贴板",
+    "detailedView": "详细视图",
+    "compactView": "紧凑视图",
+    "exportData": "导出数据",
+    "importData": "导入数据",
+    "switchToSample": "切换到示例数据",
+    "switchToYours": "切换到您的数据",
+    "settings": "设置",
+    "evaluationTemplates": "评估模板",
+    "sampleDataLoaded": "示例数据已加载，正在刷新...",
+    "dataRestored": "您的数据已恢复，正在刷新...",
+    "noDataToRestore": "没有可恢复的用户数据",
+    "backupDownloaded": "备份已下载",
+    "exportFailed": "导出失败",
+    "restoredReloading": "已恢复，正在刷新...",
+    "invalidFile": "无效文件",
+    "noActiveTemplate": "没有活跃的问题模板",
+    "questionsCopied": "问题已复制到剪贴板",
+    "profileCopied": "资料已复制到剪贴板",
+    "profileEmpty": "资料为空",
+    "failedToCopy": "复制失败",
+    "columns": {
+      "toView": "待看房",
+      "viewed": "已看房",
+      "all": "全部",
+      "unscheduled": "未安排",
+      "scheduled": "已安排"
+    },
+    "emptyState": {
+      "title": "您的找房之旅从这里开始",
+      "description": "跟踪您找到的所有潜在房源。添加一个房源开始比较和评分。"
+    },
+    "emptyColumn": {
+      "toView": "暂无房源。点击 + 添加您的第一个房源",
+      "viewed": "暂无已看房源"
+    },
+    "sortOptions": {
+      "default": "默认",
+      "highestPrice": "最高价格",
+      "lowestPrice": "最低价格",
+      "highestScore": "最高评分",
+      "lowestScore": "最低评分",
+      "nameAZ": "名称 A-Z",
+      "nameZA": "名称 Z-A",
+      "newestFirst": "最新优先",
+      "oldestFirst": "最早优先",
+      "recentlyModified": "最近修改",
+      "leastRecentlyModified": "最早修改"
+    },
+    "addColumn": {
+      "toView": "待看房",
+      "yes": "满意",
+      "maybe": "考虑中",
+      "no": "不考虑"
+    },
+    "filter": {
+      "title": "筛选房源",
+      "area": "区域",
+      "priceRange": "价格范围",
+      "minPrice": "最低",
+      "maxPrice": "最高",
+      "minScore": "最低评分",
+      "hideTaken": "隐藏已租房源",
+      "apply": "应用筛选",
+      "reset": "重置",
+      "clearSelection": "清除选择",
+      "multipleHint": "按住 Ctrl/Cmd 选择多个区域"
+    },
+    "sort": {
+      "priceAsc": "价格：从低到高",
+      "priceDesc": "价格：从高到低",
+      "scoreDesc": "评分：从高到低",
+      "scoreAsc": "评分：从低到高",
+      "dateDesc": "日期：最新",
+      "dateAsc": "日期：最早",
+      "nameAsc": "名称：A-Z",
+      "nameDesc": "名称：Z-A"
+    },
+    "card": {
+      "viewDetails": "查看详情",
+      "scheduleViewing": "安排看房",
+      "evaluate": "评估",
+      "taken": "已租",
+      "evaluation": "评估",
+      "perMonth": "/月",
+      "noArea": "无区域",
+      "noMap": "无地图",
+      "noDate": "无日期",
+      "noDateSet": "未设定日期",
+      "overdue": "已逾期",
+      "notes": "备注"
+    },
+    "form": {
+      "addTitle": "添加房源",
+      "editTitle": "编辑房源",
+      "url": "房源链接",
+      "urlPlaceholder": "粘贴 PropertyGuru 或 99.co 链接",
+      "name": "房源名称",
+      "namePlaceholder": "例如：淡畔组屋",
+      "price": "月租",
+      "pricePlaceholder": "例如：1500",
+      "area": "区域",
+      "areaPlaceholder": "例如：淡畔",
+      "address": "地址",
+      "addressPlaceholder": "完整地址",
+      "submit": "保存房源",
+      "cancel": "取消"
+    },
+    "delete": {
+      "title": "删除房源",
+      "confirm": "确定要删除此房源吗？",
+      "cannotUndo": "此操作无法撤销。"
+    },
+    "detail": {
+      "title": "房源详情",
+      "editTitle": "编辑房源",
+      "deleting": "正在删除...",
+      "notFound": "找不到房源，可能已被删除。",
+      "backToListings": "返回房源列表",
+      "listingNotes": "房源备注"
+    }
+  },
+  "evaluation": {
+    "title": "评估",
+    "score": "评分",
+    "criteria": "标准",
+    "response": "回答",
+    "notAnswered": "未回答",
+    "noTemplate": "未找到评估模板。请先在设置中创建。",
+    "yes": "是",
+    "no": "否",
+    "na": "不适用",
+    "scoreRanges": {
+      "great": "优秀 - 非常适合",
+      "good": "良好 - 强力竞争者",
+      "neutral": "一般 - 优缺点参半",
+      "belowAverage": "较差 - 主要顾虑",
+      "poor": "差 - 决定性因素"
+    }
+  },
+  "map": {
+    "title": "地图",
+    "searchPlaceholder": "搜索位置...",
+    "addListing": "添加房源",
+    "addAnchor": "添加锚点",
+    "listingDetails": "房源详情",
+    "addNewListing": "添加新房源",
+    "editAnchor": "编辑锚点",
+    "listing": "房源",
+    "anchor": "锚点",
+    "noCoordsWarning": "{count} 个房源缺少地图坐标 \u2014 编辑以添加位置",
+    "noCoordsWarningPlural": "{count} 个房源缺少地图坐标 \u2014 编辑以添加位置",
+    "commute": {
+      "title": "通勤",
+      "driving": "驾车",
+      "transit": "公共交通",
+      "walking": "步行",
+      "biking": "骑行"
+    },
+    "anchors": {
+      "title": "锚点",
+      "add": "添加锚点",
+      "name": "名称",
+      "type": "类型",
+      "types": {
+        "home": "家",
+        "work": "工作地点",
+        "school": "学校",
+        "mrt": "地铁站",
+        "other": "其他"
+      }
+    },
+    "filters": {
+      "title": "筛选",
+      "status": "状态",
+      "verdict": "结论",
+      "area": "区域",
+      "score": "评分",
+      "priceRange": "价格范围",
+      "min": "最低",
+      "max": "最高",
+      "display": "显示",
+      "showAnchors": "显示锚点",
+      "hideTaken": "隐藏已租",
+      "statusOptions": {
+        "new": "新",
+        "toView": "待看",
+        "viewed": "已看"
+      },
+      "verdictOptions": {
+        "yes": "满意",
+        "maybe": "考虑中",
+        "no": "不满意"
+      }
+    },
+    "markerColor": {
+      "byStatus": "按状态",
+      "byArea": "按区域"
+    },
+    "travelMode": {
+      "transit": "公共交通",
+      "drive": "驾车",
+      "walk": "步行",
+      "bike": "骑行",
+      "hoverTitle": "路线模式",
+      "hoverDescription": "点击地图上的房源时，使用 Google Maps 按需计算通勤路线。请先通过锚点面板设置锚点以查看路线。"
+    },
+    "commuteFilter": {
+      "title": "通勤筛选",
+      "anyAnchor": "任意锚点",
+      "maxCommute": "最长通勤：",
+      "min": "分钟",
+      "hint": "选择一个锚点并设置最长通勤时间，只显示该行程时间内的房源。通勤路线使用 Google Maps 按需计算。",
+      "setMaxHint": "设置最长通勤时间以筛选地图上的房源"
+    }
+  },
+  "compare": {
+    "title": "对比",
+    "selectListings": "从看板选择 2\u20133 个房源进行并排对比。",
+    "noSelection": "未选择房源",
+    "highestScore": "最高评分",
+    "criteria": "标准",
+    "best": "最佳",
+    "noScores": "暂无评分",
+    "listingCount": "{count} 个房源",
+    "listingsCount": "{count} 个房源",
+    "criteriaCount": "{count} 个标准",
+    "clear": "清除",
+    "removeFromComparison": "移除对比",
+    "yes": "满意",
+    "no": "不满意",
+    "maybe": "考虑中",
+    "na": "不适用"
+  },
+  "schedule": {
+    "title": "看房安排",
+    "upcoming": "即将到来",
+    "past": "已过去",
+    "noViewings": "没有安排看房",
+    "noViewingsDescription": "您安排的看房将会显示在这里，方便快速访问。",
+    "browseListings": "浏览房源",
+    "viewingDetails": "看房详情",
+    "viewingsCount": "已安排 {count} 次看房",
+    "viewingsCountPlural": "已安排 {count} 次看房",
+    "today": "今天",
+    "tomorrow": "明天",
+    "pastPrefix": "已过 —"
+  },
+  "settings": {
+    "title": "设置",
+    "manageDescription": "管理模板和个人资料",
+    "new": "新建",
+    "evaluationTemplatesTitle": "评估模板",
+    "evaluationTemplatesDescription": "用于评分和对比房源的标准",
+    "agentQuestionsTitle": "中介问题",
+    "agentQuestionsDescription": "发送给中介的问题模板",
+    "tenantProfileTitle": "租客资料",
+    "tenantProfileDescription": "与中介分享的个人信息",
+    "editCriteria": "编辑标准",
+    "addCriteria": "添加标准",
+    "evaluationTemplate": {
+      "title": "评估模板",
+      "customize": "自定义标准",
+      "addCriterion": "添加标准",
+      "category": "类别",
+      "categories": {
+        "cost": "费用",
+        "room": "房间",
+        "bathroom": "浴室",
+        "kitchen": "厨房",
+        "location": "位置",
+        "building": "建筑",
+        "other": "其他"
+      },
+      "type": "类型",
+      "types": {
+        "checkbox": "复选框",
+        "rating": "评分 1-5",
+        "number": "数字",
+        "select": "选择",
+        "text": "文本",
+        "derived": "衍生"
+      }
+    },
+    "agentQuestions": {
+      "title": "中介问题",
+      "addQuestion": "添加问题",
+      "copy": "复制到剪贴板"
+    },
+    "tenantProfile": {
+      "title": "租客资料",
+      "name": "姓名",
+      "occupation": "职业",
+      "budget": "预算",
+      "moveInDate": "入住日期",
+      "leaseDuration": "租期",
+      "copy": "复制到剪贴板"
+    },
+    "data": {
+      "title": "数据管理",
+      "export": "导出数据",
+      "import": "导入数据",
+      "loadSample": "加载示例数据",
+      "clearAll": "清除所有数据"
+    }
+  },
+  "help": {
+    "title": "帮助与指南",
+    "whatIsJIRoom": "什么是 JIRoom？",
+    "whatIsJIRoomDescription": "JIRoom 让您的租房搜索井井有条——无需在浏览器标签页、电子表格笔记和遗忘的链接之间手忙脚乱。从任何门户网站跟踪房源，一致地评估它们，安排看房，并排比较选项，并根据到重要地点的通勤时间来判断位置。",
+    "privacy": "所有数据都保存在您的浏览器中。无需注册，无需服务器，无广告。",
+    "gettingStarted": "入门指南",
+    "quickStart": "快速开始（3 步）",
+    "step1": "添加房源：在房源页面点击\"添加房源\"，粘贴 PropertyGuru/99.co 链接",
+    "step2": "评估：点击房源卡片，填写评估标准，查看自动计算的评分",
+    "step3": "决定：设置结论（满意/考虑中/不考虑）移至决策栏",
+    "tip": "提示：使用示例数据（烧瓶图标 🧪）在添加自己的房源之前探索功能。",
+    "pages": "页面",
+    "listingsPage": {
+      "title": "房源列表 — 您的主要工作区",
+      "columns": "栏目：待看房（新房源）、满意/考虑中/不考虑（您看房后的决定）",
+      "actions": "操作：在栏目之间拖动卡片，点击卡片进行评估/安排/记录",
+      "tools": "工具：按区域/价格/评分筛选，按价格/评分/日期排序，切换紧凑视图",
+      "compare": "对比：勾选选择最多 3 个房源，然后点击\"对比\""
+    },
+    "mapPage": {
+      "title": "地图 — 可视化位置视图",
+      "markers": "标记：所有房源显示为图钉，按状态或区域着色",
+      "commute": "通勤：点击房源查看到锚点的通勤时间",
+      "addFromMap": "从地图添加：搜索任何位置 → 点击\"房源\"或\"锚点\"按钮",
+      "filter": "筛选：切换标记颜色，更改出行方式（驾车/公共交通/步行/骑行）"
+    },
+    "comparePage": {
+      "title": "对比 — 并排评估",
+      "select": "通过房源页面上的复选框选择最多 3 个房源",
+      "view": "并排查看关键标准、评分和结论",
+      "highlight": "最高评分房源高亮显示"
+    },
+    "schedulePage": {
+      "title": "看房安排 — 您的看房时间表",
+      "grouped": "即将到来和过去的看房按天分组",
+      "click": "点击任何条目查看完整房源详情",
+      "scheduleDirectly": "直接从房源卡片安排/重新安排"
+    },
+    "settingsDialog": {
+      "title": "设置对话框",
+      "access": "访问：房源页面工具栏上的设置图标（⚙️）",
+      "evaluationTemplates": {
+        "title": "评估模板",
+        "customize": "自定义房源评分标准",
+        "addRemove": "按类别添加/删除/重新排序标准（费用、房间、浴室等）",
+        "types": "标准类型：复选框、评分 1-5、带阈值的数字、选择下拉菜单、文本备注",
+        "example": "示例：添加\"有空调\"作为复选框 → 是则 +1，否则 -1"
+      },
+      "agentQuestions": {
+        "title": "中介问题",
+        "create": "创建发送房产中介的问题模板",
+        "example": "示例：\"允许访客吗？\"、\"空调运行时间？\"、\"当前租客？\"",
+        "copy": "复制到剪贴板，便于通过 WhatsApp/电子邮件分享"
+      },
+      "tenantProfile": {
+        "title": "租客资料",
+        "store": "存储您的详细信息以分享给中介",
+        "fields": "字段：姓名、职业、预算、入住日期、租期等",
+        "copy": "复制到剪贴板以便快速分享"
+      }
+    },
+    "scoring": {
+      "title": "评分",
+      "howItWorks": "工作原理",
+      "contribution": "每个回答的标准贡献 +1（好）、0（中性）或 -1（差）",
+      "netScore": "净分 = 总好分 - 总差分",
+      "textFields": "文本字段和未回答的问题不影响评分",
+      "scoreRanges": "评分范围"
+    },
+    "anchors": {
+      "title": "锚点",
+      "whatAre": "什么是锚点？",
+      "description": "您的重要位置：家、工作地点、学校、地铁站。设置一次即可评估所有房源的通勤时间。",
+      "howToAdd": "如何添加锚点",
+      "step1": "前往地图页面",
+      "step2": "搜索位置（例如：\"莱佛士地铁站\"）",
+      "step3": "点击出现的紫色\"锚点\"按钮",
+      "step4": "给它一个名称和类型（例如：\"办公室\" → \"工作地点\"）",
+      "manage": "管理锚点",
+      "click": "点击\"锚点\"按钮（地图页面右上角）查看/编辑/删除",
+      "markers": "地图上的菱形标记显示您的锚点位置"
+    },
+    "dataManagement": {
+      "title": "数据管理",
+      "yourControl": "您的数据，您掌控",
+      "stored": "所有数据存储在您的浏览器中（无服务器，无注册）",
+      "private": "私密且本地 - 不会离开您的设备",
+      "backup": "备份与传输",
+      "export": "导出：房源页面上的下载按钮 → 将所有数据保存为 JSON 文件",
+      "import": "导入：上传按钮 → 从备份恢复或在设备之间传输",
+      "tryIt": "试用",
+      "click": "点击房源页面上的烧瓶图标（🧪）加载示例数据",
+      "explore": "使用演示房源探索所有功能",
+      "switch": "随时切换回您的数据"
+    },
+    "keyboardShortcuts": {
+      "title": "键盘快捷键",
+      "toggleHelp": "按 ? 从任何页面切换此帮助对话框。"
+    }
+  },
+  "language": {
+    "switch": "切换语言",
+    "current": "当前语言"
+  }
+}

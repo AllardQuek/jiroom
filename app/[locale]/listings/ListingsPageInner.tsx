@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings, MessageSquare, User, Check, X, MoreVertical, Filter } from "lucide-react";
+import { useTranslations } from 'next-intl';
 import {
   Tooltip,
   TooltipTrigger,
@@ -41,6 +42,7 @@ import {
 } from "@/lib/data/seedData";
 
 export function ListingsPageInner() {
+  const t = useTranslations('listings');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
     null
@@ -125,15 +127,15 @@ export function ListingsPageInner() {
   const handleCopyQuestions = () => {
     const template = getActiveTemplate();
     if (!template) {
-      showCopyStatus("error", "No active question template");
+      showCopyStatus("error", t('noActiveTemplate'));
       return;
     }
 
     const text = template.questions.join("\n");
     navigator.clipboard.writeText(text).then(() => {
-      showCopyStatus("success", "Questions copied to clipboard");
+      showCopyStatus("success", t('questionsCopied'));
     }).catch(() => {
-      showCopyStatus("error", "Failed to copy");
+      showCopyStatus("error", t('failedToCopy'));
     });
   };
 
@@ -161,15 +163,15 @@ export function ListingsPageInner() {
       .map(([key, value]) => `${fieldLabels[key as keyof typeof profile]}: ${value}`);
 
     if (lines.length === 0) {
-      showCopyStatus("error", "Profile is empty");
+      showCopyStatus("error", t('profileEmpty'));
       return;
     }
 
     const text = lines.join("\n");
     navigator.clipboard.writeText(text).then(() => {
-      showCopyStatus("success", "Profile copied to clipboard");
+      showCopyStatus("success", t('profileCopied'));
     }).catch(() => {
-      showCopyStatus("error", "Failed to copy");
+      showCopyStatus("error", t('failedToCopy'));
     });
   };
 
@@ -178,15 +180,15 @@ export function ListingsPageInner() {
     if (result === "seed") {
       setBackupStatus({
         type: "success",
-        message: "Sample data loaded. Reloading...",
+        message: t('sampleDataLoaded'),
       });
     } else if (result === "user") {
       setBackupStatus({
         type: "success",
-        message: "Your data restored. Reloading...",
+        message: t('dataRestored'),
       });
     } else {
-      setBackupStatus({ type: "error", message: "No user data to restore" });
+      setBackupStatus({ type: "error", message: t('noDataToRestore') });
       return;
     }
     setTimeout(() => window.location.reload(), 1500);
@@ -196,10 +198,10 @@ export function ListingsPageInner() {
     try {
       const data = exportAllData();
       downloadData(data);
-      setBackupStatus({ type: "success", message: "Backup downloaded" });
+      setBackupStatus({ type: "success", message: t('backupDownloaded') });
       setTimeout(() => setBackupStatus({ type: null, message: "" }), 3000);
     } catch {
-      setBackupStatus({ type: "error", message: "Export failed" });
+      setBackupStatus({ type: "error", message: t('exportFailed') });
       setTimeout(() => setBackupStatus({ type: null, message: "" }), 3000);
     }
   }
@@ -217,7 +219,7 @@ export function ListingsPageInner() {
           sessionStorage.setItem("import-completed", "true");
           setBackupStatus({
             type: "success",
-            message: "Restored. Reloading...",
+            message: t('restoredReloading'),
           });
           setTimeout(() => window.location.reload(), 1500);
         } else {
@@ -225,7 +227,7 @@ export function ListingsPageInner() {
           setTimeout(() => setBackupStatus({ type: null, message: "" }), 3000);
         }
       } catch {
-        setBackupStatus({ type: "error", message: "Invalid file" });
+        setBackupStatus({ type: "error", message: t('invalidFile') });
         setTimeout(() => setBackupStatus({ type: null, message: "" }), 3000);
       }
     };
@@ -237,10 +239,10 @@ export function ListingsPageInner() {
     <div className="p-4">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Listings</h1>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
           <div className="flex items-center gap-2 mt-1">
             <p className="text-sm text-muted-foreground">
-              JIRA for rental search. Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">?</kbd> for help.
+              {t.rich('subtitle', { key: (chunks) => <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">{chunks}</kbd> })}
             </p>
             {(backupStatus.type || copyStatus.type) && (
               <Badge
@@ -263,7 +265,7 @@ export function ListingsPageInner() {
           <div className="flex flex-wrap gap-2 items-center">
             {compareMode && selectedListingIds.length >= 2 && (
               <Button variant="default" onClick={handleCompare} className="hidden sm:flex">
-                Compare ({selectedListingIds.length})
+                {t('compareCount', { count: selectedListingIds.length })}
               </Button>
             )}
             <Tooltip>
@@ -272,7 +274,7 @@ export function ListingsPageInner() {
                   <Filter className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Filter listings</TooltipContent>
+              <TooltipContent>{t('filterListings')}</TooltipContent>
             </Tooltip>
             {!compareMode && (
               <Button
@@ -281,7 +283,7 @@ export function ListingsPageInner() {
                 size="sm"
                 className="shrink-0"
               >
-                Compare
+                {t('compare')}
               </Button>
             )}
             <Tooltip>
@@ -290,7 +292,7 @@ export function ListingsPageInner() {
                   <MessageSquare className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Copy questions to clipboard</TooltipContent>
+              <TooltipContent>{t('copyQuestions')}</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -298,7 +300,7 @@ export function ListingsPageInner() {
                   <User className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Copy profile to clipboard</TooltipContent>
+              <TooltipContent>{t('copyProfile')}</TooltipContent>
             </Tooltip>
           </div>
           
@@ -306,7 +308,7 @@ export function ListingsPageInner() {
           <div className="flex flex-wrap gap-2 items-center">
             <Button onClick={() => setIsCreateDialogOpen(true)} size="sm" className="shrink-0" style={{ backgroundColor: '#7e5be9', color: 'white' }}>
               <Plus className="h-4 w-4 hidden sm:inline-block" />
-              <span className="hidden sm:inline">Add listing</span>
+              <span className="hidden sm:inline">{t('addListing')}</span>
               <Plus className="sm:hidden h-4 w-4" />
             </Button>
             <div className="hidden sm:flex">
@@ -322,7 +324,7 @@ export function ListingsPageInner() {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  {compact ? "Detailed view" : "Compact view"}
+                  {compact ? t('detailedView') : t('compactView')}
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -346,35 +348,35 @@ export function ListingsPageInner() {
                     className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
                   >
                     {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
-                    {compact ? "Detailed view" : "Compact view"}
+                    {compact ? t('detailedView') : t('compactView')}
                   </button>
                   <button
                     onClick={() => { handleExport(); setMobileMenuOpen(false); }}
                     className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
                   >
                     <Download className="h-4 w-4" />
-                    Export data
+                    {t('exportData')}
                   </button>
                   <button
                     onClick={() => { fileRef.current?.click(); setMobileMenuOpen(false); }}
                     className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
                   >
                     <Upload className="h-4 w-4" />
-                    Import data
+                    {t('importData')}
                   </button>
                   <button
                     onClick={() => { handleToggleSeed(); }}
                     className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left ${seedMode ? "text-amber-500" : ""}`}
                   >
                     <FlaskConical className="h-4 w-4" />
-                    {seedMode ? "Switch to your data" : "Switch to sample data"}
+                    {seedMode ? t('switchToYours') : t('switchToSample')}
                   </button>
                   <button
                     onClick={() => { setSettingsOpen(true); setMobileMenuOpen(false); }}
                     className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
                   >
                     <Settings className="h-4 w-4" />
-                    Settings
+                    {t('settings')}
                   </button>
                 </div>
               )}
@@ -392,7 +394,7 @@ export function ListingsPageInner() {
                     <Download className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Export data</TooltipContent>
+                <TooltipContent>{t('exportData')}</TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -404,7 +406,7 @@ export function ListingsPageInner() {
                     <Upload className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Import data</TooltipContent>
+                <TooltipContent>{t('importData')}</TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -418,7 +420,7 @@ export function ListingsPageInner() {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  {seedMode ? "Switch to your data" : "Switch to sample data"}
+                  {seedMode ? t('switchToYours') : t('switchToSample')}
                 </TooltipContent>
               </Tooltip>
               <Tooltip>
@@ -431,7 +433,7 @@ export function ListingsPageInner() {
                     <Settings className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Evaluation templates</TooltipContent>
+                <TooltipContent>{t('evaluationTemplates')}</TooltipContent>
               </Tooltip>
             </div>
             <input
@@ -466,7 +468,7 @@ export function ListingsPageInner() {
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="max-w-lg max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Add New Listing</DialogTitle>
+            <DialogTitle>{t('addNew')}</DialogTitle>
           </DialogHeader>
           <CreateListingForm
             onSuccess={() => setIsCreateDialogOpen(false)}

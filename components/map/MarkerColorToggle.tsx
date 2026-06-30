@@ -1,6 +1,7 @@
 "use client";
 
 import { Palette, ListChecks } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 export type ColorMode = "status" | "area";
 
@@ -10,6 +11,7 @@ interface MarkerColorToggleProps {
 }
 
 export function MarkerColorToggle({ mode, onChange }: MarkerColorToggleProps) {
+  const t = useTranslations('map.markerColor');
   return (
     <div className="flex items-center gap-1 bg-muted/60 rounded-lg p-0.5 border border-border/40">
       <button
@@ -21,7 +23,7 @@ export function MarkerColorToggle({ mode, onChange }: MarkerColorToggleProps) {
         }`}
       >
         <ListChecks size={12} />
-        By Status
+        {t('byStatus')}
       </button>
       <button
         onClick={() => onChange("area")}
@@ -32,7 +34,7 @@ export function MarkerColorToggle({ mode, onChange }: MarkerColorToggleProps) {
         }`}
       >
         <Palette size={12} />
-        By Area
+        {t('byArea')}
       </button>
     </div>
   );

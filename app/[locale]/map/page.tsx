@@ -8,7 +8,7 @@ const MapView = dynamic(() => import("@/components/map/MapView"), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-full text-muted-foreground">
-      Loading map...
+      …
     </div>
   ),
 });

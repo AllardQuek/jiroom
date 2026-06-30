@@ -1,6 +1,7 @@
 "use client";
 
 import { Filter } from "lucide-react";
+import { useTranslations } from 'next-intl';
 import {
   Dialog,
   DialogContent,
@@ -39,6 +40,7 @@ export function FilterDialog({
   onFiltersChange,
   areas,
 }: FilterDialogProps) {
+  const t = useTranslations('listings.filter');
   const handleFilterChange = (key: keyof ListingFilters, value: boolean | string | number | null | string[]) => {
     const newFilters = { ...filters, [key]: value };
     onFiltersChange(newFilters);
@@ -60,12 +62,12 @@ export function FilterDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Filter size={18} />
-            Filter Listings
+            {t('title')}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="flex items-center justify-between">
-            <Label htmlFor="hideTaken">Hide taken listings</Label>
+            <Label htmlFor="hideTaken">{t('hideTaken')}</Label>
             <Switch
               id="hideTaken"
               checked={filters.hideTaken}
@@ -75,14 +77,14 @@ export function FilterDialog({
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="area">Area</Label>
+              <Label htmlFor="area">{t('area')}</Label>
               {filters.areas.length > 0 && (
                 <button
                   type="button"
                   onClick={() => handleFilterChange("areas", [])}
                   className="text-xs text-primary hover:underline"
                 >
-                  Clear selection
+                  {t('clearSelection')}
                 </button>
               )}
             </div>
@@ -103,15 +105,15 @@ export function FilterDialog({
                 </option>
               ))}
             </select>
-            <p className="text-xs text-muted-foreground">Hold Ctrl/Cmd to select multiple areas</p>
+            <p className="text-xs text-muted-foreground">{t('multipleHint')}</p>
           </div>
 
           <div className="space-y-2">
-            <Label>Price range</Label>
+            <Label>{t('priceRange')}</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
-                placeholder="Min"
+                placeholder={t('minPrice')}
                 value={filters.priceMin ?? ""}
                 onChange={(e) =>
                   handleFilterChange("priceMin", e.target.value ? Number(e.target.value) : null)
@@ -121,7 +123,7 @@ export function FilterDialog({
               <span className="text-sm text-muted-foreground">—</span>
               <Input
                 type="number"
-                placeholder="Max"
+                placeholder={t('maxPrice')}
                 value={filters.priceMax ?? ""}
                 onChange={(e) =>
                   handleFilterChange("priceMax", e.target.value ? Number(e.target.value) : null)
@@ -133,7 +135,7 @@ export function FilterDialog({
         </div>
         <div className="flex justify-end pt-4 border-t">
           <Button variant="outline" onClick={handleReset}>
-            Reset
+            {t('reset')}
           </Button>
         </div>
       </DialogContent>
