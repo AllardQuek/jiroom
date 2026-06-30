@@ -12,9 +12,13 @@ import { calculateScore } from "@/lib/utils/calculateScore";
 import { getDisplayPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { GitCompareArrows, X, LayoutList } from "lucide-react";
-import Link from "next/link";
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 export function ComparisonTable() {
+  const t = useTranslations('compare');
+  const tNav = useTranslations('navigation');
+  const tCommon = useTranslations('common');
   const selectedListingIds = useComparisonStore((s) => s.selectedListingIds);
   const clearComparison = useComparisonStore((s) => s.clearComparison);
   const removeFromComparison = useComparisonStore(
@@ -54,15 +58,15 @@ export function ComparisonTable() {
           <GitCompareArrows size={48} className="text-muted-foreground" />
         </div>
         <div className="space-y-2">
-          <h2 className="text-xl font-bold">No listings selected</h2>
+          <h2 className="text-xl font-bold">{t('noSelection')}</h2>
           <p className="text-muted-foreground max-w-xs">
-            Select 2–3 listings from your board to compare them side by side.
+            {t('selectListings')}
           </p>
         </div>
         <Link href="/listings">
           <Button variant="outline">
             <LayoutList className="h-4 w-4 mr-1.5" />
-            Browse Listings
+            {tNav('listings')}
           </Button>
         </Link>
       </div>
@@ -73,18 +77,20 @@ export function ComparisonTable() {
     <div className="p-4 pb-24 space-y-4">
       <header className="flex items-start sm:items-center justify-between gap-4 flex-col sm:flex-row">
         <div>
-          <h1 className="text-2xl font-bold">Compare</h1>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
           <p className="text-sm text-muted-foreground">
-            {selectedListings.length} listing
-            {selectedListings.length > 1 ? "s" : ""} &middot;{" "}
-            {template?.criteria.length ?? 0} criteria
+            {selectedListings.length > 1
+              ? t('listingsCount', { count: selectedListings.length })
+              : t('listingCount', { count: selectedListings.length })}
+            {" "}&middot;{" "}
+            {t('criteriaCount', { count: template?.criteria.length ?? 0 })}
           </p>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
           <Button variant="outline" size="sm" onClick={clearComparison}>
             <X size={14} className="mr-1" />
-            Clear
+            {tCommon('close')}
           </Button>
         </div>
       </header>
