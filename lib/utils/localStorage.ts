@@ -130,6 +130,21 @@ export function cleanupOldLocalStorageData(): void {
 }
 
 /**
+ * Get all localStorage keys ending with "-storage" (i.e. Zustand persisted stores)
+ */
+export function getStoreKeys(): string[] {
+  if (typeof window === "undefined") return [];
+  const keys: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.endsWith("-storage")) {
+      keys.push(key);
+    }
+  }
+  return keys.sort();
+}
+
+/**
  * Get localStorage usage statistics
  */
 export function getLocalStorageStats(): {

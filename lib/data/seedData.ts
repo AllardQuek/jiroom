@@ -1,3 +1,4 @@
+import { getStoreKeys } from "@/lib/utils/localStorage";
 import type { Listing, Viewing } from "@/types/listing";
 import type { Evaluation, Template } from "@/types/evaluation";
 import type { Verdict } from "@/types/verdict";
@@ -345,18 +346,6 @@ export const seedComparisonIds: string[] = [ids.l3, ids.l4];
 
 const BACKUP_KEY = "user-data-backup";
 const SEED_FLAG = "seed-mode-active";
-
-function getStoreKeys(): string[] {
-  if (typeof window === "undefined") return [];
-  const keys: string[] = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.endsWith("-storage")) {
-      keys.push(key);
-    }
-  }
-  return keys.sort();
-}
 
 export function isSeedModeActive(): boolean {
   if (typeof window === "undefined") return false;

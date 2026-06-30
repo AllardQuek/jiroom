@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from 'next-intl';
 import { Viewing } from "@/types/listing";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -51,6 +52,7 @@ export function ScheduleViewingForm({
   isScheduled = false,
   scheduledDate,
 }: ScheduleViewingFormProps) {
+  const locale = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const initial = parseExistingDate(viewing?.scheduled_date);
   const [selectedDate, setSelectedDate] = useState<string | undefined>(
@@ -80,7 +82,7 @@ export function ScheduleViewingForm({
 
   const formatScheduledDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(locale, {
       weekday: "short",
       month: "short",
       day: "numeric",

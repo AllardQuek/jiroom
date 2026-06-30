@@ -11,12 +11,14 @@ import { calculateScore as calcScore } from "@/lib/utils/calculateScore";
 import { hasResponse, groupCriteriaByCategory } from "./shared/evaluationHelpers";
 import { SelectPills, NumberBadge, TextNote } from "./shared/EvaluationInputs";
 import { useDerivedTotal } from "./shared/useDerivedTotal";
+import { useTranslations } from 'next-intl';
 
 interface EvaluationSectionProps {
   listingId: string;
 }
 
 export function EvaluationSection({ listingId }: EvaluationSectionProps) {
+  const t = useTranslations('evaluation');
   const templates = useTemplateStore((state) => state.templates);
   const listings = useListingStore((state) => state.listings);
   const evaluation = useEvaluationStore((state) =>
@@ -36,7 +38,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   if (!template) {
     return (
       <div className="rounded-xl bg-muted/50 p-4 text-sm text-muted-foreground">
-        Set up an evaluation template before rating this listing.
+        {t('noTemplate')}
       </div>
     );
   }
@@ -157,7 +159,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                   : "bg-transparent text-muted-foreground/60 border-border/30 hover:border-border/60 hover:text-foreground/80"
               }`}
             >
-              Yes
+              {t('yes')}
             </button>
             <button
               type="button"
@@ -172,7 +174,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                   : "bg-transparent text-muted-foreground/60 border-border/30 hover:border-border/60 hover:text-foreground/80"
               }`}
             >
-              No
+              {t('no')}
             </button>
             <button
               type="button"
@@ -187,7 +189,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                   : "bg-transparent text-muted-foreground/40 border-transparent hover:text-muted-foreground/70"
               }`}
             >
-              N/A
+              {t('na')}
             </button>
           </div>
         );
@@ -247,7 +249,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   return (
     <div className="rounded-xl bg-muted/50 p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">Evaluation</span>
+        <span className="text-sm font-medium">{t('title')}</span>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span>
             {answeredCount}/{totalCount}

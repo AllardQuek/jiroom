@@ -1,16 +1,6 @@
-const MIGRATION_FLAG = "migration-v1-strip-singapore";
+import { getStoreKeys } from "@/lib/utils/localStorage";
 
-function getStoreKeys(): string[] {
-  if (typeof window === "undefined") return [];
-  const keys: string[] = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.endsWith("-storage")) {
-      keys.push(key);
-    }
-  }
-  return keys.sort();
-}
+const MIGRATION_FLAG = "migration-v1-strip-singapore";
 
 function stripSingapore(text: string): string {
   return text.replace(/,\s*Singapore\s*$/i, "").replace(/\s+Singapore\s*$/i, "").trim();

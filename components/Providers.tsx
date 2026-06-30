@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { ThemeProvider } from "next-themes";
 import { runMigrations } from "@/lib/data/migrations";
@@ -26,10 +27,9 @@ function StoreInitializer({ children }: { children: React.ReactNode }) {
 }
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  // Run migrations once on the server side or first client render
-  if (typeof window !== "undefined") {
+  useEffect(() => {
     runMigrations();
-  }
+  }, []);
 
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 

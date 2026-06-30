@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Listing, Viewing } from "@/types/listing";
 import { Template, Criterion, Evaluation } from "@/types/evaluation";
 import { Verdict } from "@/types/verdict";
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { X, Star, Check, Minus } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 function CriterionValue({
   criterion,
@@ -238,6 +238,7 @@ export function ComparisonMatrix({
   onRemove,
 }: ComparisonMatrixProps) {
   const t = useTranslations('compare');
+  const locale = useLocale();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const resolvedTheme = (theme as 'light' | 'dark') || 'light';
@@ -395,7 +396,7 @@ export function ComparisonMatrix({
           )}
           {viewing?.scheduled_date && (
             <span className="text-[10px] text-muted-foreground/60">
-              {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
+              {new Date(viewing.scheduled_date).toLocaleDateString(locale, {
                 weekday: "short",
                 month: "short",
                 day: "numeric",

@@ -313,11 +313,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         {showMobileMenu && (
           <div className="sm:hidden absolute right-0 top-full mt-2 bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md w-56 space-y-3">
             <div>
-              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{t('markerColor')}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{t('markerColorLabel')}</p>
               <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{t('routeMode')}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{t('routeModeLabel')}</p>
               <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
             </div>
             <button

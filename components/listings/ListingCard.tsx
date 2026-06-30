@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { TakenBadge } from "./TakenBadge";
 import { TakenTooltip } from "./TakenTooltip";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import {
   Tooltip,
   TooltipContent,
@@ -38,6 +38,7 @@ interface ListingCardProps {
 
 export function ListingCard({ listing, compact, compareMode, onClick }: ListingCardProps) {
   const t = useTranslations('listings.card');
+  const locale = useLocale();
   const [showNotes, setShowNotes] = useState(false);
   const viewings = useViewingStore((state) => state.viewings);
   const verdicts = useVerdictStore((state) => state.verdicts);
@@ -137,7 +138,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                 <div className="flex items-center gap-2 shrink-0 text-[10px] text-muted-foreground/50">
                   {viewing?.scheduled_date ? (
                     <span className={isViewingOverdue ? "text-amber-500 font-medium" : ""}>
-                      {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
+                      {new Date(viewing.scheduled_date).toLocaleDateString(locale, {
                         month: "short",
                         day: "numeric",
                       })}
@@ -276,7 +277,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
             {viewing?.scheduled_date ? (
               <span className={`text-[10px] ${isViewingOverdue ? "text-amber-500 font-semibold" : "text-muted-foreground/60"}`} title="Scheduled viewing">
                 <CalendarDays size={10} className="inline -mt-0.5 mr-0.5" />
-                {new Date(viewing.scheduled_date).toLocaleDateString("en-US", {
+                {new Date(viewing.scheduled_date).toLocaleDateString(locale, {
                   month: "short",
                   day: "numeric",
                   hour: "numeric",

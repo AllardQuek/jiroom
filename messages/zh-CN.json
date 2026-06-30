@@ -229,10 +229,12 @@
         "no": "不满意"
       }
     },
+    "markerColorLabel": "标记颜色",
     "markerColor": {
       "byStatus": "按状态",
       "byArea": "按区域"
     },
+    "routeModeLabel": "路线模式",
     "travelMode": {
       "transit": "公共交通",
       "drive": "驾车",
@@ -438,6 +440,23 @@
     "keyboardShortcuts": {
       "title": "键盘快捷键",
       "toggleHelp": "按 ? 从任何页面切换此帮助对话框。"
+    }
+  },
+  "tenantProfile": {
+    "fields": {
+      "name": "姓名",
+      "occupation": "职业",
+      "nationality": "国籍",
+      "noOfPax": "入住人数",
+      "gender": "性别",
+      "pets": "是否养宠物?",
+      "cooking": "烹饪",
+      "pass": "签证/准证",
+      "workLocation": "工作地点",
+      "moveInDate": "入住日期",
+      "leaseDuration": "租期",
+      "budget": "预算",
+      "viewing": "看房"
     }
   },
   "language": {
