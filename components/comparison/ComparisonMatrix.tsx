@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/popover";
 import { X, Star, Check, Minus } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useTranslations } from 'next-intl';
 
 function CriterionValue({
   criterion,
@@ -37,6 +38,7 @@ function CriterionValue({
   responses?: Record<string, number | string>;
   isMobile: boolean;
 }) {
+  const t = useTranslations('compare');
   if (criterion.type === "derived") {
     if (listingPrice === undefined) {
       return <span className="text-muted-foreground/40 text-sm">&mdash;</span>;
@@ -64,16 +66,16 @@ function CriterionValue({
   switch (criterion.type) {
     case "checkbox":
       return value === "true" ? (
-        <span className="inline-flex items-center gap-1.5 text-emerald-600 text-sm font-medium">
+        <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-sm font-medium">
           <Check size={13} strokeWidth={3} />
-          Yes
+          {t('yes')}
         </span>
       ) : value === "na" ? (
-        <span className="text-muted-foreground/50 text-sm">N/A</span>
+        <span className="text-muted-foreground/50 text-sm">{t('na')}</span>
       ) : (
-        <span className="inline-flex items-center gap-1.5 text-red-500 text-sm font-medium">
+        <span className="inline-flex items-center gap-1.5 text-red-500 dark:text-red-400 text-sm font-medium">
           <Minus size={13} strokeWidth={3} />
-          No
+          {t('no')}
         </span>
       );
     case "rating": {
@@ -136,6 +138,7 @@ function formatNet(net: number) {
 }
 
 function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
+  const t = useTranslations('compare');
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const resolvedTheme = (theme as 'light' | 'dark') || 'light';
@@ -165,13 +168,13 @@ function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
       <div className="flex items-center gap-2">
         <div className="relative w-10 h-10 shrink-0">
           <svg className="w-10 h-10" viewBox="0 0 64 64">
-            <circle cx="32" cy="32" r="28" fill="none" stroke="#e7e5e4" strokeWidth="4" />
+            <circle cx="32" cy="32" r="28" fill="none" className="stroke-muted-foreground/20" strokeWidth="4" />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-sm font-bold tabular-nums leading-none text-[#d4d4d4]">&mdash;</span>
+            <span className="text-sm font-bold tabular-nums leading-none text-muted-foreground/30">&mdash;</span>
           </div>
         </div>
-        <span className="text-[11px] text-muted-foreground/50">No scores</span>
+        <span className="text-[11px] text-muted-foreground/50 dark:text-muted-foreground/60">{t('noScores')}</span>
       </div>
     );
   }
@@ -180,7 +183,7 @@ function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
     <div className="flex items-center gap-2">
       <div className="relative w-10 h-10 shrink-0">
         <svg className="w-10 h-10" viewBox="0 0 64 64">
-          <circle cx="32" cy="32" r="28" fill="none" stroke="#e7e5e4" strokeWidth="4" />
+          <circle cx="32" cy="32" r="28" fill="none" className="stroke-muted-foreground/20" strokeWidth="4" />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
           <span className="text-sm font-bold tabular-nums leading-none" style={{ color: ringColor }}>
@@ -190,10 +193,10 @@ function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
       </div>
       <div className="space-y-1">
         <div className="flex items-center gap-1.5 text-[11px]">
-          <span className="font-bold text-emerald-600 tabular-nums">{score.positives}</span>
-          <span className="font-semibold text-emerald-700/70 leading-none">↑</span>
-          <span className="font-bold text-red-600 tabular-nums ml-0.5">{score.negatives}</span>
-          <span className="font-semibold text-red-700/70 leading-none">↓</span>
+          <span className="font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">{score.positives}</span>
+          <span className="font-semibold text-emerald-700/70 dark:text-emerald-500/70 leading-none">↑</span>
+          <span className="font-bold text-red-600 dark:text-red-400 tabular-nums ml-0.5">{score.negatives}</span>
+          <span className="font-semibold text-red-700/70 dark:text-red-500/70 leading-none">↓</span>
           <span className="font-bold text-muted-foreground tabular-nums ml-0.5">{score.neutrals}</span>
           <span className="text-muted-foreground/70 leading-none">—</span>
         </div>
@@ -234,6 +237,7 @@ export function ComparisonMatrix({
   scores,
   onRemove,
 }: ComparisonMatrixProps) {
+  const t = useTranslations('compare');
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const resolvedTheme = (theme as 'light' | 'dark') || 'light';
@@ -323,7 +327,7 @@ export function ComparisonMatrix({
       key="h-criteria"
       className="bg-background px-2 py-2.5 border-b border-border/40 font-semibold text-xs text-muted-foreground uppercase tracking-wider"
     >
-      Criteria
+      {t('criteria')}
     </div>
   );
 
@@ -341,15 +345,15 @@ export function ComparisonMatrix({
       no: "destructive",
     };
     const verdictLabel: Record<string, string> = {
-      yes: "Yes",
-      maybe: "Maybe",
-      no: "No",
+      yes: t('yes'),
+      maybe: t('maybe'),
+      no: t('no'),
     };
 
     gridItems.push(
       <div
         key={`h-${listing.id}`}
-        className={`px-2 py-2.5 border-b border-border/40 space-y-1.5 ${isWinner ? "bg-amber-50/30" : "bg-background"}`}
+        className={`px-2 py-2.5 border-b border-border/40 space-y-1.5 ${isWinner ? "bg-amber-50/30 dark:bg-amber-950/40" : "bg-background"}`}
       >
         <div className="flex items-start justify-between gap-2">
           <Link
@@ -363,7 +367,7 @@ export function ComparisonMatrix({
             size="icon"
             className="h-6 w-6 shrink-0 -mt-0.5 -mr-1"
             onClick={() => onRemove(listing.id)}
-            aria-label="Remove from comparison"
+            aria-label={t('removeFromComparison')}
           >
             <X size={12} />
           </Button>
@@ -383,10 +387,10 @@ export function ComparisonMatrix({
           {isWinner && (
             <Badge
               variant="outline"
-              className="border-amber-300/60 bg-amber-50 text-amber-700 text-[10px] px-1.5 py-0 font-semibold"
+              className="border-amber-300/60 bg-amber-50 text-amber-700 dark:border-amber-600/50 dark:bg-amber-950/60 dark:text-amber-300 text-[10px] px-1.5 py-0 font-semibold"
             >
               <Star size={8} className="fill-amber-500 text-amber-500 -mt-0.5 mr-0.5 inline" />
-              Best
+              {t('best')}
             </Badge>
           )}
           {viewing?.scheduled_date && (
