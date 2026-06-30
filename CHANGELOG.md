@@ -5,7 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2025-06-25
+## [3.0.0] - 2025-06-30
+
+### Added
+- **Internationalization Support**: Full i18n implementation using next-intl library
+- **Simplified Chinese Language**: Complete translation of UI to Simplified Chinese (zh-CN)
+- **Language Switcher**: Component to toggle between English and Chinese
+- **Locale-aware Routing**: Middleware for automatic locale detection and routing
+- **Translation Files**: 362 translation keys across all UI components
+- **Translated Components**: Language support for 15+ components including Listings, Map, Compare, Settings, and all dialogs
+- **Native Date Picker**: Replaced custom DatePicker with native HTML date input for better UX
+- **Rebranding**: Updated app name to JIRoom
+
+### Changed
+- **URL Structure**: All URLs now include locale prefix (e.g., `/en/listings`, `/zh-CN/listings`)
+- **Navigation Architecture**: Separated navigation module for i18n-aware routing
+- **Component Hierarchy**: Moved Navigation and FloatingActions inside Providers to fix dark mode toggle
+- **Date Formatting**: Dates now display in user's selected locale (en or zh-CN)
+- **Export/Import**: Profile field labels in copy function now use translated labels
+
+### Fixed
+- **Dark Mode Toggle**: Fixed theme toggle not working by moving components inside Providers
+- **Compare Page Contrast**: Improved highlight contrast for "best" listing in both light and dark modes
+- **Script Tag Warning**: Resolved React 19 script tag warning in theme provider
+- **i18n Routing**: Fixed redirects and navigation to preserve locale prefix
+- **Translation Keys**: Added missing keys for MapView mobile menu and EvaluationSection
+- **Code Duplication**: Extracted shared getStoreKeys utility to eliminate duplicate code
+- **Date Locale**: Replaced hardcoded "en-US" with dynamic locale in 6 components
+- **Migration Lifecycle**: Moved runMigrations to useEffect for proper lifecycle management
+
+### Architecture
+- **Middleware**: Added Proxy.ts middleware for locale detection and routing
+- **i18n Module**: Created dedicated i18n directory with routing, navigation, and message files
+- **State Management**: Improved migration handling with proper React lifecycle
+
+### Notes
+- This release introduces locale-aware URLs; existing bookmarks may need to be updated
+- Translation coverage is comprehensive but user-defined content (criteria names, notes) remains in input language
+- Supported locales: English (en) and Simplified Chinese (zh-CN)
+
+[3.0.0]: https://github.com/AllardQuek/jiroom/releases/tag/v3.0.0
+[2.0.0]: https://github.com/AllardQuek/jiroom/releases/tag/v2.0.0
 
 ### Added
 - **HelpDialog Getting Started**: 3-step quick start guide for first-time users

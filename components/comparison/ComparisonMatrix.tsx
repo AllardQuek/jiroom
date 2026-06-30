@@ -66,7 +66,7 @@ function CriterionValue({
   switch (criterion.type) {
     case "checkbox":
       return value === "true" ? (
-        <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-sm font-medium">
+        <span className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-600 text-sm font-medium">
           <Check size={13} strokeWidth={3} />
           {t('yes')}
         </span>
@@ -193,17 +193,17 @@ function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
       </div>
       <div className="space-y-1">
         <div className="flex items-center gap-1.5 text-[11px]">
-          <span className="font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">{score.positives}</span>
-          <span className="font-semibold text-emerald-700/70 dark:text-emerald-500/70 leading-none">↑</span>
-          <span className="font-bold text-red-600 dark:text-red-400 tabular-nums ml-0.5">{score.negatives}</span>
-          <span className="font-semibold text-red-700/70 dark:text-red-500/70 leading-none">↓</span>
-          <span className="font-bold text-muted-foreground tabular-nums ml-0.5">{score.neutrals}</span>
-          <span className="text-muted-foreground/70 leading-none">—</span>
+          <span className="font-bold text-emerald-700 dark:text-emerald-600 tabular-nums">{score.positives}</span>
+          <span className="font-semibold text-emerald-700 dark:text-emerald-600 leading-none">↑</span>
+          <span className="font-bold text-rose-500 dark:text-rose-400 tabular-nums ml-0.5">{score.negatives}</span>
+          <span className="font-semibold text-rose-500/70 dark:text-rose-400/70 leading-none">↓</span>
+          <span className="font-bold text-slate-500 dark:text-slate-400 tabular-nums ml-0.5">{score.neutrals}</span>
+          <span className="text-slate-400 dark:text-slate-500 leading-none">—</span>
         </div>
         {score.answered > 0 && (
           <div className="h-1 rounded-full bg-muted overflow-hidden flex max-w-[100px]">
             {score.positives > 0 && (
-              <div className="h-full bg-emerald-400" style={{ width: `${(score.positives / score.answered) * 100}%` }} />
+              <div className="h-full bg-emerald-600" style={{ width: `${(score.positives / score.answered) * 100}%` }} />
             )}
             {score.neutrals > 0 && (
               <div className="h-full bg-muted-foreground/20" style={{ width: `${(score.neutrals / score.answered) * 100}%` }} />
@@ -354,7 +354,7 @@ export function ComparisonMatrix({
     gridItems.push(
       <div
         key={`h-${listing.id}`}
-        className={`px-2 py-2.5 border-b border-border/40 space-y-1.5 ${isWinner ? "bg-amber-100/50 dark:bg-amber-950/40" : "bg-background"}`}
+        className={`px-2 py-2.5 border-b border-border/40 space-y-1.5 ${isWinner ? "bg-emerald-50 border-l-2 border-l-emerald-500 dark:bg-emerald-950/30 dark:border-l-emerald-400" : "bg-background"}`}
       >
         <div className="flex items-start justify-between gap-2">
           <Link
@@ -388,14 +388,14 @@ export function ComparisonMatrix({
           {isWinner && (
             <Badge
               variant="outline"
-              className="border-amber-400/70 bg-amber-100 text-amber-800 dark:border-amber-600/50 dark:bg-amber-950/60 dark:text-amber-300 text-[10px] px-1.5 py-0 font-semibold"
+              className="border-emerald-500/80 bg-emerald-100 text-emerald-900 dark:border-emerald-500/60 dark:bg-emerald-950/70 dark:text-emerald-200 text-[10px] px-1.5 py-0 font-semibold"
             >
-              <Star size={8} className="fill-amber-500 text-amber-500 -mt-0.5 mr-0.5 inline" />
+              <Star size={8} className="fill-emerald-600 text-emerald-600 -mt-0.5 mr-0.5 inline" />
               {t('best')}
             </Badge>
           )}
           {viewing?.scheduled_date && (
-            <span className="text-[10px] text-muted-foreground/60">
+            <span className={`text-[10px] ${isWinner ? "text-foreground/70" : "text-muted-foreground/60"}`}>
               {new Date(viewing.scheduled_date).toLocaleDateString(locale, {
                 weekday: "short",
                 month: "short",
@@ -403,7 +403,7 @@ export function ComparisonMatrix({
               })}
             </span>
           )}
-          <span className="text-[10px] text-muted-foreground/50">
+          <span className={`text-[10px] ${isWinner ? "text-foreground/60" : "text-muted-foreground/50"}`}>
             {answeredCount}/{totalCriteria}
           </span>
         </div>
