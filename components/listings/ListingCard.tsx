@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { TakenBadge } from "./TakenBadge";
 import { TakenTooltip } from "./TakenTooltip";
+import { useTranslations } from 'next-intl';
 import {
   Tooltip,
   TooltipContent,
@@ -36,6 +37,7 @@ interface ListingCardProps {
 }
 
 export function ListingCard({ listing, compact, compareMode, onClick }: ListingCardProps) {
+  const t = useTranslations('listings.card');
   const [showNotes, setShowNotes] = useState(false);
   const viewings = useViewingStore((state) => state.viewings);
   const verdicts = useVerdictStore((state) => state.verdicts);
@@ -141,7 +143,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                       })}
                     </span>
                   ) : (
-                    <span className="italic text-muted-foreground/30">No date</span>
+                    <span className="italic text-muted-foreground/30">{t('noDate')}</span>
                   )}
                   {isTaken && <TakenBadge takenDate={listing.taken_date} />}
                   {hasNotes && <FileText size={10} className="text-muted-foreground/40" />}
@@ -214,7 +216,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
             <span className={`text-xl font-bold ${isNegotiated ? "text-emerald-600" : "text-primary"}`}>
               ${displayPrice.toLocaleString()}
             </span>
-            <span className="text-xs text-muted-foreground">/mo</span>
+            <span className="text-xs text-muted-foreground">{t('perMonth')}</span>
           </div>
         </div>
 
@@ -222,7 +224,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
           <div>
             <div className="flex items-center justify-between text-xs mb-1.5">
               <span className="font-medium text-muted-foreground">
-                Evaluation
+                {t('evaluation')}
               </span>
               <span className="font-semibold tabular-nums">
                 {answeredCount}/{totalCount}
@@ -246,8 +248,8 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <MapPin size={12} className={!listing.lat ? "opacity-30" : ""} />
             <span className={!listing.lat ? "opacity-40 italic" : ""}>
-              {listing.area || "No area"}
-              {!listing.lat && " (no map)"}
+              {listing.area || t('noArea')}
+              {!listing.lat && ` (${t('noMap')})`}
             </span>
             <CommuteBadge listing={listing} />
           </div>
@@ -263,7 +265,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                 className="flex items-center gap-1 text-xs text-muted-foreground/60 hover:text-foreground transition-colors"
               >
                 <FileText size={12} />
-                <span>Notes</span>
+                <span>{t('notes')}</span>
                 {showNotes ? (
                   <ChevronUp size={12} />
                 ) : (
@@ -282,12 +284,12 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                 })}
                 {isViewingOverdue && (
                   <span className="ml-1.5 text-[9px] bg-amber-100 text-amber-700 rounded-full px-1.5 py-0.5 font-semibold">
-                    Overdue
+                    {t('overdue')}
                   </span>
                 )}
               </span>
             ) : (
-              <span className="text-[10px] text-muted-foreground/30 italic">No date set</span>
+              <span className="text-[10px] text-muted-foreground/30 italic">{t('noDateSet')}</span>
             )}
           </div>
         </div>

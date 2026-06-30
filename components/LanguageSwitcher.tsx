@@ -1,5 +1,6 @@
 "use client";
 
+import { useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRouter, usePathname } from '@/i18n/navigation';
 import { locales, localeNames, type Locale } from '@/i18n/config';
@@ -18,8 +19,12 @@ export default function LanguageSwitcher() {
   const pathname = usePathname();
   const t = useTranslations('language');
 
+  const [isPending, startTransition] = useTransition();
+
   const handleLocaleChange = (newLocale: string) => {
-    router.replace(pathname, { locale: newLocale });
+    startTransition(() => {
+      router.replace(pathname, { locale: newLocale });
+    });
   };
 
   return (

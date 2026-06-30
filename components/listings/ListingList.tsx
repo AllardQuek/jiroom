@@ -14,6 +14,7 @@ import { SortButton } from "./SortButton";
 import { DroppableColumn } from "./DroppableColumn";
 import { useListingDragDrop } from "./hooks/useListingDragDrop";
 import { Home, ChevronDown } from "lucide-react";
+import { useTranslations } from 'next-intl';
 import { calculateScore } from "@/lib/utils/calculateScore";
 import {
   DndContext,
@@ -31,36 +32,39 @@ interface Column {
   dropData: { dropStatus: ListingStatus; dropVerdict?: "yes" | "maybe" | "no" };
 }
 
-const columns: Column[] = [
+const COLUMN_DEFS: Omit<Column, 'title'>[] = [
   {
     id: "to_view",
-    title: "To View",
     group: "not_viewed",
     filter: (l) => l.status === "new" || l.status === "to_view",
     dropData: { dropStatus: "to_view" },
   },
   {
     id: "yes",
-    title: "Yes",
     group: "viewed",
     filter: (l, v) => l.status === "viewed" && v?.status === "yes",
     dropData: { dropStatus: "viewed", dropVerdict: "yes" },
   },
   {
     id: "maybe",
-    title: "Maybe",
     group: "viewed",
     filter: (l, v) => l.status === "viewed" && (!v || v.status === "maybe"),
     dropData: { dropStatus: "viewed", dropVerdict: "maybe" },
   },
   {
     id: "no",
-    title: "No",
     group: "viewed",
     filter: (l, v) => l.status === "viewed" && v?.status === "no",
     dropData: { dropStatus: "viewed", dropVerdict: "no" },
   },
 ];
+
+const COLUMN_TITLE_KEYS: Record<string, string> = {
+  to_view: "columns.toView",
+  yes: "addColumn.yes",
+  maybe: "addColumn.maybe",
+  no: "addColumn.no",
+};
 
 type SortField = "price" | "score" | "name" | "date" | "area" | "created_date" | "modified_date";
 type SortDir = "asc" | "desc";
@@ -77,18 +81,18 @@ interface ListingListProps {
   filters?: ListingFilters;
 }
 
-const SORT_OPTIONS = [
-  { label: "Default", value: null },
-  { label: "Highest Price", value: { by: "price" as const, dir: "desc" as const } },
-  { label: "Lowest Price", value: { by: "price" as const, dir: "asc" as const } },
-  { label: "Highest Score", value: { by: "score" as const, dir: "desc" as const } },
-  { label: "Lowest Score", value: { by: "score" as const, dir: "asc" as const } },
-  { label: "Name A-Z", value: { by: "name" as const, dir: "asc" as const } },
-  { label: "Name Z-A", value: { by: "name" as const, dir: "desc" as const } },
-  { label: "Newest First", value: { by: "created_date" as const, dir: "desc" as const } },
-  { label: "Oldest First", value: { by: "created_date" as const, dir: "asc" as const } },
-  { label: "Recently Modified", value: { by: "modified_date" as const, dir: "desc" as const } },
-  { label: "Least Recently Modified", value: { by: "modified_date" as const, dir: "asc" as const } },
+const SORT_OPTION_KEYS = [
+  { key: "default", value: null },
+  { key: "highestPrice", value: { by: "price" as const, dir: "desc" as const } },
+  { key: "lowestPrice", value: { by: "price" as const, dir: "asc" as const } },
+  { key: "highestScore", value: { by: "score" as const, dir: "desc" as const } },
+  { key: "lowestScore", value: { by: "score" as const, dir: "asc" as const } },
+  { key: "nameAZ", value: { by: "name" as const, dir: "asc" as const } },
+  { key: "nameZA", value: { by: "name" as const, dir: "desc" as const } },
+  { key: "newestFirst", value: { by: "created_date" as const, dir: "desc" as const } },
+  { key: "oldestFirst", value: { by: "created_date" as const, dir: "asc" as const } },
+  { key: "recentlyModified", value: { by: "modified_date" as const, dir: "desc" as const } },
+  { key: "leastRecentlyModified", value: { by: "modified_date" as const, dir: "asc" as const } },
 ] as const;
 
 export function ListingList({
@@ -97,6 +101,7 @@ export function ListingList({
   compareMode,
   filters,
 }: ListingListProps) {
+  const t = useTranslations('listings');
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
   const verdicts = useVerdictStore((state) => state.verdicts);
@@ -122,6 +127,16 @@ export function ListingList({
   const templates = useTemplateStore((state) => state.templates);
 
   const template = templates[0];
+
+  const columns: Column[] = COLUMN_DEFS.map((col) => ({
+    ...col,
+    title: t(COLUMN_TITLE_KEYS[col.id] as any),
+  }));
+
+  const SORT_OPTIONS = SORT_OPTION_KEYS.map((opt) => ({
+    label: t(`sortOptions.${opt.key}` as any),
+    value: opt.value,
+  }));
 
   const toggleColumn = (columnId: string) => {
     setExpandedColumns((prev) => ({
@@ -203,11 +218,10 @@ export function ListingList({
         </div>
         <div className="space-y-2">
           <h2 className="text-xl font-semibold tracking-tight">
-            Your hunting journey starts here
+            {t('emptyState.title')}
           </h2>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-            Keep track of all the potential rooms you find. Add a listing to
-            begin comparing and rating them.
+            {t('emptyState.description')}
           </p>
         </div>
       </div>
@@ -237,7 +251,7 @@ export function ListingList({
           {/* Group header row */}
           <div className="hidden lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/80">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
-              To View
+              {t('columns.toView')}
             </span>
             <span className="text-[11px] text-muted-foreground/40">
               {columns
@@ -253,7 +267,7 @@ export function ListingList({
           </div>
           <div className="hidden lg:col-span-3 lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/80">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
-              Viewed
+              {t('columns.viewed')}
             </span>
             <span className="text-[11px] text-muted-foreground/40">
               {columns
@@ -284,10 +298,10 @@ export function ListingList({
                   }`}
                 >
                   {opt === "all"
-                    ? "All"
+                    ? t('columns.all')
                     : opt === "unscheduled"
-                      ? "Unscheduled"
-                      : "Scheduled"}
+                      ? t('columns.unscheduled')
+                      : t('columns.scheduled')}
                 </button>
               ))}
               <span className="ml-auto flex items-center gap-1">
@@ -407,10 +421,10 @@ export function ListingList({
                             }`}
                           >
                             {opt === "all"
-                              ? "All"
+                              ? t('columns.all')
                               : opt === "unscheduled"
-                                ? "Unscheduled"
-                                : "Scheduled"}
+                                ? t('columns.unscheduled')
+                                : t('columns.scheduled')}
                           </button>
                         )
                       )}
@@ -478,7 +492,7 @@ export function ListingList({
                       ))
                     ) : (
                       <div className="flex min-h-32 items-center justify-center rounded-lg border border-dashed border-border/80 bg-background/40 p-4 text-center text-xs text-muted-foreground/50">
-                        {col.id === "to_view" ? "No listings yet. Tap + to add your first listing" : "No viewed listings yet"}
+                        {col.id === "to_view" ? t('emptyColumn.toView') : t('emptyColumn.viewed')}
                       </div>
                     )}
                   </div>
