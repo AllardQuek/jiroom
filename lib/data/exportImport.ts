@@ -1,14 +1,4 @@
-function getStoreKeys(): string[] {
-  if (typeof window === "undefined") return [];
-  const keys: string[] = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.endsWith("-storage")) {
-      keys.push(key);
-    }
-  }
-  return keys.sort();
-}
+import { getStoreKeys } from "@/lib/utils/localStorage";
 
 export interface ExportData {
   version: number;
