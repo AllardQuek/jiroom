@@ -15,6 +15,7 @@ interface HelpDialogProps {
 
 export default function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
   const t = useTranslations('help');
+  const tEval = useTranslations('evaluation');
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -147,31 +148,31 @@ export default function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
                   <div className="flex items-center gap-2">
                     <span className="inline-block size-3 rounded-full bg-emerald-500" />
                     <span className="text-muted-foreground">
-                      <strong className="text-foreground">≥ +4:</strong> {t('evaluation.scoreRanges.great')}
+                      <strong className="text-foreground">≥ +4:</strong> {tEval('scoreRanges.great')}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="inline-block size-3 rounded-full bg-green-500" />
                     <span className="text-muted-foreground">
-                      <strong className="text-foreground">+1 to +3:</strong> {t('evaluation.scoreRanges.good')}
+                      <strong className="text-foreground">+1 to +3:</strong> {tEval('scoreRanges.good')}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="inline-block size-3 rounded-full bg-gray-400" />
                     <span className="text-muted-foreground">
-                      <strong className="text-foreground">0:</strong> {t('evaluation.scoreRanges.neutral')}
+                      <strong className="text-foreground">0:</strong> {tEval('scoreRanges.neutral')}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="inline-block size-3 rounded-full bg-orange-500" />
                     <span className="text-muted-foreground">
-                      <strong className="text-foreground">-1 to -2:</strong> {t('evaluation.scoreRanges.belowAverage')}
+                      <strong className="text-foreground">-1 to -2:</strong> {tEval('scoreRanges.belowAverage')}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="inline-block size-3 rounded-full bg-red-500" />
                     <span className="text-muted-foreground">
-                      <strong className="text-foreground">≤ -3:</strong> {t('evaluation.scoreRanges.poor')}
+                      <strong className="text-foreground">≤ -3:</strong> {tEval('scoreRanges.poor')}
                     </span>
                   </div>
                 </div>

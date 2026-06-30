@@ -1,7 +1,9 @@
-export const locales = ['en', 'zh-CN'] as const;
-export const defaultLocale = 'en' as const;
+import { routing } from './routing';
 
-export type Locale = (typeof locales)[number];
+export const locales = routing.locales;
+export const defaultLocale = routing.defaultLocale;
+
+export type Locale = (typeof routing.locales)[number];
 
 export const localeNames: Record<Locale, string> = {
   en: 'English',

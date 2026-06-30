@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
-import { NextIntlClientProvider } from 'next-intl';
+import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+import { routing } from '@/i18n/routing';
 import Navigation from "@/components/Navigation";
 import Providers from "@/components/Providers";
 import FloatingActions from "@/components/FloatingActions";
@@ -26,6 +28,12 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
+
+  // Ensure that the incoming `locale` is valid
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+
   const messages = await getMessages();
 
   return (
