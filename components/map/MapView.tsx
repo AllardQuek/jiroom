@@ -87,12 +87,7 @@ interface SearchResult {
 export default function MapView({ onViewDetails }: MapViewProps) {
   const t = useTranslations('map');
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const resolvedTheme = (theme as 'light' | 'dark') || 'light';
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const listings = useListingStore((state) => state.listings);
   const anchors = useAnchorStore((state) => state.anchors);
@@ -144,7 +139,6 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     [listings]
   );
   const areaColorMap = useMemo(() => {
-    if (!mounted) return {};
     const uniqueAreas = [
       ...new Set(listings.map((l) => l.area).filter(Boolean)),
     ] as string[];
@@ -154,12 +148,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       map[area] = palette[i % palette.length];
     });
     return map;
-  }, [listings, resolvedTheme, mounted]);
+  }, [listings, resolvedTheme]);
 
   const statusColors = useMemo(() => {
-    if (!mounted) return STATUS_COLORS;
     return getStatusColors(resolvedTheme);
-  }, [resolvedTheme, mounted]);
+  }, [resolvedTheme]);
 
   const travelMode = useRoutePrefsStore((s) => s.travelMode);
   const setTravelMode = useRoutePrefsStore((s) => s.setTravelMode);

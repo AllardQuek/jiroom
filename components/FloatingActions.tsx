@@ -38,7 +38,7 @@ export default function FloatingActions() {
     <>
       <div className="fixed bottom-[calc(7rem+env(safe-area-inset-bottom,0px))] right-4 z-40 flex flex-col items-end gap-2">
         <div
-          className={`flex flex-col items-end gap-2 transition-all duration-300 ${
+          className={`flex flex-col items-end gap-2 transition-all duration-200 ${
             menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
           }`}
         >
@@ -71,12 +71,11 @@ export default function FloatingActions() {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
+          className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-200 bg-background border-border size-10"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          style={{ transition: 'transform 0.2s ease-in-out' }}
         >
-          {menuOpen ? <X className="size-4" style={{ transform: 'rotate(90deg)', transition: 'transform 0.2s ease-in-out' }} /> : <Menu className="size-4" />}
+          {menuOpen ? <X className="size-4" style={{ transform: 'rotate(90deg)' }} /> : <Menu className="size-4" />}
         </Button>
       </div>
       <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />

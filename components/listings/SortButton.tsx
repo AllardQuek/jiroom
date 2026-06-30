@@ -65,7 +65,7 @@ export function SortButton({
         onClick={() =>
           setOpenSortCol(openSortCol === columnId ? null : columnId)
         }
-        className={`flex items-center rounded-md p-1 text-xs transition-colors ${
+        className={`flex items-center rounded-md p-1 text-xs ${
           config
             ? "bg-primary/10 text-primary"
             : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/60"
@@ -95,7 +95,7 @@ export function SortButton({
                     }));
                     setOpenSortCol(null);
                   }}
-                  className={`w-full rounded-md px-2.5 py-1.5 text-left text-xs transition-colors ${
+                  className={`w-full rounded-md px-2.5 py-1.5 text-left text-xs ${
                     isActive
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-foreground hover:bg-muted/80"

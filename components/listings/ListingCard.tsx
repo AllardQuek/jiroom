@@ -85,7 +85,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
         <Tooltip>
           <TooltipTrigger asChild>
             <Card
-              className={`overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-sm transition-all duration-200 rounded-lg ${
+              className={`overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-sm rounded-lg ${
                 isTaken ? "opacity-50" : ""
               }`}
               onClick={handleClick}
@@ -98,12 +98,12 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="shrink-0 text-muted-foreground/40 hover:text-primary transition-colors"
+                      className="shrink-0 text-muted-foreground/40 hover:text-primary"
                     >
                       <ExternalLink size={10} />
                     </a>
                   )}
-                  <span className="font-medium truncate group-hover:text-primary transition-colors">
+                  <span className="font-medium truncate group-hover:text-primary">
                     {listing.title}
                   </span>
                   {listing.area && (
@@ -172,7 +172,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
       <Tooltip>
         <TooltipTrigger asChild>
           <Card
-            className={`overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-md transition-all duration-200 rounded-xl ${
+            className={`overflow-hidden group cursor-pointer border-border/40 hover:border-primary/30 hover:shadow-md rounded-xl ${
               isViewingOverdue ? "border-l-amber-400 border-l-2" : ""
             } ${
               isTaken ? "opacity-50" : ""
@@ -182,7 +182,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
       <div className="p-3.5 space-y-3">
         <div className="flex justify-between items-start gap-3">
           <div className="space-y-1 flex-1 min-w-0">
-            <h3 className="font-semibold leading-snug group-hover:text-primary transition-colors line-clamp-2">
+            <h3 className="font-semibold leading-snug group-hover:text-primary line-clamp-2">
               {listing.title}
             </h3>
             {listing.source_platform && (
@@ -194,7 +194,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="hover:text-primary transition-colors"
+                    className="hover:text-primary transition-colors transition-colors"
                   >
                     <ExternalLink size={10} />
                   </a>
@@ -238,7 +238,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
             </div>
             <div className="h-1 overflow-hidden rounded-full bg-muted">
               <div
-                className="h-full rounded-full bg-primary transition-all"
+                className="h-full rounded-full bg-primary"
                 style={{ width: `${completionPercent}%` }}
               />
             </div>
@@ -263,7 +263,7 @@ export function ListingCard({ listing, compact, compareMode, onClick }: ListingC
                   event.stopPropagation();
                   setShowNotes(!showNotes);
                 }}
-                className="flex items-center gap-1 text-xs text-muted-foreground/60 hover:text-foreground transition-colors"
+                className="flex items-center gap-1 text-xs text-muted-foreground/60 hover:text-foreground"
               >
                 <FileText size={12} />
                 <span>{t('notes')}</span>

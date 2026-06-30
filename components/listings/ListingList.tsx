@@ -402,7 +402,7 @@ export function ListingList({
                       <button
                         type="button"
                         onClick={() => toggleColumn(col.id)}
-                        className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium transition-colors text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60"
+                        className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60"
                       >
                         <ChevronDown 
                           className={`w-4 h-4 transition-transform duration-300 ease-in-out ${expandedColumns[col.id] ? 'rotate-180' : ''}`} 
@@ -448,7 +448,7 @@ export function ListingList({
                         <button
                           type="button"
                           onClick={() => toggleColumn(col.id)}
-                          className="flex items-center justify-center rounded-md p-1 text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60 transition-colors"
+                          className="flex items-center justify-center rounded-md p-1 text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60"
                         >
                           <ChevronDown 
                             className={`w-4 h-4 transition-transform duration-300 ease-in-out ${expandedColumns[col.id] ? 'rotate-180' : ''}`} 
