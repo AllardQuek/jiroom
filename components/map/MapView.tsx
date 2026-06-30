@@ -50,6 +50,7 @@ import { AnchorInfoWindow } from "./AnchorInfoWindow";
 import { MapController } from "./MapController";
 import { useRouteCalculator } from "./hooks/useRouteCalculator";
 import { useTheme } from "next-themes";
+import { useTranslations } from 'next-intl';
 
 const LocationSearch = dynamic(() => import("./LocationSearch"), {
   ssr: false,
@@ -84,6 +85,7 @@ interface SearchResult {
 }
 
 export default function MapView({ onViewDetails }: MapViewProps) {
+  const t = useTranslations('map');
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const resolvedTheme = (theme as 'light' | 'dark') || 'light';
@@ -281,9 +283,9 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           <div className="flex items-center gap-2 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg px-3 py-2 text-xs text-amber-800 dark:text-amber-200 shadow-sm">
             <AlertCircle size={14} className="shrink-0" />
             <span className="flex-1">
-              {listingsWithoutCoords.length} listing
-              {listingsWithoutCoords.length > 1 ? "s" : ""} without map
-              coordinates — edit to add a location
+              {listingsWithoutCoords.length > 1
+                ? t('noCoordsWarningPlural', { count: listingsWithoutCoords.length })
+                : t('noCoordsWarning', { count: listingsWithoutCoords.length })}
             </span>
             <button
               type="button"
@@ -311,11 +313,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         {showMobileMenu && (
           <div className="sm:hidden absolute right-0 top-full mt-2 bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md w-56 space-y-3">
             <div>
-              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">Marker color</p>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{t('markerColor')}</p>
               <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">Route mode</p>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{t('routeMode')}</p>
               <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
             </div>
             <button
@@ -323,7 +325,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
               className="w-full flex items-center justify-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-muted/50 transition-colors"
             >
               <List size={14} />
-              Anchors
+              {t('anchors.title')}
             </button>
           </div>
         )}
@@ -335,7 +337,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-muted/50 transition-colors"
           >
             <List size={14} />
-            Anchors
+            {t('anchors.title')}
           </button>
         </div>
       </div>
@@ -455,7 +457,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             />
             <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_var(--shadow-panel)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-96 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
               <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
-                <h2 className="text-sm font-semibold">Listing Details</h2>
+                <h2 className="text-sm font-semibold">{t('listingDetails')}</h2>
                 <button
                   onClick={() => setSelectedListing(null)}
                   className="p-1 -mr-1 text-muted-foreground hover:text-foreground"
@@ -474,13 +476,13 @@ export default function MapView({ onViewDetails }: MapViewProps) {
                     routes={routeResults}
                     travelModeLabel={
                       travelMode === "TRANSIT"
-                        ? "Transit"
+                        ? t('commute.transit')
                         : travelMode === "DRIVING"
-                          ? "Driving"
+                          ? t('commute.driving')
                           : travelMode === "WALKING"
-                            ? "Walking"
+                            ? t('commute.walking')
                             : travelMode === "BICYCLING"
-                              ? "Biking"
+                              ? t('commute.biking')
                               : ""
                     }
                   />
@@ -529,7 +531,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             size="lg"
           >
             <Plus className="h-4 w-4" />
-            Listing
+            {t('listing')}
           </Button>
           <Button
             onClick={() => setShowCreateAnchorDialog(true)}
@@ -538,7 +540,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             size="lg"
           >
             <MapPin className="h-4 w-4" />
-            Anchor
+            {t('anchor')}
           </Button>
         </div>
       )}
@@ -549,7 +551,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       >
         <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Add New Listing</DialogTitle>
+            <DialogTitle>{t('addNewListing')}</DialogTitle>
           </DialogHeader>
           <CreateListingForm
             defaultValues={{
@@ -575,7 +577,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {selectedAnchor ? "Edit Anchor" : "Add Anchor"}
+              {selectedAnchor ? t('editAnchor') : t('addAnchor')}
             </DialogTitle>
           </DialogHeader>
           <CreateAnchorForm
