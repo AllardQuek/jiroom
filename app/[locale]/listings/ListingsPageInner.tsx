@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -43,6 +44,7 @@ import {
 
 export function ListingsPageInner() {
   const t = useTranslations('listings');
+  const tProfile = useTranslations('tenantProfile.fields');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
     null
@@ -142,25 +144,15 @@ export function ListingsPageInner() {
   const handleCopyProfile = () => {
     const profile = getProfile();
 
-    const fieldLabels: Record<keyof typeof profile, string> = {
-      name: "Name",
-      occupation: "Occupation",
-      nationality: "Nationality",
-      noOfPax: "No. of Pax",
-      gender: "Gender",
-      pets: "Any pets?",
-      cooking: "Cooking",
-      pass: "Pass",
-      workLocation: "Work Location",
-      moveInDate: "Move in date",
-      leaseDuration: "Lease duration",
-      budget: "Budget",
-      viewing: "Viewing",
-    };
+    const fieldKeys = [
+      "name", "occupation", "nationality", "noOfPax", "gender",
+      "pets", "cooking", "pass", "workLocation", "moveInDate",
+      "leaseDuration", "budget", "viewing",
+    ] as const;
 
     const lines = Object.entries(profile)
-      .filter(([_, value]) => value && value.trim() !== "")
-      .map(([key, value]) => `${fieldLabels[key as keyof typeof profile]}: ${value}`);
+      .filter(([key, value]) => value && value.trim() !== "" && fieldKeys.includes(key as typeof fieldKeys[number]))
+      .map(([key, value]) => `${tProfile(key as typeof fieldKeys[number])}: ${value}`);
 
     if (lines.length === 0) {
       showCopyStatus("error", t('profileEmpty'));
