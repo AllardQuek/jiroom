@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from 'next-intl';
 import { Viewing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
 
@@ -30,6 +31,7 @@ export function ListingDetailContent({
   listingId,
   onDeleted,
 }: ListingDetailContentProps) {
+  const t = useTranslations('listings.detail');
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
   const deleteListing = useListingStore((state) => state.deleteListing);
@@ -56,17 +58,17 @@ export function ListingDetailContent({
   const [isDeleting, setIsDeleting] = useState(false);
 
   if (isDeleting) {
-    return <div className="p-4 text-sm text-muted-foreground">Deleting...</div>;
+    return <div className="p-4 text-sm text-muted-foreground">{t('deleting')}</div>;
   }
 
   if (!listing) {
     return (
       <div className="p-4 space-y-3">
         <p className="text-sm text-muted-foreground">
-          Listing not found. It may have been deleted.
+          {t('notFound')}
         </p>
         <Button type="button" onClick={onDeleted}>
-          Back to Listings
+          {t('backToListings')}
         </Button>
       </div>
     );
@@ -122,7 +124,7 @@ export function ListingDetailContent({
       <InlineNotes
         notes={listing.notes || ""}
         onUpdate={handleListingNotesUpdate}
-        label="Listing Notes"
+        label={t('listingNotes')}
       />
 
       <ViewingSection
@@ -145,7 +147,7 @@ export function ListingDetailContent({
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Edit Listing</DialogTitle>
+            <DialogTitle>{t('editTitle')}</DialogTitle>
           </DialogHeader>
           <EditListingForm
             listing={listing}
