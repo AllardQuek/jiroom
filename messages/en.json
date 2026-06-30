@@ -229,10 +229,12 @@
         "no": "No"
       }
     },
+    "markerColorLabel": "Marker color",
     "markerColor": {
       "byStatus": "By Status",
       "byArea": "By Area"
     },
+    "routeModeLabel": "Route mode",
     "travelMode": {
       "transit": "Transit",
       "drive": "Drive",
@@ -438,6 +440,23 @@
     "keyboardShortcuts": {
       "title": "Keyboard Shortcuts",
       "toggleHelp": "Press ? to toggle this help dialog from any page."
+    }
+  },
+  "tenantProfile": {
+    "fields": {
+      "name": "Name",
+      "occupation": "Occupation",
+      "nationality": "Nationality",
+      "noOfPax": "No. of Pax",
+      "gender": "Gender",
+      "pets": "Any pets?",
+      "cooking": "Cooking",
+      "pass": "Pass",
+      "workLocation": "Work Location",
+      "moveInDate": "Move in date",
+      "leaseDuration": "Lease duration",
+      "budget": "Budget",
+      "viewing": "Viewing"
     }
   },
   "language": {
