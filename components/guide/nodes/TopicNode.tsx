@@ -183,12 +183,12 @@ const handleContentClick = (e: React.MouseEvent) => {
             className="border-t border-border/20 guide-scrollable"
           >
             <div ref={contentRef} className="px-4 pb-4 pt-3 space-y-3 select-text" onClick={handleContentClick}>
-              {content.note && (
-                <p className="text-xs text-muted-foreground leading-relaxed flex items-start gap-1.5">
+              {content.notes?.map((n, i) => (
+                <p key={i} className="text-xs text-muted-foreground leading-relaxed flex items-start gap-1.5">
                   <span className="text-foreground/30 mt-0.5 flex-shrink-0">•</span>
-                  <span className="text-muted-foreground/70">{content.note}</span>
+                  <span className="text-muted-foreground/70">{n}</span>
                 </p>
-              )}
+              ))}
               {content.bullets.length > 0 && (
                 <ul className="space-y-1">
                   {content.bullets.map((b, i) => (

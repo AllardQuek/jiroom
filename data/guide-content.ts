@@ -70,14 +70,9 @@ const TOPICS: TopicDef[] = [
     content: {
       bullets: [
         "Expo is on both the green (EW) and blue (DT) lines. Simei, Tampines, Pasir Ris, and Tanah Merah are your closest options.",
-        "Tampines West, Tampines, and Tampines East are on the blue line — direct train to Expo.",
-        "Upper Changi and Bedok are closer to the city while still a short ride to Expo.",
-        "Visit at night AND on weekends — some estates go from quiet to lively fast.",
+        "Tampines West, Tampines, Upper Changi, and Tampines East are on the blue line — direct train to Expo.",
       ],
-      tips: [
-        "Use JIRoom's commute planner to check travel time before choosing an area",
-        "A place that looks great at 7pm on a Tuesday can feel very different on a Sunday morning.",
-      ],
+      tips: [],
 
     },
   },
@@ -90,7 +85,7 @@ const TOPICS: TopicDef[] = [
     content: {
       bullets: [],
       tips: [
-        "Prepare a tenant profile to send to agents: occupation, nationality, move-in date, budget range, and any key preferences (cooking, pets, etc.). Agents often ask before arranging viewings.",
+        "Prepare a tenant profile to send to agents: occupation, nationality, move-in date, budget range, etc.",
       ],
       table: {
         headers: [
@@ -113,18 +108,23 @@ const TOPICS: TopicDef[] = [
     emoji: "📋",
     label: "How to do viewings?",
     content: {
-      note: "Allocate ~20min for the viewing. If it's a condo, add 10min before/after to check facilities (gym, pool) and access gates.",
+      notes: [
+        "Allocate ~20min for the viewing. If it's a condo, add 10min before/after to check facilities (gym, pool) and access gates.",
+        "Photos vs reality — agents sometimes mix photos of all rooms in a listing. That $900 room might really be the $1.2k one.",
+        "Take video in addition to photos — it's much easier to revisit conditions realistically.",
+      ],
       bullets: [
         "💧 Water pressure — turn on ALL taps, flush the toilet",
         "❄️ Aircon — does it blow cold? Does the remote work?",
         "📶 Signal — some HDBs have dead zones. Test every room.",
-        "🔊 Noise — windows open AND closed. Traffic? Neighbours?",
+        "🧱 Partition walls or real walls? You'll hear everything through thin walls.",
+        "📍 Check nearby amenities — supermarket, parks, late-night food options.",
+        "🧺 Dryer included? Many HDBs don't have one.",
         "👤 Does the landlord live in? Utilities capped or shared?",
         "👥 Who's staying there? Fellow tenants' profile, landlord living in?",
       ],
       tips: [
-        "View once on a weekday evening (neighbour noise) and once on a weekend morning (light, crowd feel)",
-        "Take video of EVERYTHING. Ceilings, corners, fittings. The move-out inventory check is brutal without it.",
+        "Walk around the neighbourhood before or after the viewing — grab a meal at a nearby place to get a feel for the area. Try to picture what it might be like at different times of day.",
       ],
     },
   },
@@ -139,7 +139,6 @@ const TOPICS: TopicDef[] = [
         "Agent — [CEA register](https://eservices.cea.gov.sg/aceas/public-register). Licensed? Any disciplinary record?",
         "Property — [INLIS](https://app.sla.gov.sg/inlis/) to confirm floor area and tenure.",
         "Listings — [URA Space](https://www.ura.gov.sg/maps). Past prices? Upcoming construction?",
-        "Photos vs reality — agents sometimes mix photos of all rooms in a listing. That $900 room might really be the $1.2k one.",
         "LOI vs TA — LOI is non-binding intent with a good-faith deposit; TA is the binding contract. LOI can be skipped for smaller/room rentals.",
       ],
       tips: [],

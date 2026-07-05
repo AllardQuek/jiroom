@@ -11,7 +11,7 @@ export interface ContentTable {
 }
 
 export interface TopicContent {
-  note?: string;
+  notes?: string[];
   bullets: string[];
   tips: string[];
   links?: LinkItem[];
@@ -48,8 +48,8 @@ export function estimateNodeContentHeight(content?: TopicContent): number {
 
   let h = 28; // pt-3 (12) + pb-4 (16)
 
-  if (content.note) {
-    h += 14;
+  if (content.notes && content.notes.length > 0) {
+    h += content.notes.length * 16;
   }
 
   if (hasBullets) {
