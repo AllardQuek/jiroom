@@ -2,7 +2,7 @@
 
 Stop forgetting which rental you visited yesterday. Your rental hunting brain - now digital.
 
-A mobile-first web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, and make final decisions through visual comparison tools.
+A web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, and make final decisions through visual comparison tools.
 
 Built from personal frustration with rental hunting chaos - trying to remember details from multiple viewings and make objective decisions.
 
@@ -43,7 +43,7 @@ Rental hunting is chaotic. You're juggle multiple listings, struggle to remember
 - **Filtering & Sorting**: By area, price, score, verdict, and more
 - **View Modes**: Compact and detailed card layouts
 - **Data Management**: Local storage with export/import backup
-- **Mobile First**: Fully responsive design
+- **Responsive Design**: Works seamlessly on mobile and desktop
 - **No Account Required**: All data stored in browser
 
 ## How It Works
@@ -74,12 +74,12 @@ cd jiroom
 
 2. Install dependencies:
 ```bash
-npm install
+pnpm install
 ```
 
 3. Run the development server:
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -92,7 +92,7 @@ This app is ready for a standard Next.js deployment on Vercel.
 2. Create a new project in Vercel and import this repository.
 3. Keep the default settings Vercel detects:
    - Framework preset: `Next.js`
-   - Build command: `npm run build`
+   - Build command: `pnpm build`
    - Output directory: leave empty
 4. Deploy the project.
 
