@@ -14,13 +14,13 @@ import { useAnchorStore } from "@/store/anchorStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import {
-  ANCHOR_COLORS,
   STATUS_COLORS,
   AREA_PALETTE,
   getAnchorColors,
   getStatusColors,
   getAreaPalette,
 } from "@/lib/constants/colors";
+import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
 import { MapFilters, type Filters } from "./MapFilters";
@@ -433,7 +433,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           visibleAnchors.map((anchor) => {
             const data = routeResults[anchor.id];
             if (!data?.result) return null;
-            const color = anchor.color || ANCHOR_COLORS[anchor.type];
+            const color = getAnchorColor(anchor);
             const duration = data.result.durationText;
             return (
               <RoutePolyline

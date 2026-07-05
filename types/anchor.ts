@@ -1,4 +1,4 @@
-export type AnchorType = "home" | "work" | "school" | "station" | "other";
+export type AnchorType = "home" | "work" | "school" | "station" | string;
 
 export interface Anchor {
   id: string;

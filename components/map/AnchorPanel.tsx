@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAnchorStore } from "@/store/anchorStore";
-import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
+import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { Anchor } from "@/types/anchor";
 import {
   Dialog,
@@ -101,7 +101,7 @@ export default function AnchorPanel({
           )}
 
           {sorted.map((anchor) => {
-            const color = anchor.color || ANCHOR_COLORS[anchor.type];
+            const color = getAnchorColor(anchor);
             return (
               <div
                 key={anchor.id}

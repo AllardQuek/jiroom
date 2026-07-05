@@ -6,6 +6,32 @@ import { AnchorType } from "@/types/anchor";
  * For CSS-only contexts, use CSS variables from globals.css.
  */
 
+// Vibrant color palette for custom anchor types
+const CUSTOM_ANCHOR_PALETTE = [
+  "#EF4444", // red
+  "#F97316", // orange
+  "#F59E0B", // amber
+  "#84CC16", // lime
+  "#10B981", // emerald
+  "#06B6D4", // cyan
+  "#0EA5E9", // sky
+  "#3B82F6", // blue
+  "#6366F1", // indigo
+  "#8B5CF6", // violet
+  "#D946EF", // fuchsia
+  "#EC4899", // pink
+];
+
+// Get a color from the palette based on string hash
+function getPaletteColor(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % CUSTOM_ANCHOR_PALETTE.length;
+  return CUSTOM_ANCHOR_PALETTE[index];
+}
+
 // Light mode colors (default)
 const LIGHT_COLORS = {
   anchors: {
@@ -13,7 +39,6 @@ const LIGHT_COLORS = {
     work: "#D946EF",
     school: "#0EA5E9",
     station: "#F97316",
-    other: "#78716C",
   },
   status: {
     new: "#9CA3AF",
@@ -66,7 +91,6 @@ const DARK_COLORS = {
     work: "#E879F9",
     school: "#38BDF8",
     station: "#FB923C",
-    other: "#A1A1AA",
   },
   status: {
     new: "#A1A1AA",
@@ -126,8 +150,20 @@ export function getThemeColors(theme: "light" | "dark") {
  */
 export function getAnchorColors(
   theme: "light" | "dark"
-): Record<AnchorType, string> {
+): Record<string, string> {
   return getThemeColors(theme).anchors;
+}
+
+/**
+ * Get color for an anchor type (handles custom types with palette fallback)
+ */
+export function getAnchorColorForType(
+  type: string,
+  theme: "light" | "dark" = "light"
+): string {
+  const colors = getAnchorColors(theme);
+  if (type in colors) return colors[type];
+  return getPaletteColor(type);
 }
 
 /**
@@ -172,7 +208,8 @@ export function getVerdictStyles(
 }
 
 // Backwards compatibility - export light mode as default
-export const ANCHOR_COLORS: Record<AnchorType, string> = LIGHT_COLORS.anchors;
+export const ANCHOR_COLORS: Record<string, string> = LIGHT_COLORS.anchors;
+export const CUSTOM_ANCHOR_PALETTE_EXPORT = CUSTOM_ANCHOR_PALETTE;
 export const STATUS_COLORS: Record<string, string> = LIGHT_COLORS.status;
 export const AREA_PALETTE = LIGHT_COLORS.area;
 export const SCORE_COLORS = LIGHT_COLORS.score;

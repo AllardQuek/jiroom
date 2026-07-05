@@ -1,7 +1,8 @@
 "use client";
 
 import { useAnchorStore } from "@/store/anchorStore";
-import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
+import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
+import { CUSTOM_ANCHOR_PALETTE_EXPORT } from "@/lib/constants/colors";
 import { Anchor } from "@/types/anchor";
 import { useState } from "react";
 import {
@@ -10,13 +11,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { CreateAnchorForm } from "@/components/anchors/CreateAnchorForm";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Pencil } from "lucide-react";
+import { Plus, Trash2, Pencil, Palette } from "lucide-react";
 
 export default function AnchorListPage() {
   const anchors = useAnchorStore((state) => state.anchors);
   const deleteAnchor = useAnchorStore((state) => state.deleteAnchor);
+  const updateAnchor = useAnchorStore((state) => state.updateAnchor);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingAnchor, setEditingAnchor] = useState<Anchor | null>(null);
   const [sortBy, setSortBy] = useState<"title" | "type">("title");
@@ -78,7 +85,7 @@ export default function AnchorListPage() {
         )}
 
         {sorted.map((anchor) => {
-          const color = anchor.color || ANCHOR_COLORS[anchor.type];
+          const color = getAnchorColor(anchor);
           return (
             <div
               key={anchor.id}
@@ -108,6 +115,27 @@ export default function AnchorListPage() {
                 </div>
               </div>
               <div className="flex items-center gap-1 shrink-0">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="p-1.5 text-muted-foreground hover:text-foreground transition-colors">
+                      <Palette className="h-3.5 w-3.5" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-2" align="end">
+                    <div className="flex flex-wrap gap-1.5">
+                      {CUSTOM_ANCHOR_PALETTE_EXPORT.map((color) => (
+                        <button
+                          key={color}
+                          onClick={() => updateAnchor(anchor.id, { color })}
+                          className={`w-6 h-6 rounded-full transition-transform hover:scale-110 ${
+                            color === getAnchorColor(anchor) ? "ring-2 ring-offset-2 ring-primary" : ""
+                          }`}
+                          style={{ backgroundColor: color }}
+                        />
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
                 <button
                   onClick={() => setEditingAnchor(anchor)}
                   className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
