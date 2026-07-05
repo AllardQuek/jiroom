@@ -4,6 +4,7 @@ export interface Anchor {
   id: string;
   title: string;
   type: AnchorType;
+  customTypeLabel?: string;
   lat: number;
   lng: number;
   googlePlaceId?: string;

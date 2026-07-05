@@ -105,7 +105,9 @@ export default function AnchorListPage() {
                       color: color,
                     }}
                   >
-                    {anchor.type.replace("_", " ")}
+                    {anchor.type === "custom" && anchor.customTypeLabel
+                      ? anchor.customTypeLabel
+                      : anchor.type.replace("_", " ")}
                   </span>
                   {anchor.address && (
                     <span className="text-xs text-muted-foreground truncate">

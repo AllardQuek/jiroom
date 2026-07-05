@@ -58,6 +58,7 @@ export function CreateAnchorForm({
         ? {
             title: anchorToEdit.title,
             type: anchorToEdit.type,
+            customTypeLabel: anchorToEdit.customTypeLabel,
             lat: anchorToEdit.lat,
             lng: anchorToEdit.lng,
             googlePlaceId: anchorToEdit.googlePlaceId,
@@ -150,17 +151,17 @@ export function CreateAnchorForm({
         {selectedType === "custom" && (
           <FormField
             control={form.control}
-            name="type"
+            name="customTypeLabel"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Custom Type</FormLabel>
+                <FormLabel>Custom Type Label</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="e.g. Gym, Parents' House"
                     {...field}
                     onChange={(e) => {
                       field.onChange(e.target.value);
-                      // Auto-assign color based on custom type
+                      // Auto-assign color based on custom type label
                       form.setValue("color", getAnchorColorForType(e.target.value));
                     }}
                   />

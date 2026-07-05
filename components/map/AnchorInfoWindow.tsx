@@ -48,7 +48,9 @@ export function AnchorInfoWindow({
             color: color,
           }}
         >
-          {anchor.type.replace("_", " ")}
+          {anchor.type === "custom" && anchor.customTypeLabel
+            ? anchor.customTypeLabel
+            : anchor.type.replace("_", " ")}
         </span>
       </div>
       {anchor.address && (
