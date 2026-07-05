@@ -1,3 +1,5 @@
+"use client";
+
 import { Anchor } from "@/types/anchor";
 import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 
@@ -37,16 +39,14 @@ export function AnchorInfoWindow({
 
   return (
     <div className="text-sm" style={{ minWidth: 180, maxWidth: 280 }}>
-      <h3 className="font-semibold leading-tight text-[13px] break-words">
+      <h3 className="font-semibold leading-tight text-[13px] break-words text-foreground">
         {anchor.title}
       </h3>
       <div className="flex items-center gap-2 mt-1.5">
         <span
-          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
+          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider text-foreground"
           style={{
             backgroundColor: color + "20",
-            color: color,
-            mixBlendMode: "difference",
           }}
         >
           {anchor.type === "custom" && anchor.customTypeLabel
