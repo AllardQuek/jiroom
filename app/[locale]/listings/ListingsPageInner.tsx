@@ -11,8 +11,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, Download, Upload, FlaskConical, Columns3, List, Settings, MessageSquare, User, Check, X, MoreVertical, Filter } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import {
+  Plus,
+  Download,
+  Upload,
+  FlaskConical,
+  Columns3,
+  List,
+  Settings,
+  MessageSquare,
+  User,
+  Check,
+  X,
+  MoreVertical,
+  Filter,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   Tooltip,
   TooltipTrigger,
@@ -43,8 +57,8 @@ import {
 } from "@/lib/data/seedData";
 
 export function ListingsPageInner() {
-  const t = useTranslations('listings');
-  const tProfile = useTranslations('tenantProfile.fields');
+  const t = useTranslations("listings");
+  const tProfile = useTranslations("tenantProfile.fields");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
     null
@@ -108,7 +122,9 @@ export function ListingsPageInner() {
   const selectedListingIds = useComparisonStore(
     (state) => state.selectedListingIds
   );
-  const getActiveTemplate = useAgentQuestionStore((state) => state.getActiveTemplate);
+  const getActiveTemplate = useAgentQuestionStore(
+    (state) => state.getActiveTemplate
+  );
   const getProfile = useTenantProfileStore((state) => state.getProfile);
 
   useEffect(() => {
@@ -129,42 +145,66 @@ export function ListingsPageInner() {
   const handleCopyQuestions = () => {
     const template = getActiveTemplate();
     if (!template) {
-      showCopyStatus("error", t('noActiveTemplate'));
+      showCopyStatus("error", t("noActiveTemplate"));
       return;
     }
 
     const text = template.questions.join("\n");
-    navigator.clipboard.writeText(text).then(() => {
-      showCopyStatus("success", t('questionsCopied'));
-    }).catch(() => {
-      showCopyStatus("error", t('failedToCopy'));
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        showCopyStatus("success", t("questionsCopied"));
+      })
+      .catch(() => {
+        showCopyStatus("error", t("failedToCopy"));
+      });
   };
 
   const handleCopyProfile = () => {
     const profile = getProfile();
 
     const fieldKeys = [
-      "name", "occupation", "nationality", "noOfPax", "gender",
-      "pets", "cooking", "pass", "workLocation", "moveInDate",
-      "leaseDuration", "budget", "viewing",
+      "name",
+      "occupation",
+      "nationality",
+      "noOfPax",
+      "gender",
+      "pets",
+      "cooking",
+      "pass",
+      "workLocation",
+      "moveInDate",
+      "leaseDuration",
+      "budget",
+      "viewing",
     ] as const;
 
     const lines = Object.entries(profile)
-      .filter(([key, value]) => value && value.trim() !== "" && fieldKeys.includes(key as typeof fieldKeys[number]))
-      .map(([key, value]) => `${tProfile(key as typeof fieldKeys[number])}: ${value}`);
+      .filter(
+        ([key, value]) =>
+          value &&
+          value.trim() !== "" &&
+          fieldKeys.includes(key as (typeof fieldKeys)[number])
+      )
+      .map(
+        ([key, value]) =>
+          `${tProfile(key as (typeof fieldKeys)[number])}: ${value}`
+      );
 
     if (lines.length === 0) {
-      showCopyStatus("error", t('profileEmpty'));
+      showCopyStatus("error", t("profileEmpty"));
       return;
     }
 
     const text = lines.join("\n");
-    navigator.clipboard.writeText(text).then(() => {
-      showCopyStatus("success", t('profileCopied'));
-    }).catch(() => {
-      showCopyStatus("error", t('failedToCopy'));
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        showCopyStatus("success", t("profileCopied"));
+      })
+      .catch(() => {
+        showCopyStatus("error", t("failedToCopy"));
+      });
   };
 
   function handleToggleSeed() {
@@ -172,15 +212,15 @@ export function ListingsPageInner() {
     if (result === "seed") {
       setBackupStatus({
         type: "success",
-        message: t('sampleDataLoaded'),
+        message: t("sampleDataLoaded"),
       });
     } else if (result === "user") {
       setBackupStatus({
         type: "success",
-        message: t('dataRestored'),
+        message: t("dataRestored"),
       });
     } else {
-      setBackupStatus({ type: "error", message: t('noDataToRestore') });
+      setBackupStatus({ type: "error", message: t("noDataToRestore") });
       return;
     }
     setTimeout(() => window.location.reload(), 1500);
@@ -190,10 +230,10 @@ export function ListingsPageInner() {
     try {
       const data = exportAllData();
       downloadData(data);
-      setBackupStatus({ type: "success", message: t('backupDownloaded') });
+      setBackupStatus({ type: "success", message: t("backupDownloaded") });
       setTimeout(() => setBackupStatus({ type: null, message: "" }), 3000);
     } catch {
-      setBackupStatus({ type: "error", message: t('exportFailed') });
+      setBackupStatus({ type: "error", message: t("exportFailed") });
       setTimeout(() => setBackupStatus({ type: null, message: "" }), 3000);
     }
   }
@@ -211,7 +251,7 @@ export function ListingsPageInner() {
           sessionStorage.setItem("import-completed", "true");
           setBackupStatus({
             type: "success",
-            message: t('restoredReloading'),
+            message: t("restoredReloading"),
           });
           setTimeout(() => window.location.reload(), 1500);
         } else {
@@ -219,7 +259,7 @@ export function ListingsPageInner() {
           setTimeout(() => setBackupStatus({ type: null, message: "" }), 3000);
         }
       } catch {
-        setBackupStatus({ type: "error", message: t('invalidFile') });
+        setBackupStatus({ type: "error", message: t("invalidFile") });
         setTimeout(() => setBackupStatus({ type: null, message: "" }), 3000);
       }
     };
@@ -231,17 +271,29 @@ export function ListingsPageInner() {
     <div className="p-4">
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{t('title')}</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <div className="flex items-center gap-2 mt-1">
             <p className="text-sm text-muted-foreground">
-              {t.rich('subtitle', { key: (chunks) => <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">{chunks}</kbd> })}
+              {t.rich("subtitle", {
+                key: (chunks) => (
+                  <kbd className="px-1.5 py-0.5 bg-muted rounded text-xs font-mono">
+                    {chunks}
+                  </kbd>
+                ),
+              })}
             </p>
             {(backupStatus.type || copyStatus.type) && (
               <Badge
-                variant={(backupStatus.type === "success" || copyStatus.type === "success") ? "default" : "destructive"}
-                className={`text-xs animate-in fade-in slide-in-from-left-2 duration-300 ${(backupStatus.type === "success" || copyStatus.type === "success") ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-red-600 text-white hover:bg-red-700"}`}
+                variant={
+                  backupStatus.type === "success" ||
+                  copyStatus.type === "success"
+                    ? "default"
+                    : "destructive"
+                }
+                className={`text-xs animate-in fade-in slide-in-from-left-2 duration-300 ${backupStatus.type === "success" || copyStatus.type === "success" ? "bg-emerald-600 text-white hover:bg-emerald-700" : "bg-red-600 text-white hover:bg-red-700"}`}
               >
-                {(backupStatus.type === "success" || copyStatus.type === "success") ? (
+                {backupStatus.type === "success" ||
+                copyStatus.type === "success" ? (
                   <Check className="w-3 h-3 mr-1" />
                 ) : (
                   <X className="w-3 h-3 mr-1" />
@@ -252,198 +304,238 @@ export function ListingsPageInner() {
           </div>
         </div>
         <TooltipProvider delayDuration={300}>
-        <div className="flex items-center justify-between gap-2">
-          {/* Left side: Listing-specific actions */}
-          <div className="flex flex-wrap gap-2 items-center">
-            {compareMode && selectedListingIds.length >= 2 && (
-              <Button variant="default" onClick={handleCompare} className="hidden sm:flex">
-                {t('compareCount', { count: selectedListingIds.length })}
-              </Button>
-            )}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={() => setFilterOpen(true)} className="shrink-0">
-                  <Filter className="h-4 w-4" />
+          <div className="flex items-center justify-between gap-2">
+            {/* Left side: Listing-specific actions */}
+            <div className="flex flex-wrap gap-2 items-center">
+              {compareMode && selectedListingIds.length >= 2 && (
+                <Button
+                  variant="default"
+                  onClick={handleCompare}
+                  className="hidden sm:flex"
+                >
+                  {t("compareCount", { count: selectedListingIds.length })}
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent>{t('filterListings')}</TooltipContent>
-            </Tooltip>
-            {!compareMode && (
-              <Button
-                variant="outline"
-                onClick={() => setCompareMode(true)}
-                size="sm"
-                className="shrink-0"
-              >
-                {t('compare')}
-              </Button>
-            )}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleCopyQuestions} className="shrink-0">
-                  <MessageSquare className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>{t('copyQuestions')}</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={handleCopyProfile} className="shrink-0">
-                  <User className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>{t('copyProfile')}</TooltipContent>
-            </Tooltip>
-          </div>
-          
-          {/* Right side: Primary actions and utilities */}
-          <div className="flex flex-wrap gap-2 items-center">
-            <Button onClick={() => setIsCreateDialogOpen(true)} size="sm" className="shrink-0" style={{ backgroundColor: '#7e5be9', color: 'white' }}>
-              <Plus className="h-4 w-4 hidden sm:inline-block" />
-              <span className="hidden sm:inline">{t('addListing')}</span>
-              <Plus className="sm:hidden h-4 w-4" />
-            </Button>
-            <div className="hidden sm:flex">
+              )}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => setCompact(!compact)}
-                    className={compact ? "text-primary shrink-0" : "shrink-0"}
+                    onClick={() => setFilterOpen(true)}
+                    className="shrink-0"
                   >
-                    {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
+                    <Filter className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
-                  {compact ? t('detailedView') : t('compactView')}
-                </TooltipContent>
+                <TooltipContent>{t("filterListings")}</TooltipContent>
               </Tooltip>
-            </div>
-            
-            {/* Mobile menu for secondary actions */}
-            <div className="relative">
-              <Button
-                variant="outline"
-                size="icon"
-                className="sm:hidden shrink-0"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-              {mobileMenuOpen && (
-                <div
-                  className="absolute right-0 top-12 bg-card border border-border rounded-lg shadow-lg p-2 min-w-[200px] z-50 transition-all duration-300 animate-fade-in"
+              {!compareMode && (
+                <Button
+                  variant="outline"
+                  onClick={() => setCompareMode(true)}
+                  size="sm"
+                  className="shrink-0"
                 >
-                  <button
-                    onClick={() => { setCompact(!compact); setMobileMenuOpen(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
-                  >
-                    {compact ? <Columns3 className="h-4 w-4" /> : <List className="h-4 w-4" />}
-                    {compact ? t('detailedView') : t('compactView')}
-                  </button>
-                  <button
-                    onClick={() => { handleExport(); setMobileMenuOpen(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
-                  >
-                    <Download className="h-4 w-4" />
-                    {t('exportData')}
-                  </button>
-                  <button
-                    onClick={() => { fileRef.current?.click(); setMobileMenuOpen(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
-                  >
-                    <Upload className="h-4 w-4" />
-                    {t('importData')}
-                  </button>
-                  <button
-                    onClick={() => { handleToggleSeed(); }}
-                    className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left ${seedMode ? "text-amber-500" : ""}`}
-                  >
-                    <FlaskConical className="h-4 w-4" />
-                    {seedMode ? t('switchToYours') : t('switchToSample')}
-                  </button>
-                  <button
-                    onClick={() => { setSettingsOpen(true); setMobileMenuOpen(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
-                  >
-                    <Settings className="h-4 w-4" />
-                    {t('settings')}
-                  </button>
-                </div>
+                  {t("compare")}
+                </Button>
               )}
-            </div>
-            
-            {/* Desktop secondary actions */}
-            <div className="hidden sm:flex gap-1">
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
-                    onClick={handleExport}
+                    onClick={handleCopyQuestions}
+                    className="shrink-0"
                   >
-                    <Download className="h-4 w-4" />
+                    <MessageSquare className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>{t('exportData')}</TooltipContent>
+                <TooltipContent>{t("copyQuestions")}</TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
-                    onClick={() => fileRef.current?.click()}
+                    onClick={handleCopyProfile}
+                    className="shrink-0"
                   >
-                    <Upload className="h-4 w-4" />
+                    <User className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>{t('importData')}</TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleToggleSeed}
-                    className={seedMode ? "text-amber-500" : ""}
-                  >
-                    <FlaskConical className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {seedMode ? t('switchToYours') : t('switchToSample')}
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setSettingsOpen(true)}
-                  >
-                    <Settings className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>{t('evaluationTemplates')}</TooltipContent>
+                <TooltipContent>{t("copyProfile")}</TooltipContent>
               </Tooltip>
             </div>
-            <input
-              ref={fileRef}
-              type="file"
-              accept=".json"
-              onChange={handleImport}
-              className="hidden"
-            />
+
+            {/* Right side: Primary actions and utilities */}
+            <div className="flex flex-wrap gap-2 items-center">
+              <Button
+                onClick={() => setIsCreateDialogOpen(true)}
+                size="sm"
+                className="shrink-0"
+                style={{ backgroundColor: "#7e5be9", color: "white" }}
+              >
+                <Plus className="h-4 w-4 hidden sm:inline-block" />
+                <span className="hidden sm:inline">{t("addListing")}</span>
+                <Plus className="sm:hidden h-4 w-4" />
+              </Button>
+              <div className="hidden sm:flex">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setCompact(!compact)}
+                      className={compact ? "text-primary shrink-0" : "shrink-0"}
+                    >
+                      {compact ? (
+                        <Columns3 className="h-4 w-4" />
+                      ) : (
+                        <List className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {compact ? t("detailedView") : t("compactView")}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+
+              {/* Mobile menu for secondary actions */}
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="sm:hidden shrink-0"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                >
+                  <MoreVertical className="h-4 w-4" />
+                </Button>
+                {mobileMenuOpen && (
+                  <div className="absolute right-0 top-12 bg-card border border-border rounded-lg shadow-lg p-2 min-w-[200px] z-50 transition-all duration-300 animate-fade-in">
+                    <button
+                      onClick={() => {
+                        setCompact(!compact);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
+                    >
+                      {compact ? (
+                        <Columns3 className="h-4 w-4" />
+                      ) : (
+                        <List className="h-4 w-4" />
+                      )}
+                      {compact ? t("detailedView") : t("compactView")}
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleExport();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
+                    >
+                      <Download className="h-4 w-4" />
+                      {t("exportData")}
+                    </button>
+                    <button
+                      onClick={() => {
+                        fileRef.current?.click();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
+                    >
+                      <Upload className="h-4 w-4" />
+                      {t("importData")}
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleToggleSeed();
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left ${seedMode ? "text-amber-500" : ""}`}
+                    >
+                      <FlaskConical className="h-4 w-4" />
+                      {seedMode ? t("switchToYours") : t("switchToSample")}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSettingsOpen(true);
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent rounded-md text-left"
+                    >
+                      <Settings className="h-4 w-4" />
+                      {t("settings")}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Desktop secondary actions */}
+              <div className="hidden sm:flex gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" onClick={handleExport}>
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t("exportData")}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => fileRef.current?.click()}
+                    >
+                      <Upload className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t("importData")}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleToggleSeed}
+                      className={seedMode ? "text-amber-500" : ""}
+                    >
+                      <FlaskConical className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {seedMode ? t("switchToYours") : t("switchToSample")}
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setSettingsOpen(true)}
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t("evaluationTemplates")}</TooltipContent>
+                </Tooltip>
+              </div>
+              <input
+                ref={fileRef}
+                type="file"
+                accept=".json"
+                onChange={handleImport}
+                className="hidden"
+              />
+            </div>
           </div>
-        </div>
         </TooltipProvider>
       </div>
 
       <div className="mt-6">
-        <ListingList 
-          compact={compact} 
-          compareMode={compareMode} 
+        <ListingList
+          compact={compact}
+          compareMode={compareMode}
           onListingClick={(id) => setSelectedListingId(id)}
           filters={filters}
         />
@@ -454,13 +546,15 @@ export function ListingsPageInner() {
         onOpenChange={setFilterOpen}
         filters={filters}
         onFiltersChange={setFilters}
-        areas={Array.from(new Set(listings.map((l: any) => l.area).filter(Boolean)))}
+        areas={Array.from(
+          new Set(listings.map((l: any) => l.area).filter(Boolean))
+        )}
       />
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="max-w-lg max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{t('addNew')}</DialogTitle>
+            <DialogTitle>{t("addNew")}</DialogTitle>
           </DialogHeader>
           <CreateListingForm
             onSuccess={() => setIsCreateDialogOpen(false)}

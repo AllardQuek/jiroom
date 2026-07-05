@@ -110,7 +110,11 @@ export function useRouteCalculator({
         console.error("Route calculation error:", err);
         setRouteResults((prev) => ({
           ...prev,
-          [anchor.id]: { result: null, error: (err as Error).message, loading: false },
+          [anchor.id]: {
+            result: null,
+            error: (err as Error).message,
+            loading: false,
+          },
         }));
       }
     });

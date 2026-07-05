@@ -7,7 +7,7 @@
  */
 export function getLocalStorageSize(): number {
   if (typeof window === "undefined") return 0;
-  
+
   let total = 0;
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -44,13 +44,13 @@ export function isLocalStorageNearLimit(threshold: number = 0.8): boolean {
  */
 export function safeLocalStorageSetItem(key: string, value: string): boolean {
   if (typeof window === "undefined") return false;
-  
+
   try {
     // Check if we're near the limit before writing
     if (isLocalStorageNearLimit(0.9)) {
       console.warn("localStorage is near quota limit, write may fail");
     }
-    
+
     localStorage.setItem(key, value);
     return true;
   } catch (error) {
@@ -62,7 +62,10 @@ export function safeLocalStorageSetItem(key: string, value: string): boolean {
         localStorage.setItem(key, value);
         return true;
       } catch (retryError) {
-        console.error(`Retry failed for localStorage item "${key}":`, retryError);
+        console.error(
+          `Retry failed for localStorage item "${key}":`,
+          retryError
+        );
       }
     }
     return false;
@@ -87,13 +90,13 @@ function isQuotaExceededError(error: unknown): boolean {
  */
 export function cleanupOldLocalStorageData(): void {
   if (typeof window === "undefined") return;
-  
+
   const keysToRemove: string[] = [];
-  
+
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (!key) continue;
-    
+
     // Remove items that are likely corrupted or too old
     try {
       const value = localStorage.getItem(key);
@@ -101,7 +104,7 @@ export function cleanupOldLocalStorageData(): void {
         keysToRemove.push(key);
         continue;
       }
-      
+
       // Try to parse JSON - if it fails, it might be corrupted
       if (key.endsWith("-storage")) {
         try {
@@ -114,7 +117,7 @@ export function cleanupOldLocalStorageData(): void {
       keysToRemove.push(key);
     }
   }
-  
+
   // Remove identified keys
   keysToRemove.forEach((key) => {
     try {
@@ -123,7 +126,7 @@ export function cleanupOldLocalStorageData(): void {
       console.warn(`Failed to remove localStorage key "${key}":`, error);
     }
   });
-  
+
   if (keysToRemove.length > 0) {
     console.log(`Cleaned up ${keysToRemove.length} localStorage items`);
   }
@@ -157,7 +160,7 @@ export function getLocalStorageStats(): {
   const size = getLocalStorageSize();
   const quota = getLocalStorageQuota();
   const itemCount = localStorage.length;
-  
+
   return {
     size,
     quota,

@@ -5,10 +5,13 @@ import { Check } from "lucide-react";
 import { useTemplateStore } from "@/store/templateStore";
 import { Criterion, Template } from "@/types/evaluation";
 import { calculateScore as calcScore } from "@/lib/utils/calculateScore";
-import { hasResponse, groupCriteriaByCategory } from "./shared/evaluationHelpers";
+import {
+  hasResponse,
+  groupCriteriaByCategory,
+} from "./shared/evaluationHelpers";
 import { SelectPills, NumberBadge, TextNote } from "./shared/EvaluationInputs";
 import { useDerivedTotal } from "./shared/useDerivedTotal";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 interface InlineEvaluationProps {
   responses: Record<string, number | string>;
@@ -23,7 +26,7 @@ export function InlineEvaluation({
   onClearResponse,
   listingPrice,
 }: InlineEvaluationProps) {
-  const t = useTranslations('evaluation');
+  const t = useTranslations("evaluation");
   const templates = useTemplateStore((state) => state.templates);
 
   const template = templates[0];
@@ -31,18 +34,22 @@ export function InlineEvaluation({
   if (!template) {
     return (
       <div className="rounded-xl bg-muted/50 p-4 text-sm text-muted-foreground">
-        {t('noTemplate')}
+        {t("noTemplate")}
       </div>
     );
   }
 
-  const score = Object.keys(responses).length > 0
-    ? calcScore(responses, template, listingPrice)
-    : null;
+  const score =
+    Object.keys(responses).length > 0
+      ? calcScore(responses, template, listingPrice)
+      : null;
 
   const answeredCount = template.criteria.filter((criterion) => {
     if (criterion.type === "derived") {
-      return listingPrice !== undefined || criterion.derivedFrom?.some((id) => hasResponse(responses[id]));
+      return (
+        listingPrice !== undefined ||
+        criterion.derivedFrom?.some((id) => hasResponse(responses[id]))
+      );
     }
     return hasResponse(responses[criterion.id]);
   }).length;
@@ -50,7 +57,11 @@ export function InlineEvaluation({
   const groupedCriteria = groupCriteriaByCategory(template);
 
   const derivedCriterion = template.criteria.find((c) => c.type === "derived");
-  const derivedTotal = useDerivedTotal(derivedCriterion, listingPrice, responses);
+  const derivedTotal = useDerivedTotal(
+    derivedCriterion,
+    listingPrice,
+    responses
+  );
 
   const renderInput = (criterion: Criterion) => {
     const value = responses[criterion.id];
@@ -60,7 +71,9 @@ export function InlineEvaluation({
         return (
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-semibold tabular-nums text-foreground/80">
-              {derivedTotal !== null ? `$${derivedTotal.toLocaleString()}` : "—"}
+              {derivedTotal !== null
+                ? `$${derivedTotal.toLocaleString()}`
+                : "—"}
             </span>
           </div>
         );
@@ -80,7 +93,7 @@ export function InlineEvaluation({
                   : "bg-transparent text-muted-foreground/60 border-border/30 hover:border-border/60 hover:text-foreground/80"
               }`}
             >
-              {t('yes')}
+              {t("yes")}
             </button>
             <button
               type="button"
@@ -95,7 +108,7 @@ export function InlineEvaluation({
                   : "bg-transparent text-muted-foreground/60 border-border/30 hover:border-border/60 hover:text-foreground/80"
               }`}
             >
-              {t('no')}
+              {t("no")}
             </button>
             <button
               type="button"
@@ -110,7 +123,7 @@ export function InlineEvaluation({
                   : "bg-transparent text-muted-foreground/40 border-transparent hover:text-muted-foreground/70"
               }`}
             >
-              {t('na')}
+              {t("na")}
             </button>
           </div>
         );
@@ -170,7 +183,7 @@ export function InlineEvaluation({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">{t('title')}</span>
+        <span className="text-sm font-medium">{t("title")}</span>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span>
             {answeredCount}/{totalCount}
@@ -178,9 +191,15 @@ export function InlineEvaluation({
           {score !== null && (
             <>
               <span className="text-muted-foreground/40">·</span>
-              <span className={`font-medium tabular-nums ${
-                score.net > 0 ? "text-emerald-600" : score.net < 0 ? "text-red-600" : "text-muted-foreground"
-              }`}>
+              <span
+                className={`font-medium tabular-nums ${
+                  score.net > 0
+                    ? "text-emerald-600"
+                    : score.net < 0
+                      ? "text-red-600"
+                      : "text-muted-foreground"
+                }`}
+              >
                 {score.net > 0 ? `+${score.net}` : score.net}
               </span>
             </>
@@ -196,19 +215,22 @@ export function InlineEvaluation({
             </span>
             <span className="h-px flex-1 bg-border/50" />
             <span className="text-xs text-muted-foreground">
-              {criteria.filter((c) => {
-                if (c.type === "derived") return derivedTotal !== null;
-                return hasResponse(responses[c.id]);
-              }).length}
+              {
+                criteria.filter((c) => {
+                  if (c.type === "derived") return derivedTotal !== null;
+                  return hasResponse(responses[c.id]);
+                }).length
+              }
               /{criteria.length}
             </span>
           </div>
 
           <div className="space-y-0.5">
             {criteria.map((criterion) => {
-              const answered = criterion.type === "derived"
-                ? derivedTotal !== null
-                : hasResponse(responses[criterion.id]);
+              const answered =
+                criterion.type === "derived"
+                  ? derivedTotal !== null
+                  : hasResponse(responses[criterion.id]);
               return (
                 <div
                   key={criterion.id}
@@ -229,9 +251,7 @@ export function InlineEvaluation({
                           </span>
                         )}
                       </div>
-                      <div className="shrink-0">
-                        {renderInput(criterion)}
-                      </div>
+                      <div className="shrink-0">{renderInput(criterion)}</div>
                     </div>
                   </div>
                 </div>

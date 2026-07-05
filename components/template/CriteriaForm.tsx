@@ -79,8 +79,14 @@ export function CriteriaForm({
     try {
       onSubmit({
         ...data,
-        scores: data.scores && Object.keys(data.scores).length > 0 ? data.scores : undefined,
-        thresholds: data.thresholds && data.thresholds.length > 0 ? data.thresholds : undefined,
+        scores:
+          data.scores && Object.keys(data.scores).length > 0
+            ? data.scores
+            : undefined,
+        thresholds:
+          data.thresholds && data.thresholds.length > 0
+            ? data.thresholds
+            : undefined,
       });
     } finally {
       setIsSubmitting(false);
@@ -245,7 +251,9 @@ export function CriteriaForm({
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => append({ min: undefined, max: undefined, score: 0 })}
+                onClick={() =>
+                  append({ min: undefined, max: undefined, score: 0 })
+                }
                 className="h-7 text-xs"
               >
                 <Plus className="h-3 w-3 mr-1" />
@@ -255,7 +263,8 @@ export function CriteriaForm({
 
             {fields.length === 0 && (
               <p className="text-xs text-muted-foreground">
-                No thresholds defined — this criterion will not contribute to the score.
+                No thresholds defined — this criterion will not contribute to
+                the score.
               </p>
             )}
 
@@ -274,7 +283,9 @@ export function CriteriaForm({
                         setValueAs: (v) => (v === "" ? undefined : Number(v)),
                       })}
                     />
-                    <span className="text-xs text-muted-foreground">&ndash;</span>
+                    <span className="text-xs text-muted-foreground">
+                      &ndash;
+                    </span>
                     <Input
                       type="number"
                       placeholder="Max"

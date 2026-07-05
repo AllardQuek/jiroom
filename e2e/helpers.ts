@@ -30,10 +30,8 @@ export function seedLocalStorage(page: Page) {
       a3: "seed-anchor-3",
     };
 
-    const daysAgo = (n: number) =>
-      new Date(now - n * DAY).toISOString();
-    const daysFromNow = (n: number) =>
-      new Date(now + n * DAY).toISOString();
+    const daysAgo = (n: number) => new Date(now - n * DAY).toISOString();
+    const daysFromNow = (n: number) => new Date(now + n * DAY).toISOString();
 
     const listings = [
       {
@@ -70,8 +68,7 @@ export function seedLocalStorage(page: Page) {
         price: 2800,
         area: "Robertson Quay / River Valley",
         status: "viewed",
-        notes:
-          "Beautiful river view, great amenities, but noisy at night",
+        notes: "Beautiful river view, great amenities, but noisy at night",
         lat: 1.2913,
         lng: 103.8412,
         created_at: daysAgo(14),
@@ -84,8 +81,7 @@ export function seedLocalStorage(page: Page) {
         price: 2200,
         area: "Holland Village / Buona Vista",
         status: "viewed",
-        notes:
-          "Top choice \u2014 near work, great neighborhood, good layout",
+        notes: "Top choice \u2014 near work, great neighborhood, good layout",
         lat: 1.3117,
         lng: 103.7961,
         created_at: daysAgo(10),
@@ -217,18 +213,15 @@ export function seedLocalStorage(page: Page) {
           c20: "Yes",
           c21: "Yes",
           c22: "No specific restrictions",
-          c23:
-            "Nightlife noise from Robertson Quay, some traffic",
+          c23: "Nightlife noise from Robertson Quay, some traffic",
           c24: "Yes",
-          c25:
-            "Robertson Quay restaurants, Clarke Quay 5min",
+          c25: "Robertson Quay restaurants, Clarke Quay 5min",
           c26: "Cold Storage at UE Square 3min",
           c27: "Singapore River walking path",
           c28: "6 months notice, negotiable",
           c29: "10% increase expected at renewal",
           c30: "Minor damages covered by tenant up to $200",
-          c31:
-            "Full deposit returned within 14 days after inspection",
+          c31: "Full deposit returned within 14 days after inspection",
           c32: "No",
         },
         created_at: daysAgo(9),
@@ -257,18 +250,15 @@ export function seedLocalStorage(page: Page) {
           c16: "Yes",
           c17: "Yes",
           c18: "Weekly cleaning included, general trash",
-          c19:
-            "Young working professional couple, very friendly",
+          c19: "Young working professional couple, very friendly",
           c20: "Yes",
           c21: "Maybe",
           c22: "Overnight visitors need advance notice",
           c23: "Quiet street, occasional traffic",
           c24: "Yes",
-          c25:
-            "Holland Village market & food centre 3min",
+          c25: "Holland Village market & food centre 3min",
           c26: "Cold Storage at Holland V 3min",
-          c27:
-            "Botanic Gardens 10min walk, running paths along Bukit Timah",
+          c27: "Botanic Gardens 10min walk, running paths along Bukit Timah",
           c28: "Flexible break clause with 1 month notice",
           c29: "Renewal with 5-8% increase, negotiable",
           c30: "Normal wear and tear covered by landlord",

@@ -36,7 +36,10 @@ const typeMeta: Record<string, { label: string; icon: React.ReactNode }> = {
   derived: { label: "Derived", icon: <FunctionSquare className="h-3 w-3" /> },
 };
 
-function ScoreToggle({ value, onChange }: {
+function ScoreToggle({
+  value,
+  onChange,
+}: {
   value: -1 | 0 | 1;
   onChange: (v: -1 | 0 | 1) => void;
 }) {
@@ -87,7 +90,10 @@ function ScorePopover({
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+      if (
+        popoverRef.current &&
+        !popoverRef.current.contains(e.target as Node)
+      ) {
         onClose();
       }
     };
@@ -190,7 +196,10 @@ function ScorePopover({
                 value={t.min ?? ""}
                 onChange={(e) =>
                   updateThreshold(i, {
-                    min: e.target.value === "" ? undefined : Number(e.target.value),
+                    min:
+                      e.target.value === ""
+                        ? undefined
+                        : Number(e.target.value),
                   })
                 }
                 className="h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -202,7 +211,10 @@ function ScorePopover({
                 value={t.max ?? ""}
                 onChange={(e) =>
                   updateThreshold(i, {
-                    max: e.target.value === "" ? undefined : Number(e.target.value),
+                    max:
+                      e.target.value === ""
+                        ? undefined
+                        : Number(e.target.value),
                   })
                 }
                 className="h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -250,20 +262,19 @@ export function CriteriaItem({
 }: CriteriaItemProps) {
   const hasScores =
     criterion.scores && Object.keys(criterion.scores).length > 0;
-  const hasThresholds =
-    criterion.thresholds && criterion.thresholds.length > 0;
+  const hasThresholds = criterion.thresholds && criterion.thresholds.length > 0;
   const hasScoring = hasScores || hasThresholds;
   const meta = typeMeta[criterion.type] ?? typeMeta.text;
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-muted rounded-lg group relative">
+    <div className="flex items-start gap-3 py-2.5 group relative">
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <h4 className="font-medium truncate text-sm">{criterion.name}</h4>
+        <div className="flex items-center gap-2">
+          <h4 className="font-medium text-sm text-foreground leading-snug">{criterion.name}</h4>
           <Badge
             variant="outline"
-            className="inline-flex items-center gap-1 text-[10px] px-2 py-0 font-normal text-muted-foreground/60 border-border/40"
+            className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0 font-normal text-muted-foreground/50 border-border/20"
           >
             {meta.icon}
             {meta.label}
@@ -275,7 +286,7 @@ export function CriteriaItem({
                 e.stopPropagation();
                 setPopoverOpen(true);
               }}
-              className="h-5 w-5 rounded flex items-center justify-center text-muted-foreground/40 hover:text-foreground hover:bg-muted-foreground/10 transition-colors"
+              className="h-5 w-5 rounded flex items-center justify-center text-muted-foreground/30 hover:text-foreground hover:bg-muted-foreground/10 transition-colors"
               title="Scoring details"
             >
               <Gauge className="h-3 w-3" />
@@ -283,18 +294,18 @@ export function CriteriaItem({
           )}
         </div>
         {criterion.description && (
-          <p className="text-xs text-muted-foreground/60 leading-relaxed line-clamp-1">
+          <p className="text-xs text-muted-foreground/50 leading-relaxed mt-0.5">
             {criterion.description}
           </p>
         )}
       </div>
 
-      <div className="flex items-center gap-0.5 opacity-60 group-hover:opacity-100 transition-opacity">
+      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity pt-0.5 flex-shrink-0">
         <Button
           variant="ghost"
           size="icon"
           onClick={onEdit}
-          className="h-7 w-7 text-muted-foreground/60 hover:text-foreground"
+          className="h-7 w-7 text-muted-foreground/40 hover:text-foreground"
         >
           <Pencil className="h-3.5 w-3.5" />
         </Button>
@@ -302,7 +313,7 @@ export function CriteriaItem({
           variant="ghost"
           size="icon"
           onClick={onDelete}
-          className="h-7 w-7 text-muted-foreground/60 hover:text-destructive"
+          className="h-7 w-7 text-muted-foreground/40 hover:text-destructive"
         >
           <Trash2 className="h-3.5 w-3.5" />
         </Button>

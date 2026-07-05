@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Template, Criterion } from "@/types/evaluation";
 import { Plus } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 import { useTemplateStore } from "@/store/templateStore";
 import { useAgentQuestionStore } from "@/store/agentQuestionStore";
 import { AgentQuestionTemplate } from "@/types/agentQuestion";
@@ -29,7 +29,7 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
-  const t = useTranslations('settings');
+  const t = useTranslations("settings");
   const templates = useTemplateStore((state) => state.templates);
   const addTemplate = useTemplateStore((state) => state.addTemplate);
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
@@ -37,8 +37,12 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
   const agentTemplates = useAgentQuestionStore((state) => state.templates);
   const addAgentTemplate = useAgentQuestionStore((state) => state.addTemplate);
-  const updateAgentTemplate = useAgentQuestionStore((state) => state.updateTemplate);
-  const deleteAgentTemplate = useAgentQuestionStore((state) => state.deleteTemplate);
+  const updateAgentTemplate = useAgentQuestionStore(
+    (state) => state.updateTemplate
+  );
+  const deleteAgentTemplate = useAgentQuestionStore(
+    (state) => state.deleteTemplate
+  );
 
   const [editingTemplateId, setEditingTemplateId] = useState<string | null>(
     null
@@ -52,11 +56,17 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   );
   const [addingToCategory, setAddingToCategory] = useState<string | null>(null);
 
-  const [editingAgentTemplateId, setEditingAgentTemplateId] = useState<string | null>(null);
-  const [deletingAgentTemplateId, setDeletingAgentTemplateId] = useState<string | null>(null);
+  const [editingAgentTemplateId, setEditingAgentTemplateId] = useState<
+    string | null
+  >(null);
+  const [deletingAgentTemplateId, setDeletingAgentTemplateId] = useState<
+    string | null
+  >(null);
 
   const editingTemplate = templates.find((t) => t.id === editingTemplateId);
-  const editingAgentTemplate = agentTemplates.find((t) => t.id === editingAgentTemplateId);
+  const editingAgentTemplate = agentTemplates.find(
+    (t) => t.id === editingAgentTemplateId
+  );
 
   const handleCreateTemplate = () => {
     const newTemplate: Template = {
@@ -171,9 +181,9 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader className="pb-4">
-            <DialogTitle className="text-base">{t('title')}</DialogTitle>
+            <DialogTitle className="text-base">{t("title")}</DialogTitle>
             <p className="text-xs text-muted-foreground/60">
-              {t('manageDescription')}
+              {t("manageDescription")}
             </p>
           </DialogHeader>
 
@@ -181,14 +191,21 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             {/* Evaluation Templates Section */}
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">{t('evaluationTemplatesTitle')}</h3>
-                <Button size="sm" variant="outline" onClick={handleCreateTemplate} className="h-7 text-xs shrink-0">
+                <h3 className="text-sm font-semibold">
+                  {t("evaluationTemplatesTitle")}
+                </h3>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleCreateTemplate}
+                  className="h-7 text-xs shrink-0"
+                >
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  {t('new')}
+                  {t("new")}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground/50">
-                {t('evaluationTemplatesDescription')}
+                {t("evaluationTemplatesDescription")}
               </p>
               <TemplateList
                 onEdit={setEditingTemplateId}
@@ -202,14 +219,21 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             {/* Agent Questions Section */}
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">{t('agentQuestionsTitle')}</h3>
-                <Button size="sm" variant="outline" onClick={handleCreateAgentTemplate} className="h-7 text-xs shrink-0">
+                <h3 className="text-sm font-semibold">
+                  {t("agentQuestionsTitle")}
+                </h3>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleCreateAgentTemplate}
+                  className="h-7 text-xs shrink-0"
+                >
                   <Plus className="w-3.5 h-3.5 mr-1" />
-                  {t('new')}
+                  {t("new")}
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground/50">
-                {t('agentQuestionsDescription')}
+                {t("agentQuestionsDescription")}
               </p>
               <AgentQuestionList
                 onEdit={setEditingAgentTemplateId}
@@ -222,9 +246,11 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
             {/* Tenant Profile Section */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold">{t('tenantProfileTitle')}</h3>
+              <h3 className="text-sm font-semibold">
+                {t("tenantProfileTitle")}
+              </h3>
               <p className="text-xs text-muted-foreground/50">
-                {t('tenantProfileDescription')}
+                {t("tenantProfileDescription")}
               </p>
               <TenantProfileForm />
             </div>
@@ -252,14 +278,11 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
       )}
 
       {isCriteriaFormOpen && (
-        <Dialog
-          open={isCriteriaFormOpen}
-          onOpenChange={setIsCriteriaFormOpen}
-        >
+        <Dialog open={isCriteriaFormOpen} onOpenChange={setIsCriteriaFormOpen}>
           <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {editingCriterion ? t('editCriteria') : t('addCriteria')}
+                {editingCriterion ? t("editCriteria") : t("addCriteria")}
               </DialogTitle>
             </DialogHeader>
             <CriteriaForm

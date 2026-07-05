@@ -58,7 +58,10 @@ export function AgentQuestionEditor({
 
         <div className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="template-name" className="text-xs font-medium text-muted-foreground">
+            <Label
+              htmlFor="template-name"
+              className="text-xs font-medium text-muted-foreground"
+            >
               Name
             </Label>
             <Input
@@ -71,7 +74,10 @@ export function AgentQuestionEditor({
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="questions" className="text-xs font-medium text-muted-foreground">
+            <Label
+              htmlFor="questions"
+              className="text-xs font-medium text-muted-foreground"
+            >
               Questions (one per line)
             </Label>
             <Textarea
@@ -83,7 +89,9 @@ export function AgentQuestionEditor({
             />
             <p className="text-xs text-muted-foreground/50">
               {questions.split("\n").filter((q) => q.trim()).length} question
-              {questions.split("\n").filter((q) => q.trim()).length !== 1 ? "s" : ""}
+              {questions.split("\n").filter((q) => q.trim()).length !== 1
+                ? "s"
+                : ""}
             </p>
           </div>
 

@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 interface DatePickerProps {
-  value?: string
-  onChange: (date: string | undefined) => void
-  placeholder?: string
-  className?: string
+  value?: string;
+  onChange: (date: string | undefined) => void;
+  placeholder?: string;
+  className?: string;
 }
 
 export function DatePicker({
@@ -18,27 +18,27 @@ export function DatePicker({
 }: DatePickerProps) {
   // Convert ISO string to YYYY-MM-DD format for date input
   const formatDateForInput = (isoString?: string): string => {
-    if (!isoString) return ""
-    const date = new Date(isoString)
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, "0")
-    const day = String(date.getDate()).padStart(2, "0")
-    return `${year}-${month}-${day}`
-  }
+    if (!isoString) return "";
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   // Convert YYYY-MM-DD from date input back to ISO string
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value
+    const inputValue = e.target.value;
     if (!inputValue) {
-      onChange(undefined)
-      return
+      onChange(undefined);
+      return;
     }
-    
+
     // Parse YYYY-MM-DD and create ISO string at midnight
-    const [year, month, day] = inputValue.split("-").map(Number)
-    const date = new Date(year, month - 1, day)
-    onChange(date.toISOString())
-  }
+    const [year, month, day] = inputValue.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    onChange(date.toISOString());
+  };
 
   return (
     <input
@@ -50,5 +50,5 @@ export function DatePicker({
         className
       )}
     />
-  )
+  );
 }

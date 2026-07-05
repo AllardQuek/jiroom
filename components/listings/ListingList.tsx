@@ -14,12 +14,9 @@ import { SortButton } from "./SortButton";
 import { DroppableColumn } from "./DroppableColumn";
 import { useListingDragDrop } from "./hooks/useListingDragDrop";
 import { Home, ChevronDown } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 import { calculateScore } from "@/lib/utils/calculateScore";
-import {
-  DndContext,
-  DragOverlay,
-} from "@dnd-kit/core";
+import { DndContext, DragOverlay } from "@dnd-kit/core";
 import type { ListingFilters } from "./FilterDialog";
 
 type ListingStatus = Listing["status"];
@@ -32,7 +29,7 @@ interface Column {
   dropData: { dropStatus: ListingStatus; dropVerdict?: "yes" | "maybe" | "no" };
 }
 
-const COLUMN_DEFS: Omit<Column, 'title'>[] = [
+const COLUMN_DEFS: Omit<Column, "title">[] = [
   {
     id: "to_view",
     group: "not_viewed",
@@ -66,7 +63,14 @@ const COLUMN_TITLE_KEYS: Record<string, string> = {
   no: "addColumn.no",
 };
 
-type SortField = "price" | "score" | "name" | "date" | "area" | "created_date" | "modified_date";
+type SortField =
+  | "price"
+  | "score"
+  | "name"
+  | "date"
+  | "area"
+  | "created_date"
+  | "modified_date";
 type SortDir = "asc" | "desc";
 
 interface SortConfig {
@@ -83,16 +87,34 @@ interface ListingListProps {
 
 const SORT_OPTION_KEYS = [
   { key: "default", value: null },
-  { key: "highestPrice", value: { by: "price" as const, dir: "desc" as const } },
+  {
+    key: "highestPrice",
+    value: { by: "price" as const, dir: "desc" as const },
+  },
   { key: "lowestPrice", value: { by: "price" as const, dir: "asc" as const } },
-  { key: "highestScore", value: { by: "score" as const, dir: "desc" as const } },
+  {
+    key: "highestScore",
+    value: { by: "score" as const, dir: "desc" as const },
+  },
   { key: "lowestScore", value: { by: "score" as const, dir: "asc" as const } },
   { key: "nameAZ", value: { by: "name" as const, dir: "asc" as const } },
   { key: "nameZA", value: { by: "name" as const, dir: "desc" as const } },
-  { key: "newestFirst", value: { by: "created_date" as const, dir: "desc" as const } },
-  { key: "oldestFirst", value: { by: "created_date" as const, dir: "asc" as const } },
-  { key: "recentlyModified", value: { by: "modified_date" as const, dir: "desc" as const } },
-  { key: "leastRecentlyModified", value: { by: "modified_date" as const, dir: "asc" as const } },
+  {
+    key: "newestFirst",
+    value: { by: "created_date" as const, dir: "desc" as const },
+  },
+  {
+    key: "oldestFirst",
+    value: { by: "created_date" as const, dir: "asc" as const },
+  },
+  {
+    key: "recentlyModified",
+    value: { by: "modified_date" as const, dir: "desc" as const },
+  },
+  {
+    key: "leastRecentlyModified",
+    value: { by: "modified_date" as const, dir: "asc" as const },
+  },
 ] as const;
 
 export function ListingList({
@@ -101,7 +123,7 @@ export function ListingList({
   compareMode,
   filters,
 }: ListingListProps) {
-  const t = useTranslations('listings');
+  const t = useTranslations("listings");
   const listings = useListingStore((state) => state.listings);
   const updateListing = useListingStore((state) => state.updateListing);
   const verdicts = useVerdictStore((state) => state.verdicts);
@@ -145,11 +167,12 @@ export function ListingList({
     }));
   };
 
-  const { activeId, sensors, handleDragStart, handleDragEnd } = useListingDragDrop({
-    updateListing,
-    updateVerdict,
-    addVerdict,
-  });
+  const { activeId, sensors, handleDragStart, handleDragEnd } =
+    useListingDragDrop({
+      updateListing,
+      updateVerdict,
+      addVerdict,
+    });
 
   const getScore = useCallback(
     (listing: Listing) => {
@@ -218,10 +241,10 @@ export function ListingList({
         </div>
         <div className="space-y-2">
           <h2 className="text-xl font-semibold tracking-tight">
-            {t('emptyState.title')}
+            {t("emptyState.title")}
           </h2>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-            {t('emptyState.description')}
+            {t("emptyState.description")}
           </p>
         </div>
       </div>
@@ -234,7 +257,11 @@ export function ListingList({
   const filteredListings = listings.filter((l) => {
     if (!filters) return true;
     if (filters.hideTaken && l.is_taken) return false;
-    if (filters.areas.length > 0 && (!l.area || !filters.areas.includes(l.area))) return false;
+    if (
+      filters.areas.length > 0 &&
+      (!l.area || !filters.areas.includes(l.area))
+    )
+      return false;
     if (filters.priceMin !== null && l.price < filters.priceMin) return false;
     if (filters.priceMax !== null && l.price > filters.priceMax) return false;
     return true;
@@ -251,7 +278,7 @@ export function ListingList({
           {/* Group header row */}
           <div className="hidden lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/80">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
-              {t('columns.toView')}
+              {t("columns.toView")}
             </span>
             <span className="text-[11px] text-muted-foreground/40">
               {columns
@@ -259,15 +286,16 @@ export function ListingList({
                 .reduce((sum, col) => {
                   return (
                     sum +
-                    filteredListings.filter((l) => col.filter(l, getVerdict(l.id)))
-                      .length
+                    filteredListings.filter((l) =>
+                      col.filter(l, getVerdict(l.id))
+                    ).length
                   );
                 }, 0)}
             </span>
           </div>
           <div className="hidden lg:col-span-3 lg:flex lg:items-center lg:justify-center lg:gap-2 lg:pb-2 lg:border-b lg:border-border/80">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
-              {t('columns.viewed')}
+              {t("columns.viewed")}
             </span>
             <span className="text-[11px] text-muted-foreground/40">
               {columns
@@ -275,8 +303,9 @@ export function ListingList({
                 .reduce((sum, col) => {
                   return (
                     sum +
-                    filteredListings.filter((l) => col.filter(l, getVerdict(l.id)))
-                      .length
+                    filteredListings.filter((l) =>
+                      col.filter(l, getVerdict(l.id))
+                    ).length
                   );
                 }, 0)}
             </span>
@@ -298,10 +327,10 @@ export function ListingList({
                   }`}
                 >
                   {opt === "all"
-                    ? t('columns.all')
+                    ? t("columns.all")
                     : opt === "unscheduled"
-                      ? t('columns.unscheduled')
-                      : t('columns.scheduled')}
+                      ? t("columns.unscheduled")
+                      : t("columns.scheduled")}
                 </button>
               ))}
               <span className="ml-auto flex items-center gap-1">
@@ -404,8 +433,8 @@ export function ListingList({
                         onClick={() => toggleColumn(col.id)}
                         className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60"
                       >
-                        <ChevronDown 
-                          className={`w-4 h-4 transition-transform duration-300 ease-in-out ${expandedColumns[col.id] ? 'rotate-180' : ''}`} 
+                        <ChevronDown
+                          className={`w-4 h-4 transition-transform duration-300 ease-in-out ${expandedColumns[col.id] ? "rotate-180" : ""}`}
                         />
                       </button>
                       {(["all", "unscheduled", "scheduled"] as const).map(
@@ -421,10 +450,10 @@ export function ListingList({
                             }`}
                           >
                             {opt === "all"
-                              ? t('columns.all')
+                              ? t("columns.all")
                               : opt === "unscheduled"
-                                ? t('columns.unscheduled')
-                                : t('columns.scheduled')}
+                                ? t("columns.unscheduled")
+                                : t("columns.scheduled")}
                           </button>
                         )
                       )}
@@ -450,8 +479,8 @@ export function ListingList({
                           onClick={() => toggleColumn(col.id)}
                           className="flex items-center justify-center rounded-md p-1 text-muted-foreground/50 hover:text-muted-foreground hover:bg-muted/60"
                         >
-                          <ChevronDown 
-                            className={`w-4 h-4 transition-transform duration-300 ease-in-out ${expandedColumns[col.id] ? 'rotate-180' : ''}`} 
+                          <ChevronDown
+                            className={`w-4 h-4 transition-transform duration-300 ease-in-out ${expandedColumns[col.id] ? "rotate-180" : ""}`}
                           />
                         </button>
                         <h2 className="text-sm font-semibold">{col.title}</h2>
@@ -472,11 +501,11 @@ export function ListingList({
                     </div>
                   )}
                 </div>
-                <div 
+                <div
                   className="overflow-hidden transition-all duration-300 ease-out"
                   style={{
-                    maxHeight: expandedColumns[col.id] ? '2000px' : '0px',
-                    opacity: expandedColumns[col.id] ? '1' : '0'
+                    maxHeight: expandedColumns[col.id] ? "2000px" : "0px",
+                    opacity: expandedColumns[col.id] ? "1" : "0",
                   }}
                 >
                   <div className="flex flex-1 flex-col gap-3 p-3 pt-2">
@@ -492,7 +521,9 @@ export function ListingList({
                       ))
                     ) : (
                       <div className="flex min-h-32 items-center justify-center rounded-lg border border-dashed border-border/80 bg-background/40 p-4 text-center text-xs text-muted-foreground/50">
-                        {col.id === "to_view" ? t('emptyColumn.toView') : t('emptyColumn.viewed')}
+                        {col.id === "to_view"
+                          ? t("emptyColumn.toView")
+                          : t("emptyColumn.viewed")}
                       </div>
                     )}
                   </div>

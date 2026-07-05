@@ -33,8 +33,8 @@ interface PriceInputProps {
  * ```
  */
 export function PriceInput({ field }: PriceInputProps) {
-  const [text, setText] = useState(
-    () => (field.value ? String(field.value) : "")
+  const [text, setText] = useState(() =>
+    field.value ? String(field.value) : ""
   );
 
   return (

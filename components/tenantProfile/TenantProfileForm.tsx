@@ -29,11 +29,28 @@ const profileFields: ProfileField[] = [
   { key: "pass", label: "Pass", placeholder: "Pass type" },
   { key: "pets", label: "Any pets?", placeholder: "Yes/No" },
   { key: "cooking", label: "Cooking", placeholder: "Yes/No" },
-  { key: "workLocation", label: "Work Location", placeholder: "Your work location" },
-  { key: "moveInDate", label: "Move in date", placeholder: "Preferred move-in date" },
-  { key: "leaseDuration", label: "Lease duration", placeholder: "e.g., 1 year" },
+  {
+    key: "workLocation",
+    label: "Work Location",
+    placeholder: "Your work location",
+  },
+  {
+    key: "moveInDate",
+    label: "Move in date",
+    placeholder: "Preferred move-in date",
+  },
+  {
+    key: "leaseDuration",
+    label: "Lease duration",
+    placeholder: "e.g., 1 year",
+  },
   { key: "budget", label: "Budget", placeholder: "Your budget" },
-  { key: "viewing", label: "Viewing availability", placeholder: "e.g., Weekday evenings", full: true },
+  {
+    key: "viewing",
+    label: "Viewing availability",
+    placeholder: "e.g., Weekday evenings",
+    full: true,
+  },
 ];
 
 export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
@@ -62,8 +79,14 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         {profileFields.map((field) => (
-          <div key={field.key} className={`space-y-1.5 ${field.full ? "col-span-2" : ""}`}>
-            <Label htmlFor={field.key} className="text-xs font-medium text-muted-foreground">
+          <div
+            key={field.key}
+            className={`space-y-1.5 ${field.full ? "col-span-2" : ""}`}
+          >
+            <Label
+              htmlFor={field.key}
+              className="text-xs font-medium text-muted-foreground"
+            >
               {field.label}
             </Label>
             <Input

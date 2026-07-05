@@ -7,7 +7,12 @@ import { Template, Criterion, Evaluation } from "@/types/evaluation";
 import { Verdict } from "@/types/verdict";
 import { ScoreResult } from "@/lib/utils/calculateScore";
 import { getDisplayPrice } from "@/lib/utils";
-import { SCORE_COLORS, ACCENT_COLORS, getScoreColors, getAccentColors } from "@/lib/constants/colors";
+import {
+  SCORE_COLORS,
+  ACCENT_COLORS,
+  getScoreColors,
+  getAccentColors,
+} from "@/lib/constants/colors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +28,7 @@ import {
 } from "@/components/ui/popover";
 import { X, Star, Check, Minus } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations, useLocale } from "next-intl";
 
 function CriterionValue({
   criterion,
@@ -38,7 +43,7 @@ function CriterionValue({
   responses?: Record<string, number | string>;
   isMobile: boolean;
 }) {
-  const t = useTranslations('compare');
+  const t = useTranslations("compare");
   if (criterion.type === "derived") {
     if (listingPrice === undefined) {
       return <span className="text-muted-foreground/40 text-sm">&mdash;</span>;
@@ -68,14 +73,14 @@ function CriterionValue({
       return value === "true" ? (
         <span className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-600 text-sm font-medium">
           <Check size={13} strokeWidth={3} />
-          {t('yes')}
+          {t("yes")}
         </span>
       ) : value === "na" ? (
-        <span className="text-muted-foreground/50 text-sm">{t('na')}</span>
+        <span className="text-muted-foreground/50 text-sm">{t("na")}</span>
       ) : (
         <span className="inline-flex items-center gap-1.5 text-red-500 dark:text-red-400 text-sm font-medium">
           <Minus size={13} strokeWidth={3} />
-          {t('no')}
+          {t("no")}
         </span>
       );
     case "rating": {
@@ -98,7 +103,9 @@ function CriterionValue({
     case "text":
     default:
       const isTextTruncated = String(value).length > 50;
-      const displayText = isTextTruncated ? String(value).slice(0, 50) + "..." : String(value);
+      const displayText = isTextTruncated
+        ? String(value).slice(0, 50) + "..."
+        : String(value);
 
       if (!isTextTruncated) {
         return (
@@ -121,9 +128,7 @@ function CriterionValue({
       ) : (
         <TooltipProvider delayDuration={300}>
           <Tooltip>
-            <TooltipTrigger>
-              {interactiveContent}
-            </TooltipTrigger>
+            <TooltipTrigger>{interactiveContent}</TooltipTrigger>
             <TooltipContent align="center" collisionPadding={16}>
               <p className="whitespace-pre-wrap">{value}</p>
             </TooltipContent>
@@ -138,10 +143,10 @@ function formatNet(net: number) {
 }
 
 function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
-  const t = useTranslations('compare');
+  const t = useTranslations("compare");
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const resolvedTheme = (theme as 'light' | 'dark') || 'light';
+  const resolvedTheme = (theme as "light" | "dark") || "light";
   const net = score?.net ?? null;
 
   useEffect(() => {
@@ -168,13 +173,24 @@ function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
       <div className="flex items-center gap-2">
         <div className="relative w-10 h-10 shrink-0">
           <svg className="w-10 h-10" viewBox="0 0 64 64">
-            <circle cx="32" cy="32" r="28" fill="none" className="stroke-muted-foreground/20" strokeWidth="4" />
+            <circle
+              cx="32"
+              cy="32"
+              r="28"
+              fill="none"
+              className="stroke-muted-foreground/20"
+              strokeWidth="4"
+            />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-sm font-bold tabular-nums leading-none text-muted-foreground/30">&mdash;</span>
+            <span className="text-sm font-bold tabular-nums leading-none text-muted-foreground/30">
+              &mdash;
+            </span>
           </div>
         </div>
-        <span className="text-[11px] text-muted-foreground/50 dark:text-muted-foreground/60">{t('noScores')}</span>
+        <span className="text-[11px] text-muted-foreground/50 dark:text-muted-foreground/60">
+          {t("noScores")}
+        </span>
       </div>
     );
   }
@@ -183,33 +199,68 @@ function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
     <div className="flex items-center gap-2">
       <div className="relative w-10 h-10 shrink-0">
         <svg className="w-10 h-10" viewBox="0 0 64 64">
-          <circle cx="32" cy="32" r="28" fill="none" className="stroke-muted-foreground/20" strokeWidth="4" />
+          <circle
+            cx="32"
+            cy="32"
+            r="28"
+            fill="none"
+            className="stroke-muted-foreground/20"
+            strokeWidth="4"
+          />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-sm font-bold tabular-nums leading-none" style={{ color: ringColor }}>
+          <span
+            className="text-sm font-bold tabular-nums leading-none"
+            style={{ color: ringColor }}
+          >
             {formatNet(score.net)}
           </span>
         </div>
       </div>
       <div className="space-y-1">
         <div className="flex items-center gap-1.5 text-[11px]">
-          <span className="font-bold text-emerald-700 dark:text-emerald-600 tabular-nums">{score.positives}</span>
-          <span className="font-semibold text-emerald-700 dark:text-emerald-600 leading-none">↑</span>
-          <span className="font-bold text-rose-500 dark:text-rose-400 tabular-nums ml-0.5">{score.negatives}</span>
-          <span className="font-semibold text-rose-500/70 dark:text-rose-400/70 leading-none">↓</span>
-          <span className="font-bold text-slate-500 dark:text-slate-400 tabular-nums ml-0.5">{score.neutrals}</span>
-          <span className="text-slate-400 dark:text-slate-500 leading-none">—</span>
+          <span className="font-bold text-emerald-700 dark:text-emerald-600 tabular-nums">
+            {score.positives}
+          </span>
+          <span className="font-semibold text-emerald-700 dark:text-emerald-600 leading-none">
+            ↑
+          </span>
+          <span className="font-bold text-rose-500 dark:text-rose-400 tabular-nums ml-0.5">
+            {score.negatives}
+          </span>
+          <span className="font-semibold text-rose-500/70 dark:text-rose-400/70 leading-none">
+            ↓
+          </span>
+          <span className="font-bold text-slate-500 dark:text-slate-400 tabular-nums ml-0.5">
+            {score.neutrals}
+          </span>
+          <span className="text-slate-400 dark:text-slate-500 leading-none">
+            —
+          </span>
         </div>
         {score.answered > 0 && (
           <div className="h-1 rounded-full bg-muted overflow-hidden flex max-w-[100px]">
             {score.positives > 0 && (
-              <div className="h-full bg-emerald-600" style={{ width: `${(score.positives / score.answered) * 100}%` }} />
+              <div
+                className="h-full bg-emerald-600"
+                style={{
+                  width: `${(score.positives / score.answered) * 100}%`,
+                }}
+              />
             )}
             {score.neutrals > 0 && (
-              <div className="h-full bg-muted-foreground/20" style={{ width: `${(score.neutrals / score.answered) * 100}%` }} />
+              <div
+                className="h-full bg-muted-foreground/20"
+                style={{ width: `${(score.neutrals / score.answered) * 100}%` }}
+              />
             )}
             {score.negatives > 0 && (
-              <div className="h-full bg-red-400" style={{ width: `${(score.negatives / score.answered) * 100}%` }} />
+              <div
+                className="h-full bg-red-400"
+                style={{
+                  width: `${(score.negatives / score.answered) * 100}%`,
+                }}
+              />
             )}
           </div>
         )}
@@ -237,11 +288,11 @@ export function ComparisonMatrix({
   scores,
   onRemove,
 }: ComparisonMatrixProps) {
-  const t = useTranslations('compare');
+  const t = useTranslations("compare");
   const locale = useLocale();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const resolvedTheme = (theme as 'light' | 'dark') || 'light';
+  const resolvedTheme = (theme as "light" | "dark") || "light";
 
   useEffect(() => {
     setMounted(true);
@@ -251,7 +302,7 @@ export function ComparisonMatrix({
 
   useEffect(() => {
     // Load saved width from localStorage
-    const savedWidth = localStorage.getItem('criteria-column-width');
+    const savedWidth = localStorage.getItem("criteria-column-width");
     if (savedWidth) {
       setCriteriaColumnWidth(Number(savedWidth));
     }
@@ -260,8 +311,8 @@ export function ComparisonMatrix({
       setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const handleResizeStart = (e: React.MouseEvent) => {
@@ -276,13 +327,16 @@ export function ComparisonMatrix({
     };
 
     const handleMouseUp = () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      localStorage.setItem('criteria-column-width', criteriaColumnWidth.toString());
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      localStorage.setItem(
+        "criteria-column-width",
+        criteriaColumnWidth.toString()
+      );
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
   };
 
   const bestNet = Math.max(
@@ -328,7 +382,7 @@ export function ComparisonMatrix({
       key="h-criteria"
       className="bg-background px-2 py-2.5 border-b border-border/40 font-semibold text-xs text-muted-foreground uppercase tracking-wider"
     >
-      {t('criteria')}
+      {t("criteria")}
     </div>
   );
 
@@ -337,18 +391,20 @@ export function ComparisonMatrix({
     const verdict = verdicts.find((v) => v.listing_id === listing.id) ?? null;
     const viewing = viewings.find((v) => v.listing_id === listing.id) ?? null;
     const answeredCount = getAnsweredCount(listing.id);
-    const isWinner =
-      score !== null && score.net === bestNet && bestNet > 0;
+    const isWinner = score !== null && score.net === bestNet && bestNet > 0;
 
-    const verdictVariant: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+    const verdictVariant: Record<
+      string,
+      "default" | "secondary" | "destructive" | "outline"
+    > = {
       yes: "default",
       maybe: "secondary",
       no: "destructive",
     };
     const verdictLabel: Record<string, string> = {
-      yes: t('yes'),
-      maybe: t('maybe'),
-      no: t('no'),
+      yes: t("yes"),
+      maybe: t("maybe"),
+      no: t("no"),
     };
 
     gridItems.push(
@@ -368,7 +424,7 @@ export function ComparisonMatrix({
             size="icon"
             className="h-6 w-6 shrink-0 -mt-0.5 -mr-1"
             onClick={() => onRemove(listing.id)}
-            aria-label={t('removeFromComparison')}
+            aria-label={t("removeFromComparison")}
           >
             <X size={12} />
           </Button>
@@ -390,12 +446,17 @@ export function ComparisonMatrix({
               variant="outline"
               className="border-emerald-500/80 bg-emerald-100 text-emerald-900 dark:border-emerald-500/60 dark:bg-emerald-950/70 dark:text-emerald-200 text-[10px] px-1.5 py-0 font-semibold"
             >
-              <Star size={8} className="fill-emerald-600 text-emerald-600 -mt-0.5 mr-0.5 inline" />
-              {t('best')}
+              <Star
+                size={8}
+                className="fill-emerald-600 text-emerald-600 -mt-0.5 mr-0.5 inline"
+              />
+              {t("best")}
             </Badge>
           )}
           {viewing?.scheduled_date && (
-            <span className={`text-[10px] ${isWinner ? "text-foreground/70" : "text-muted-foreground/60"}`}>
+            <span
+              className={`text-[10px] ${isWinner ? "text-foreground/70" : "text-muted-foreground/60"}`}
+            >
               {new Date(viewing.scheduled_date).toLocaleDateString(locale, {
                 weekday: "short",
                 month: "short",
@@ -403,7 +464,9 @@ export function ComparisonMatrix({
               })}
             </span>
           )}
-          <span className={`text-[10px] ${isWinner ? "text-foreground/60" : "text-muted-foreground/50"}`}>
+          <span
+            className={`text-[10px] ${isWinner ? "text-foreground/60" : "text-muted-foreground/50"}`}
+          >
             {answeredCount}/{totalCriteria}
           </span>
         </div>
@@ -459,9 +522,13 @@ export function ComparisonMatrix({
       const criterionCellContent = (
         <div
           className={`px-2 py-2.5 text-sm leading-snug flex items-center min-h-[38px] ${
-            isMobile ? "" : "cursor-pointer hover:bg-muted/50 active:bg-muted/70 transition-colors"
+            isMobile
+              ? ""
+              : "cursor-pointer hover:bg-muted/50 active:bg-muted/70 transition-colors"
           } ${
-            isUnansweredEverywhere ? "text-muted-foreground/40" : "text-foreground"
+            isUnansweredEverywhere
+              ? "text-muted-foreground/40"
+              : "text-foreground"
           }`}
         >
           <span className={isMobile ? "" : "truncate"}>{criterion.name}</span>
@@ -479,9 +546,7 @@ export function ComparisonMatrix({
           ) : (
             <TooltipProvider delayDuration={300}>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  {criterionCellContent}
-                </TooltipTrigger>
+                <TooltipTrigger asChild>{criterionCellContent}</TooltipTrigger>
                 <TooltipContent side="top" align="start" collisionPadding={16}>
                   <p>{criterion.name}</p>
                 </TooltipContent>
@@ -523,7 +588,9 @@ export function ComparisonMatrix({
     <div className="overflow-x-auto rounded-lg border border-border/15 max-w-5xl mx-auto">
       <div
         className="grid min-w-[500px] gap-px bg-border/12 relative"
-        style={{ gridTemplateColumns: `${criteriaColumnWidth}px repeat(${numCols}, 1fr)` }}
+        style={{
+          gridTemplateColumns: `${criteriaColumnWidth}px repeat(${numCols}, 1fr)`,
+        }}
       >
         {gridItems}
         <div

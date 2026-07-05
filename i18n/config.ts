@@ -1,4 +1,4 @@
-import { routing } from './routing';
+import { routing } from "./routing";
 
 export const locales = routing.locales;
 export const defaultLocale = routing.defaultLocale;
@@ -6,11 +6,11 @@ export const defaultLocale = routing.defaultLocale;
 export type Locale = (typeof routing.locales)[number];
 
 export const localeNames: Record<Locale, string> = {
-  en: 'English',
-  'zh-CN': '简体中文',
+  en: "English",
+  "zh-CN": "简体中文",
 };
 
 export const localeLabels: Record<Locale, string> = {
-  en: 'EN',
-  'zh-CN': '简',
+  en: "EN",
+  "zh-CN": "简",
 };

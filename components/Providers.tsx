@@ -36,7 +36,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <StoreInitializer>
-        {apiKey ? <APIProvider apiKey={apiKey}>{children}</APIProvider> : children}
+        {apiKey ? (
+          <APIProvider apiKey={apiKey}>{children}</APIProvider>
+        ) : (
+          children
+        )}
       </StoreInitializer>
     </ThemeProvider>
   );

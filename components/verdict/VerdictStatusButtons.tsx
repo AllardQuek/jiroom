@@ -23,11 +23,7 @@ export function VerdictStatusButtons({
   currentStatus,
   onStatusChange,
 }: VerdictStatusButtonsProps) {
-  const statuses: Array<"yes" | "maybe" | "no"> = [
-    "yes",
-    "maybe",
-    "no",
-  ];
+  const statuses: Array<"yes" | "maybe" | "no"> = ["yes", "maybe", "no"];
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -37,7 +33,9 @@ export function VerdictStatusButtons({
           size="sm"
           variant="outline"
           className={
-            currentStatus === status ? statusColors[status] : "border-border text-foreground hover:bg-muted"
+            currentStatus === status
+              ? statusColors[status]
+              : "border-border text-foreground hover:bg-muted"
           }
           onClick={() => onStatusChange(status)}
         >

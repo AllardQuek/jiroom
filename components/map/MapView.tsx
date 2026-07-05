@@ -13,7 +13,14 @@ import { useTemplateStore } from "@/store/templateStore";
 import { useAnchorStore } from "@/store/anchorStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
-import { ANCHOR_COLORS, STATUS_COLORS, AREA_PALETTE, getAnchorColors, getStatusColors, getAreaPalette } from "@/lib/constants/colors";
+import {
+  ANCHOR_COLORS,
+  STATUS_COLORS,
+  AREA_PALETTE,
+  getAnchorColors,
+  getStatusColors,
+  getAreaPalette,
+} from "@/lib/constants/colors";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
 import { MapFilters, type Filters } from "./MapFilters";
@@ -36,21 +43,14 @@ import {
 import { CreateListingForm } from "@/components/listings/CreateListingForm";
 import { CreateAnchorForm } from "@/components/anchors/CreateAnchorForm";
 import { Button } from "@/components/ui/button";
-import {
-  Plus,
-  MapPin,
-  List,
-  AlertCircle,
-  X,
-  Menu,
-} from "lucide-react";
+import { Plus, MapPin, List, AlertCircle, X, Menu } from "lucide-react";
 import dynamic from "next/dynamic";
 import { ListingPreviewCard } from "./ListingPreviewCard";
 import { AnchorInfoWindow } from "./AnchorInfoWindow";
 import { MapController } from "./MapController";
 import { useRouteCalculator } from "./hooks/useRouteCalculator";
 import { useTheme } from "next-themes";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 const LocationSearch = dynamic(() => import("./LocationSearch"), {
   ssr: false,
@@ -85,9 +85,9 @@ interface SearchResult {
 }
 
 export default function MapView({ onViewDetails }: MapViewProps) {
-  const t = useTranslations('map');
+  const t = useTranslations("map");
   const { theme } = useTheme();
-  const resolvedTheme = (theme as 'light' | 'dark') || 'light';
+  const resolvedTheme = (theme as "light" | "dark") || "light";
 
   const listings = useListingStore((state) => state.listings);
   const anchors = useAnchorStore((state) => state.anchors);
@@ -218,7 +218,13 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         return false;
     }
 
-    if (filterAnchorId && maxCommuteMinutes !== null && travelMode && l.lat && l.lng) {
+    if (
+      filterAnchorId &&
+      maxCommuteMinutes !== null &&
+      travelMode &&
+      l.lat &&
+      l.lng
+    ) {
       const filterAnchor = anchors.find((a) => a.id === filterAnchorId);
       if (filterAnchor) {
         const key = `${l.lat},${l.lng}`;
@@ -257,7 +263,10 @@ export default function MapView({ onViewDetails }: MapViewProps) {
   useEffect(() => {
     if (!showMobileMenu) return;
     function handleClickOutside(e: MouseEvent) {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target as Node)) {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target as Node)
+      ) {
         setShowMobileMenu(false);
       }
     }
@@ -277,8 +286,10 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             <AlertCircle size={14} className="shrink-0" />
             <span className="flex-1">
               {listingsWithoutCoords.length > 1
-                ? t('noCoordsWarningPlural', { count: listingsWithoutCoords.length })
-                : t('noCoordsWarning', { count: listingsWithoutCoords.length })}
+                ? t("noCoordsWarningPlural", {
+                    count: listingsWithoutCoords.length,
+                  })
+                : t("noCoordsWarning", { count: listingsWithoutCoords.length })}
             </span>
             <button
               type="button"
@@ -296,7 +307,10 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         areaColors={areaColorMap}
         areaOptions={areaOptions}
       />
-      <div ref={mobileMenuRef} className="absolute top-3 right-16 sm:right-16 z-10">
+      <div
+        ref={mobileMenuRef}
+        className="absolute top-3 right-16 sm:right-16 z-10"
+      >
         <button
           onClick={() => setShowMobileMenu(!showMobileMenu)}
           className="sm:hidden flex items-center justify-center bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg p-2.5 shadow-sm hover:bg-muted/50 transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -306,19 +320,27 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         {showMobileMenu && (
           <div className="sm:hidden absolute right-0 top-full mt-2 bg-background/95 backdrop-blur-sm border border-border/50 rounded-xl p-3 shadow-md w-56 space-y-3">
             <div>
-              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{t('markerColorLabel')}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">
+                {t("markerColorLabel")}
+              </p>
               <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
             </div>
             <div>
-              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{t('routeModeLabel')}</p>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">
+                {t("routeModeLabel")}
+              </p>
               <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
             </div>
             <button
-              onClick={() => { setSelectedListing(null); setShowAnchorPanel(true); setShowMobileMenu(false); }}
+              onClick={() => {
+                setSelectedListing(null);
+                setShowAnchorPanel(true);
+                setShowMobileMenu(false);
+              }}
               className="w-full flex items-center justify-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-muted/50 transition-colors"
             >
               <List size={14} />
-              {t('anchors.title')}
+              {t("anchors.title")}
             </button>
           </div>
         )}
@@ -326,11 +348,14 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           <MarkerColorToggle mode={colorMode} onChange={setColorMode} />
           <TravelModeToggle mode={travelMode} onChange={setTravelMode} />
           <button
-            onClick={() => { setSelectedListing(null); setShowAnchorPanel(true); }}
+            onClick={() => {
+              setSelectedListing(null);
+              setShowAnchorPanel(true);
+            }}
             className="flex items-center gap-1.5 bg-background/90 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 text-xs font-medium shadow-sm hover:bg-muted/50 transition-colors"
           >
             <List size={14} />
-            {t('anchors.title')}
+            {t("anchors.title")}
           </button>
         </div>
       </div>
@@ -345,11 +370,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           setSelectedAnchor(null);
         }}
       >
-          {filteredListings.map((listing) => {
-            const isSelected = selectedListing?.id === listing.id;
-            return (
+        {filteredListings.map((listing) => {
+          const isSelected = selectedListing?.id === listing.id;
+          return (
             <AdvancedMarker
-              key={`${listing.id}-${isSelected ? 'selected' : 'unselected'}`}
+              key={`${listing.id}-${isSelected ? "selected" : "unselected"}`}
               position={{ lat: listing.lat!, lng: listing.lng! }}
               onClick={() => {
                 setSelectedListing(listing);
@@ -364,11 +389,13 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             >
               {isSelected ? (
                 <div className="relative">
-                  <div className="absolute inset-0 animate-ping rounded-full opacity-30"
+                  <div
+                    className="absolute inset-0 animate-ping rounded-full opacity-30"
                     style={{
-                      backgroundColor: colorMode === "area"
-                        ? areaColorMap[listing.area] || "#6B7280"
-                        : statusColors[listing.status] || "#9CA3AF",
+                      backgroundColor:
+                        colorMode === "area"
+                          ? areaColorMap[listing.area] || "#6B7280"
+                          : statusColors[listing.status] || "#9CA3AF",
                       width: 48,
                       height: 48,
                       left: -10,
@@ -387,20 +414,20 @@ export default function MapView({ onViewDetails }: MapViewProps) {
                   />
                 </div>
               ) : (
-              <Pin
-                background={
-                  colorMode === "area"
-                    ? areaColorMap[listing.area] || "#6B7280"
-                    : statusColors[listing.status] || "#9CA3AF"
-                }
-                borderColor="#374151"
-                glyphColor="#FFFFFF"
-                scale={1.2}
-              />
+                <Pin
+                  background={
+                    colorMode === "area"
+                      ? areaColorMap[listing.area] || "#6B7280"
+                      : statusColors[listing.status] || "#9CA3AF"
+                  }
+                  borderColor="#374151"
+                  glyphColor="#FFFFFF"
+                  scale={1.2}
+                />
               )}
             </AdvancedMarker>
-            );
-          })}
+          );
+        })}
 
         {selectedListing &&
           visibleAnchors.map((anchor) => {
@@ -450,7 +477,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             />
             <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_var(--shadow-panel)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-96 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
               <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
-                <h2 className="text-sm font-semibold">{t('listingDetails')}</h2>
+                <h2 className="text-sm font-semibold">{t("listingDetails")}</h2>
                 <button
                   onClick={() => setSelectedListing(null)}
                   className="p-1 -mr-1 text-muted-foreground hover:text-foreground"
@@ -469,13 +496,13 @@ export default function MapView({ onViewDetails }: MapViewProps) {
                     routes={routeResults}
                     travelModeLabel={
                       travelMode === "TRANSIT"
-                        ? t('commute.transit')
+                        ? t("commute.transit")
                         : travelMode === "DRIVING"
-                          ? t('commute.driving')
+                          ? t("commute.driving")
                           : travelMode === "WALKING"
-                            ? t('commute.walking')
+                            ? t("commute.walking")
                             : travelMode === "BICYCLING"
-                              ? t('commute.biking')
+                              ? t("commute.biking")
                               : ""
                     }
                   />
@@ -512,7 +539,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           <MapController lat={searchResult.lat} lng={searchResult.lng} />
         )}
         {selectedAnchor && (
-          <MapController key={selectedAnchor.id} lat={selectedAnchor.lat} lng={selectedAnchor.lng} />
+          <MapController
+            key={selectedAnchor.id}
+            lat={selectedAnchor.lat}
+            lng={selectedAnchor.lng}
+          />
         )}
       </Map>
 
@@ -524,7 +555,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             size="lg"
           >
             <Plus className="h-4 w-4" />
-            {t('listing')}
+            {t("listing")}
           </Button>
           <Button
             onClick={() => setShowCreateAnchorDialog(true)}
@@ -533,7 +564,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             size="lg"
           >
             <MapPin className="h-4 w-4" />
-            {t('anchor')}
+            {t("anchor")}
           </Button>
         </div>
       )}
@@ -544,7 +575,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       >
         <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{t('addNewListing')}</DialogTitle>
+            <DialogTitle>{t("addNewListing")}</DialogTitle>
           </DialogHeader>
           <CreateListingForm
             defaultValues={{
@@ -570,7 +601,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {selectedAnchor ? t('editAnchor') : t('addAnchor')}
+              {selectedAnchor ? t("editAnchor") : t("addAnchor")}
             </DialogTitle>
           </DialogHeader>
           <CreateAnchorForm

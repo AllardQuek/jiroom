@@ -7,10 +7,11 @@ export const agentQuestionTemplateSchema = z.object({
   updated_at: z.string().optional(),
 });
 
-export const createAgentQuestionTemplateSchema = agentQuestionTemplateSchema.omit({
-  id: true,
-  updated_at: true,
-});
+export const createAgentQuestionTemplateSchema =
+  agentQuestionTemplateSchema.omit({
+    id: true,
+    updated_at: true,
+  });
 
 export const updateAgentQuestionTemplateSchema = agentQuestionTemplateSchema
   .partial()

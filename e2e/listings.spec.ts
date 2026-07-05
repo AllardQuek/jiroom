@@ -10,7 +10,9 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("page title and description are visible", async ({ page }) => {
-  await expect(page.locator("h1").filter({ hasText: "Listings" })).toBeVisible();
+  await expect(
+    page.locator("h1").filter({ hasText: "Listings" })
+  ).toBeVisible();
   await expect(
     page.getByText("JIRA for rental search. Press ? for help.")
   ).toBeVisible();
@@ -28,14 +30,10 @@ test("seed listing titles are visible", async ({ page }) => {
     page.getByText("Spacious Master Bedroom @ Novena MRT")
   ).toBeVisible();
   await expect(page.getByText("Studio @ Robertson Quay")).toBeVisible();
-  await expect(
-    page.getByText("Master Room @ Holland Village")
-  ).toBeVisible();
+  await expect(page.getByText("Master Room @ Holland Village")).toBeVisible();
 });
 
-test("evaluation progress shows for evaluated listings", async ({
-  page,
-}) => {
+test("evaluation progress shows for evaluated listings", async ({ page }) => {
   const evalText = page.locator("text=/\\d+\\/32/").first();
   const count = await evalText.count();
   expect(count).toBeGreaterThanOrEqual(0);

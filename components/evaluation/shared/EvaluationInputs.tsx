@@ -33,10 +33,10 @@ export function SelectPills({
               ${
                 selected
                   ? score === 1
-                      ? "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-xs"
-                      : score === -1
-                        ? "bg-red-50 text-red-700 border-red-200 shadow-xs"
-                        : "bg-primary/10 text-primary border-primary/30 shadow-xs"
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-xs"
+                    : score === -1
+                      ? "bg-red-50 text-red-700 border-red-200 shadow-xs"
+                      : "bg-primary/10 text-primary border-primary/30 shadow-xs"
                   : "bg-transparent text-muted-foreground/60 border border-border/30 hover:border-border/60 hover:text-foreground/80"
               }
             `}
@@ -103,9 +103,10 @@ export function TextNote({ value, onChange, onClear }: TextNoteProps) {
         className={`
           text-xs py-2 rounded-lg
           transition-all duration-150
-          ${hasContent
-            ? "bg-amber-50/30 dark:bg-amber-950/10 border-amber-200/40 dark:border-amber-800/30"
-            : "border-dashed border-border/40"
+          ${
+            hasContent
+              ? "bg-amber-50/30 dark:bg-amber-950/10 border-amber-200/40 dark:border-amber-800/30"
+              : "border-dashed border-border/40"
           }
         `}
       />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useLocale } from 'next-intl';
+import { useLocale } from "next-intl";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
 interface InlineNotesProps {

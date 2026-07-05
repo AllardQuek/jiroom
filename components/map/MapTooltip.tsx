@@ -38,16 +38,24 @@ export function MapTooltip({ listing, x, y }: MapTooltipProps) {
         {listing.title}
       </div>
       <div className="flex items-baseline gap-1 mt-0.5">
-        <span className={`font-bold text-base ${isNegotiated ? "text-emerald-600" : ""}`}>
+        <span
+          className={`font-bold text-base ${isNegotiated ? "text-emerald-600" : ""}`}
+        >
           ${displayPrice.toLocaleString()}
         </span>
         <span className="text-muted-foreground text-[10px]">/mo</span>
       </div>
       <div className="flex items-center gap-2 mt-0.5">
         {score !== null && (
-          <span className={`text-xs font-semibold tabular-nums ${
-            score.net > 0 ? "text-emerald-600" : score.net < 0 ? "text-red-600" : ""
-          }`}>
+          <span
+            className={`text-xs font-semibold tabular-nums ${
+              score.net > 0
+                ? "text-emerald-600"
+                : score.net < 0
+                  ? "text-red-600"
+                  : ""
+            }`}
+          >
             {score.net > 0 ? `+${score.net}` : score.net}
           </span>
         )}

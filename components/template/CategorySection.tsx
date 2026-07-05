@@ -23,18 +23,23 @@ export function CategorySection({
   onDeleteCriteria,
 }: CategorySectionProps) {
   return (
-    <div className="rounded-lg border p-3">
+    <section>
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold">{category}</h3>
-        <Button variant="ghost" size="sm" onClick={onAddCriteria} className="h-6 text-xs">
+        <h3 className="text-sm font-semibold text-foreground">{category}</h3>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onAddCriteria}
+          className="h-6 text-xs text-muted-foreground/60 hover:text-foreground"
+        >
           <Plus className="w-3 h-3 mr-1" />
           Add
         </Button>
       </div>
 
-      <div className="space-y-1">
+      <div className="divide-y divide-border/30">
         {criteria.length === 0 ? (
-          <p className="text-xs text-muted-foreground/50 py-3 text-center">
+          <p className="text-xs text-muted-foreground/40 py-3 text-center">
             No criteria in this category
           </p>
         ) : (
@@ -49,6 +54,6 @@ export function CategorySection({
           ))
         )}
       </div>
-    </div>
+    </section>
   );
 }

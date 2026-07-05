@@ -13,15 +13,16 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: process.env.CI
-    ? [["list"] as [string], ["html", { outputFolder: "playwright-report" }] as [string, unknown]]
+    ? [
+        ["list"] as [string],
+        ["html", { outputFolder: "playwright-report" }] as [string, unknown],
+      ]
     : [["list"] as [string]],
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
-    ...(API_KEY
-      ? { extraHTTPHeaders: { "x-google-maps-key": API_KEY } }
-      : {}),
+    ...(API_KEY ? { extraHTTPHeaders: { "x-google-maps-key": API_KEY } } : {}),
   },
   projects: [
     {
@@ -29,10 +30,7 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         launchOptions: {
-          args: [
-            "--use-gl=angle",
-            "--use-angle=swiftshader",
-          ],
+          args: ["--use-gl=angle", "--use-angle=swiftshader"],
         },
       },
     },

@@ -36,8 +36,8 @@ export function downloadData(exportData: ExportData): void {
   a.href = url;
   const localDate = new Date();
   const year = localDate.getFullYear();
-  const month = String(localDate.getMonth() + 1).padStart(2, '0');
-  const day = String(localDate.getDate()).padStart(2, '0');
+  const month = String(localDate.getMonth() + 1).padStart(2, "0");
+  const day = String(localDate.getDate()).padStart(2, "0");
   a.download = `jiroom-backup-${year}-${month}-${day}.json`;
   document.body.appendChild(a);
   a.click();
@@ -60,7 +60,7 @@ export function importData(json: ExportData): {
 
   const storeKeys = getStoreKeys();
   const backupKeys = Object.keys(json.data).filter(
-    (k) => k.endsWith("-storage") || storeKeys.includes(k),
+    (k) => k.endsWith("-storage") || storeKeys.includes(k)
   );
 
   let count = 0;

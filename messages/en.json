@@ -20,6 +20,7 @@
     "copied": "Copied!"
   },
   "navigation": {
+    "guide": "Guide",
     "listings": "Listings",
     "map": "Map",
     "compare": "Compare",
@@ -462,5 +463,9 @@
   "language": {
     "switch": "Switch Language",
     "current": "Current Language"
+  },
+  "guide": {
+    "title": "SG Rental Journey",
+    "subtitle": "Your interactive guide to renting in Singapore"
   }
 }

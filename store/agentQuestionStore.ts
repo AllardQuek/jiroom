@@ -45,19 +45,25 @@ export const useAgentQuestionStore = create<AgentQuestionState>()(
         const { templates } = get();
         const existingDefault = templates.find((t) => t.id === "default");
         const others = templates.filter((t) => t.id !== "default");
-        
+
         if (existingDefault) {
           // Update default template if questions have changed
-          if (JSON.stringify(existingDefault.questions) !== JSON.stringify(defaultAgentQuestions.questions)) {
-            const updatedTemplates = others.map((t) => 
+          if (
+            JSON.stringify(existingDefault.questions) !==
+            JSON.stringify(defaultAgentQuestions.questions)
+          ) {
+            const updatedTemplates = others.map((t) =>
               t.id === "default" ? defaultAgentQuestions : t
             );
             set({ templates: updatedTemplates });
           }
           return;
         }
-        
-        set({ templates: [...others, defaultAgentQuestions], activeTemplateId: "default" });
+
+        set({
+          templates: [...others, defaultAgentQuestions],
+          activeTemplateId: "default",
+        });
       },
     }),
     {

@@ -71,9 +71,9 @@ export function useListingDragDrop({
         updateListing(listingId, { status: dropData.dropStatus });
 
         if (dropData.dropVerdict) {
-          const existingVerdict = useVerdictStore.getState().verdicts.find(
-            (v) => v.listing_id === listingId
-          );
+          const existingVerdict = useVerdictStore
+            .getState()
+            .verdicts.find((v) => v.listing_id === listingId);
 
           if (existingVerdict) {
             updateVerdict(existingVerdict.id, { status: dropData.dropVerdict });
