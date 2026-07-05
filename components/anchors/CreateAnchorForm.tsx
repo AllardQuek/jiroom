@@ -134,7 +134,7 @@ export function CreateAnchorForm({
                       }`}
                       style={
                         field.value === t.value
-                          ? { backgroundColor: ANCHOR_COLORS[t.value] || getAnchorColorForType(t.value) }
+                          ? { backgroundColor: t.value === "custom" && selectedColor ? selectedColor : ANCHOR_COLORS[t.value] || getAnchorColorForType(t.value) }
                           : {}
                       }
                     >
@@ -167,31 +167,33 @@ export function CreateAnchorForm({
           />
         )}
 
-        <FormField
-          control={form.control}
-          name="color"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Color</FormLabel>
-              <FormControl>
-                <div className="flex flex-wrap gap-2">
-                  {CUSTOM_ANCHOR_PALETTE_EXPORT.map((color) => (
-                    <button
-                      key={color}
-                      type="button"
-                      onClick={() => field.onChange(color)}
-                      className={`w-8 h-8 rounded-full transition-transform hover:scale-110 ${
-                        selectedColor === color ? "ring-2 ring-offset-2 ring-primary" : ""
-                      }`}
-                      style={{ backgroundColor: color }}
-                    />
-                  ))}
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {selectedType === "custom" && (
+          <FormField
+            control={form.control}
+            name="color"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Color</FormLabel>
+                <FormControl>
+                  <div className="flex flex-wrap gap-2">
+                    {CUSTOM_ANCHOR_PALETTE_EXPORT.map((color) => (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() => field.onChange(color)}
+                        className={`w-8 h-8 rounded-full transition-transform hover:scale-110 ${
+                          selectedColor === color ? "ring-2 ring-offset-2 ring-primary" : ""
+                        }`}
+                        style={{ backgroundColor: color }}
+                      />
+                    ))}
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         <div>
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
