@@ -11,7 +11,7 @@ A mobile-first tool that helps renters manage shortlisted room listings, apply a
 **Working Name:** Rental Viewing Evaluator
 
 **Product Definition:**
-A responsive web application designed for renters to manage shortlisted room listings discovered on external property portals. The app provides a structured workspace for evaluating rooms using customizable templates, capturing notes during viewings, tracking viewing statuses, and making final decisions through visual comparison tools.
+A responsive web application designed for renters to manage shortlisted room listings discovered on external property portals. The app provides a structured workspace for evaluating rooms using customizable templates, capturing notes during viewings, and making final decisions through visual comparison tools.
 
 **Core Problem:**
 Renters often discover listings on external portals (PropertyGuru, 99.co, etc.), but once they shortlist multiple rooms, the process becomes fragmented across property links, chat threads, calendars, and messy notes. This product solves that downstream workflow problem by providing a centralized evaluation workspace, not by competing with listing portals on discovery inventory.
@@ -65,8 +65,8 @@ The product differentiates itself through three key features:
 
 - Saving listings by URL with minimal identifying metadata
 - Lightweight listing cards for scanability
-- Optional viewing tracking with status
-- A reusable evaluation template applied to listings/viewings
+- Optional viewing scheduling
+- A reusable evaluation template applied to listings
 - Freeform notes and comments
 - Final verdict states (Yes / Maybe / No / Undecided)
 - A comparison view across shortlisted options
@@ -134,8 +134,6 @@ The MVP uses local storage for data persistence, making it suitable for personal
 
 ### 2. Viewing Tracking
 - Schedule optional viewing date/time
-- Track viewing status (To View, Upcoming, Viewed, Skipped, Cancelled)
-- Add viewing-specific notes
 
 ### 3. Evaluation Template
 - Default template with common rental criteria
@@ -145,7 +143,7 @@ The MVP uses local storage for data persistence, making it suitable for personal
 - Optional weighting of criteria
 
 ### 4. Notes & Comments
-- Freeform notes at listing and viewing level
+- Freeform notes at listing level
 - Bullet-style input support
 - Editable and timestamped
 - Visible alongside template responses
@@ -159,7 +157,7 @@ The MVP uses local storage for data persistence, making it suitable for personal
 ### 6. Comparison View
 - Side-by-side comparison of shortlisted listings
 - Key criteria responses displayed
-- Verdict and viewing status
+- Verdict status
 - Optional fit score
 - Notes snippets
 

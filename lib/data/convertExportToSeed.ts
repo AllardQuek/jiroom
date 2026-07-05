@@ -24,7 +24,7 @@ export function convertExportToSeed(jsonPath: string): ConvertedSeedData {
   const listingStorage = data['listing-storage'] as { state: { listings: Listing[] } };
   const seedListings = listingStorage?.state?.listings || [];
   
-  // Extract viewings (filter to only include fields in Viewing type)
+  // Extract viewings (filter to only include fields in current Viewing type)
   const viewingStorage = data['viewing-storage'] as { state: { viewings: any[] } };
   const rawViewings = viewingStorage?.state?.viewings || [];
   const seedViewings: Viewing[] = rawViewings.map((v: any) => ({
