@@ -141,7 +141,7 @@ const TOPICS: TopicDef[] = [
     label: "What to verify?",
     content: {
       bullets: [
-        "Agent — [CEA register](https://eservices.cea.gov.sg/aceas/public-register). Licensed? Any complaints?",
+        "Agent — [CEA register](https://eservices.cea.gov.sg/aceas/public-register). Licensed? Any disciplinary record?",
         "Property — [INLIS](https://app.sla.gov.sg/inlis/) to confirm floor area and tenure.",
         "Listings — [URA Space](https://www.ura.gov.sg/maps). Past prices? Upcoming construction?",
         "Photos vs reality — agents sometimes mix photos of all rooms in a listing. That $900 room might really be the $1.2k one.",
