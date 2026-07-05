@@ -45,20 +45,15 @@ export default function FloatingActions() {
         >
           <LanguageSwitcher />
           <ThemeToggle />
-          <a
-            href={GITHUB_ISSUES_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
+            onClick={() => window.open(GITHUB_ISSUES_URL, '_blank', 'noopener,noreferrer')}
             aria-label="Report an issue on GitHub"
           >
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
-            >
-              <Bug className="size-4" />
-            </Button>
-          </a>
+            <Bug className="size-4" />
+          </Button>
           <Button
             variant="outline"
             size="icon"
@@ -72,7 +67,7 @@ export default function FloatingActions() {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-200 bg-primary text-primary-foreground size-10"
+          className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-200 bg-background border-border size-10"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
