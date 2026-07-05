@@ -1,5 +1,7 @@
+"use client";
+
 import { Anchor } from "@/types/anchor";
-import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
+import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 
 interface AnchorInfoWindowProps {
   anchor: Anchor;
@@ -33,22 +35,23 @@ export function AnchorInfoWindow({
   onEdit,
   onDelete,
 }: AnchorInfoWindowProps) {
-  const color = anchor.color || ANCHOR_COLORS[anchor.type];
+  const color = getAnchorColor(anchor);
 
   return (
-    <div className="text-sm" style={{ minWidth: 180, maxWidth: 280 }}>
-      <h3 className="font-semibold leading-tight text-[13px] break-words">
+    <div className="text-sm">
+      <h3 className="font-semibold leading-tight text-[13px] break-words text-foreground">
         {anchor.title}
       </h3>
       <div className="flex items-center gap-2 mt-1.5">
         <span
-          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
+          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider text-foreground"
           style={{
             backgroundColor: color + "20",
-            color: color,
           }}
         >
-          {anchor.type.replace("_", " ")}
+          {anchor.type === "custom" && anchor.customTypeLabel
+            ? anchor.customTypeLabel
+            : anchor.type.replace("_", " ")}
         </span>
       </div>
       {anchor.address && (
@@ -56,7 +59,7 @@ export function AnchorInfoWindow({
           {anchor.address}
         </p>
       )}
-      <div className="flex gap-1.5 mt-3 pt-2.5 border-t border-border/40">
+      <div className="flex gap-1.5 mt-3 pt-2.5 border-t border-border">
         <button
           onClick={onEdit}
           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"

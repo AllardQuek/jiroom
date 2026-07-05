@@ -14,13 +14,13 @@ import { useAnchorStore } from "@/store/anchorStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import {
-  ANCHOR_COLORS,
   STATUS_COLORS,
   AREA_PALETTE,
   getAnchorColors,
   getStatusColors,
   getAreaPalette,
 } from "@/lib/constants/colors";
+import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
 import { MapFilters, type Filters } from "./MapFilters";
@@ -433,7 +433,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
           visibleAnchors.map((anchor) => {
             const data = routeResults[anchor.id];
             if (!data?.result) return null;
-            const color = anchor.color || ANCHOR_COLORS[anchor.type];
+            const color = getAnchorColor(anchor);
             const duration = data.result.durationText;
             return (
               <RoutePolyline
@@ -513,26 +513,35 @@ export default function MapView({ onViewDetails }: MapViewProps) {
         )}
 
         {selectedAnchor && (
-          <InfoWindow
-            position={{
-              lat: selectedAnchor.lat,
-              lng: selectedAnchor.lng,
-            }}
-            onCloseClick={() => setSelectedAnchor(null)}
-          >
-            <div>
-              <AnchorInfoWindow
-                anchor={selectedAnchor}
-                onEdit={() => {
-                  setShowCreateAnchorDialog(true);
-                }}
-                onDelete={() => {
-                  deleteAnchor(selectedAnchor.id);
-                  setSelectedAnchor(null);
-                }}
-              />
+          <>
+            <div
+              className="fixed inset-0 z-30 sm:hidden"
+              onClick={() => setSelectedAnchor(null)}
+            />
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_var(--shadow-panel)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-80 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
+              <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
+                <h2 className="text-sm font-semibold">Anchor Details</h2>
+                <button
+                  onClick={() => setSelectedAnchor(null)}
+                  className="p-1 -mr-1 text-muted-foreground hover:text-foreground"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-4">
+                <AnchorInfoWindow
+                  anchor={selectedAnchor}
+                  onEdit={() => {
+                    setShowCreateAnchorDialog(true);
+                  }}
+                  onDelete={() => {
+                    deleteAnchor(selectedAnchor.id);
+                    setSelectedAnchor(null);
+                  }}
+                />
+              </div>
             </div>
-          </InfoWindow>
+          </>
         )}
 
         {searchResult && (

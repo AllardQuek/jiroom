@@ -1,6 +1,6 @@
 "use client";
 
-import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
+import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { Anchor } from "@/types/anchor";
 import type { RouteResultData } from "@/lib/utils/routeCache";
 import { Loader2, RouteOff } from "lucide-react";
@@ -34,7 +34,7 @@ export function CommuteInfo({
       <div className="space-y-2">
         {visibleAnchors.map((anchor) => {
           const data = routes[anchor.id];
-          const color = anchor.color || ANCHOR_COLORS[anchor.type];
+          const color = getAnchorColor(anchor);
           const duration = data?.result?.durationText;
 
           return (

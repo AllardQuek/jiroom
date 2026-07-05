@@ -4,7 +4,7 @@ import { useAnchorStore } from "@/store/anchorStore";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
 import { getCachedRoute } from "@/lib/utils/routeCache";
 import { MapPin } from "lucide-react";
-import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
+import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { Listing } from "@/types/listing";
 
 interface CommuteBadgeProps {
@@ -28,7 +28,7 @@ export function CommuteBadge({ listing }: CommuteBadgeProps) {
 
   if (!duration) return null;
 
-  const color = anchor.color || ANCHOR_COLORS[anchor.type];
+  const color = getAnchorColor(anchor);
 
   return (
     <div

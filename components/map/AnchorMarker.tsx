@@ -2,7 +2,7 @@
 
 import { AdvancedMarker } from "@vis.gl/react-google-maps";
 import { Anchor } from "@/types/anchor";
-import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
+import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 
 interface AnchorMarkerProps {
   anchor: Anchor;
@@ -10,7 +10,7 @@ interface AnchorMarkerProps {
 }
 
 export default function AnchorMarker({ anchor, onClick }: AnchorMarkerProps) {
-  const color = anchor.color || ANCHOR_COLORS[anchor.type];
+  const color = getAnchorColor(anchor);
 
   return (
     <AdvancedMarker
