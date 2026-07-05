@@ -159,11 +159,6 @@ export function CreateAnchorForm({
                   <Input
                     placeholder="e.g. Gym, Parents' House"
                     {...field}
-                    onChange={(e) => {
-                      field.onChange(e.target.value);
-                      // Auto-assign color based on custom type label
-                      form.setValue("color", getAnchorColorForType(e.target.value));
-                    }}
                   />
                 </FormControl>
                 <FormMessage />
