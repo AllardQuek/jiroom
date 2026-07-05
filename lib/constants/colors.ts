@@ -6,19 +6,20 @@ import { AnchorType } from "@/types/anchor";
  * For CSS-only contexts, use CSS variables from globals.css.
  */
 
-// Vibrant color palette for custom anchor types
+// Vibrant color palette for custom anchor types (includes predefined type colors)
 const CUSTOM_ANCHOR_PALETTE = [
+  "#E11D48", // home (red)
+  "#D946EF", // work (fuchsia)
+  "#0EA5E9", // school (sky)
+  "#F97316", // station (orange)
   "#EF4444", // red
-  "#F97316", // orange
   "#F59E0B", // amber
   "#84CC16", // lime
   "#10B981", // emerald
   "#06B6D4", // cyan
-  "#0EA5E9", // sky
   "#3B82F6", // blue
   "#6366F1", // indigo
   "#8B5CF6", // violet
-  "#D946EF", // fuchsia
   "#EC4899", // pink
 ];
 
