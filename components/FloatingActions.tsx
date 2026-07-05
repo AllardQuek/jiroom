@@ -72,7 +72,7 @@ export default function FloatingActions() {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-200 bg-background border-border size-10"
+          className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-200 bg-primary text-primary-foreground size-10"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >

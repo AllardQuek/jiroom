@@ -38,7 +38,7 @@ export function AnchorInfoWindow({
   const color = getAnchorColor(anchor);
 
   return (
-    <div className="text-sm" style={{ minWidth: 180, maxWidth: 280 }}>
+    <div className="text-sm">
       <h3 className="font-semibold leading-tight text-[13px] break-words text-foreground">
         {anchor.title}
       </h3>
@@ -59,7 +59,7 @@ export function AnchorInfoWindow({
           {anchor.address}
         </p>
       )}
-      <div className="flex gap-1.5 mt-3 mb-2 pt-2.5 border-t border-border/40">
+      <div className="flex gap-1.5 mt-3 pt-2.5 border-t border-border">
         <button
           onClick={onEdit}
           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
