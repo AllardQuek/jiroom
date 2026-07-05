@@ -67,7 +67,10 @@ export function TemplateEditor({
 
         <div className="space-y-5">
           <div className="space-y-1.5">
-            <Label htmlFor="template-name" className="text-xs font-medium text-muted-foreground">
+            <Label
+              htmlFor="template-name"
+              className="text-xs font-medium text-muted-foreground"
+            >
               Name
             </Label>
             <Input

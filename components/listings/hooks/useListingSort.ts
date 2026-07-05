@@ -4,7 +4,14 @@ import { Verdict } from "@/types/verdict";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import { getDisplayPrice } from "@/lib/utils";
 
-type SortField = "price" | "score" | "name" | "date" | "area" | "created_date" | "modified_date";
+type SortField =
+  | "price"
+  | "score"
+  | "name"
+  | "date"
+  | "area"
+  | "created_date"
+  | "modified_date";
 type SortDir = "asc" | "desc";
 
 interface SortConfig {
@@ -53,10 +60,10 @@ export function useListingSort({
 }: UseListingSortProps) {
   return useMemo(() => {
     const sortedListings = { ...listings };
-    
+
     Object.entries(sortConfigs).forEach(([columnId, config]) => {
       if (!config) return;
-      
+
       const columnListings = listings.filter((listing) => {
         const verdict = verdicts.find((v) => v.listing_id === listing.id);
         if (columnId === "to_view") {
@@ -66,7 +73,10 @@ export function useListingSort({
           return listing.status === "viewed" && verdict?.status === "yes";
         }
         if (columnId === "maybe") {
-          return listing.status === "viewed" && (!verdict || verdict.status === "maybe");
+          return (
+            listing.status === "viewed" &&
+            (!verdict || verdict.status === "maybe")
+          );
         }
         if (columnId === "no") {
           return listing.status === "viewed" && verdict?.status === "no";
@@ -82,7 +92,7 @@ export function useListingSort({
       // Update the sorted listings (this is a simplified approach)
       // In a real implementation, you'd want to maintain the sorted order per column
     });
-    
+
     return listings;
   }, [listings, verdicts, evaluations, template, sortConfigs]);
 }
@@ -104,20 +114,35 @@ function compareListings(
     case "name":
       return a.title.localeCompare(b.title);
     case "date":
-      return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+      return (
+        new Date(a.created_at || 0).getTime() -
+        new Date(b.created_at || 0).getTime()
+      );
     case "area":
       return (a.area || "").localeCompare(b.area || "");
     case "created_date":
-      return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+      return (
+        new Date(a.created_at || 0).getTime() -
+        new Date(b.created_at || 0).getTime()
+      );
     case "modified_date":
-      return new Date(a.updated_at || 0).getTime() - new Date(b.updated_at || 0).getTime();
+      return (
+        new Date(a.updated_at || 0).getTime() -
+        new Date(b.updated_at || 0).getTime()
+      );
     case "score": {
       const evalA = evaluations.find((e) => e.listing_id === a.id);
       const evalB = evaluations.find((e) => e.listing_id === b.id);
       const priceA = getDisplayPrice(a, evalA);
       const priceB = getDisplayPrice(b, evalB);
-      const scoreA = evalA && template ? calculateScore(evalA.responses, template, priceA) : null;
-      const scoreB = evalB && template ? calculateScore(evalB.responses, template, priceB) : null;
+      const scoreA =
+        evalA && template
+          ? calculateScore(evalA.responses, template, priceA)
+          : null;
+      const scoreB =
+        evalB && template
+          ? calculateScore(evalB.responses, template, priceB)
+          : null;
       const netA = scoreA?.net ?? 0;
       const netB = scoreB?.net ?? 0;
       return netA - netB;

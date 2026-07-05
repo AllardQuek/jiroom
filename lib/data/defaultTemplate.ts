@@ -9,14 +9,16 @@ export const defaultTemplate: Template = {
     {
       id: "c2",
       name: "Monthly utility cost (SGD)",
-      description: "Average monthly utilities (water, electricity, gas). If included in rent, leave blank.",
+      description:
+        "Average monthly utilities (water, electricity, gas). If included in rent, leave blank.",
       type: "number",
       category: "Cost",
     },
     {
       id: "c4",
       name: "Additional costs (SGD/mth)",
-      description: "Monthly additional costs (cleaning, aircon, etc.). Leave blank if none.",
+      description:
+        "Monthly additional costs (cleaning, aircon, etc.). Leave blank if none.",
       type: "number",
       category: "Cost",
     },
@@ -152,14 +154,16 @@ export const defaultTemplate: Template = {
     {
       id: "c19",
       name: "Tenant profile notes",
-      description: "Description of current housemates / tenants (occupation, lifestyle, etc.).",
+      description:
+        "Description of current housemates / tenants (occupation, lifestyle, etc.).",
       type: "text",
       category: "Household",
     },
     {
       id: "c20",
       name: "Comfortable with current tenants",
-      description: "Based on the tenant profile, do you feel comfortable living with them?",
+      description:
+        "Based on the tenant profile, do you feel comfortable living with them?",
       type: "select",
       category: "Household",
       options: ["Yes", "No", "Maybe"],
@@ -177,7 +181,8 @@ export const defaultTemplate: Template = {
     {
       id: "c22",
       name: "Visitor rules notes",
-      description: "Any specific rules about visitors (frequency, duration, advance notice).",
+      description:
+        "Any specific rules about visitors (frequency, duration, advance notice).",
       type: "text",
       category: "Household",
     },
@@ -240,7 +245,8 @@ export const defaultTemplate: Template = {
     {
       id: "c30",
       name: "Damage coverage",
-      description: "What damages are covered by the landlord vs tenant? Any insurance requirements?",
+      description:
+        "What damages are covered by the landlord vs tenant? Any insurance requirements?",
       type: "text",
       category: "Additional",
     },

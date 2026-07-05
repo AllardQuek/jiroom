@@ -16,8 +16,12 @@ export function AgentQuestionList({
   onDelete,
 }: AgentQuestionListProps) {
   const templates = useAgentQuestionStore((state) => state.templates);
-  const activeTemplateId = useAgentQuestionStore((state) => state.activeTemplateId);
-  const setActiveTemplate = useAgentQuestionStore((state) => state.setActiveTemplate);
+  const activeTemplateId = useAgentQuestionStore(
+    (state) => state.activeTemplateId
+  );
+  const setActiveTemplate = useAgentQuestionStore(
+    (state) => state.setActiveTemplate
+  );
 
   if (templates.length === 0) {
     return (

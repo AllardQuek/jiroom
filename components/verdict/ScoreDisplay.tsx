@@ -49,15 +49,23 @@ export function ScoreDisplay({ listingId }: ScoreDisplayProps) {
     <div>
       <div className="flex items-baseline gap-1">
         <span className="text-sm text-muted-foreground">Score:</span>
-        <span className={`text-2xl font-bold tabular-nums ${netColor(score.net)}`}>
+        <span
+          className={`text-2xl font-bold tabular-nums ${netColor(score.net)}`}
+        >
           {formatNet(score.net)}
         </span>
       </div>
       <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60 mt-0.5">
-        {score.positives > 0 && <span className="text-emerald-600/70">{score.positives}↑</span>}
-        {score.negatives > 0 && <span className="text-red-600/70">{score.negatives}↓</span>}
+        {score.positives > 0 && (
+          <span className="text-emerald-600/70">{score.positives}↑</span>
+        )}
+        {score.negatives > 0 && (
+          <span className="text-red-600/70">{score.negatives}↓</span>
+        )}
         {score.neutrals > 0 && <span>{score.neutrals}—</span>}
-        <span className="text-muted-foreground/40">· {score.answered} scored</span>
+        <span className="text-muted-foreground/40">
+          · {score.answered} scored
+        </span>
       </div>
     </div>
   );

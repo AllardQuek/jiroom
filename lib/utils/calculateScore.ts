@@ -68,7 +68,8 @@ export function calculateScore(
         points = response === "true" ? 1 : -1;
         break;
       case "rating": {
-        const rating = typeof response === "number" ? response : Number(response);
+        const rating =
+          typeof response === "number" ? response : Number(response);
         points = rating <= 2 ? -1 : rating === 3 ? 0 : 1;
         break;
       }
@@ -76,7 +77,8 @@ export function calculateScore(
         points = criterion.scores?.[String(response)] ?? 0;
         break;
       case "number": {
-        const numValue = typeof response === "number" ? response : Number(response);
+        const numValue =
+          typeof response === "number" ? response : Number(response);
         points = scoreFromThresholds(numValue, criterion.thresholds);
         break;
       }

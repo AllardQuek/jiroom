@@ -26,7 +26,12 @@ export function CategorySection({
     <div className="rounded-lg border p-3">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-semibold">{category}</h3>
-        <Button variant="ghost" size="sm" onClick={onAddCriteria} className="h-6 text-xs">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onAddCriteria}
+          className="h-6 text-xs"
+        >
           <Plus className="w-3 h-3 mr-1" />
           Add
         </Button>

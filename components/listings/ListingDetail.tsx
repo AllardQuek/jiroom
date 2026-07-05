@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Edit3, Trash2 } from "lucide-react";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { getDisplayPrice } from "@/lib/utils";
-import { useLocale } from 'next-intl';
+import { useLocale } from "next-intl";
 
 interface ListingDetailProps {
   listing: Listing;
@@ -59,7 +59,9 @@ export function ListingDetail({
       </div>
 
       <div className="flex items-baseline gap-1">
-        <span className={`text-3xl font-bold tracking-tight ${isNegotiated ? "text-emerald-600" : "text-primary"}`}>
+        <span
+          className={`text-3xl font-bold tracking-tight ${isNegotiated ? "text-emerald-600" : "text-primary"}`}
+        >
           ${displayPrice.toLocaleString()}
         </span>
         <span className="text-sm text-muted-foreground">/month</span>

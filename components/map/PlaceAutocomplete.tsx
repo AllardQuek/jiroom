@@ -57,7 +57,10 @@ export default function PlaceAutocomplete({
 
   useEffect(() => {
     if (!placesLib) return;
-    console.log("[PlaceAutocomplete] placesLib available, keys:", Object.keys(placesLib as object));
+    console.log(
+      "[PlaceAutocomplete] placesLib available, keys:",
+      Object.keys(placesLib as object)
+    );
     const lib = placesLib as unknown as Record<string, unknown>;
     const SessionTokenCtor = lib.AutocompleteSessionToken as new () => unknown;
     if (typeof SessionTokenCtor === "function") {
@@ -83,7 +86,9 @@ export default function PlaceAutocomplete({
       };
       const fetchFn = lib.AutocompleteSuggestion?.fetchAutocompleteSuggestions;
       if (!fetchFn) {
-        console.log("[PlaceAutocomplete] fetchAutocompleteSuggestions not available");
+        console.log(
+          "[PlaceAutocomplete] fetchAutocompleteSuggestions not available"
+        );
         setSuggestions([]);
         return;
       }
@@ -99,14 +104,26 @@ export default function PlaceAutocomplete({
       });
       console.log("[PlaceAutocomplete] suggestions result:", result);
 
-      const items = (result.suggestions || []).map((s: Record<string, unknown>) => ({
-        text: (s.placePrediction as Record<string, unknown>)?.text
-          ? ((s.placePrediction as Record<string, unknown>).text as Record<string, unknown>).text as string
-          : (s.queryPrediction as Record<string, unknown>)?.text
-            ? ((s.queryPrediction as Record<string, unknown>).text as Record<string, unknown>).text as string
-            : "",
-        placePrediction: s.placePrediction as object | undefined,
-      })).filter((s: { text: string }) => s.text);
+      const items = (result.suggestions || [])
+        .map((s: Record<string, unknown>) => ({
+          text: (s.placePrediction as Record<string, unknown>)?.text
+            ? ((
+                (s.placePrediction as Record<string, unknown>).text as Record<
+                  string,
+                  unknown
+                >
+              ).text as string)
+            : (s.queryPrediction as Record<string, unknown>)?.text
+              ? ((
+                  (s.queryPrediction as Record<string, unknown>).text as Record<
+                    string,
+                    unknown
+                  >
+                ).text as string)
+              : "",
+          placePrediction: s.placePrediction as object | undefined,
+        }))
+        .filter((s: { text: string }) => s.text);
 
       setSuggestions(items);
       setShowDropdown(items.length > 0);
@@ -124,7 +141,10 @@ export default function PlaceAutocomplete({
     debounceRef.current = setTimeout(() => fetchSuggestions(value), 300);
   }
 
-  async function handleSelect(suggestion: { text: string; placePrediction?: object }) {
+  async function handleSelect(suggestion: {
+    text: string;
+    placePrediction?: object;
+  }) {
     console.log("[PlaceAutocomplete] handleSelect:", suggestion.text);
     if (!placesLib || !suggestion.placePrediction) return;
 
@@ -148,7 +168,9 @@ export default function PlaceAutocomplete({
       };
     }
 
-    const place = (suggestion.placePrediction as SuggestionWithToPlace).toPlace();
+    const place = (
+      suggestion.placePrediction as SuggestionWithToPlace
+    ).toPlace();
     await place.fetchFields({
       fields: [
         "displayName",
@@ -176,7 +198,11 @@ export default function PlaceAutocomplete({
       }
     }
 
-    console.log("[PlaceAutocomplete] selected place:", { displayText, lat: location.lat(), lng: location.lng() });
+    console.log("[PlaceAutocomplete] selected place:", {
+      displayText,
+      lat: location.lat(),
+      lng: location.lng(),
+    });
     onPlaceSelectRef.current({
       displayText,
       lat: location.lat(),

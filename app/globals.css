@@ -130,3 +130,18 @@ body {
 .animate-fade-in {
   animation: fade-in 0.2s ease-out;
 }
+
+/* ReactFlow Controls dark mode — icons use currentColor, need light text */
+.dark .react-flow__controls-button {
+  background: var(--color-card);
+  color: var(--color-foreground);
+  border-color: var(--color-border);
+}
+.dark .react-flow__controls-button:hover {
+  background: var(--color-muted);
+  color: var(--color-foreground);
+}
+
+.react-flow__attribution {
+  display: none !important;
+}

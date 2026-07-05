@@ -25,9 +25,7 @@ test.describe("M1a — Map UX Enhancements", () => {
     await expect(page.getByText("Status").first()).toBeVisible();
   });
 
-  test("status filter chips are present in filter panel", async ({
-    page,
-  }) => {
+  test("status filter chips are present in filter panel", async ({ page }) => {
     await page.getByText("Filters").click();
     await expect(page.getByText("New").first()).toBeVisible();
     await expect(page.getByText("To View").first()).toBeVisible();
@@ -49,20 +47,12 @@ test.describe("M1a — Map UX Enhancements", () => {
 
   test("price range inputs are present", async ({ page }) => {
     await page.getByText("Filters").click();
-    await expect(
-      page.getByText("Price").first()
-    ).toBeVisible();
+    await expect(page.getByText("Price").first()).toBeVisible();
   });
 
-  test("marker color toggle shows By Status and By Area", async ({
-    page,
-  }) => {
-    await expect(
-      page.getByRole("button", { name: "By Status" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "By Area" })
-    ).toBeVisible();
+  test("marker color toggle shows By Status and By Area", async ({ page }) => {
+    await expect(page.getByRole("button", { name: "By Status" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "By Area" })).toBeVisible();
   });
 
   test("clicking By Area activates area mode", async ({ page }) => {
@@ -86,33 +76,21 @@ test.describe("M1a — Map UX Enhancements", () => {
 
 test.describe("M4 — Distances & Routes", () => {
   test("travel mode toggle shows all four modes", async ({ page }) => {
-    await expect(
-      page.getByRole("button", { name: "Transit" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "Drive" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "Walk" })
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: "Bike" })
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Transit" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Drive" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Walk" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Bike" })).toBeVisible();
   });
 
   test("travel mode default is Transit", async ({ page }) => {
-    await expect(
-      page.getByRole("button", { name: "Transit" })
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Transit" })).toBeVisible();
   });
 
   test("clicking Drive switches travel mode", async ({ page }) => {
     await page.getByRole("button", { name: "Drive" }).click();
   });
 
-  test("commute filter section appears in filter panel", async ({
-    page,
-  }) => {
+  test("commute filter section appears in filter panel", async ({ page }) => {
     await page.getByText("Filters").click();
     await expect(page.getByText("Commute filter")).toBeVisible();
   });
@@ -123,9 +101,7 @@ test.describe("M4 — Distances & Routes", () => {
     await expect(selects.first()).toBeVisible();
   });
 
-  test("commute filter shows seed anchors in dropdown", async ({
-    page,
-  }) => {
+  test("commute filter shows seed anchors in dropdown", async ({ page }) => {
     await page.getByText("Filters").click();
     const select = page.locator("select").first();
     const options = await select.locator("option").allTextContents();
@@ -134,9 +110,7 @@ test.describe("M4 — Distances & Routes", () => {
     expect(options).toContain("Parents Home");
   });
 
-  test("selecting an anchor shows max commute input", async ({
-    page,
-  }) => {
+  test("selecting an anchor shows max commute input", async ({ page }) => {
     await page.getByText("Filters").click();
     const select = page.locator("select").first();
     await select.selectOption("Office");

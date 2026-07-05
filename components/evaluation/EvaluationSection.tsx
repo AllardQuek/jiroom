@@ -8,17 +8,20 @@ import { useTemplateStore } from "@/store/templateStore";
 import { useListingStore } from "@/store/listingStore";
 import { Criterion, Evaluation, Template } from "@/types/evaluation";
 import { calculateScore as calcScore } from "@/lib/utils/calculateScore";
-import { hasResponse, groupCriteriaByCategory } from "./shared/evaluationHelpers";
+import {
+  hasResponse,
+  groupCriteriaByCategory,
+} from "./shared/evaluationHelpers";
 import { SelectPills, NumberBadge, TextNote } from "./shared/EvaluationInputs";
 import { useDerivedTotal } from "./shared/useDerivedTotal";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 interface EvaluationSectionProps {
   listingId: string;
 }
 
 export function EvaluationSection({ listingId }: EvaluationSectionProps) {
-  const t = useTranslations('evaluation');
+  const t = useTranslations("evaluation");
   const templates = useTemplateStore((state) => state.templates);
   const listings = useListingStore((state) => state.listings);
   const evaluation = useEvaluationStore((state) =>
@@ -38,18 +41,23 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   if (!template) {
     return (
       <div className="rounded-xl bg-muted/50 p-4 text-sm text-muted-foreground">
-        {t('noTemplate')}
+        {t("noTemplate")}
       </div>
     );
   }
 
   const responses = evaluation?.responses ?? {};
   const listingPrice = listing?.negotiated_price ?? listing?.price;
-  const score = evaluation ? calcScore(responses, template, listingPrice) : null;
+  const score = evaluation
+    ? calcScore(responses, template, listingPrice)
+    : null;
 
   const answeredCount = template.criteria.filter((criterion) => {
     if (criterion.type === "derived") {
-      return listingPrice !== undefined || criterion.derivedFrom?.some((id) => hasResponse(responses[id]));
+      return (
+        listingPrice !== undefined ||
+        criterion.derivedFrom?.some((id) => hasResponse(responses[id]))
+      );
     }
     return hasResponse(responses[criterion.id]);
   }).length;
@@ -59,20 +67,34 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   const groupedCriteria = groupCriteriaByCategory(template);
 
   const derivedCriterion = template.criteria.find((c) => c.type === "derived");
-  const derivedTotal = useDerivedTotal(derivedCriterion, listingPrice, responses);
+  const derivedTotal = useDerivedTotal(
+    derivedCriterion,
+    listingPrice,
+    responses
+  );
 
   const saveResponse = (criterionId: string, value: number | string) => {
     const now = new Date().toISOString();
-    
+
     // Calculate derived total (c0) when saving cost fields (c2 or c4)
     let updatedResponses: Record<string, number | string>;
     if (criterionId === "c2" || criterionId === "c4") {
-      const utilityCost = criterionId === "c2" ? Number(value || 0) : Number(evaluation?.responses["c2"] || 0);
-      const additionalCost = criterionId === "c4" ? Number(value || 0) : Number(evaluation?.responses["c4"] || 0);
+      const utilityCost =
+        criterionId === "c2"
+          ? Number(value || 0)
+          : Number(evaluation?.responses["c2"] || 0);
+      const additionalCost =
+        criterionId === "c4"
+          ? Number(value || 0)
+          : Number(evaluation?.responses["c4"] || 0);
       const totalCost = (listingPrice || 0) + utilityCost + additionalCost;
-      
+
       if (evaluation) {
-        updatedResponses = { ...evaluation.responses, [criterionId]: value, c0: totalCost };
+        updatedResponses = {
+          ...evaluation.responses,
+          [criterionId]: value,
+          c0: totalCost,
+        };
       } else {
         updatedResponses = { [criterionId]: value, c0: totalCost };
       }
@@ -83,7 +105,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
         updatedResponses = { [criterionId]: value };
       }
     }
-    
+
     if (evaluation) {
       updateEvaluation(evaluation.id, {
         responses: updatedResponses,
@@ -106,13 +128,13 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
     if (!evaluation) return;
     const nextResponses = { ...evaluation.responses };
     delete nextResponses[criterionId];
-    
+
     // Recalculate c0 when clearing cost fields (c2 or c4)
     if (criterionId === "c2" || criterionId === "c4") {
       const utilityCost = Number(evaluation.responses["c2"] || 0);
       const additionalCost = Number(evaluation.responses["c4"] || 0);
       const totalCost = (listingPrice || 0) + utilityCost + additionalCost;
-      
+
       // Only include c0 if there are still costs
       if (utilityCost > 0 || additionalCost > 0) {
         nextResponses["c0"] = totalCost;
@@ -120,7 +142,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
         delete nextResponses["c0"];
       }
     }
-    
+
     if (Object.keys(nextResponses).length === 0) {
       deleteEvaluation(evaluation.id);
       return;
@@ -139,7 +161,9 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
         return (
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-semibold tabular-nums text-foreground/80">
-              {derivedTotal !== null ? `$${derivedTotal.toLocaleString()}` : "—"}
+              {derivedTotal !== null
+                ? `$${derivedTotal.toLocaleString()}`
+                : "—"}
             </span>
           </div>
         );
@@ -159,7 +183,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                   : "bg-transparent text-muted-foreground/60 border-border/30 hover:border-border/60 hover:text-foreground/80"
               }`}
             >
-              {t('yes')}
+              {t("yes")}
             </button>
             <button
               type="button"
@@ -174,7 +198,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                   : "bg-transparent text-muted-foreground/60 border-border/30 hover:border-border/60 hover:text-foreground/80"
               }`}
             >
-              {t('no')}
+              {t("no")}
             </button>
             <button
               type="button"
@@ -189,7 +213,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
                   : "bg-transparent text-muted-foreground/40 border-transparent hover:text-muted-foreground/70"
               }`}
             >
-              {t('na')}
+              {t("na")}
             </button>
           </div>
         );
@@ -249,7 +273,7 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   return (
     <div className="rounded-xl bg-muted/50 p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">{t('title')}</span>
+        <span className="text-sm font-medium">{t("title")}</span>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span>
             {answeredCount}/{totalCount}
@@ -259,9 +283,15 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
           {score !== null && (
             <>
               <span className="text-muted-foreground/40">·</span>
-              <span className={`font-medium tabular-nums ${
-                score.net > 0 ? "text-emerald-600" : score.net < 0 ? "text-red-600" : "text-muted-foreground"
-              }`}>
+              <span
+                className={`font-medium tabular-nums ${
+                  score.net > 0
+                    ? "text-emerald-600"
+                    : score.net < 0
+                      ? "text-red-600"
+                      : "text-muted-foreground"
+                }`}
+              >
                 {score.net > 0 ? `+${score.net}` : score.net}
               </span>
             </>
@@ -277,19 +307,22 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
             </span>
             <span className="h-px flex-1 bg-border/50" />
             <span className="text-xs text-muted-foreground">
-              {criteria.filter((c) => {
-                if (c.type === "derived") return derivedTotal !== null;
-                return hasResponse(responses[c.id]);
-              }).length}
+              {
+                criteria.filter((c) => {
+                  if (c.type === "derived") return derivedTotal !== null;
+                  return hasResponse(responses[c.id]);
+                }).length
+              }
               /{criteria.length}
             </span>
           </div>
 
           <div className="space-y-0.5">
             {criteria.map((criterion) => {
-              const answered = criterion.type === "derived"
-                ? derivedTotal !== null
-                : hasResponse(responses[criterion.id]);
+              const answered =
+                criterion.type === "derived"
+                  ? derivedTotal !== null
+                  : hasResponse(responses[criterion.id]);
               return (
                 <div
                   key={criterion.id}

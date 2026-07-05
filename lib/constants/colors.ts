@@ -117,49 +117,57 @@ const DARK_COLORS = {
  * @param theme - 'light' or 'dark'
  * @returns Color constants for the specified theme
  */
-export function getThemeColors(theme: 'light' | 'dark') {
-  return theme === 'dark' ? DARK_COLORS : LIGHT_COLORS;
+export function getThemeColors(theme: "light" | "dark") {
+  return theme === "dark" ? DARK_COLORS : LIGHT_COLORS;
 }
 
 /**
  * Get anchor colors for a theme
  */
-export function getAnchorColors(theme: 'light' | 'dark'): Record<AnchorType, string> {
+export function getAnchorColors(
+  theme: "light" | "dark"
+): Record<AnchorType, string> {
   return getThemeColors(theme).anchors;
 }
 
 /**
  * Get status colors for a theme
  */
-export function getStatusColors(theme: 'light' | 'dark'): Record<string, string> {
+export function getStatusColors(
+  theme: "light" | "dark"
+): Record<string, string> {
   return getThemeColors(theme).status;
 }
 
 /**
  * Get area palette for a theme
  */
-export function getAreaPalette(theme: 'light' | 'dark'): string[] {
+export function getAreaPalette(theme: "light" | "dark"): string[] {
   return getThemeColors(theme).area;
 }
 
 /**
  * Get score colors for a theme
  */
-export function getScoreColors(theme: 'light' | 'dark'): typeof LIGHT_COLORS.score {
+export function getScoreColors(
+  theme: "light" | "dark"
+): typeof LIGHT_COLORS.score {
   return getThemeColors(theme).score;
 }
 
 /**
  * Get accent colors for a theme
  */
-export function getAccentColors(theme: 'light' | 'dark'): string[] {
+export function getAccentColors(theme: "light" | "dark"): string[] {
   return getThemeColors(theme).accent;
 }
 
 /**
  * Get verdict styles for a theme
  */
-export function getVerdictStyles(theme: 'light' | 'dark'): typeof LIGHT_COLORS.verdict {
+export function getVerdictStyles(
+  theme: "light" | "dark"
+): typeof LIGHT_COLORS.verdict {
   return getThemeColors(theme).verdict;
 }
 

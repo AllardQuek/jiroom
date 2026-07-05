@@ -28,7 +28,11 @@ interface AnchorInfoWindowProps {
  * </InfoWindow>
  * ```
  */
-export function AnchorInfoWindow({ anchor, onEdit, onDelete }: AnchorInfoWindowProps) {
+export function AnchorInfoWindow({
+  anchor,
+  onEdit,
+  onDelete,
+}: AnchorInfoWindowProps) {
   const color = anchor.color || ANCHOR_COLORS[anchor.type];
 
   return (

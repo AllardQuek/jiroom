@@ -36,7 +36,10 @@ const typeMeta: Record<string, { label: string; icon: React.ReactNode }> = {
   derived: { label: "Derived", icon: <FunctionSquare className="h-3 w-3" /> },
 };
 
-function ScoreToggle({ value, onChange }: {
+function ScoreToggle({
+  value,
+  onChange,
+}: {
   value: -1 | 0 | 1;
   onChange: (v: -1 | 0 | 1) => void;
 }) {
@@ -87,7 +90,10 @@ function ScorePopover({
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+      if (
+        popoverRef.current &&
+        !popoverRef.current.contains(e.target as Node)
+      ) {
         onClose();
       }
     };
@@ -190,7 +196,10 @@ function ScorePopover({
                 value={t.min ?? ""}
                 onChange={(e) =>
                   updateThreshold(i, {
-                    min: e.target.value === "" ? undefined : Number(e.target.value),
+                    min:
+                      e.target.value === ""
+                        ? undefined
+                        : Number(e.target.value),
                   })
                 }
                 className="h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -202,7 +211,10 @@ function ScorePopover({
                 value={t.max ?? ""}
                 onChange={(e) =>
                   updateThreshold(i, {
-                    max: e.target.value === "" ? undefined : Number(e.target.value),
+                    max:
+                      e.target.value === ""
+                        ? undefined
+                        : Number(e.target.value),
                   })
                 }
                 className="h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -250,8 +262,7 @@ export function CriteriaItem({
 }: CriteriaItemProps) {
   const hasScores =
     criterion.scores && Object.keys(criterion.scores).length > 0;
-  const hasThresholds =
-    criterion.thresholds && criterion.thresholds.length > 0;
+  const hasThresholds = criterion.thresholds && criterion.thresholds.length > 0;
   const hasScoring = hasScores || hasThresholds;
   const meta = typeMeta[criterion.type] ?? typeMeta.text;
   const [popoverOpen, setPopoverOpen] = useState(false);

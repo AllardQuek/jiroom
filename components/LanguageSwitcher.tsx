@@ -1,9 +1,9 @@
 "use client";
 
-import { useTransition } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
-import { useRouter, usePathname } from '@/i18n/navigation';
-import { locales, localeNames, type Locale } from '@/i18n/config';
+import { useTransition } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter, usePathname } from "@/i18n/navigation";
+import { locales, localeNames, type Locale } from "@/i18n/config";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +17,7 @@ export default function LanguageSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const t = useTranslations('language');
+  const t = useTranslations("language");
 
   const [isPending, startTransition] = useTransition();
 
@@ -36,7 +36,7 @@ export default function LanguageSwitcher() {
           className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
         >
           <Globe className="size-4" />
-          <span className="sr-only">{t('switch')}</span>
+          <span className="sr-only">{t("switch")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[160px]">
@@ -51,9 +51,7 @@ export default function LanguageSwitcher() {
               <span className="flex items-center gap-2">
                 <span className="text-sm font-medium">{localeNames[loc]}</span>
               </span>
-              {isActive && (
-                <Check className="size-4 text-primary shrink-0" />
-              )}
+              {isActive && <Check className="size-4 text-primary shrink-0" />}
             </DropdownMenuItem>
           );
         })}

@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 import { TakenBadge } from "@/components/listings/TakenBadge";
 import { TakenTooltip } from "@/components/listings/TakenTooltip";
-import { useTranslations } from 'next-intl';
-import { Link as I18nLink } from '@/i18n/navigation';
+import { useTranslations } from "next-intl";
+import { Link as I18nLink } from "@/i18n/navigation";
 import {
   Tooltip,
   TooltipContent,
@@ -69,7 +69,9 @@ function DaySection({
           </h2>
           <span className="text-xs text-muted-foreground">{dateLabel}</span>
         </div>
-        <div className={`h-px mt-2 ${isPast ? "bg-border/30" : "bg-border"} lg:hidden`} />
+        <div
+          className={`h-px mt-2 ${isPast ? "bg-border/30" : "bg-border"} lg:hidden`}
+        />
       </div>
 
       <div className="space-y-3">
@@ -91,96 +93,100 @@ function DaySection({
                         isPast
                           ? "opacity-50 border-border/30 hover:opacity-70"
                           : "hover:shadow-md active:scale-[0.99] border-border/50"
-                      } ${
-                        viewing.listing.is_taken ? "opacity-50" : ""
-                      }`}
+                      } ${viewing.listing.is_taken ? "opacity-50" : ""}`}
                     >
-                <CardContent className="p-0">
-                  <div className="flex items-center gap-4 px-4 py-4 min-w-0">
-                    <div className="text-center shrink-0">
-                      <div
-                        className={`text-lg font-black tracking-tight ${
-                          isPast
-                            ? "text-muted-foreground/50"
-                            : "text-foreground"
-                        }`}
-                      >
-                        {format(date, "h:mm")}
-                      </div>
-                      <div
-                        className={`text-[11px] font-semibold uppercase tracking-wider leading-tight ${
-                          isPast
-                            ? "text-muted-foreground/40"
-                            : "text-muted-foreground/60"
-                        }`}
-                      >
-                        {format(date, "a")}
-                      </div>
-                    </div>
+                      <CardContent className="p-0">
+                        <div className="flex items-center gap-4 px-4 py-4 min-w-0">
+                          <div className="text-center shrink-0">
+                            <div
+                              className={`text-lg font-black tracking-tight ${
+                                isPast
+                                  ? "text-muted-foreground/50"
+                                  : "text-foreground"
+                              }`}
+                            >
+                              {format(date, "h:mm")}
+                            </div>
+                            <div
+                              className={`text-[11px] font-semibold uppercase tracking-wider leading-tight ${
+                                isPast
+                                  ? "text-muted-foreground/40"
+                                  : "text-muted-foreground/60"
+                              }`}
+                            >
+                              {format(date, "a")}
+                            </div>
+                          </div>
 
-                    <div
-                      className={`w-px h-10 shrink-0 ${
-                        isPast ? "bg-border/20" : "bg-border/60"
-                      }`}
-                    />
+                          <div
+                            className={`w-px h-10 shrink-0 ${
+                              isPast ? "bg-border/20" : "bg-border/60"
+                            }`}
+                          />
 
-                    <div className="flex-1 min-w-0 space-y-0.5">
-                      <div className="flex items-center gap-1.5">
-                        <h3
-                          className={`text-sm font-semibold line-clamp-1 ${
-                            isPast
-                              ? "text-muted-foreground/70"
-                              : "group-hover:text-primary transition-colors"
-                          }`}
-                        >
-                          {viewing.listing.title}
-                        </h3>
-                        {viewing.listing.source_url && (
-                          <a
-                            href={viewing.listing.source_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="shrink-0 p-1 -m-1 text-muted-foreground/50 hover:text-primary transition-colors"
-                          >
-                            <ExternalLink size={16} />
-                          </a>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        {viewing.listing.is_taken && <TakenBadge takenDate={viewing.listing.taken_date} />}
-                        <span
-                          className={`font-semibold ${
-                            isPast
-                              ? "text-muted-foreground/70"
-                              : "text-foreground"
-                          }`}
-                        >
-                          ${viewing.listing.price.toLocaleString()}
-                        </span>
-                        {viewing.listing.area && (
-                          <>
-                            <span className="text-muted-foreground/40">•</span>
-                            <span className="flex items-center gap-1">
-                              <MapPin size={10} />
-                              {viewing.listing.area}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </div>
+                          <div className="flex-1 min-w-0 space-y-0.5">
+                            <div className="flex items-center gap-1.5">
+                              <h3
+                                className={`text-sm font-semibold line-clamp-1 ${
+                                  isPast
+                                    ? "text-muted-foreground/70"
+                                    : "group-hover:text-primary transition-colors"
+                                }`}
+                              >
+                                {viewing.listing.title}
+                              </h3>
+                              {viewing.listing.source_url && (
+                                <a
+                                  href={viewing.listing.source_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="shrink-0 p-1 -m-1 text-muted-foreground/50 hover:text-primary transition-colors"
+                                >
+                                  <ExternalLink size={16} />
+                                </a>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              {viewing.listing.is_taken && (
+                                <TakenBadge
+                                  takenDate={viewing.listing.taken_date}
+                                />
+                              )}
+                              <span
+                                className={`font-semibold ${
+                                  isPast
+                                    ? "text-muted-foreground/70"
+                                    : "text-foreground"
+                                }`}
+                              >
+                                ${viewing.listing.price.toLocaleString()}
+                              </span>
+                              {viewing.listing.area && (
+                                <>
+                                  <span className="text-muted-foreground/40">
+                                    •
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <MapPin size={10} />
+                                    {viewing.listing.area}
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </div>
 
-                    <ArrowRight
-                      size={16}
-                      className={`shrink-0 transition-colors ${
-                        isPast
-                          ? "text-muted-foreground/20"
-                          : "text-muted-foreground/30 group-hover:text-primary"
-                      }`}
-                    />
-                  </div>
-                </CardContent>
-                  </Card>
+                          <ArrowRight
+                            size={16}
+                            className={`shrink-0 transition-colors ${
+                              isPast
+                                ? "text-muted-foreground/20"
+                                : "text-muted-foreground/30 group-hover:text-primary"
+                            }`}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
                   </TooltipTrigger>
                   {viewing.listing.is_taken && (
                     <TooltipContent>
@@ -198,7 +204,7 @@ function DaySection({
 }
 
 export default function SchedulePage() {
-  const t = useTranslations('schedule');
+  const t = useTranslations("schedule");
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
     null
   );
@@ -245,9 +251,9 @@ export default function SchedulePage() {
       } else {
         let label: string;
         if (isToday(day)) {
-          label = t('today');
+          label = t("today");
         } else if (isTomorrow(day)) {
-          label = t('tomorrow');
+          label = t("tomorrow");
         } else {
           label = format(day, "EEEE");
         }
@@ -301,15 +307,15 @@ export default function SchedulePage() {
           <CalendarDays size={48} className="text-muted-foreground" />
         </div>
         <div className="space-y-2">
-          <h2 className="text-xl font-bold">{t('noViewings')}</h2>
+          <h2 className="text-xl font-bold">{t("noViewings")}</h2>
           <p className="text-muted-foreground max-w-xs">
-            {t('noViewingsDescription')}
+            {t("noViewingsDescription")}
           </p>
         </div>
         <I18nLink href="/listings">
           <Button variant="outline">
             <Home className="h-4 w-4 mr-1.5" />
-            {t('browseListings')}
+            {t("browseListings")}
           </Button>
         </I18nLink>
       </div>
@@ -319,9 +325,11 @@ export default function SchedulePage() {
   return (
     <div className="p-4 pb-24 space-y-2">
       <header className="pb-2">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-sm text-muted-foreground">
-          {totalCount === 1 ? t('viewingsCount', { count: totalCount }) : t('viewingsCountPlural', { count: totalCount })}
+          {totalCount === 1
+            ? t("viewingsCount", { count: totalCount })
+            : t("viewingsCountPlural", { count: totalCount })}
         </p>
       </header>
 
@@ -334,7 +342,7 @@ export default function SchedulePage() {
             viewings={group.viewings}
             onListingClick={setSelectedListingId}
             isPast={group.isPast}
-            pastPrefix={t('pastPrefix')}
+            pastPrefix={t("pastPrefix")}
           />
         ))}
       </div>

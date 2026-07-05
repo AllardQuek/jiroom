@@ -15,7 +15,13 @@ import { normalizeUrl, normalizeForComparison } from "@/lib/utils/url";
 import { extractFromUrl } from "@/lib/utils/urlExtract";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Globe, MapPin, FileText, ChevronDown, ChevronRight } from "lucide-react";
+import {
+  Globe,
+  MapPin,
+  FileText,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
 import { InlineEvaluation } from "@/components/evaluation/InlineEvaluation";
 import { ScheduleViewingForm } from "@/components/viewing/ScheduleViewingForm";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
@@ -235,9 +241,7 @@ export function CreateListingForm({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">
-                  Title
-                </FormLabel>
+                <FormLabel className="flex items-center gap-2">Title</FormLabel>
                 <FormControl>
                   <Input placeholder="Auto-filled from URL" {...field} />
                 </FormControl>
@@ -253,7 +257,6 @@ export function CreateListingForm({
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-muted" />
             </div>
-
           </div>
 
           <div className="grid grid-cols-1 gap-4">
@@ -275,7 +278,8 @@ export function CreateListingForm({
                 }}
               />
               <p className="text-[0.8rem] text-muted-foreground mt-1.5">
-                Sets the listing title and map coordinates from the selected place
+                Sets the listing title and map coordinates from the selected
+                place
               </p>
             </div>
 
@@ -380,7 +384,10 @@ export function CreateListingForm({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">
-                Schedule Viewing <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+                Schedule Viewing{" "}
+                <span className="text-muted-foreground font-normal ml-1">
+                  (optional)
+                </span>
               </span>
               {viewingDate && (
                 <span className="text-[11px] bg-primary/10 text-primary rounded-full px-2 py-0.5 font-medium">
@@ -389,13 +396,22 @@ export function CreateListingForm({
               )}
             </div>
           </div>
-          
+
           <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
             <ScheduleViewingForm
               listingId=""
               isScheduled={!!viewingDate}
               scheduledDate={viewingDate}
-              viewing={viewingDate ? { scheduled_date: viewingDate, id: "", listing_id: "", created_at: "" } : undefined}
+              viewing={
+                viewingDate
+                  ? {
+                      scheduled_date: viewingDate,
+                      id: "",
+                      listing_id: "",
+                      created_at: "",
+                    }
+                  : undefined
+              }
               onCancel={() => setViewingDate(undefined)}
               onSubmit={(data) => {
                 setViewingDate(data.scheduled_date);
@@ -409,7 +425,10 @@ export function CreateListingForm({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold">
-                  Evaluation <span className="text-muted-foreground font-normal ml-1">(optional)</span>
+                  Evaluation{" "}
+                  <span className="text-muted-foreground font-normal ml-1">
+                    (optional)
+                  </span>
                 </span>
                 {evalAnsweredCount > 0 && (
                   <span className="text-[11px] bg-primary/10 text-primary rounded-full px-2 py-0.5 font-medium">
@@ -423,13 +442,17 @@ export function CreateListingForm({
                 </div>
               )}
             </div>
-            
+
             <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
               <InlineEvaluation
                 responses={evalResponses}
                 onResponse={handleEvalResponse}
                 onClearResponse={handleEvalClear}
-                listingPrice={(negotiatedPriceValue ?? priceValue) > 0 ? (negotiatedPriceValue ?? priceValue) : undefined}
+                listingPrice={
+                  (negotiatedPriceValue ?? priceValue) > 0
+                    ? (negotiatedPriceValue ?? priceValue)
+                    : undefined
+                }
               />
             </div>
           </div>

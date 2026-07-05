@@ -4,7 +4,7 @@ import { Viewing } from "@/types/listing";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Eye } from "lucide-react";
 import { useState } from "react";
-import { useLocale } from 'next-intl';
+import { useLocale } from "next-intl";
 import { ScheduleViewingForm } from "./ScheduleViewingForm";
 
 interface ViewingSectionProps {

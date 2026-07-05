@@ -1,23 +1,25 @@
 "use client";
 
-import { useTranslations } from 'next-intl';
-import { Link, usePathname } from '@/i18n/navigation';
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import {
   LayoutList,
   GitCompareArrows,
   CalendarDays,
   Map,
+  Compass,
 } from "lucide-react";
 
 export default function Navigation() {
   const pathname = usePathname();
-  const t = useTranslations('navigation');
+  const t = useTranslations("navigation");
 
   const tabs = [
-    { name: t('listings'), href: "/listings", icon: LayoutList },
-    { name: t('map'), href: "/map", icon: Map },
-    { name: t('compare'), href: "/compare", icon: GitCompareArrows },
-    { name: t('schedule'), href: "/schedule", icon: CalendarDays },
+    { name: t("listings"), href: "/listings", icon: LayoutList },
+    { name: t("map"), href: "/map", icon: Map },
+    { name: t("compare"), href: "/compare", icon: GitCompareArrows },
+    { name: t("schedule"), href: "/schedule", icon: CalendarDays },
+    { name: t("guide"), href: "/guide", icon: Compass },
   ];
 
   return (

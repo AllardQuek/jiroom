@@ -4,8 +4,7 @@ import { useEffect, useRef, forwardRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-export interface AutoResizeTextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   minHeight?: string;
   maxHeight?: string;
 }
@@ -15,7 +14,8 @@ const AutoResizeTextarea = forwardRef<
   AutoResizeTextareaProps
 >(({ className, minHeight = "60px", maxHeight = "300px", ...props }, ref) => {
   const internalRef = useRef<HTMLTextAreaElement>(null);
-  const textareaRef = (ref as React.RefObject<HTMLTextAreaElement>) || internalRef;
+  const textareaRef =
+    (ref as React.RefObject<HTMLTextAreaElement>) || internalRef;
 
   const autoResizeTextarea = (element: HTMLTextAreaElement) => {
     element.style.height = "auto";

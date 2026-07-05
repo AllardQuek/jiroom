@@ -47,7 +47,7 @@ export function DroppableColumn({
       className={`flex min-h-[200px] lg:min-h-[560px] flex-col rounded-xl bg-muted/30 ${className ?? ""} ${
         isOver ? "bg-primary/5 ring-2 ring-primary/30" : ""
       }`}
-      style={collapsed ? { minHeight: 'auto' } : undefined}
+      style={collapsed ? { minHeight: "auto" } : undefined}
     >
       {children}
     </section>

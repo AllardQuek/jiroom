@@ -1,7 +1,7 @@
 "use client";
 
 import { Filter } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +21,10 @@ export interface ListingFilters {
 }
 
 // Helper function to get the effective price for filtering/sorting
-export function getEffectivePrice(listing: { price: number; negotiated_price?: number }): number {
+export function getEffectivePrice(listing: {
+  price: number;
+  negotiated_price?: number;
+}): number {
   return listing.negotiated_price ?? listing.price;
 }
 
@@ -40,8 +43,11 @@ export function FilterDialog({
   onFiltersChange,
   areas,
 }: FilterDialogProps) {
-  const t = useTranslations('listings.filter');
-  const handleFilterChange = (key: keyof ListingFilters, value: boolean | string | number | null | string[]) => {
+  const t = useTranslations("listings.filter");
+  const handleFilterChange = (
+    key: keyof ListingFilters,
+    value: boolean | string | number | null | string[]
+  ) => {
     const newFilters = { ...filters, [key]: value };
     onFiltersChange(newFilters);
   };
@@ -62,29 +68,31 @@ export function FilterDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Filter size={18} />
-            {t('title')}
+            {t("title")}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="flex items-center justify-between">
-            <Label htmlFor="hideTaken">{t('hideTaken')}</Label>
+            <Label htmlFor="hideTaken">{t("hideTaken")}</Label>
             <Switch
               id="hideTaken"
               checked={filters.hideTaken}
-              onCheckedChange={(checked) => handleFilterChange("hideTaken", checked)}
+              onCheckedChange={(checked) =>
+                handleFilterChange("hideTaken", checked)
+              }
             />
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label htmlFor="area">{t('area')}</Label>
+              <Label htmlFor="area">{t("area")}</Label>
               {filters.areas.length > 0 && (
                 <button
                   type="button"
                   onClick={() => handleFilterChange("areas", [])}
                   className="text-xs text-primary hover:underline"
                 >
-                  {t('clearSelection')}
+                  {t("clearSelection")}
                 </button>
               )}
             </div>
@@ -93,7 +101,10 @@ export function FilterDialog({
               multiple
               value={filters.areas}
               onChange={(e) => {
-                const selectedOptions = Array.from(e.target.selectedOptions, (opt) => opt.value);
+                const selectedOptions = Array.from(
+                  e.target.selectedOptions,
+                  (opt) => opt.value
+                );
                 handleFilterChange("areas", selectedOptions);
               }}
               className="w-full bg-muted/50 border border-border/50 rounded-lg px-3 py-2 text-sm outline-none focus:border-primary"
@@ -105,28 +116,34 @@ export function FilterDialog({
                 </option>
               ))}
             </select>
-            <p className="text-xs text-muted-foreground">{t('multipleHint')}</p>
+            <p className="text-xs text-muted-foreground">{t("multipleHint")}</p>
           </div>
 
           <div className="space-y-2">
-            <Label>{t('priceRange')}</Label>
+            <Label>{t("priceRange")}</Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
-                placeholder={t('minPrice')}
+                placeholder={t("minPrice")}
                 value={filters.priceMin ?? ""}
                 onChange={(e) =>
-                  handleFilterChange("priceMin", e.target.value ? Number(e.target.value) : null)
+                  handleFilterChange(
+                    "priceMin",
+                    e.target.value ? Number(e.target.value) : null
+                  )
                 }
                 className="w-full"
               />
               <span className="text-sm text-muted-foreground">—</span>
               <Input
                 type="number"
-                placeholder={t('maxPrice')}
+                placeholder={t("maxPrice")}
                 value={filters.priceMax ?? ""}
                 onChange={(e) =>
-                  handleFilterChange("priceMax", e.target.value ? Number(e.target.value) : null)
+                  handleFilterChange(
+                    "priceMax",
+                    e.target.value ? Number(e.target.value) : null
+                  )
                 }
                 className="w-full"
               />
@@ -135,7 +152,7 @@ export function FilterDialog({
         </div>
         <div className="flex justify-end pt-4 border-t">
           <Button variant="outline" onClick={handleReset}>
-            {t('reset')}
+            {t("reset")}
           </Button>
         </div>
       </DialogContent>
