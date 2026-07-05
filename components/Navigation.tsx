@@ -7,7 +7,6 @@ import {
   GitCompareArrows,
   CalendarDays,
   Map,
-  Compass,
 } from "lucide-react";
 
 export default function Navigation() {
@@ -19,7 +18,6 @@ export default function Navigation() {
     { name: t("map"), href: "/map", icon: Map },
     { name: t("compare"), href: "/compare", icon: GitCompareArrows },
     { name: t("schedule"), href: "/schedule", icon: CalendarDays },
-    { name: t("guide"), href: "/guide", icon: Compass },
   ];
 
   return (

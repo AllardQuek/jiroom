@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import {
   Dialog,
   DialogContent,
@@ -40,20 +41,25 @@ export default function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
             <p className="mt-2">{t("privacy")}</p>
           </Section>
 
+          <Section title={t("guide.title")}>
+            <p className="mb-2">{t("guide.description")}</p>
+            <Link
+              href="/guide"
+              className="inline-flex items-center gap-2 text-primary hover:underline underline-offset-2 transition-colors"
+              onClick={() => onOpenChange(false)}
+            >
+              {t("guide.linkText")}
+            </Link>
+          </Section>
+
           <Section title={t("gettingStarted")}>
             <div className="space-y-3">
               <div>
                 <strong className="text-foreground">{t("quickStart")}</strong>
                 <ol className="mt-2 space-y-1.5 list-decimal list-inside text-muted-foreground">
-                  <li>
-                    <strong className="text-foreground">{t("step1")}</strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">{t("step2")}</strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">{t("step3")}</strong>
-                  </li>
+                  <li>{t("step1")}</li>
+                  <li>{t("step2")}</li>
+                  <li>{t("step3")}</li>
                 </ol>
               </div>
               <div className="bg-muted/50 rounded-lg px-3 py-2 border border-border/50">
@@ -71,26 +77,10 @@ export default function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
                   {t("listingsPage.title")}
                 </strong>
                 <ul className="mt-1.5 space-y-1 list-disc list-inside text-muted-foreground">
-                  <li>
-                    <strong className="text-foreground">
-                      {t("listingsPage.columns")}
-                    </strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      {t("listingsPage.actions")}
-                    </strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      {t("listingsPage.tools")}
-                    </strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      {t("listingsPage.compare")}
-                    </strong>
-                  </li>
+                  <li>{t("listingsPage.columns")}</li>
+                  <li>{t("listingsPage.actions")}</li>
+                  <li>{t("listingsPage.tools")}</li>
+                  <li>{t("listingsPage.compare")}</li>
                 </ul>
               </div>
               <div>
@@ -98,26 +88,10 @@ export default function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
                   {t("mapPage.title")}
                 </strong>
                 <ul className="mt-1.5 space-y-1 list-disc list-inside text-muted-foreground">
-                  <li>
-                    <strong className="text-foreground">
-                      {t("mapPage.markers")}
-                    </strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      {t("mapPage.commute")}
-                    </strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      {t("mapPage.addFromMap")}
-                    </strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      {t("mapPage.filter")}
-                    </strong>
-                  </li>
+                  <li>{t("mapPage.markers")}</li>
+                  <li>{t("mapPage.commute")}</li>
+                  <li>{t("mapPage.addFromMap")}</li>
+                  <li>{t("mapPage.filter")}</li>
                 </ul>
               </div>
               <div>
@@ -298,16 +272,8 @@ export default function HelpDialog({ open, onOpenChange }: HelpDialogProps) {
                   {t("dataManagement.backup")}
                 </strong>
                 <ul className="mt-1.5 space-y-1 list-disc list-inside text-muted-foreground">
-                  <li>
-                    <strong className="text-foreground">
-                      {t("dataManagement.export")}
-                    </strong>
-                  </li>
-                  <li>
-                    <strong className="text-foreground">
-                      {t("dataManagement.import")}
-                    </strong>
-                  </li>
+                  <li>{t("dataManagement.export")}</li>
+                  <li>{t("dataManagement.import")}</li>
                 </ul>
               </div>
               <div>

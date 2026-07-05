@@ -20,7 +20,6 @@
     "copied": "已复制！"
   },
   "navigation": {
-    "guide": "指南",
     "listings": "房源列表",
     "map": "地图",
     "compare": "对比",
@@ -348,6 +347,11 @@
     "whatIsJIRoom": "什么是 JIRoom？",
     "whatIsJIRoomDescription": "JIRoom 让您的租房搜索井井有条——无需在浏览器标签页、电子表格笔记和遗忘的链接之间手忙脚乱。从任何门户网站跟踪房源，一致地评估它们，安排看房，并排比较选项，并根据到重要地点的通勤时间来判断位置。",
     "privacy": "所有数据都保存在您的浏览器中。无需注册，无需服务器，无广告。",
+    "guide": {
+      "title": "租房指南",
+      "description": "新加坡租房流程综合指南，从规划到入住。",
+      "linkText": "打开租房指南 →"
+    },
     "gettingStarted": "入门指南",
     "quickStart": "快速开始（3 步）",
     "step1": "添加房源：在房源页面点击\"添加房源\"，粘贴 PropertyGuru/99.co 链接",

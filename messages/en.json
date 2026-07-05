@@ -20,7 +20,6 @@
     "copied": "Copied!"
   },
   "navigation": {
-    "guide": "Guide",
     "listings": "Listings",
     "map": "Map",
     "compare": "Compare",
@@ -348,6 +347,11 @@
     "whatIsJIRoom": "What is JIRoom?",
     "whatIsJIRoomDescription": "JIRoom keeps your rental search organised in one place — no more juggling browser tabs, spreadsheet notes, and forgotten links. Track listings from any portal, evaluate them consistently, schedule viewings, compare options side-by-side, and judge locations by commute times to the places that matter.",
     "privacy": "Everything stays in your browser. No sign-up, no server, no ads.",
+    "guide": {
+      "title": "Rental Guide",
+      "description": "A comprehensive guide to the Singapore rental process, from planning to move-in.",
+      "linkText": "Open Rental Guide →"
+    },
     "gettingStarted": "Getting Started",
     "quickStart": "Quick Start (3 steps)",
     "step1": "Add a listing: Click \"Add listing\" on Listings page, paste URL from PropertyGuru/99.co",
