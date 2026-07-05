@@ -15,22 +15,26 @@ import {
 import type { GuideNodeData, ContentTable } from "@/data/guide-types";
 import { MeasuredHeightContext } from "../HeightContext";
 
-function renderTipWithLinks(text: string) {
-  const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
+function renderInline(text: string) {
+  const parts = text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
-    const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-    if (match) {
+    const linkMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (linkMatch) {
       return (
         <a
           key={i}
-          href={match[2]}
+          href={linkMatch[2]}
           target="_blank"
           rel="noopener noreferrer"
           className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
         >
-          {match[1]}
+          {linkMatch[1]}
         </a>
       );
+    }
+    const boldMatch = part.match(/^\*\*([^*]+)\*\*$/);
+    if (boldMatch) {
+      return <strong key={i} className="font-semibold">{boldMatch[1]}</strong>;
     }
     return <span key={i}>{part}</span>;
   });
@@ -77,7 +81,7 @@ function ContentTable({ table }: { table: ContentTable }) {
                       : "text-muted-foreground"
                   }`}
                 >
-                  <span>{renderTipWithLinks(cell)}</span>
+                    <span>{renderInline(cell)}</span>
                 </td>
               ))}
             </tr>
@@ -192,7 +196,7 @@ const handleContentClick = (e: React.MouseEvent) => {
                       <span className="text-foreground/30 mt-0.5 flex-shrink-0">
                         •
                       </span>
-                      <span>{renderTipWithLinks(b)}</span>
+                      <span>{renderInline(b)}</span>
                     </motion.li>
                   ))}
                 </ul>
@@ -212,7 +216,7 @@ const handleContentClick = (e: React.MouseEvent) => {
                         key={i}
                         className="text-xs text-foreground/80 leading-relaxed"
                       >
-                        {renderTipWithLinks(tip)}
+                        {renderInline(tip)}
                       </p>
                     ))}
                   </div>
