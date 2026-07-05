@@ -99,15 +99,14 @@ const TOPICS: TopicDef[] = [
       tips: [],
       table: {
         headers: [
-          "",
-          "Best for",
-          "Floor plans",
+          "Platform",
+          "Best For",
         ],
         rows: [
-          ["[PropertyGuru](https://www.propertyguru.com.sg)", "Largest inventory", "No"],
-          ["[99.co](https://www.99.co/singapore)", "Floor plans + history", "Yes"],
-          ["[Carousell](https://www.carousell.sg)", "Direct-owner rooms", "No"],
-          ["[Facebook](https://www.facebook.com/marketplace/singapore/propertyrental)", "Sublets & rooms", "No"],
+          ["[PropertyGuru](https://www.propertyguru.com.sg)", "Largest inventory, mostly agent-listed whole units and condos"],
+          ["[99.co](https://www.99.co/singapore)", "Map and room search with MRT commute filtering"],
+          ["[Carousell](https://www.carousell.sg)", "Direct-owner rooms and budget deals (higher scam risk)"],
+          ["[Facebook](https://www.facebook.com/marketplace/singapore/propertyrental)", "Room shares and expat sublets (harder to filter)"],
         ],
       },
     },
