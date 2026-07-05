@@ -14,7 +14,7 @@ Enable side-by-side comparison of multiple listings. This feature allows users t
 
 ### Design Rationale
 
-The comparison view was capped at 3 listings based on the practical limit of what can be meaningfully compared on a mobile screen. Beyond 3, each column becomes too narrow to be useful. The view prioritizes evaluation score, verdict status, and price as the primary comparison dimensions — these are the three signals that drive most rental decisions. Source platform and viewing status are secondary context. The "highlight best value" pattern (e.g., green for lowest price) was chosen over color-coding by performance (red/yellow/green) to avoid implying that certain criteria are inherently good or bad.
+The comparison view was capped at 3 listings based on the practical limit of what can be meaningfully compared on a mobile screen. Beyond 3, each column becomes too narrow to be useful. The view prioritizes evaluation score, verdict status, and price as the primary comparison dimensions — these are the three signals that drive most rental decisions. Source platform is secondary context. The "highlight best value" pattern (e.g., green for lowest price) was chosen over color-coding by performance (red/yellow/green) to avoid implying that certain criteria are inherently good or bad.
 
 ## Functional Requirements
 
@@ -31,7 +31,6 @@ Display the following metrics for each listing:
 - **Basic Metrics**: Title, price, area, source platform
 - **Evaluation Score**: Calculated score from evaluation (if available)
 - **Verdict Status**: Yes/Maybe/No/Undecided (if available)
-- **Viewing Status**: To View/Upcoming/Viewed/Skipped/Cancelled (if available)
 
 ### FR3: Comparison Layout
 - Side-by-side column layout for desktop
@@ -94,7 +93,6 @@ Display the following metrics for each listing:
 - Listing Management (listings page and detail view must exist)
 - Evaluation Template (evaluation scores must exist)
 - Verdict System (verdict status must exist)
-- Viewing Tracking (viewing status must exist)
 - State Management (Zustand stores must be available)
 - UI Framework Setup (shadcn/ui components must be available)
 
@@ -127,7 +125,6 @@ interface ComparisonState {
 - Price: Highlight lowest
 - Score: Highlight highest
 - Verdict: Highlight "Yes" status
-- Viewing: Highlight "Viewed" status
 
 ### Layout Strategy
 - Desktop: 3 columns side-by-side

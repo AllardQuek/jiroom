@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Comparison View feature enables users to compare up to 3 listings side-by-side. Users can select listings from the listings page or add them from the detail view, then view a unified comparison of key metrics including price, area, evaluation scores, verdict status, and viewing status.
+The Comparison View feature enables users to compare up to 3 listings side-by-side. Users can select listings from the listings page or add them from the detail view, then view a unified comparison of key metrics including price, area, evaluation scores, and verdict status.
 
 ## Technical Architecture
 
@@ -49,7 +49,6 @@ Each comparison column displays:
 - **Basic Metrics**: Title, price, area, source platform
 - **Evaluation Score**: Calculated score from evaluation (0-100)
 - **Verdict Status**: Yes/Maybe/No/Undecided with color coding
-- **Viewing Status**: To View/Upcoming/Viewed/Skipped/Cancelled with color coding
 - **Actions**: Remove button and View Details link
 
 ## Key Technical Decisions
@@ -169,7 +168,6 @@ The Comparison View feature successfully delivers:
 - ✅ Display of basic metrics (title, price, area, source)
 - ✅ Display of evaluation scores
 - ✅ Display of verdict status with color coding
-- ✅ Display of viewing status with color coding
 - ✅ Navigate to listing detail from comparison
 - ✅ Clear all selections
 - ✅ localStorage persistence across sessions

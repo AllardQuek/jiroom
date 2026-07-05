@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Notes & Comments feature enables freeform note-taking at listing and viewing levels with bullet-style formatting support. This feature allows users to capture thoughts, observations, and details during their rental evaluation process, with notes displayed both inline in relevant sections and in a dedicated overview section.
+The Notes & Comments feature enables freeform note-taking at listing level with bullet-style formatting support. This feature allows users to capture thoughts, observations, and details during their rental evaluation process, with notes displayed both inline in relevant sections and in a dedicated overview section.
 
 ## Technical Architecture
 
@@ -17,19 +17,12 @@ The feature is built around a modular component structure:
 
 ### Type System
 
-The Listing and Viewing types were updated to support notes:
+The Listing type was updated to support notes:
 
 ```typescript
 export interface Listing {
   // ... existing fields
   notes?: string; // listing-level notes
-  // ...
-}
-
-export interface Viewing {
-  // ... existing fields
-  notes?: string;
-  notes_updated_at?: string; // track when notes were last updated
   // ...
 }
 ```
@@ -45,7 +38,7 @@ Simple markdown-style parsing:
 ### Notes Display
 
 Two display modes:
-1. **Inline Notes**: Displayed in relevant sections (listing detail, viewing section)
+1. **Inline Notes**: Displayed in relevant sections (listing detail)
 2. **Dedicated Section**: Shows all notes grouped by source at the bottom of the page
 
 ## Key Technical Decisions
@@ -125,7 +118,7 @@ The implementation is optimized for performance:
 
 **Risk**: Timestamps might not update correctly on all note changes.
 
-**Mitigation**: Update `notes_updated_at` on every notes save operation in both listing and viewing stores.
+**Mitigation**: Update `notes_updated_at` on every notes save operation in the listing store.
 
 ## Lessons Learned
 
@@ -154,8 +147,7 @@ Having both inline and dedicated notes:
 
 The Notes & Comments feature successfully delivers:
 - ✅ Listing-level notes with bullet formatting
-- ✅ Viewing-level notes with bullet formatting
-- ✅ Inline notes display in listing and viewing sections
+- ✅ Inline notes display in listing sections
 - ✅ Dedicated notes section showing all notes grouped by source
 - ✅ Bullet parser for markdown-style formatting
 - ✅ Notes editor with save/cancel actions

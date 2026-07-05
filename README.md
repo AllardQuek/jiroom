@@ -2,7 +2,7 @@
 
 Stop forgetting which rental you visited yesterday. Your rental hunting brain - now digital.
 
-A mobile-first web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, track viewing statuses, and make final decisions through visual comparison tools.
+A mobile-first web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, and make final decisions through visual comparison tools.
 
 Built from personal frustration with rental hunting chaos - trying to remember details from multiple viewings and make objective decisions.
 
@@ -20,7 +20,7 @@ Rental hunting is chaotic. You're juggle multiple listings, struggle to remember
 
 | Frustration | Solution |
 |------------|----------|
-| "Wait, did I already see this place?" | 📋 **Kanban board** tracks your viewing status |
+| "Wait, did I already see this place?" | 📋 **Kanban board** tracks your progress |
 | "I've seen 8 places today and they all blur together" | 📝 **Rich notes** capture details that matter |
 | "How am I supposed to remember details from last week?" | 📋 **Evaluation templates** ensure consistency |
 | "I can't objectively compare options with different trade-offs" | ⚖️ **Side-by-side comparison** with smart scoring |
