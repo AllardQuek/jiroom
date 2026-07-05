@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2025-07-05
+
+### Added
+- **Anchor Color Customization**: Custom anchor types with color picker support
+- **Predefined Color Palette**: Standard colors for home, work, school, station anchor types
+- **Color Synchronization**: Custom type button color syncs with anchor marker colors
+- **SG Rental Guide Page**: Comprehensive rental guide with interactive journey map
+- **Multi-Note Support**: Enhanced viewing section with notes array for multiple notes
+- **convertExportToSeed Utility**: Data conversion tool for switching from mock to real exported data
+
+### Changed
+- **Seed Data**: Switched from mock seed data to real exported data
+- **Platforms Table**: Updated with verified descriptions and improved formatting
+- **Viewing Checklist**: Improved bullet detection and removed redundant items
+- **Floating Actions**: Differentiated button styles for better visual hierarchy
+
+### Fixed
+- **Anchor Info Window**: Text contrast issues in dark mode resolved
+- **Theme Toggle**: Fixed theme toggle not working in certain contexts
+- **Type Badge**: Text contrast improved using mix-blend-mode
+- **Custom Type Field**: Fixed bug where field would close unexpectedly
+- **Layout Issues**: Various UI spacing and alignment improvements
+
+[3.1.0]: https://github.com/AllardQuek/jiroom/releases/tag/v3.1.0
+
 ## [3.0.0] - 2025-06-30
 
 ### Added
