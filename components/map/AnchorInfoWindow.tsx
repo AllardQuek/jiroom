@@ -42,9 +42,11 @@ export function AnchorInfoWindow({
       </h3>
       <div className="flex items-center gap-2 mt-1.5">
         <span
-          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider text-white"
+          className="px-1.5 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider"
           style={{
             backgroundColor: color + "20",
+            color: color,
+            mixBlendMode: "difference",
           }}
         >
           {anchor.type === "custom" && anchor.customTypeLabel
