@@ -1,4 +1,5 @@
 import type { Node, Edge } from "@xyflow/react";
+import type { TopicContent } from "./guide-types";
 
 export const PHASE_CONFIG = {
   explore: {
@@ -38,15 +39,7 @@ export interface TopicDef {
   row: number;
   emoji: string;
   label: string;
-  content: {
-    bullets: string[];
-    tips: string[];
-    links?: { label: string; url: string }[];
-    table?: {
-      headers: string[];
-      rows: string[][];
-    };
-  };
+  content: TopicContent;
 }
 
 const TOPICS: TopicDef[] = [
@@ -96,7 +89,9 @@ const TOPICS: TopicDef[] = [
     label: "Where to find listings?",
     content: {
       bullets: [],
-      tips: [],
+      tips: [
+        "Prepare a tenant profile to send to agents: occupation, nationality, move-in date, budget range, and any key preferences (cooking, pets, etc.). Agents often ask before arranging viewings.",
+      ],
       table: {
         headers: [
           "Platform",
@@ -118,16 +113,16 @@ const TOPICS: TopicDef[] = [
     emoji: "📋",
     label: "How to do viewings?",
     content: {
+      note: "Allocate ~20min for the viewing. If it's a condo, add 10min before/after to check facilities (gym, pool) and access gates.",
       bullets: [
         "💧 Water pressure — turn on ALL taps, flush the toilet",
         "❄️ Aircon — does it blow cold? Does the remote work?",
-        "🦠 Mold — check corners, behind furniture, bathroom ceiling",
         "📶 Signal — some HDBs have dead zones. Test every room.",
         "🔊 Noise — windows open AND closed. Traffic? Neighbours?",
-        "🏢 HDB vs Condo — what are you actually paying for?",
+        "👤 Does the landlord live in? Utilities capped or shared?",
+        "👥 Who's staying there? Fellow tenants' profile, landlord living in?",
       ],
       tips: [
-        "Allocate ~20min for the viewing. If it's a condo, add 10min before/after to check facilities (gym, pool) and access gates (side gates, etc.).",
         "View once on a weekday evening (neighbour noise) and once on a weekend morning (light, crowd feel)",
         "Take video of EVERYTHING. Ceilings, corners, fittings. The move-out inventory check is brutal without it.",
       ],
