@@ -57,15 +57,10 @@ export default function PlaceAutocomplete({
 
   useEffect(() => {
     if (!placesLib) return;
-    console.log(
-      "[PlaceAutocomplete] placesLib available, keys:",
-      Object.keys(placesLib as object)
-    );
     const lib = placesLib as unknown as Record<string, unknown>;
     const SessionTokenCtor = lib.AutocompleteSessionToken as new () => unknown;
     if (typeof SessionTokenCtor === "function") {
       sessionTokenRef.current = new SessionTokenCtor();
-      console.log("[PlaceAutocomplete] SessionToken created");
     }
   }, [placesLib]);
 
@@ -86,14 +81,10 @@ export default function PlaceAutocomplete({
       };
       const fetchFn = lib.AutocompleteSuggestion?.fetchAutocompleteSuggestions;
       if (!fetchFn) {
-        console.log(
-          "[PlaceAutocomplete] fetchAutocompleteSuggestions not available"
-        );
         setSuggestions([]);
         return;
       }
 
-      console.log("[PlaceAutocomplete] fetching suggestions for:", query);
       const result = await fetchFn({
         input: query,
         region: "SG",
@@ -102,7 +93,6 @@ export default function PlaceAutocomplete({
           ? { sessionToken: sessionTokenRef.current }
           : {}),
       });
-      console.log("[PlaceAutocomplete] suggestions result:", result);
 
       const items = (result.suggestions || [])
         .map((s: Record<string, unknown>) => ({
@@ -145,7 +135,6 @@ export default function PlaceAutocomplete({
     text: string;
     placePrediction?: object;
   }) {
-    console.log("[PlaceAutocomplete] handleSelect:", suggestion.text);
     if (!placesLib || !suggestion.placePrediction) return;
 
     const cleanedText = cleanTitle(suggestion.text);
@@ -198,11 +187,6 @@ export default function PlaceAutocomplete({
       }
     }
 
-    console.log("[PlaceAutocomplete] selected place:", {
-      displayText,
-      lat: location.lat(),
-      lng: location.lng(),
-    });
     onPlaceSelectRef.current({
       displayText,
       lat: location.lat(),
