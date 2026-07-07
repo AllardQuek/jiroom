@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Listing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
 import { calculateScore } from "@/lib/utils/calculateScore";
-import { getDisplayPrice } from "@/lib/utils";
+import { getDisplayPrice, getScoringPrice } from "@/lib/utils";
 
 type SortField =
   | "price"
@@ -137,11 +137,11 @@ function compareListings(
       const priceB = getDisplayPrice(b, evalB);
       const scoreA =
         evalA && template
-          ? calculateScore(evalA.responses, template, priceA)
+          ? calculateScore(evalA.responses, template, getScoringPrice(a, evalA))
           : null;
       const scoreB =
         evalB && template
-          ? calculateScore(evalB.responses, template, priceB)
+          ? calculateScore(evalB.responses, template, getScoringPrice(b, evalB))
           : null;
       const netA = scoreA?.net ?? 0;
       const netB = scoreB?.net ?? 0;

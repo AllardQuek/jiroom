@@ -13,6 +13,7 @@ import { useTemplateStore } from "@/store/templateStore";
 import { useAnchorStore } from "@/store/anchorStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
+import { getScoringPrice } from "@/lib/utils";
 import {
   STATUS_COLORS,
   AREA_PALETTE,
@@ -203,7 +204,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       const evaluation = evaluations.find((e) => e.listing_id === l.id);
       const scoreNet =
         evaluation && template
-          ? (calculateScore(evaluation.responses, template)?.net ?? null)
+          ? (calculateScore(evaluation.responses, template, getScoringPrice(l, evaluation))?.net ?? null)
           : null;
 
       if (

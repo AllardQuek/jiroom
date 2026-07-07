@@ -38,3 +38,13 @@ export function getDisplayPrice(
   // Otherwise return base price
   return basePrice;
 }
+
+export function getScoringPrice(
+  listing: Listing,
+  _evaluation?: Evaluation
+): number {
+  // Base rent only. Cost responses (c2/c4) are summed inside calculateScore's
+  // derived branch — do NOT pass getDisplayPrice (which already includes them)
+  // or the "total monthly cost" criterion will be counted twice.
+  return listing.negotiated_price ?? listing.price;
+}

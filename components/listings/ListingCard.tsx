@@ -26,7 +26,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { calculateScore } from "@/lib/utils/calculateScore";
-import { getDisplayPrice } from "@/lib/utils";
+import { getDisplayPrice, getScoringPrice } from "@/lib/utils";
 import { CommuteBadge } from "@/components/distance/CommuteBadge";
 
 interface ListingCardProps {
@@ -75,7 +75,7 @@ export function ListingCard({
 
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, displayPrice)
+      ? calculateScore(evaluation.responses, template, getScoringPrice(listing, evaluation))
       : null;
 
   const handleClick = () => {
