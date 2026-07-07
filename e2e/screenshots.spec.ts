@@ -1,10 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import { seedLocalStorage } from "./helpers";
 
 const MOBILE_VIEWPORT = { width: 390, height: 844 };
 const DESKTOP_VIEWPORT = { width: 1280, height: 800 };
 
-async function seedAndNavigate(page, url, viewport = MOBILE_VIEWPORT) {
+async function seedAndNavigate(page: Page, url: string, viewport = MOBILE_VIEWPORT) {
   await page.setViewportSize(viewport);
   await page.goto("/map");
   await page.waitForLoadState("domcontentloaded");

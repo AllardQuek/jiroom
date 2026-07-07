@@ -3,7 +3,7 @@
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
-import { getDisplayPrice } from "@/lib/utils";
+import { getDisplayPrice, getScoringPrice } from "@/lib/utils";
 import { Listing } from "@/types/listing";
 
 interface MapTooltipProps {
@@ -22,7 +22,7 @@ export function MapTooltip({ listing, x, y }: MapTooltipProps) {
   const isNegotiated = listing.negotiated_price !== undefined;
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, displayPrice)
+      ? calculateScore(evaluation.responses, template, getScoringPrice(listing, evaluation))
       : null;
 
   return (

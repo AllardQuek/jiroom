@@ -51,8 +51,7 @@ export function TemplateList({
             <div className="min-w-0">
               <p className="text-sm font-medium truncate">{template.name}</p>
               <p className="text-xs text-muted-foreground/50">
-                {template.criteria.length} criterion
-                {template.criteria.length !== 1 ? "ia" : ""}
+                {template.criteria.length} {template.criteria.length === 1 ? "criterion" : "criteria"}
               </p>
             </div>
           </div>

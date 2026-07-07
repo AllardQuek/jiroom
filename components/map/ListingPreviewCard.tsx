@@ -2,7 +2,7 @@ import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
-import { getDisplayPrice } from "@/lib/utils";
+import { getDisplayPrice, getScoringPrice } from "@/lib/utils";
 import {
   STATUS_COLORS,
   VERDICT_STYLES,
@@ -65,7 +65,7 @@ export function ListingPreviewCard({
   const isNegotiated = listing.negotiated_price !== undefined;
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, displayPrice)
+      ? calculateScore(evaluation.responses, template, getScoringPrice(listing, evaluation))
       : null;
   const verdict = useVerdictStore((s) =>
     s.verdicts.find((v) => v.listing_id === listing.id)
