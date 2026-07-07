@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
 import { Listing } from "@/types/listing";
@@ -48,6 +48,7 @@ export function useRouteCalculator({
   );
   const travelMode = useRoutePrefsStore((s) => s.travelMode);
   const routesLib = useMapsLibrary("routes");
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     if (
@@ -60,6 +61,10 @@ export function useRouteCalculator({
     ) {
       return;
     }
+
+    // Latest-wins guard: a newer selection/travelMode/anchor change increments
+    // this counter, so results from a superseded run are discarded on resolve.
+    const requestId = ++requestIdRef.current;
 
     const targets = visibleAnchors;
     const listing = selectedListing;
@@ -93,6 +98,8 @@ export function useRouteCalculator({
           fields: ["path", "legs"],
         });
 
+        if (requestId !== requestIdRef.current) return;
+
         const route = routes?.[0];
         if (!route) throw new Error("No route");
 
@@ -108,6 +115,7 @@ export function useRouteCalculator({
         }));
       } catch (err) {
         console.error("Route calculation error:", err);
+        if (requestId !== requestIdRef.current) return;
         setRouteResults((prev) => ({
           ...prev,
           [anchor.id]: {
