@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useTemplateStore } from "@/store/templateStore";
 import { useAgentQuestionStore } from "@/store/agentQuestionStore";
-import { isAnyStoreEmpty, loadSeedData } from "@/lib/data/seedData";
 
 // Module-level flag to ensure initialization runs only once across all instances
 let hasInitialized = false;
@@ -31,14 +30,5 @@ export function useStoreInitialization() {
     templateStore.initializeTemplates();
     agentQuestionStore.initializeTemplates();
 
-    // Load seed data if stores are empty (only on initial load)
-    // This replaces the reload-based approach in ListingsPageInner
-    if (isAnyStoreEmpty() && typeof window !== "undefined") {
-      // Check if we're not already in seed mode
-      const isSeedMode = localStorage.getItem("seed-mode-active") === "true";
-      if (!isSeedMode) {
-        loadSeedData();
-      }
-    }
   }, []); // Empty dependency array - runs once on mount
 }
