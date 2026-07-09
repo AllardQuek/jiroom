@@ -502,7 +502,7 @@ export function ListingList({
                   )}
                 </div>
                 <div
-                  className="overflow-hidden transition-all duration-300 ease-out"
+                  className="overflow-y-auto transition-all duration-300 ease-out"
                   style={{
                     maxHeight: expandedColumns[col.id] ? "2000px" : "0px",
                     opacity: expandedColumns[col.id] ? "1" : "0",
