@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-07-09
+
+### Changed
+- **Seed Data Behavior**: App now starts empty instead of auto-loading sample data; users can load sample data via flask icon
+- **Kanban Column Scrolling**: Fixed overflow issue on desktop - columns now scroll when content exceeds 2000px
+- **Scoring Calculation**: Fixed double-counting of utility/additional costs in score calculations
+- **Map Route Results**: Fixed stale in-flight route results being displayed on selection change
+- **Help Dialog**: Moved guide content to help panel and improved text styling
+- **Documentation**: Updated README to remove mobile-first references and standardize to pnpm
+
+### Removed
+- **Unused Components**: Removed zero-byte ViewingStatusButtons component
+
+[3.2.0]: https://github.com/AllardQuek/jiroom/releases/tag/v3.2.0
+
 ## [3.1.0] - 2025-07-05
 
 ### Added
