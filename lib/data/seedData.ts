@@ -22,6 +22,22 @@ const yearsFromNow = (n: number) => {
 
 export const seedListings: Listing[] = [
   {
+    "id": "838cdfe9-1613-42da-ac14-9c6d207e3029",
+    "source_url": "https://www.propertyguru.com.sg/l/60023485",
+    "title": "Simei Street 3, Eastpoint Green",
+    "price": 750,
+    "area": "Simei",
+    "source_platform": "PropertyGuru",
+    "status": "viewed",
+    "lat": 1.3393621,
+    "lng": 103.95067259999999,
+    "googlePlaceId": "ChIJqxXxoiQ92jERTdFEeiX-vjU",
+    "notes": "",
+    "created_at": "2026-06-17T04:16:14.430Z",
+    "updated_at": "2026-07-16T12:49:34.590Z",
+    "is_taken": false
+  },
+  {
     "id": "46c77228-a0f9-427d-a94b-0510f1e08e73",
     "source_url": "https://www.propertyguru.com.sg/l/500163996",
     "title": "52 Tanah Merah Kechil Road",
@@ -34,7 +50,7 @@ export const seedListings: Listing[] = [
     "googlePlaceId": "ChIJV7Lu9jM92jER5bYPjtCG6t8",
     "notes": "- newly renovated, 2 rooms one with window facing out, other with high indoor window\n- shower need to wear slippers out bit troublesome\n- have a common area with super high ceiling but no fan\n- Landlord said this room if 900 excluded utilities.  1000 then utilities included\n\n-- \n- The other room 1000. If you really interested, I try 950 for you\n- He said. 950 ok. Utilities capped $400.\n- After landlord signed.  Need to pay 1 month deposit.  1month advance rent\nDear Tenant,\n\nKindly Bank in the rent or deposit to our company account as follows:\n\nCompany Name: Co-Living APP Pte. Ltd.\nBank : OCBC Bank\nAccount No: 701838062001\nPaynow UEN: 202135892C\nSwift Code : OCBCSGSG\nBank Code. : 7339\n\nPlease indicate your House and Room number in the payment remarks. Thanks 🙏\n\n---\n\n 1.⁠ ⁠Contact end 1 day before. \n 2.⁠ ⁠Can. You need to inform 1 month before. If you never inform. It becomes automatic renew. \n 3.⁠ ⁠Landlord will not be able to know if anything is damaged  , so deposit will be returned within 14 days.\n 4.⁠ ⁠Its up to you , want to change anot, but if any government sector come and check and your address in your ic is not same as contact,  you need to explain to government yourself why you never change.\n 5.⁠ ⁠Deposit is to offset any damage to the item you damaged,  and if you breaking the contract of leaving earlier, and no replacement,  cannot be Landlord bearing the cost, of cause you can't take back your deposit, this is normal practice. You leave before contract end, deposit will be forfeited, and you have to pay 1 more month rental as you never inform landlord, you can take back deposit if you can find someone to take over you. But fee apply to do new contract. \n 6.⁠ ⁠If you lost your key of your room door, or main gate . You cant enter, and need them to go over to open door, charges apply. \n 7.⁠ ⁠That is a landed house, only key. \n 8.⁠ ⁠Only items in the room tenant need to bear, unless it wear and tear. Everything in the room are new, if its damaged you have to bear all costs.\n---\n5.⁠ ⁠If you can find replacement if you want to leave before the 6months, if you can find, only need to pay for doing a new contract ,if need me or landlord find, extra charges. If cant find, need to pay 1 more month and deposit forfeited.\n\n The company has no bank account at the moment.  So has to transfer to another of landlord's company account.  If you dont want, you can pay cash. Some tenants dont know how to paynow to uen.\n---\n- bad reviews of landlord\n- agents says This is the 1st time the the landlord ask me to find tenant\n- I cant tell you if the comments are real or not, or someone leave fake comments",
     "created_at": "2026-06-18T14:10:01.868Z",
-    "updated_at": "2026-06-28T13:37:16.413Z",
+    "updated_at": "2026-07-05T11:21:48.865Z",
     "is_taken": false,
     "negotiated_price": 950
   },
@@ -300,22 +316,6 @@ export const seedListings: Listing[] = [
     "googlePlaceId": "ChIJmYoR_DE92jERmVclRJkgLg4",
     "notes": "- enter via back gate, front for landlord\n- partition wall near toilet i think\n- outside looks a bit run down\n- small window\n- recommended bicycle",
     "updated_at": "2026-06-19T18:43:51.335Z",
-    "is_taken": false
-  },
-  {
-    "id": "838cdfe9-1613-42da-ac14-9c6d207e3029",
-    "source_url": "https://www.propertyguru.com.sg/l/60023485",
-    "title": "Simei Street 3, Eastpoint Green",
-    "price": 750,
-    "area": "Simei",
-    "source_platform": "PropertyGuru",
-    "status": "viewed",
-    "lat": 1.3393621,
-    "lng": 103.95067259999999,
-    "googlePlaceId": "ChIJqxXxoiQ92jERTdFEeiX-vjU",
-    "notes": "",
-    "created_at": "2026-06-17T04:16:14.430Z",
-    "updated_at": "2026-06-18T14:12:19.106Z",
     "is_taken": false
   },
   {
@@ -860,6 +860,12 @@ export const seedViewings: Viewing[] = [
     "listing_id": "6cbba1e2-b663-40f7-b441-3f9bc6dfccb8",
     "scheduled_date": "2026-06-24T18:30:00",
     "created_at": "2026-06-24T10:22:11.851Z"
+  },
+  {
+    "id": "ad100d74-4b24-4102-bff8-46ed6526c7ff",
+    "listing_id": "bfab542d-a498-4c73-ae90-adc01ea9540e",
+    "scheduled_date": "2026-06-01T05:15:00.000Z",
+    "created_at": "2026-07-16T12:39:07.002Z"
   }
 ];
 
