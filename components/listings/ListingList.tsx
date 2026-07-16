@@ -348,12 +348,13 @@ export function ListingList({
                       const base = l.status === "new" || l.status === "to_view";
                       if (!base) return false;
                       if (toViewFilter === "all") return true;
-                      const hasViewing = viewings.some(
+                      const viewing = viewings.find(
                         (v) => v.listing_id === l.id
                       );
+                      const hasScheduledDate = viewing?.scheduled_date !== undefined;
                       return toViewFilter === "scheduled"
-                        ? hasViewing
-                        : !hasViewing;
+                        ? hasScheduledDate
+                        : !hasScheduledDate;
                     }).length
                   }
                 </span>
@@ -396,12 +397,13 @@ export function ListingList({
               col.id === "to_view"
                 ? (l: Listing) => {
                     if (toViewFilter === "all") return true;
-                    const hasViewing = viewings.some(
+                    const viewing = viewings.find(
                       (v) => v.listing_id === l.id
                     );
+                    const hasScheduledDate = viewing?.scheduled_date !== undefined;
                     return toViewFilter === "scheduled"
-                      ? hasViewing
-                      : !hasViewing;
+                      ? hasScheduledDate
+                      : !hasScheduledDate;
                   }
                 : () => true;
 
