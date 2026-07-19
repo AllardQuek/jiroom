@@ -15,24 +15,28 @@ import { Star, Bug, Share2 } from "lucide-react";
 
 const TIERS = [
   {
+    label: "1",
     amount: 1,
     message: "That's a bus fare to the next viewing — thank you!",
     qr: "/support/paynow-1-sgd.jpg",
   },
   {
+    label: "2",
     amount: 2,
     message: "That's an iced kopi from the nearest hawker — thank you!",
     qr: "/support/paynow-2-sgd.jpg",
   },
   {
+    label: "5",
     amount: 5,
     message: "That's a kopi after a bad viewing — thank you!",
     qr: "/support/paynow-5-sgd.jpg",
   },
   {
-    amount: 10,
-    message: "That's a well-deserved lunch between viewings — thank you!",
-    qr: "/support/paynow-10-sgd.jpg",
+    label: "?",
+    amount: null,
+    message: "A well-deserved lunch between viewings..?",
+    qr: "/support/paynow-custom-sgd.jpg",
   },
 ];
 
@@ -79,7 +83,9 @@ export default function SupportModal({
     if (!supportEmail || !note.trim()) return;
 
     const tipLine = selected
-      ? `I also sent a S$${selected.amount} tip via PayNow.`
+      ? selected.amount
+        ? `I also sent a S$${selected.amount} tip via PayNow.`
+        : "I also sent a custom tip via PayNow."
       : "No tip selected.";
 
     const body = `${note.trim()}\n\n${tipLine}\n\n— from JIRoom`;
@@ -152,17 +158,17 @@ export default function SupportModal({
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {TIERS.map((tier) => {
-                const isSelected = selected?.amount === tier.amount;
+                const isSelected = selected?.label === tier.label;
                 return (
                   <Button
-                    key={tier.amount}
+                    key={tier.label}
                     type="button"
                     variant={isSelected ? "default" : "outline"}
                     onClick={() => setSelected(tier)}
                     className="h-14 w-14 rounded-full p-0 text-lg"
-                    aria-label={`S$${tier.amount} tip`}
+                    aria-label={tier.amount ? `S$${tier.amount} tip` : "Custom tip"}
                   >
-                    {tier.amount}
+                    {tier.label}
                   </Button>
                 );
               })}
@@ -177,7 +183,7 @@ export default function SupportModal({
               <div className="flex justify-center bg-white p-2 rounded-lg shadow">
                 <Image
                   src={selected.qr}
-                  alt={`PayNow QR for SGD ${selected.amount}`}
+                  alt={`PayNow QR for ${selected.amount ? `SGD ${selected.amount}` : "a custom amount"}`}
                   width={645}
                   height={717}
                   className="w-56 h-auto rounded"
