@@ -114,37 +114,35 @@ export default function SupportModal({
 
         <div className="space-y-6">
           {showNote && (
-            <div className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="support-note" className="text-sm">
-                  Say thanks or share a thought
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Opens your email app — no account needed.
-                </p>
-              </div>
+            <div className="space-y-3">
+              <Label htmlFor="support-note" className="text-sm">
+                Say thanks or share a thought
+              </Label>
               <textarea
                 id="support-note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 maxLength={200}
-                placeholder="Liked JIRoom? Found a bug? Just want to say hi..."
+                placeholder="A quick thanks, bug, or hello..."
                 className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
               />
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs text-muted-foreground/80">
+                  Opens your email app — no account needed.
+                </span>
                 <span className="text-xs text-muted-foreground">
                   {note.length} / 200
                 </span>
-                <Button
-                  type="button"
-                  variant="default"
-                  onClick={handleSendNote}
-                  disabled={!note.trim()}
-                  className="w-full sm:w-auto"
-                >
-                  Send note
-                </Button>
               </div>
+              <Button
+                type="button"
+                variant="default"
+                onClick={handleSendNote}
+                disabled={!note.trim()}
+                className="w-full sm:w-auto"
+              >
+                Send note
+              </Button>
             </div>
           )}
 
