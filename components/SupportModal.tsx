@@ -10,27 +10,28 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { Star, Bug, Share2 } from "lucide-react";
 
 const TIERS = [
   {
-    label: "Bus fare to next viewing",
     amount: 1,
+    message: "That's a bus fare to the next viewing — thank you!",
     qr: "/support/paynow-1-sgd.jpg",
   },
   {
-    label: "MRT to next viewing",
     amount: 2,
+    message: "That's an MRT to the next viewing — thank you!",
     qr: "/support/paynow-2-sgd.jpg",
   },
   {
-    label: "Kopi after a bad viewing",
     amount: 5,
+    message: "That's a kopi after a bad viewing — thank you!",
     qr: "/support/paynow-5-sgd.jpg",
   },
   {
-    label: "Agent co-broke coffee",
     amount: 10,
+    message: "That's an agent co-broke coffee — thank you!",
     qr: "/support/paynow-10-sgd.jpg",
   },
 ];
@@ -40,15 +41,21 @@ interface SupportModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+const supportEmail = process.env.NEXT_PUBLIC_SUPPORT_EMAIL;
+
 export default function SupportModal({
   open,
   onOpenChange,
 }: SupportModalProps) {
   const [selected, setSelected] = useState<(typeof TIERS)[number] | null>(null);
+  const [note, setNote] = useState("");
+
+  const showNote = Boolean(supportEmail);
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!newOpen) {
       setSelected(null);
+      setNote("");
     }
     onOpenChange(newOpen);
   };
@@ -68,6 +75,21 @@ export default function SupportModal({
     }
   };
 
+  const handleSendNote = () => {
+    if (!supportEmail || !note.trim()) return;
+
+    const tipLine = selected
+      ? `I also sent a S$${selected.amount} tip via PayNow.`
+      : "No tip selected.";
+
+    const body = `${note.trim()}\n\n${tipLine}\n\n— from JIRoom`;
+    const subject = "A note for JIRoom";
+
+    window.location.href = `mailto:${supportEmail}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+  };
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md sm:max-w-lg max-h-[85vh] overflow-y-auto">
@@ -83,100 +105,109 @@ export default function SupportModal({
             >
               free and open-source
             </a>
-            . If it helped your hunt, pick an amount and scan with any bank app
-            — the amount is pre-filled.
+            .{" "}
+            {showNote
+              ? "A quick note means a lot — and a small tip helps keep it running."
+              : "If it helped your rental hunt, a small tip or share goes a long way."}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-2">
-            {TIERS.map((tier) => {
-              const isSelected = selected?.amount === tier.amount;
-              return (
-                <Button
-                  key={tier.amount}
-                  type="button"
-                  variant={isSelected ? "default" : "outline"}
-                  onClick={() => setSelected(tier)}
-                  className="h-auto py-3 flex flex-col items-start text-left !select-text"
-                >
-                  <span className="text-sm font-medium">{tier.label}</span>
-                  <span
-                    className={
-                      isSelected
-                        ? "text-xs text-primary-foreground/80"
-                        : "text-xs text-muted-foreground"
-                    }
-                  >
-                    SGD {tier.amount}
-                  </span>
-                </Button>
-              );
-            })}
-          </div>
-
-          {selected && (
-            <div className="flex justify-center bg-white p-2 rounded-lg shadow">
-              <Image
-                src={selected.qr}
-                alt={`PayNow QR for SGD ${selected.amount}`}
-                width={645}
-                height={717}
-                className="w-56 h-auto rounded"
-                unoptimized
+          {showNote && (
+            <div className="space-y-2">
+              <Label htmlFor="support-note" className="text-sm">
+                Send the dev a note
+              </Label>
+              <textarea
+                id="support-note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="A quick thank-you or feedback..."
+                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
               />
+              <Button
+                type="button"
+                size="sm"
+                onClick={handleSendNote}
+                disabled={!note.trim()}
+              >
+                Send note
+              </Button>
             </div>
           )}
 
-          <div className="space-y-3">
-            <p className="text-sm text-muted-foreground">
-              Can&apos;t use PayNow? You can still support JIRoom by sharing or
-              contributing.
+          <div className="space-y-2">
+            <p className="text-center text-sm text-muted-foreground">
+              Add a tip <span className="text-xs">(S$)</span>
             </p>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="gap-1"
-                onClick={handleShare}
-              >
-                <Share2 className="size-4" />
-                Share
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="gap-1"
-                onClick={() =>
-                  window.open(
-                    "https://github.com/AllardQuek/jiroom",
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
-                }
+            <div className="flex flex-wrap justify-center gap-3">
+              {TIERS.map((tier) => {
+                const isSelected = selected?.amount === tier.amount;
+                return (
+                  <Button
+                    key={tier.amount}
+                    type="button"
+                    variant={isSelected ? "default" : "outline"}
+                    onClick={() => setSelected(tier)}
+                    className="h-14 w-14 rounded-full p-0 text-lg"
+                    aria-label={`S$${tier.amount} tip`}
+                  >
+                    {tier.amount}
+                  </Button>
+                );
+              })}
+            </div>
+          </div>
+
+          {selected && (
+            <div className="space-y-3">
+              <p className="text-sm text-center text-muted-foreground">
+                {selected.message}
+              </p>
+              <div className="flex justify-center bg-white p-2 rounded-lg shadow">
+                <Image
+                  src={selected.qr}
+                  alt={`PayNow QR for SGD ${selected.amount}`}
+                  width={645}
+                  height={717}
+                  className="w-56 h-auto rounded"
+                  unoptimized
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-wrap justify-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="gap-1"
+              onClick={handleShare}
+            >
+              <Share2 className="size-4" />
+              Share
+            </Button>
+            <Button asChild variant="outline" size="sm" className="gap-1">
+              <a
+                href="https://github.com/AllardQuek/jiroom"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Star className="size-4" />
                 Star on GitHub
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="gap-1"
-                onClick={() =>
-                  window.open(
-                    "https://github.com/AllardQuek/jiroom/issues/new",
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
-                }
+              </a>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="gap-1">
+              <a
+                href="https://github.com/AllardQuek/jiroom/issues/new"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 <Bug className="size-4" />
                 Report an issue
-              </Button>
-            </div>
+              </a>
+            </Button>
           </div>
         </div>
       </DialogContent>
