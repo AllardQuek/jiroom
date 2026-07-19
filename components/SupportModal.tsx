@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,6 +45,12 @@ export default function SupportModal({
   onOpenChange,
 }: SupportModalProps) {
   const [selected, setSelected] = useState<(typeof TIERS)[number] | null>(null);
+
+  useEffect(() => {
+    if (!open) {
+      setSelected(null);
+    }
+  }, [open]);
 
   const handleShare = async () => {
     const url = typeof window !== "undefined" ? window.location.origin : "";
