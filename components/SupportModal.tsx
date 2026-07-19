@@ -116,7 +116,7 @@ export default function SupportModal({
           </div>
 
           {selected && (
-            <div className="flex justify-center bg-white p-4 rounded-lg">
+            <div className="flex justify-center bg-white p-4 rounded-lg shadow">
               <Image
                 src={selected.qr}
                 alt={`PayNow QR for SGD ${selected.amount}`}
