@@ -41,7 +41,7 @@ export default function SupportButton({
         onClick={() => setOpen(true)}
       >
         <Heart className="size-3" />
-        Enjoying JIRoom? ☕
+        Enjoying JIRoom?
       </Button>
       <SupportModal open={open} onOpenChange={setOpen} />
     </>
