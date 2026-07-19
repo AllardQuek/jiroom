@@ -91,17 +91,17 @@ export default function SupportModal({
                   type="button"
                   variant={isSelected ? "default" : "outline"}
                   onClick={() => setSelected(tier)}
-                  className="h-auto py-3 flex flex-col items-start text-left"
+                  className="h-auto py-3 flex flex-col items-start text-left !select-text"
                 >
-                  <span className="font-semibold">SGD {tier.amount}</span>
+                  <span className="text-sm font-medium">{tier.label}</span>
                   <span
                     className={
                       isSelected
-                        ? "text-xs text-primary-foreground/90"
+                        ? "text-xs text-primary-foreground/80"
                         : "text-xs text-muted-foreground"
                     }
                   >
-                    {tier.label}
+                    SGD {tier.amount}
                   </span>
                 </Button>
               );
