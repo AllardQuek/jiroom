@@ -53,7 +53,6 @@ export default function SupportModal({
 }: SupportModalProps) {
   const [selected, setSelected] = useState<(typeof TIERS)[number] | null>(null);
   const [note, setNote] = useState("");
-  const [noteStatus, setNoteStatus] = useState<"idle" | "copied">("idle");
 
   const showNote = Boolean(supportEmail);
 
@@ -61,7 +60,6 @@ export default function SupportModal({
     if (!newOpen) {
       setSelected(null);
       setNote("");
-      setNoteStatus("idle");
     }
     onOpenChange(newOpen);
   };
@@ -81,7 +79,7 @@ export default function SupportModal({
     }
   };
 
-  const handleSendNote = async () => {
+  const handleSendNote = () => {
     if (!supportEmail || !note.trim()) return;
 
     const tipLine = selected
@@ -92,12 +90,6 @@ export default function SupportModal({
 
     const body = `${note.trim()}\n\n${tipLine}\n\n— from JIRoom`;
     const subject = "A note for JIRoom";
-
-    const draft = `To: ${supportEmail}\nSubject: ${subject}\n\n${body}`;
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(draft);
-      setNoteStatus("copied");
-    }
 
     window.location.href = `mailto:${supportEmail}?subject=${encodeURIComponent(
       subject
@@ -142,7 +134,10 @@ export default function SupportModal({
               />
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs text-muted-foreground/80">
-                  Opens your email app — no account needed.
+                  Opens your email app. If not, send to{" "}
+                  <a href={`mailto:${supportEmail}`} className="underline">
+                    {supportEmail}
+                  </a>
                 </span>
                 <span className="text-xs text-muted-foreground">
                   {note.length} / 200
@@ -157,11 +152,6 @@ export default function SupportModal({
               >
                 Send note
               </Button>
-              {noteStatus === "copied" && (
-                <p className="text-xs text-muted-foreground">
-                  If your email app didn&apos;t open, the note is copied to your clipboard.
-                </p>
-              )}
             </div>
           )}
 
