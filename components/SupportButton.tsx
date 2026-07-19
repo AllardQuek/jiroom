@@ -37,11 +37,11 @@ export default function SupportButton({
       <Button
         type="button"
         variant="outline"
-        className="h-auto rounded-full border border-border/40 bg-background/80 backdrop-blur-sm px-3 py-1.5 text-xs leading-none text-muted-foreground/60 hover:text-muted-foreground hover:border-border/60 transition-colors inline-flex gap-1.5"
+        className="h-auto rounded-full border border-border/40 bg-background/80 backdrop-blur-sm px-3 py-1.5 text-xs leading-none text-muted-foreground/60 hover:text-muted-foreground hover:border-border/60 transition-colors inline-flex gap-1.5 select-text"
         onClick={() => setOpen(true)}
       >
         <Heart className="size-3" />
-        Enjoying JIRoom? Buy the dev a kopi ☕
+        Enjoying JIRoom? ☕
       </Button>
       <SupportModal open={open} onOpenChange={setOpen} />
     </>
