@@ -162,8 +162,7 @@ export default function SupportModal({
               </Button>
               {noteStatus === "copied" && (
                 <p className="text-xs text-muted-foreground">
-                  If your email app didn&apos;t open, the note is copied to your clipboard. Send it to{" "}
-                  {supportEmail}.
+                  If your email app didn&apos;t open, the note is copied to your clipboard.
                 </p>
               )}
             </div>
