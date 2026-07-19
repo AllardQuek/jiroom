@@ -57,7 +57,9 @@ export default function FloatingActions() {
           >
             <Bug className="size-4" />
           </Button>
-          <SupportButton variant="icon" />
+          <div className="sm:hidden">
+            <SupportButton variant="icon" />
+          </div>
           <Button
             variant="outline"
             size="icon"
