@@ -20,13 +20,13 @@
     "copied": "已复制！"
   },
   "navigation": {
-    "listings": "房源列表",
+    "listings": "我的房源列表",
     "map": "地图",
     "compare": "对比",
-    "schedule": "看房安排"
+    "schedule": "我的看房安排"
   },
   "listings": {
-    "title": "房源列表",
+    "title": "我的房源列表",
     "subtitle": "租房搜索利器。按 <key>?</key> 获取帮助。",
     "addListing": "添加房源",
     "addNew": "添加新房源",
@@ -271,7 +271,7 @@
     "na": "不适用"
   },
   "schedule": {
-    "title": "看房安排",
+    "title": "我的看房安排",
     "upcoming": "即将到来",
     "past": "已过去",
     "noViewings": "没有安排看房",

@@ -20,13 +20,13 @@
     "copied": "Copied!"
   },
   "navigation": {
-    "listings": "Listings",
+    "listings": "My Listings",
     "map": "Map",
     "compare": "Compare",
-    "schedule": "Schedule"
+    "schedule": "My Schedule"
   },
   "listings": {
-    "title": "Listings",
+    "title": "My Listings",
     "subtitle": "JIRA for rental search. Press <key>?</key> for help.",
     "addListing": "Add listing",
     "addNew": "Add New Listing",
@@ -271,7 +271,7 @@
     "na": "N/A"
   },
   "schedule": {
-    "title": "Your Schedule",
+    "title": "My Schedule",
     "upcoming": "Upcoming",
     "past": "Past",
     "noViewings": "No viewings scheduled",
