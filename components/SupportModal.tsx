@@ -67,8 +67,17 @@ export default function SupportModal({
         <DialogHeader>
           <DialogTitle>Enjoying JIRoom?</DialogTitle>
           <DialogDescription>
-            JIRoom is free and open-source. If it helped your rental hunt, you
-            can say thanks by buying the dev a kopi.
+            JIRoom is{" "}
+            <a
+              href="https://github.com/AllardQuek/jiroom"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-foreground transition-colors"
+            >
+              free and open-source
+            </a>
+            . If it helped your hunt, pick an amount and scan with any bank app
+            — the amount is pre-filled.
           </DialogDescription>
         </DialogHeader>
 
@@ -100,20 +109,15 @@ export default function SupportModal({
           </div>
 
           {selected && (
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">
-                Scan with any bank app. Amount is pre-filled.
-              </p>
-              <div className="flex justify-center bg-white p-4 rounded-lg border border-border/50">
-                <Image
-                  src={selected.qr}
-                  alt={`PayNow QR for SGD ${selected.amount}`}
-                  width={645}
-                  height={717}
-                  className="w-56 h-auto rounded"
-                  unoptimized
-                />
-              </div>
+            <div className="flex justify-center bg-white p-4 rounded-lg border border-border/50">
+              <Image
+                src={selected.qr}
+                alt={`PayNow QR for SGD ${selected.amount}`}
+                width={645}
+                height={717}
+                className="w-56 h-auto rounded"
+                unoptimized
+              />
             </div>
           )}
 
