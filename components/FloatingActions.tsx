@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Bug, CircleHelp, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HelpDialog from "@/components/HelpDialog";
+import SupportButton from "@/components/SupportButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -49,11 +50,16 @@ export default function FloatingActions() {
             variant="outline"
             size="icon"
             className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
-            onClick={() => window.open(GITHUB_ISSUES_URL, '_blank', 'noopener,noreferrer')}
+            onClick={() =>
+              window.open(GITHUB_ISSUES_URL, "_blank", "noopener,noreferrer")
+            }
             aria-label="Report an issue on GitHub"
           >
             <Bug className="size-4" />
           </Button>
+          <div className="sm:hidden">
+            <SupportButton variant="icon" />
+          </div>
           <Button
             variant="outline"
             size="icon"
