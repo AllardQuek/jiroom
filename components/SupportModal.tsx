@@ -99,12 +99,9 @@ export default function SupportModal({
       setNoteStatus("copied");
     }
 
-    window.open(
-      `mailto:${supportEmail}?subject=${encodeURIComponent(
-        subject
-      )}&body=${encodeURIComponent(body)}`,
-      "_blank"
-    );
+    window.location.href = `mailto:${supportEmail}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
   };
 
   return (
