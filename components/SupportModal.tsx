@@ -138,6 +138,16 @@ export default function SupportModal({
                 variant="outline"
                 size="sm"
                 className="gap-1"
+                onClick={handleShare}
+              >
+                <Share2 className="size-4" />
+                Share
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="gap-1"
                 onClick={() =>
                   window.open(
                     "https://github.com/AllardQuek/jiroom",
@@ -164,16 +174,6 @@ export default function SupportModal({
               >
                 <Bug className="size-4" />
                 Report an issue
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="gap-1"
-                onClick={handleShare}
-              >
-                <Share2 className="size-4" />
-                Share
               </Button>
             </div>
           </div>
