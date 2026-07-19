@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,11 +46,12 @@ export default function SupportModal({
 }: SupportModalProps) {
   const [selected, setSelected] = useState<(typeof TIERS)[number] | null>(null);
 
-  useEffect(() => {
-    if (!open) {
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen) {
       setSelected(null);
     }
-  }, [open]);
+    onOpenChange(newOpen);
+  };
 
   const handleShare = async () => {
     const url = typeof window !== "undefined" ? window.location.origin : "";
@@ -68,7 +69,7 @@ export default function SupportModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md sm:max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Enjoying JIRoom?</DialogTitle>
@@ -177,7 +178,6 @@ export default function SupportModal({
               </Button>
             </div>
           </div>
-
         </div>
       </DialogContent>
     </Dialog>
