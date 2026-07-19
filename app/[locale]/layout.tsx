@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { DM_Sans } from "next/font/google";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
@@ -53,6 +54,7 @@ export default async function LocaleLayout({
             </div>
           </Providers>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
