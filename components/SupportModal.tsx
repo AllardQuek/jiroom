@@ -172,17 +172,6 @@ export default function SupportModal({
             </div>
           </div>
 
-          <p className="text-xs text-muted-foreground text-center">
-            JIRoom is{" "}
-            <a
-              href="https://github.com/AllardQuek/jiroom"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-foreground transition-colors"
-            >
-              🏡-cooked on GitHub
-            </a>
-          </p>
         </div>
       </DialogContent>
     </Dialog>
