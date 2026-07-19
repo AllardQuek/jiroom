@@ -21,7 +21,7 @@ const TIERS = [
   },
   {
     amount: 2,
-    message: "That's an MRT to the next viewing — thank you!",
+    message: "That's an iced kopi from the nearest hawker — thank you!",
     qr: "/support/paynow-2-sgd.jpg",
   },
   {
@@ -31,7 +31,7 @@ const TIERS = [
   },
   {
     amount: 10,
-    message: "That's an agent co-broke coffee — thank you!",
+    message: "That's a well-deserved lunch between viewings — thank you!",
     qr: "/support/paynow-10-sgd.jpg",
   },
 ];
