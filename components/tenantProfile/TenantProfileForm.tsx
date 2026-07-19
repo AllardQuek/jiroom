@@ -100,7 +100,7 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
         ))}
       </div>
 
-      <div className="flex items-center justify-end pt-2 border-t gap-2">
+      <div className="flex items-center justify-end pt-2 gap-2">
         {saveStatus === "saved" && (
           <span className="text-xs text-success flex items-center gap-1 animate-in fade-in duration-300">
             <Check className="w-3 h-3" />
