@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 
 interface LocationSearchResult {
@@ -36,6 +37,7 @@ interface Suggestion {
 }
 
 export default function LocationSearch({ onPlaceSelect }: LocationSearchProps) {
+  const t = useTranslations("map");
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -184,7 +186,7 @@ export default function LocationSearch({ onPlaceSelect }: LocationSearchProps) {
           onFocus={() => {
             if (suggestions.length > 0) setShowDropdown(true);
           }}
-          placeholder="Search for a location..."
+          placeholder={t("searchPlaceholder")}
           className="flex-1 min-w-0 bg-transparent border-none outline-none text-sm text-gray-700 placeholder:text-gray-400"
         />
       </div>

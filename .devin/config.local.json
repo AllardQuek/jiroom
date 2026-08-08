@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Exec(npm run)",
+      "Exec(git status)",
+      "Exec(git diff)",
+      "Exec(git log)",
+      "Exec(git add)",
+      "Exec(git commit)",
+      "Exec(git show)",
+      "Exec(cat)",
+      "Exec(git push)",
+      "Exec(pnpm test)",
+      "Exec(pnpm build)",
+      "Exec(pnpm dev)",
+      "Exec(python)",
+      "Exec(rm)"
+    ]
+  }
+}

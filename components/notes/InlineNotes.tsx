@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
 interface InlineNotesProps {
@@ -15,14 +15,17 @@ export function InlineNotes({
   notes,
   onUpdate,
   updatedAt,
-  label = "Notes",
+  label,
 }: InlineNotesProps) {
   const [localValue, setLocalValue] = useState(notes);
+  const t = useTranslations("notes");
   const locale = useLocale();
 
   useEffect(() => {
     setLocalValue(notes);
   }, [notes]);
+
+  const displayLabel = label ?? t("label");
 
   const formatTimestamp = (dateString?: string) => {
     if (!dateString) return "";
@@ -31,8 +34,8 @@ export function InlineNotes({
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins} min ago`;
+    if (diffMins < 1) return t("justNow");
+    if (diffMins < 60) return t("minAgo", { count: diffMins });
 
     return date.toLocaleDateString(locale, {
       month: "short",
@@ -52,11 +55,11 @@ export function InlineNotes({
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
         <span className="text-xs font-medium text-muted-foreground">
-          {label}
+          {displayLabel}
         </span>
         {updatedAt && localValue && (
           <span className="text-[10px] text-muted-foreground/50">
-            Updated {formatTimestamp(updatedAt)}
+            {t("updated", { time: formatTimestamp(updatedAt) })}
           </span>
         )}
       </div>
@@ -64,7 +67,7 @@ export function InlineNotes({
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}
         onBlur={handleBlur}
-        placeholder="Add notes... Use '-' for bullet points"
+        placeholder={t("placeholder")}
         className="text-sm rounded-lg"
       />
     </div>

@@ -124,7 +124,8 @@
       "noDate": "无日期",
       "noDateSet": "未设定日期",
       "overdue": "已逾期",
-      "notes": "备注"
+      "notes": "备注",
+      "scheduledViewing": "已安排看房"
     },
     "form": {
       "addTitle": "添加房源",
@@ -233,6 +234,7 @@
   "map": {
     "title": "地图",
     "searchPlaceholder": "搜索位置...",
+    "placePlaceholder": "输入地址...",
     "addListing": "添加房源",
     "addAnchor": "添加锚点",
     "listingDetails": "房源详情",
@@ -338,7 +340,27 @@
     "viewingsCountPlural": "已安排 {count} 次看房",
     "today": "今天",
     "tomorrow": "明天",
-    "pastPrefix": "已过 —"
+    "pastPrefix": "已过 —",
+    "date": "日期",
+    "time": "时间",
+    "datePlaceholder": "选择日期",
+    "update": "更新",
+    "schedule": "安排",
+    "cancelSchedule": "取消安排",
+    "am": "上午",
+    "pm": "下午",
+    "saving": "保存中..."
+  },
+  "notes": {
+    "label": "备注",
+    "placeholder": "添加备注... 使用 '-' 作为项目符号",
+    "updated": "{time} 更新",
+    "justNow": "刚刚",
+    "minAgo": "{count, plural, one {{count} 分钟前} other {{count} 分钟前}}"
+  },
+  "verdict": {
+    "reasoning": " verdict 理由",
+    "reasoningPlaceholder": "添加您对 verdict 的理由..."
   },
   "settings": {
     "title": "设置",

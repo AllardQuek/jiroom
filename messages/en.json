@@ -124,7 +124,8 @@
       "noDate": "No date",
       "noDateSet": "No date set",
       "overdue": "Overdue",
-      "notes": "Notes"
+      "notes": "Notes",
+      "scheduledViewing": "Scheduled viewing"
     },
     "form": {
       "addTitle": "Add Listing",
@@ -233,6 +234,7 @@
   "map": {
     "title": "Map",
     "searchPlaceholder": "Search location...",
+    "placePlaceholder": "Type an address...",
     "addListing": "Add Listing",
     "addAnchor": "Add Anchor",
     "listingDetails": "Listing Details",
@@ -338,7 +340,27 @@
     "viewingsCountPlural": "{count} viewings scheduled",
     "today": "Today",
     "tomorrow": "Tomorrow",
-    "pastPrefix": "Past —"
+    "pastPrefix": "Past —",
+    "date": "Date",
+    "time": "Time",
+    "datePlaceholder": "Select date",
+    "update": "Update",
+    "schedule": "Schedule",
+    "cancelSchedule": "Cancel Schedule",
+    "am": "AM",
+    "pm": "PM",
+    "saving": "Saving..."
+  },
+  "notes": {
+    "label": "Notes",
+    "placeholder": "Add notes... Use '-' for bullet points",
+    "updated": "Updated {time}",
+    "justNow": "Just now",
+    "minAgo": "{count, plural, one {{count} min ago} other {{count} mins ago}}"
+  },
+  "verdict": {
+    "reasoning": "Verdict Reasoning",
+    "reasoningPlaceholder": "Add reasoning for your verdict..."
   },
   "settings": {
     "title": "Settings",

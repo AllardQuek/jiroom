@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { Input } from "@/components/ui/input";
 import { cleanTitle } from "@/lib/data/migrations";
@@ -25,6 +26,7 @@ export default function PlaceAutocomplete({
   placeId,
   className,
 }: PlaceAutocompleteProps) {
+  const t = useTranslations("map");
   const [value, setValue] = useState(initialValue || "");
   const [suggestions, setSuggestions] = useState<
     Array<{ text: string; placePrediction?: object }>
@@ -239,7 +241,7 @@ export default function PlaceAutocomplete({
             }
           }, 200);
         }}
-        placeholder="Type an address..."
+        placeholder={t("placePlaceholder")}
         className={className}
       />
       {showDropdown && suggestions.length > 0 && (

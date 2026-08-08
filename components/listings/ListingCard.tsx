@@ -75,7 +75,11 @@ export function ListingCard({
 
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, getScoringPrice(listing, evaluation))
+      ? calculateScore(
+          evaluation.responses,
+          template,
+          getScoringPrice(listing, evaluation)
+        )
       : null;
 
   const handleClick = () => {
@@ -312,7 +316,7 @@ export function ListingCard({
                   {viewing?.scheduled_date ? (
                     <span
                       className={`text-[10px] ${isViewingOverdue ? "text-amber-500 font-semibold" : "text-muted-foreground/60"}`}
-                      title="Scheduled viewing"
+                      title={t("scheduledViewing")}
                     >
                       <CalendarDays
                         size={10}
