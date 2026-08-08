@@ -615,5 +615,23 @@
       "createTemplate": "Create Template",
       "criterion": "{count, plural, one {# criterion} other {# criteria}}"
     }
+  },
+  "agentQuestions": {
+    "editor": {
+      "editTemplate": "Edit Question Template",
+      "nameLabel": "Name",
+      "namePlaceholder": "Template name",
+      "questionsLabel": "Questions (one per line)",
+      "questionsPlaceholder": "Visitors: \nDryer included: \nAircon usage limitations:",
+      "questionCount": "{count, plural, one {# question} other {# questions}}",
+      "saveChanges": "Save Changes"
+    },
+    "list": {
+      "noTemplates": "No question templates",
+      "noTemplatesHint": "Create one to quickly copy questions to agents",
+      "createTemplate": "Create Template",
+      "setAsActive": "Set as active",
+      "questionCount": "{count, plural, one {# question} other {# questions}}"
+    }
   }
 }

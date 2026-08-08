@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AgentQuestionTemplate } from "@/types/agentQuestion";
 import { useAgentQuestionStore } from "@/store/agentQuestionStore";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +26,8 @@ export function AgentQuestionEditor({
   open,
   onOpenChange,
 }: AgentQuestionEditorProps) {
+  const t = useTranslations("agentQuestions");
+  const tCommon = useTranslations("common");
   const [name, setName] = useState(template.name);
   const [questions, setQuestions] = useState(template.questions.join("\n"));
   const updateTemplate = useAgentQuestionStore((state) => state.updateTemplate);
@@ -49,11 +52,13 @@ export function AgentQuestionEditor({
     onOpenChange(false);
   };
 
+  const questionCount = questions.split("\n").filter((q) => q.trim()).length;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Question Template</DialogTitle>
+          <DialogTitle>{t("editor.editTemplate")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -62,13 +67,13 @@ export function AgentQuestionEditor({
               htmlFor="template-name"
               className="text-xs font-medium text-muted-foreground"
             >
-              Name
+              {t("editor.nameLabel")}
             </Label>
             <Input
               id="template-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Template name"
+              placeholder={t("editor.namePlaceholder")}
               className="h-8 text-sm"
             />
           </div>
@@ -78,29 +83,26 @@ export function AgentQuestionEditor({
               htmlFor="questions"
               className="text-xs font-medium text-muted-foreground"
             >
-              Questions (one per line)
+              {t("editor.questionsLabel")}
             </Label>
             <Textarea
               id="questions"
               value={questions}
               onChange={(e) => setQuestions(e.target.value)}
-              placeholder="Visitors: &#10;Dryer included: &#10;Aircon usage limitations:"
+              placeholder={t("editor.questionsPlaceholder")}
               className="min-h-[200px] text-sm resize-y"
             />
             <p className="text-xs text-muted-foreground/50">
-              {questions.split("\n").filter((q) => q.trim()).length} question
-              {questions.split("\n").filter((q) => q.trim()).length !== 1
-                ? "s"
-                : ""}
+              {t("editor.questionCount", { count: questionCount })}
             </p>
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-2 border-t">
             <Button variant="outline" size="sm" onClick={handleCancel}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button size="sm" onClick={handleSave}>
-              Save Changes
+              {t("editor.saveChanges")}
             </Button>
           </div>
         </div>

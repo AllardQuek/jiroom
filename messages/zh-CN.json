@@ -615,5 +615,23 @@
       "createTemplate": "创建模板",
       "criterion": "{count, plural, one {# 个标准} other {# 个标准}}"
     }
+  },
+  "agentQuestions": {
+    "editor": {
+      "editTemplate": "编辑问题模板",
+      "nameLabel": "名称",
+      "namePlaceholder": "模板名称",
+      "questionsLabel": "问题（每行一个）",
+      "questionsPlaceholder": "访客：\n是否包含烘干机：\n空调使用限制：",
+      "questionCount": "{count, plural, one {# 个问题} other {# 个问题}}",
+      "saveChanges": "保存更改"
+    },
+    "list": {
+      "noTemplates": "暂无问题模板",
+      "noTemplatesHint": "创建一个模板以快速复制问题给中介",
+      "createTemplate": "创建模板",
+      "setAsActive": "设为活跃",
+      "questionCount": "{count, plural, one {# 个问题} other {# 个问题}}"
+    }
   }
 }
