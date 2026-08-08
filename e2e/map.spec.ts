@@ -59,14 +59,6 @@ test.describe("M1a — Map UX Enhancements", () => {
     await page.getByRole("button", { name: "By Area" }).click();
   });
 
-  test.fixme("area legend appears in filter panel when By Area is active", async ({
-    page,
-  }) => {
-    await page.getByRole("button", { name: "By Area" }).click();
-    await page.getByText("Filters").click();
-    await expect(page.getByText("Areas").first()).toBeVisible();
-  });
-
   test("search input is present", async ({ page }) => {
     await expect(page.getByPlaceholder("Search location...")).toBeVisible();
   });
