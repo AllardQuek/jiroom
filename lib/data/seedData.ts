@@ -3,6 +3,26 @@ import type { Listing, Viewing } from "@/types/listing";
 import type { Evaluation } from "@/types/evaluation";
 import type { Verdict } from "@/types/verdict";
 import type { Anchor } from "@/types/anchor";
+import type { TenantProfile } from "@/types/tenantProfile";
+import { defaultAgentQuestions } from "@/lib/data/defaultAgentQuestions";
+
+export const seedTenantProfile: TenantProfile = {
+  name: "Sample Tenant",
+  occupation: "Software Engineer",
+  nationality: "Singaporean",
+  noOfPax: "1",
+  gender: "M",
+  pets: "No",
+  cooking: "Light cooking",
+  pass: "Singaporean",
+  workLocation: "Changi Business Park",
+  moveInDate: "2026-07-27",
+  leaseDuration: "1 year",
+  budget: "900",
+  viewing: "Weekday evenings",
+};
+
+export const seedAgentQuestions = defaultAgentQuestions;
 
 export const seedListings: Listing[] = [
   {
@@ -1793,6 +1813,14 @@ export function loadSeedData(): void {
       version: 0,
     },
     "anchor-storage": { state: { anchors: seedAnchors }, version: 0 },
+    "tenant-profile-storage": {
+      state: { profile: seedTenantProfile },
+      version: 0,
+    },
+    "agent-question-storage": {
+      state: { templates: [seedAgentQuestions], activeTemplateId: "default" },
+      version: 0,
+    },
   };
 
   for (const [key, value] of Object.entries(payload)) {

@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, useMemo } from "react";
+import {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 import { Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { useListingStore } from "@/store/listingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
@@ -108,11 +115,12 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     y: number;
   } | null>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isTouchDevice = useMemo(
+  const isTouchDevice = useSyncExternalStore(
+    () => () => {},
     () =>
       typeof window !== "undefined" &&
       ("ontouchstart" in window || navigator.maxTouchPoints > 0),
-    []
+    () => false
   );
   const [colorMode, setColorMode] = useState<ColorMode>("area");
   const visibleAnchors = useMemo(

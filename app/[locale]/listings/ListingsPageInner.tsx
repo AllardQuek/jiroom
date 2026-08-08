@@ -50,32 +50,34 @@ import {
   importData,
   type ExportData,
 } from "@/lib/data/exportImport";
-import { isSeedModeActive, toggleSeedMode } from "@/lib/data/seedData";
+import { toggleSeedMode } from "@/lib/data/seedData";
+import {
+  useLocalStorageValue,
+  setLocalStorageValue,
+} from "@/lib/hooks/useLocalStorageValue";
+import { useLocalStorageState } from "@/lib/hooks/useLocalStorageState";
 
 export function ListingsPageInner() {
   const t = useTranslations("listings");
   const tCommon = useTranslations("common");
   const tProfile = useTranslations("tenantProfile.fields");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const searchParams = useSearchParams();
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
-    () =>
-      typeof window !== "undefined"
-        ? new URLSearchParams(window.location.search).get("detail")
-        : null
+    () => searchParams.get("detail")
   );
   const [backupStatus, setBackupStatus] = useState<{
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
-  const [seedMode] = useState(() => {
-    if (typeof window === "undefined") return false;
-    if (sessionStorage.getItem("import-completed")) return false;
-    return isSeedModeActive();
-  });
-  const [compact, setCompact] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem("compact-view") === "true";
-  });
+  const seedMode = useLocalStorageValue("seed-mode-active", "false") === "true";
+  const [compactRaw, setCompactRaw] = useLocalStorageState(
+    "compact-view",
+    "false"
+  );
+  const compact = compactRaw === "true";
+  const setCompact = (value: boolean) =>
+    setCompactRaw(value ? "true" : "false");
   const [compareModeState, setCompareModeState] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [copyStatus, setCopyStatus] = useState<{
@@ -92,11 +94,6 @@ export function ListingsPageInner() {
     priceMax: null,
   });
   const router = useRouter();
-
-  useEffect(() => {
-    localStorage.setItem("compact-view", compact ? "true" : "false");
-  }, [compact]);
-  const searchParams = useSearchParams();
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -111,8 +108,8 @@ export function ListingsPageInner() {
   useEffect(() => {
     if (sessionStorage.getItem("import-completed")) {
       sessionStorage.removeItem("import-completed");
-      localStorage.removeItem("seed-mode-active");
-      localStorage.removeItem("user-data-backup");
+      setLocalStorageValue("seed-mode-active", null);
+      setLocalStorageValue("user-data-backup", null);
     }
   }, []);
   const selectedListingIds = useComparisonStore(

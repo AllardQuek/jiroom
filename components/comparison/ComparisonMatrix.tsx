@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState, useEffect, useSyncExternalStore } from "react";
+import { useMemo, useSyncExternalStore } from "react";
+import { useWindowWidth } from "@/lib/hooks/useWindowWidth";
+import { useLocalStorageState } from "@/lib/hooks/useLocalStorageState";
 import { Link } from "@/i18n/navigation";
 import { Listing, Viewing } from "@/types/listing";
 import { Template, Criterion, Evaluation } from "@/types/evaluation";
@@ -293,20 +295,12 @@ export function ComparisonMatrix({
   );
   const resolvedTheme = (theme as "light" | "dark") || "light";
 
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  const isMobile = useWindowWidth() < 768;
+  const [widthRaw, setWidthRaw] = useLocalStorageState(
+    "criteria-column-width",
+    "170"
   );
-  const [criteriaColumnWidth, setCriteriaColumnWidth] = useState(() => {
-    if (typeof window === "undefined") return 170;
-    const savedWidth = localStorage.getItem("criteria-column-width");
-    return savedWidth ? Number(savedWidth) : 170;
-  });
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const criteriaColumnWidth = Number(widthRaw);
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -316,16 +310,12 @@ export function ComparisonMatrix({
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX;
       const newWidth = Math.max(120, Math.min(300, startWidth + deltaX));
-      setCriteriaColumnWidth(newWidth);
+      setWidthRaw(String(newWidth));
     };
 
     const handleMouseUp = () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
-      localStorage.setItem(
-        "criteria-column-width",
-        criteriaColumnWidth.toString()
-      );
     };
 
     document.addEventListener("mousemove", handleMouseMove);
