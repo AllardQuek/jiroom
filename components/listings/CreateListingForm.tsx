@@ -13,6 +13,7 @@ import { useTemplateStore } from "@/store/templateStore";
 import { useViewingStore } from "@/store/viewingStore";
 import { normalizeUrl, normalizeForComparison } from "@/lib/utils/url";
 import { extractFromUrl } from "@/lib/utils/urlExtract";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -49,6 +50,8 @@ export function CreateListingForm({
   onCancel,
   defaultValues: defaultValuesProp,
 }: CreateListingFormProps) {
+  const t = useTranslations("listings");
+  const tCommon = useTranslations("common");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [evalResponses, setEvalResponses] = useState<
     Record<string, number | string>
@@ -207,11 +210,11 @@ export function CreateListingForm({
               <FormItem>
                 <FormLabel className="flex items-center gap-2">
                   <Globe size={14} className="text-primary" />
-                  Listing URL
+                  {t("create.listingUrl")}
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Paste link from PropertyGuru, 99.co, etc."
+                    placeholder={t("create.listingUrlPlaceholder")}
                     {...field}
                     onBlur={(e) => {
                       const normalized = normalizeUrl(e.target.value);
@@ -223,12 +226,12 @@ export function CreateListingForm({
                   />
                 </FormControl>
                 <FormDescription>
-                  We&apos;ll try to auto-fill details from the link
+                  {t("create.listingUrlDescription")}
                 </FormDescription>
                 {isDuplicateUrl && (
                   <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-1 flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
-                    This URL is already in your listings
+                    {t("create.duplicateUrlWarning")}
                   </div>
                 )}
                 <FormMessage />
@@ -241,12 +244,17 @@ export function CreateListingForm({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">Title</FormLabel>
+                <FormLabel className="flex items-center gap-2">
+                  {t("create.title")}
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder="Auto-filled from URL" {...field} />
+                  <Input
+                    placeholder={t("create.titlePlaceholder")}
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
-                  Auto-filled from URL or location &mdash; edit to differentiate
+                  {t("create.titleDescription")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -264,7 +272,7 @@ export function CreateListingForm({
               <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
                 <span className="flex items-center gap-2">
                   <MapPin size={14} className="text-primary" />
-                  Location *
+                  {t("create.locationRequired")}
                 </span>
               </label>
               <PlaceAutocomplete
@@ -278,8 +286,7 @@ export function CreateListingForm({
                 }}
               />
               <p className="text-[0.8rem] text-muted-foreground mt-1.5">
-                Sets the listing title and map coordinates from the selected
-                place
+                {t("create.locationDescription")}
               </p>
             </div>
 
@@ -291,14 +298,14 @@ export function CreateListingForm({
                   <FormItem>
                     <FormLabel className="flex items-center gap-2">
                       <MapPin size={14} className="text-primary" />
-                      Area
+                      {t("create.area")}
                     </FormLabel>
                     <FormControl>
                       <CreatableSelect
                         value={field.value}
                         onChange={field.onChange}
                         options={areaOptions}
-                        placeholder="Select or type an area..."
+                        placeholder={t("create.areaPlaceholder")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -313,7 +320,7 @@ export function CreateListingForm({
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Initial Price ($)</FormLabel>
+                    <FormLabel>{t("create.initialPrice")}</FormLabel>
                     <FormControl>
                       <PriceInput field={field} />
                     </FormControl>
@@ -327,7 +334,7 @@ export function CreateListingForm({
                 name="negotiated_price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Negotiated Price ($)</FormLabel>
+                    <FormLabel>{t("create.negotiatedPrice")}</FormLabel>
                     <FormControl>
                       <PriceInput field={field} />
                     </FormControl>
@@ -343,13 +350,13 @@ export function CreateListingForm({
                 name="source_platform"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Platform</FormLabel>
+                    <FormLabel>{t("create.platform")}</FormLabel>
                     <FormControl>
                       <CreatableSelect
                         value={field.value}
                         onChange={field.onChange}
                         options={platformOptions}
-                        placeholder="Auto-detected..."
+                        placeholder={t("create.platformPlaceholder")}
                       />
                     </FormControl>
                     <FormMessage />
@@ -366,11 +373,11 @@ export function CreateListingForm({
               <FormItem>
                 <FormLabel className="flex items-center gap-2">
                   <FileText size={14} className="text-primary" />
-                  Listing Notes
+                  {t("create.notes")}
                 </FormLabel>
                 <FormControl>
                   <AutoResizeTextarea
-                    placeholder="Add any general observations, contact details, or thoughts about this listing..."
+                    placeholder={t("create.notesPlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -384,14 +391,14 @@ export function CreateListingForm({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">
-                Schedule Viewing{" "}
+                {t("create.scheduleViewing")}{" "}
                 <span className="text-muted-foreground font-normal ml-1">
-                  (optional)
+                  {t("create.optional")}
                 </span>
               </span>
               {viewingDate && (
                 <span className="text-[11px] bg-primary/10 text-primary rounded-full px-2 py-0.5 font-medium">
-                  Set
+                  {t("create.set")}
                 </span>
               )}
             </div>
@@ -425,9 +432,9 @@ export function CreateListingForm({
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold">
-                  Evaluation{" "}
+                  {t("create.evaluation")}{" "}
                   <span className="text-muted-foreground font-normal ml-1">
-                    (optional)
+                    {t("create.optional")}
                   </span>
                 </span>
                 {evalAnsweredCount > 0 && (
@@ -464,7 +471,7 @@ export function CreateListingForm({
             disabled={isSubmitting}
             className="flex-1 font-bold"
           >
-            {isSubmitting ? "Saving..." : "Add Listing"}
+            {isSubmitting ? t("create.saving") : t("create.addListing")}
           </Button>
           <Button
             type="button"
@@ -472,7 +479,7 @@ export function CreateListingForm({
             onClick={onCancel}
             className="flex-1 bg-muted/50 hover:bg-muted"
           >
-            Cancel
+            {tCommon("cancel")}
           </Button>
         </div>
       </form>
