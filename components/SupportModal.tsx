@@ -121,7 +121,10 @@ export default function SupportModal({
                   {t.rich("noteHelper", {
                     email: supportEmail ?? "",
                     emailLink: (chunks) => (
-                      <a href={`mailto:${supportEmail ?? ""}`} className="underline">
+                      <a
+                        href={`mailto:${supportEmail ?? ""}`}
+                        className="underline"
+                      >
                         {chunks}
                       </a>
                     ),
@@ -145,7 +148,8 @@ export default function SupportModal({
 
           <div className="space-y-2">
             <p className="text-center text-sm text-muted-foreground">
-              {t("tipLabel")} <span className="text-xs">({t("tipCurrency")})</span>
+              {t("tipLabel")}{" "}
+              <span className="text-xs">({t("tipCurrency")})</span>
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {TIERS.map((tier) => {

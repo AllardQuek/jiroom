@@ -16,7 +16,7 @@ export function ThemeToggle() {
   }, []);
 
   const handleToggle = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   if (!mounted) {
@@ -24,10 +24,10 @@ export function ThemeToggle() {
       <Button
         variant="outline"
         size="icon"
-        className='rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10'
-        aria-label={t('toggleTheme')}
+        className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
+        aria-label={t("toggleTheme")}
       >
-        <Sun className='size-4' />
+        <Sun className="size-4" />
       </Button>
     );
   }
@@ -36,11 +36,15 @@ export function ThemeToggle() {
     <Button
       variant="outline"
       size="icon"
-      className='rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10'
+      className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
       onClick={handleToggle}
-      aria-label={t('toggleTheme')}
+      aria-label={t("toggleTheme")}
     >
-      {theme === 'dark' ? <Sun className='size-4' /> : <Moon className='size-4' />}
+      {theme === "dark" ? (
+        <Sun className="size-4" />
+      ) : (
+        <Moon className="size-4" />
+      )}
     </Button>
   );
 }

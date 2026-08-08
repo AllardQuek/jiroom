@@ -32,8 +32,8 @@ export function TemplateEditor({
   onEditCriteria,
   onDeleteCriteria,
 }: TemplateEditorProps) {
-  const t = useTranslations('templates');
-  const tCommon = useTranslations('common');
+  const t = useTranslations("templates");
+  const tCommon = useTranslations("common");
   const [name, setName] = useState(template.name);
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
 
@@ -63,29 +63,29 @@ export function TemplateEditor({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-lg max-h-[85vh] overflow-y-auto'>
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{t('editor.editTemplate')}</DialogTitle>
+          <DialogTitle>{t("editor.editTemplate")}</DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-5'>
-          <div className='space-y-1.5'>
+        <div className="space-y-5">
+          <div className="space-y-1.5">
             <Label
-              htmlFor='template-name'
-              className='text-xs font-medium text-muted-foreground'
+              htmlFor="template-name"
+              className="text-xs font-medium text-muted-foreground"
             >
-              {t('editor.nameLabel')}
+              {t("editor.nameLabel")}
             </Label>
             <Input
-              id='template-name'
+              id="template-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder={t('editor.namePlaceholder')}
-              className='h-8 text-sm'
+              placeholder={t("editor.namePlaceholder")}
+              className="h-8 text-sm"
             />
           </div>
 
-          <div className='space-y-3'>
+          <div className="space-y-3">
             {Object.entries(groupedCriteria).map(([category, criteria]) => (
               <CategorySection
                 key={category}
@@ -99,21 +99,21 @@ export function TemplateEditor({
             ))}
           </div>
 
-          <div className='flex items-center justify-between pt-2 border-t'>
+          <div className="flex items-center justify-between pt-2 border-t">
             <Button
-              variant='ghost'
-              size='sm'
-              onClick={() => onAddCriteria('General')}
-              className='text-xs text-muted-foreground'
+              variant="ghost"
+              size="sm"
+              onClick={() => onAddCriteria("General")}
+              className="text-xs text-muted-foreground"
             >
-              + {t('editor.addCriteria')}
+              + {t("editor.addCriteria")}
             </Button>
-            <div className='flex gap-2'>
-              <Button variant='outline' size='sm' onClick={handleCancel}>
-                {tCommon('cancel')}
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={handleCancel}>
+                {tCommon("cancel")}
               </Button>
-              <Button size='sm' onClick={handleSave}>
-                {t('editor.saveChanges')}
+              <Button size="sm" onClick={handleSave}>
+                {t("editor.saveChanges")}
               </Button>
             </div>
           </div>

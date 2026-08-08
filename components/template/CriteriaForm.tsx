@@ -103,15 +103,18 @@ export function CriteriaForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-4'>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name='name'
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('criteriaForm.name')}</FormLabel>
+              <FormLabel>{t("criteriaForm.name")}</FormLabel>
               <FormControl>
-                <Input placeholder={t('criteriaForm.namePlaceholder')} {...field} />
+                <Input
+                  placeholder={t("criteriaForm.namePlaceholder")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,12 +123,15 @@ export function CriteriaForm({
 
         <FormField
           control={form.control}
-          name='description'
+          name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('criteriaForm.description')}</FormLabel>
+              <FormLabel>{t("criteriaForm.description")}</FormLabel>
               <FormControl>
-                <Input placeholder={t('criteriaForm.descriptionPlaceholder')} {...field} />
+                <Input
+                  placeholder={t("criteriaForm.descriptionPlaceholder")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -134,22 +140,32 @@ export function CriteriaForm({
 
         <FormField
           control={form.control}
-          name='type'
+          name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('criteriaForm.inputType')}</FormLabel>
+              <FormLabel>{t("criteriaForm.inputType")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={t('criteriaForm.inputTypePlaceholder')} />
+                    <SelectValue
+                      placeholder={t("criteriaForm.inputTypePlaceholder")}
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value='checkbox'>{t('criteriaForm.checkbox')}</SelectItem>
-                  <SelectItem value='rating'>{t('criteriaForm.rating')}</SelectItem>
-                  <SelectItem value='number'>{t('criteriaForm.number')}</SelectItem>
-                  <SelectItem value='text'>{t('criteriaForm.text')}</SelectItem>
-                  <SelectItem value='select'>{t('criteriaForm.select')}</SelectItem>
+                  <SelectItem value="checkbox">
+                    {t("criteriaForm.checkbox")}
+                  </SelectItem>
+                  <SelectItem value="rating">
+                    {t("criteriaForm.rating")}
+                  </SelectItem>
+                  <SelectItem value="number">
+                    {t("criteriaForm.number")}
+                  </SelectItem>
+                  <SelectItem value="text">{t("criteriaForm.text")}</SelectItem>
+                  <SelectItem value="select">
+                    {t("criteriaForm.select")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -159,14 +175,16 @@ export function CriteriaForm({
 
         <FormField
           control={form.control}
-          name='category'
+          name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('criteriaForm.category')}</FormLabel>
+              <FormLabel>{t("criteriaForm.category")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={t('criteriaForm.categoryPlaceholder')} />
+                    <SelectValue
+                      placeholder={t("criteriaForm.categoryPlaceholder")}
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -182,21 +200,21 @@ export function CriteriaForm({
           )}
         />
 
-        {watchType === 'select' && (
-          <div className='space-y-3'>
+        {watchType === "select" && (
+          <div className="space-y-3">
             <FormField
               control={form.control}
-              name='options'
+              name="options"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('criteriaForm.options')}</FormLabel>
+                  <FormLabel>{t("criteriaForm.options")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t('criteriaForm.optionsPlaceholder')}
+                      placeholder={t("criteriaForm.optionsPlaceholder")}
                       {...field}
                       onChange={(e) =>
                         field.onChange(
-                          e.target.value.split(',').map((o) => o.trim())
+                          e.target.value.split(",").map((o) => o.trim())
                         )
                       }
                     />
@@ -207,35 +225,35 @@ export function CriteriaForm({
             />
 
             {(watchOptions ?? []).length > 0 && (
-              <div className='space-y-1.5'>
-                <Label className='text-xs text-muted-foreground'>
-                  {t('criteriaForm.scoreMapping')}
+              <div className="space-y-1.5">
+                <Label className="text-xs text-muted-foreground">
+                  {t("criteriaForm.scoreMapping")}
                 </Label>
                 {watchOptions
                   ?.filter((o) => o)
                   .map((option) => (
                     <div
                       key={option}
-                      className='flex items-center justify-between rounded-md border px-3 py-1.5'
+                      className="flex items-center justify-between rounded-md border px-3 py-1.5"
                     >
-                      <span className='text-sm font-medium'>{option}</span>
-                      <div className='flex gap-1'>
+                      <span className="text-sm font-medium">{option}</span>
+                      <div className="flex gap-1">
                         {([-1, 0, 1] as const).map((val) => (
                           <button
                             key={val}
-                            type='button'
+                            type="button"
                             onClick={() => setScoreForOption(option, val)}
                             className={`h-6 w-8 rounded text-xs font-medium transition-colors ${
-                              (form.watch('scores')?.[option] ?? 0) === val
+                              (form.watch("scores")?.[option] ?? 0) === val
                                 ? val === 1
-                                  ? 'bg-emerald-100 text-emerald-700'
+                                  ? "bg-emerald-100 text-emerald-700"
                                   : val === -1
-                                    ? 'bg-red-100 text-red-700'
-                                    : 'bg-muted text-muted-foreground'
-                                : 'bg-transparent text-muted-foreground/40 hover:text-foreground'
+                                    ? "bg-red-100 text-red-700"
+                                    : "bg-muted text-muted-foreground"
+                                : "bg-transparent text-muted-foreground/40 hover:text-foreground"
                             }`}
                           >
-                            {val > 0 ? '+1' : val < 0 ? '-1' : '0'}
+                            {val > 0 ? "+1" : val < 0 ? "-1" : "0"}
                           </button>
                         ))}
                       </div>
@@ -246,89 +264,91 @@ export function CriteriaForm({
           </div>
         )}
 
-        {watchType === 'number' && (
-          <div className='space-y-2'>
-            <div className='flex items-center justify-between'>
-              <Label className='text-sm'>{t('criteriaForm.scoringThresholds')}</Label>
+        {watchType === "number" && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm">
+                {t("criteriaForm.scoringThresholds")}
+              </Label>
               <Button
-                type='button'
-                variant='outline'
-                size='sm'
+                type="button"
+                variant="outline"
+                size="sm"
                 onClick={() =>
                   append({ min: undefined, max: undefined, score: 0 })
                 }
-                className='h-7 text-xs'
+                className="h-7 text-xs"
               >
-                <Plus className='h-3 w-3 mr-1' />
-                {t('criteriaForm.addRange')}
+                <Plus className="h-3 w-3 mr-1" />
+                {t("criteriaForm.addRange")}
               </Button>
             </div>
 
             {fields.length === 0 && (
-              <p className='text-xs text-muted-foreground'>
-                {t('criteriaForm.noThresholds')}
+              <p className="text-xs text-muted-foreground">
+                {t("criteriaForm.noThresholds")}
               </p>
             )}
 
-            <div className='space-y-2'>
+            <div className="space-y-2">
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className='flex items-center gap-2 rounded-md border px-3 py-2'
+                  className="flex items-center gap-2 rounded-md border px-3 py-2"
                 >
-                  <div className='flex items-center gap-1.5 flex-1'>
+                  <div className="flex items-center gap-1.5 flex-1">
                     <Input
-                      type='number'
-                      placeholder={t('criteriaForm.min')}
-                      className='h-7 w-16 text-xs'
+                      type="number"
+                      placeholder={t("criteriaForm.min")}
+                      className="h-7 w-16 text-xs"
                       {...form.register(`thresholds.${index}.min`, {
-                        setValueAs: (v) => (v === '' ? undefined : Number(v)),
+                        setValueAs: (v) => (v === "" ? undefined : Number(v)),
                       })}
                     />
-                    <span className='text-xs text-muted-foreground'>
+                    <span className="text-xs text-muted-foreground">
                       &ndash;
                     </span>
                     <Input
-                      type='number'
-                      placeholder={t('criteriaForm.max')}
-                      className='h-7 w-16 text-xs'
+                      type="number"
+                      placeholder={t("criteriaForm.max")}
+                      className="h-7 w-16 text-xs"
                       {...form.register(`thresholds.${index}.max`, {
-                        setValueAs: (v) => (v === '' ? undefined : Number(v)),
+                        setValueAs: (v) => (v === "" ? undefined : Number(v)),
                       })}
                     />
                   </div>
 
-                  <div className='flex gap-1'>
+                  <div className="flex gap-1">
                     {([-1, 0, 1] as const).map((val) => (
                       <button
                         key={val}
-                        type='button'
+                        type="button"
                         onClick={() =>
                           form.setValue(`thresholds.${index}.score`, val)
                         }
                         className={`h-6 w-8 rounded text-xs font-medium transition-colors ${
                           form.watch(`thresholds.${index}.score`) === val
                             ? val === 1
-                              ? 'bg-emerald-100 text-emerald-700'
+                              ? "bg-emerald-100 text-emerald-700"
                               : val === -1
-                                ? 'bg-red-100 text-red-700'
-                                : 'bg-muted text-muted-foreground'
-                            : 'bg-transparent text-muted-foreground/40 hover:text-foreground'
+                                ? "bg-red-100 text-red-700"
+                                : "bg-muted text-muted-foreground"
+                            : "bg-transparent text-muted-foreground/40 hover:text-foreground"
                         }`}
                       >
-                        {val > 0 ? '+1' : val < 0 ? '-1' : '0'}
+                        {val > 0 ? "+1" : val < 0 ? "-1" : "0"}
                       </button>
                     ))}
                   </div>
 
                   <Button
-                    type='button'
-                    variant='ghost'
-                    size='icon'
-                    className='h-7 w-7 text-destructive shrink-0'
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-destructive shrink-0"
                     onClick={() => remove(index)}
                   >
-                    <Trash2 className='h-3.5 w-3.5' />
+                    <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               ))}
@@ -336,12 +356,14 @@ export function CriteriaForm({
           </div>
         )}
 
-        <div className='flex gap-2 justify-end'>
-          <Button type='button' variant='outline' onClick={onCancel}>
-            {tCommon('cancel')}
+        <div className="flex gap-2 justify-end">
+          <Button type="button" variant="outline" onClick={onCancel}>
+            {tCommon("cancel")}
           </Button>
-          <Button type='submit' disabled={isSubmitting}>
-            {isSubmitting ? t('criteriaForm.saving') : t('criteriaForm.saveCriteria')}
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting
+              ? t("criteriaForm.saving")
+              : t("criteriaForm.saveCriteria")}
           </Button>
         </div>
       </form>

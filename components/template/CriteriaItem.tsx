@@ -36,24 +36,24 @@ function ScoreToggle({
   onChange: (v: -1 | 0 | 1) => void;
 }) {
   return (
-    <div className='flex rounded-md border border-border/40 overflow-hidden bg-background'>
+    <div className="flex rounded-md border border-border/40 overflow-hidden bg-background">
       {([1, 0, -1] as const).map((v) => {
-        const label = v > 0 ? '+1' : String(v);
+        const label = v > 0 ? "+1" : String(v);
         const textColor =
           v === 1
-            ? 'text-emerald-600 dark:text-emerald-400'
+            ? "text-emerald-600 dark:text-emerald-400"
             : v === -1
-              ? 'text-red-500 dark:text-red-400'
-              : 'text-muted-foreground';
+              ? "text-red-500 dark:text-red-400"
+              : "text-muted-foreground";
         return (
           <button
             key={v}
-            type='button'
+            type="button"
             onClick={() => onChange(v)}
             className={`h-6 px-2 text-[11px] leading-none transition-colors ${
               value === v
                 ? `bg-foreground/10 font-semibold ${textColor}`
-                : 'text-muted-foreground/40 hover:text-muted-foreground/70 hover:bg-muted/40'
+                : "text-muted-foreground/40 hover:text-muted-foreground/70 hover:bg-muted/40"
             }`}
           >
             {label}
@@ -75,7 +75,7 @@ function ScorePopover({
   open: boolean;
   onClose: () => void;
 }) {
-  const t = useTranslations('templates');
+  const t = useTranslations("templates");
   const popoverRef = useRef<HTMLDivElement>(null);
   const updateTemplate = useTemplateStore((s) => s.updateTemplate);
   const templates = useTemplateStore((s) => s.templates);
@@ -91,13 +91,13 @@ function ScorePopover({
       }
     };
     const escHandler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
-    document.addEventListener('mousedown', handler);
-    document.addEventListener('keydown', escHandler);
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("keydown", escHandler);
     return () => {
-      document.removeEventListener('mousedown', handler);
-      document.removeEventListener('keydown', escHandler);
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("keydown", escHandler);
     };
   }, [open, onClose]);
 
@@ -143,31 +143,31 @@ function ScorePopover({
   return (
     <div
       ref={popoverRef}
-      className='absolute top-full right-0 mt-1 z-50 w-72 rounded-lg border border-border/50 bg-popover text-popover-foreground shadow-lg p-3 animate-in'
-      style={{ animation: 'fadeIn 0.1s ease-out' }}
+      className="absolute top-full right-0 mt-1 z-50 w-72 rounded-lg border border-border/50 bg-popover text-popover-foreground shadow-lg p-3 animate-in"
+      style={{ animation: "fadeIn 0.1s ease-out" }}
     >
       <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}`}</style>
-      <div className='flex items-center justify-between mb-2'>
-        <span className='text-xs font-medium text-muted-foreground'>
-          {t('criteriaItem.scoring')}
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-medium text-muted-foreground">
+          {t("criteriaItem.scoring")}
         </span>
         <button
-          type='button'
+          type="button"
           onClick={onClose}
-          className='h-5 w-5 rounded flex items-center justify-center text-muted-foreground/40 hover:text-foreground'
+          className="h-5 w-5 rounded flex items-center justify-center text-muted-foreground/40 hover:text-foreground"
         >
-          <X className='h-3 w-3' />
+          <X className="h-3 w-3" />
         </button>
       </div>
 
-      {(criterion.type === 'select' || criterion.scores) && (
-        <div className='space-y-1.5'>
+      {(criterion.type === "select" || criterion.scores) && (
+        <div className="space-y-1.5">
           {(criterion.options ?? []).map((option) => (
             <div
               key={option}
-              className='flex items-center justify-between gap-2 py-1'
+              className="flex items-center justify-between gap-2 py-1"
             >
-              <span className='text-xs text-foreground/80 truncate'>
+              <span className="text-xs text-foreground/80 truncate">
                 {option}
               </span>
               <ScoreToggle
@@ -179,68 +179,68 @@ function ScorePopover({
         </div>
       )}
 
-      {(criterion.type === 'number' || criterion.type === 'derived') && (
-        <div className='space-y-1.5'>
+      {(criterion.type === "number" || criterion.type === "derived") && (
+        <div className="space-y-1.5">
           {(criterion.thresholds ?? []).map((threshold, i) => (
-            <div key={i} className='flex items-center gap-1.5'>
+            <div key={i} className="flex items-center gap-1.5">
               <Input
-                type='number'
-                placeholder={t('criteriaItem.min')}
-                value={threshold.min ?? ''}
+                type="number"
+                placeholder={t("criteriaItem.min")}
+                value={threshold.min ?? ""}
                 onChange={(e) =>
                   updateThreshold(i, {
                     min:
-                      e.target.value === ''
+                      e.target.value === ""
                         ? undefined
                         : Number(e.target.value),
                   })
                 }
-                className='h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+                className="h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
-              <span className='text-xs text-muted-foreground/40'>&ndash;</span>
+              <span className="text-xs text-muted-foreground/40">&ndash;</span>
               <Input
-                type='number'
-                placeholder={t('criteriaItem.max')}
-                value={threshold.max ?? ''}
+                type="number"
+                placeholder={t("criteriaItem.max")}
+                value={threshold.max ?? ""}
                 onChange={(e) =>
                   updateThreshold(i, {
                     max:
-                      e.target.value === ''
+                      e.target.value === ""
                         ? undefined
                         : Number(e.target.value),
                   })
                 }
-                className='h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+                className="h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
               <ScoreToggle
                 value={threshold.score}
                 onChange={(v) => updateThreshold(i, { score: v })}
               />
               <button
-                type='button'
+                type="button"
                 onClick={() => removeThreshold(i)}
-                className='h-6 w-6 shrink-0 flex items-center justify-center text-muted-foreground/30 hover:text-destructive'
+                className="h-6 w-6 shrink-0 flex items-center justify-center text-muted-foreground/30 hover:text-destructive"
               >
-                <X className='h-3 w-3' />
+                <X className="h-3 w-3" />
               </button>
             </div>
           ))}
           <button
-            type='button'
+            type="button"
             onClick={addThreshold}
-            className='flex items-center gap-1 text-xs text-muted-foreground/50 hover:text-foreground mt-1'
+            className="flex items-center gap-1 text-xs text-muted-foreground/50 hover:text-foreground mt-1"
           >
-            <Plus className='h-3 w-3' />
-            {t('criteriaItem.addRange')}
+            <Plus className="h-3 w-3" />
+            {t("criteriaItem.addRange")}
           </button>
         </div>
       )}
 
-      {(criterion.type === 'checkbox' || criterion.type === 'rating') && (
-        <p className='text-xs text-muted-foreground/50'>
-          {criterion.type === 'checkbox'
-            ? t('criteriaItem.checkboxScoring')
-            : t('criteriaItem.ratingScoring')}
+      {(criterion.type === "checkbox" || criterion.type === "rating") && (
+        <p className="text-xs text-muted-foreground/50">
+          {criterion.type === "checkbox"
+            ? t("criteriaItem.checkboxScoring")
+            : t("criteriaItem.ratingScoring")}
         </p>
       )}
     </div>
@@ -253,7 +253,7 @@ export function CriteriaItem({
   onEdit,
   onDelete,
 }: CriteriaItemProps) {
-  const t = useTranslations('templates');
+  const t = useTranslations("templates");
   const hasScores =
     criterion.scores && Object.keys(criterion.scores).length > 0;
   const hasThresholds = criterion.thresholds && criterion.thresholds.length > 0;
@@ -261,64 +261,81 @@ export function CriteriaItem({
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   const typeMeta: Record<string, { label: string; icon: React.ReactNode }> = {
-    checkbox: { label: t('criteriaItem.checkbox'), icon: <CheckSquare className='h-3 w-3' /> },
-    rating: { label: t('criteriaItem.rating'), icon: <Star className='h-3 w-3' /> },
-    number: { label: t('criteriaItem.number'), icon: <Hash className='h-3 w-3' /> },
-    text: { label: t('criteriaItem.text'), icon: <Type className='h-3 w-3' /> },
-    select: { label: t('criteriaItem.select'), icon: <List className='h-3 w-3' /> },
-    derived: { label: t('criteriaItem.derived'), icon: <FunctionSquare className='h-3 w-3' /> },
+    checkbox: {
+      label: t("criteriaItem.checkbox"),
+      icon: <CheckSquare className="h-3 w-3" />,
+    },
+    rating: {
+      label: t("criteriaItem.rating"),
+      icon: <Star className="h-3 w-3" />,
+    },
+    number: {
+      label: t("criteriaItem.number"),
+      icon: <Hash className="h-3 w-3" />,
+    },
+    text: { label: t("criteriaItem.text"), icon: <Type className="h-3 w-3" /> },
+    select: {
+      label: t("criteriaItem.select"),
+      icon: <List className="h-3 w-3" />,
+    },
+    derived: {
+      label: t("criteriaItem.derived"),
+      icon: <FunctionSquare className="h-3 w-3" />,
+    },
   };
   const meta = typeMeta[criterion.type] ?? typeMeta.text;
 
   return (
-    <div className='flex items-start gap-3 py-2.5 group relative'>
-      <div className='flex-1 min-w-0'>
-        <div className='flex items-center gap-2'>
-          <h4 className='font-medium text-sm text-foreground leading-snug'>{criterion.name}</h4>
+    <div className="flex items-start gap-3 py-2.5 group relative">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <h4 className="font-medium text-sm text-foreground leading-snug">
+            {criterion.name}
+          </h4>
           <Badge
-            variant='outline'
-            className='inline-flex items-center gap-1 text-[10px] px-1.5 py-0 font-normal text-muted-foreground/50 border-border/20'
+            variant="outline"
+            className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0 font-normal text-muted-foreground/50 border-border/20"
           >
             {meta.icon}
             {meta.label}
           </Badge>
           {hasScoring && (
             <button
-              type='button'
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 setPopoverOpen(true);
               }}
-              className='h-5 w-5 rounded flex items-center justify-center text-muted-foreground/30 hover:text-foreground hover:bg-muted-foreground/10 transition-colors'
-              title={t('criteriaItem.scoringDetails')}
+              className="h-5 w-5 rounded flex items-center justify-center text-muted-foreground/30 hover:text-foreground hover:bg-muted-foreground/10 transition-colors"
+              title={t("criteriaItem.scoringDetails")}
             >
-              <Gauge className='h-3 w-3' />
+              <Gauge className="h-3 w-3" />
             </button>
           )}
         </div>
         {criterion.description && (
-          <p className='text-xs text-muted-foreground/50 leading-relaxed mt-0.5'>
+          <p className="text-xs text-muted-foreground/50 leading-relaxed mt-0.5">
             {criterion.description}
           </p>
         )}
       </div>
 
-      <div className='flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity pt-0.5 flex-shrink-0'>
+      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity pt-0.5 flex-shrink-0">
         <Button
-          variant='ghost'
-          size='icon'
+          variant="ghost"
+          size="icon"
           onClick={onEdit}
-          className='h-7 w-7 text-muted-foreground/40 hover:text-foreground'
+          className="h-7 w-7 text-muted-foreground/40 hover:text-foreground"
         >
-          <Pencil className='h-3.5 w-3.5' />
+          <Pencil className="h-3.5 w-3.5" />
         </Button>
         <Button
-          variant='ghost'
-          size='icon'
+          variant="ghost"
+          size="icon"
           onClick={onDelete}
-          className='h-7 w-7 text-muted-foreground/40 hover:text-destructive'
+          className="h-7 w-7 text-muted-foreground/40 hover:text-destructive"
         >
-          <Trash2 className='h-3.5 w-3.5' />
+          <Trash2 className="h-3.5 w-3.5" />
         </Button>
       </div>
 
