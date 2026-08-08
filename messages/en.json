@@ -471,5 +471,58 @@
   "guide": {
     "title": "SG Rental Journey",
     "subtitle": "Your interactive guide to renting in Singapore"
+  },
+  "support": {
+    "button": {
+      "chipLabel": "Enjoying JIRoom?",
+      "iconLabel": "Support JIRoom"
+    },
+    "modal": {
+      "title": "Enjoying JIRoom?",
+      "description": "JIRoom is <link>free and open-source</link>. {hasNote, select, yes {A quick note means a lot — and a small tip helps keep it running.} other {If it helped your rental hunt, a small tip or share goes a long way.}}",
+      "noteLabel": "Say thanks or share a thought",
+      "notePlaceholder": "A quick thanks, bug, or hello...",
+      "noteHelper": "Opens your email app. If not, send to <emailLink>{email}</emailLink>",
+      "noteCounter": "{count} / 200",
+      "sendNote": "Send note",
+      "tipLabel": "Add a tip",
+      "tipCurrency": "S$",
+      "tierAmountLabel": "S${amount} tip",
+      "customTipLabel": "Custom tip",
+      "qrAltAmount": "PayNow QR for SGD {amount}",
+      "qrAltCustom": "PayNow QR for a custom amount",
+      "tiers": {
+        "1": {
+          "label": "1",
+          "message": "That's a bus fare to the next viewing — thank you!"
+        },
+        "2": {
+          "label": "2",
+          "message": "That's an iced kopi from the nearest hawker — thank you!"
+        },
+        "5": {
+          "label": "5",
+          "message": "That's a kopi after a bad viewing — thank you!"
+        },
+        "?": {
+          "label": "?",
+          "message": "A well-deserved lunch between viewings..?"
+        }
+      },
+      "share": {
+        "title": "JIRoom",
+        "text": "JIRoom helped my rental hunt in Singapore.",
+        "button": "Share"
+      },
+      "star": "Star on GitHub",
+      "report": "Report an issue",
+      "email": {
+        "subject": "A note for JIRoom",
+        "noTip": "No tip selected.",
+        "tipWithAmount": "I also sent a S${amount} tip via PayNow.",
+        "tipCustom": "I also sent a custom tip via PayNow.",
+        "signature": "— from JIRoom"
+      }
+    }
   }
 }

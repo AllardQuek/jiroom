@@ -471,5 +471,58 @@
   "guide": {
     "title": "新加坡租房指南",
     "subtitle": "您的互动式租房导览"
+  },
+  "support": {
+    "button": {
+      "chipLabel": "喜欢 JIRoom 吗？",
+      "iconLabel": "支持 JIRoom"
+    },
+    "modal": {
+      "title": "喜欢 JIRoom 吗？",
+      "description": "JIRoom 是<link>免费开源</link>的。{hasNote, select, yes {一句感谢意义重大，小费也能帮助我们持续运行。} other {如果它帮到了您的租房之旅，一笔小费或分享都将意义非凡。}}",
+      "noteLabel": "写句感谢或分享想法",
+      "notePlaceholder": "一句感谢、问题反馈或问候...",
+      "noteHelper": "将打开您的邮件应用。若未打开，请发送至 <emailLink>{email}</emailLink>",
+      "noteCounter": "{count} / 200",
+      "sendNote": "发送留言",
+      "tipLabel": "打赏",
+      "tipCurrency": "新元",
+      "tierAmountLabel": "新币 {amount} 元小费",
+      "customTipLabel": "自定义金额",
+      "qrAltAmount": "PayNow 二维码：{amount} 新元",
+      "qrAltCustom": "PayNow 二维码：自定义金额",
+      "tiers": {
+        "1": {
+          "label": "1",
+          "message": "这够坐下一趟公交去看房了——谢谢！"
+        },
+        "2": {
+          "label": "2",
+          "message": "这能在附近的熟食中心买杯冰咖啡——谢谢！"
+        },
+        "5": {
+          "label": "5",
+          "message": "看完一次糟糕的看房后值得来杯咖啡——谢谢！"
+        },
+        "?": {
+          "label": "?",
+          "message": "看房间隙犒劳自己一顿午饭？"
+        }
+      },
+      "share": {
+        "title": "JIRoom",
+        "text": "JIRoom 帮助我在新加坡租房。",
+        "button": "分享"
+      },
+      "star": "在 GitHub 上标星",
+      "report": "报告问题",
+      "email": {
+        "subject": "给 JIRoom 的留言",
+        "noTip": "未选择小费。",
+        "tipWithAmount": "我还通过 PayNow 发送了新币 {amount} 元的小费。",
+        "tipCustom": "我还通过 PayNow 发送了一笔自定义金额的小费。",
+        "signature": "——来自 JIRoom"
+      }
+    }
   }
 }
