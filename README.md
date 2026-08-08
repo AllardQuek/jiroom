@@ -1,18 +1,18 @@
 # JIRoom
 
-JIRoom helps renters organize rental listings, evaluate them consistently during viewings, and compare options before deciding.
+Born out of personal frustration with rental hunting, JIRoom helps prospective renters remember viewings and make more informed decisions.
 
 ## Quick Start
 
 1. 📋 **Add a listing**: Click "Add listing" on Listings page, paste URL from property portals like PropertyGuru, 99.co, or others
-2. 📝 **Evaluate**: Click a listing card, fill in evaluation criteria, and see scores calculated automatically
+2. 📝 **Evaluate**: Click a listing card and fill in evaluation criteria to see scores calculated automatically
 3. ✅ **Decide**: Set verdict (Yes/Maybe/No) to move to decision columns
 
 💡 **Tip**: Use the sample data (flask icon 🧪) to explore features before adding your own listings.
 
 ## Why JIRoom?
 
-Rental hunting can be chaotic. You may juggle multiple listings, forget details, and struggle to compare options objectively. JIRoom helps by:
+Rental hunts are messy. You may juggle multiple listings, forget details, and struggle to compare options objectively. JIRoom helps by:
 
 | Frustration | Solution |
 |------------|----------|
@@ -51,6 +51,8 @@ Rental hunting can be chaotic. You may juggle multiple listings, forget details,
 5. **Decide** with confidence using smart scoring
 
 ## Tech Stack
+
+Exact dependency versions are available in [`package.json`](/package.json).
 
 - **Framework**: Next.js with React
 - **Language**: TypeScript
