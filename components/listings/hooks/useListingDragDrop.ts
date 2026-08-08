@@ -7,11 +7,13 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { useVerdictStore } from "@/store/verdictStore";
+import { Listing } from "@/types/listing";
+import { Verdict } from "@/types/verdict";
 
 interface UseListingDragDropProps {
-  updateListing: (id: string, data: Partial<any>) => void;
-  updateVerdict: (id: string, data: Partial<any>) => void;
-  addVerdict: (data: any) => void;
+  updateListing: (id: string, data: Partial<Listing>) => void;
+  updateVerdict: (id: string, data: Partial<Verdict>) => void;
+  addVerdict: (data: Verdict) => void;
 }
 
 /**
@@ -64,7 +66,10 @@ export function useListingDragDrop({
       if (!over) return;
 
       const listingId = active.id as string;
-      const dropData = over.data.current as any;
+      const dropData = over.data.current as {
+        dropStatus?: Listing["status"];
+        dropVerdict?: Verdict["status"];
+      } | null;
 
       if (dropData?.dropStatus) {
         updateListing(listingId, { status: dropData.dropStatus });

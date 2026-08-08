@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Resolver } from "react-hook-form";
 import {
   createCriterionSchema,
   CriterionFormData,
@@ -46,7 +47,9 @@ export function CriteriaForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CriterionFormData>({
-    resolver: zodResolver(createCriterionSchema) as any,
+    resolver: zodResolver(
+      createCriterionSchema
+    ) as unknown as Resolver<CriterionFormData>,
     defaultValues: {
       name: "",
       description: "",

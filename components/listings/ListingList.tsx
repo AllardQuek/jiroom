@@ -152,11 +152,11 @@ export function ListingList({
 
   const columns: Column[] = COLUMN_DEFS.map((col) => ({
     ...col,
-    title: t(COLUMN_TITLE_KEYS[col.id] as any),
+    title: t(COLUMN_TITLE_KEYS[col.id] as string),
   }));
 
   const SORT_OPTIONS = SORT_OPTION_KEYS.map((opt) => ({
-    label: t(`sortOptions.${opt.key}` as any),
+    label: t(`sortOptions.${opt.key}` as string),
     value: opt.value,
   }));
 

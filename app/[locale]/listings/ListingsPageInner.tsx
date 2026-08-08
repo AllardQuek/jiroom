@@ -541,9 +541,7 @@ export function ListingsPageInner() {
         onOpenChange={setFilterOpen}
         filters={filters}
         onFiltersChange={setFilters}
-        areas={Array.from(
-          new Set(listings.map((l: any) => l.area).filter(Boolean))
-        )}
+        areas={Array.from(new Set(listings.map((l) => l.area).filter(Boolean)))}
       />
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>

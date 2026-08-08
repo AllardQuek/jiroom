@@ -7,7 +7,7 @@ interface DroppableColumnProps {
   columnId: string;
   className?: string;
   children: React.ReactNode;
-  dropData?: any;
+  dropData?: { dropStatus: string; dropVerdict?: string };
   collapsed?: boolean;
 }
 

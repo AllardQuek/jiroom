@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Resolver } from "react-hook-form";
 import {
   listingSchema,
   type ListingFormData,
@@ -60,7 +61,9 @@ export function CreateListingForm({
   const template = templates[0];
 
   const form = useForm<ListingFormData>({
-    resolver: zodResolver(listingSchema) as any,
+    resolver: zodResolver(
+      listingSchema
+    ) as unknown as Resolver<ListingFormData>,
     defaultValues: {
       source_url: "",
       title: "",

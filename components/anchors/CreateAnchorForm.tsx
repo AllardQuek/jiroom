@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Resolver } from "react-hook-form";
 import { anchorSchema, type AnchorFormData } from "@/lib/schemas/anchorSchema";
 import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
 import {
@@ -59,7 +60,7 @@ export function CreateAnchorForm({
   };
 
   const form = useForm<AnchorFormData>({
-    resolver: zodResolver(anchorSchema) as any,
+    resolver: zodResolver(anchorSchema) as unknown as Resolver<AnchorFormData>,
     defaultValues: {
       title: "",
       type: "home",

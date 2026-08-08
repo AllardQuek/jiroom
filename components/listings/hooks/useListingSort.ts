@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Listing } from "@/types/listing";
 import { Verdict } from "@/types/verdict";
+import { Evaluation, Template } from "@/types/evaluation";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import { getDisplayPrice, getScoringPrice } from "@/lib/utils";
 
@@ -22,8 +23,8 @@ interface SortConfig {
 interface UseListingSortProps {
   listings: Listing[];
   verdicts: Verdict[];
-  evaluations: any[];
-  template: any;
+  evaluations: Evaluation[];
+  template: Template | undefined;
   sortConfigs: Record<string, SortConfig | null>;
 }
 
@@ -101,8 +102,8 @@ function compareListings(
   a: Listing,
   b: Listing,
   config: SortConfig,
-  evaluations: any[],
-  template: any
+  evaluations: Evaluation[],
+  template: Template | undefined
 ): number {
   switch (config.by) {
     case "price":
