@@ -465,7 +465,12 @@ export function ListingsPageInner() {
               <div className="hidden sm:flex gap-1">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" onClick={handleExport}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("exportData")}
+                      onClick={handleExport}
+                    >
                       <Download className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -476,6 +481,7 @@ export function ListingsPageInner() {
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label={t("importData")}
                       onClick={() => fileRef.current?.click()}
                     >
                       <Upload className="h-4 w-4" />
@@ -488,6 +494,9 @@ export function ListingsPageInner() {
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label={
+                        seedMode ? t("switchToYours") : t("switchToSample")
+                      }
                       onClick={handleToggleSeed}
                       className={seedMode ? "text-amber-500" : ""}
                     >

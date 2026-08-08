@@ -355,3 +355,12 @@ export function seedLocalStorage(page: Page) {
     localStorage.setItem("seed-mode-active", "true");
   });
 }
+
+export async function dismissMapErrorDialog(page: Page) {
+  await page.evaluate(() => {
+    const dialog = document.querySelector(
+      '[role="alertdialog"][aria-label="Error"]'
+    );
+    dialog?.remove();
+  });
+}

@@ -8,34 +8,38 @@ test.beforeEach(async ({ page }) => {
 test("bottom nav shows all four tabs", async ({ page }) => {
   const nav = page.locator("nav.fixed.bottom-0");
   await expect(nav).toBeVisible();
-  await expect(nav.getByRole("link", { name: "Listings" })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "My Listings" })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Map" })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Compare" })).toBeVisible();
-  await expect(nav.getByRole("link", { name: "Schedule" })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "My Schedule" })).toBeVisible();
 });
 
 test("Listings tab is active by default", async ({ page }) => {
-  const listingsTab = page.locator("nav a[href='/listings']");
+  const listingsTab = page.getByRole("link", { name: "My Listings" }).first();
   await expect(listingsTab).toHaveClass(/text-primary/);
 });
 
 test("navigating to Map tab updates active state", async ({ page }) => {
-  await page.locator("nav a[href='/map']").click();
+  await page.getByRole("link", { name: "Map" }).first().click();
   await page.waitForURL("**/map");
-  const mapTab = page.locator("nav a[href='/map']");
+  const mapTab = page.getByRole("link", { name: "Map" }).first();
   await expect(mapTab).toHaveClass(/text-primary/);
 });
 
 test("navigating to Compare tab", async ({ page }) => {
-  await page.locator("nav a[href='/compare']").click();
+  await page.getByRole("link", { name: "Compare" }).first().click();
   await page.waitForURL("**/compare");
-  await expect(page.locator("h1")).toContainText(/compare/i);
+  await expect(
+    page.getByRole("heading", { name: /compare/i }).first()
+  ).toBeVisible();
 });
 
 test("navigating to Schedule tab", async ({ page }) => {
-  await page.locator("nav a[href='/schedule']").click();
+  await page.getByRole("link", { name: "My Schedule" }).first().click();
   await page.waitForURL("**/schedule");
-  await expect(page.locator("h1")).toContainText(/schedule/i);
+  await expect(
+    page.getByRole("heading", { name: /my schedule/i }).first()
+  ).toBeVisible();
 });
 
 test("root path redirects to /listings", async ({ page }) => {
