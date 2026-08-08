@@ -524,5 +524,12 @@
         "signature": "——来自 JIRoom"
       }
     }
+  },
+  "chrome": {
+    "reportIssue": "在 GitHub 上报告问题",
+    "openHelp": "打开帮助",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "toggleTheme": "切换主题"
   }
 }

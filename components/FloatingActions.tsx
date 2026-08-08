@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Bug, CircleHelp, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HelpDialog from "@/components/HelpDialog";
@@ -11,13 +12,14 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 const GITHUB_ISSUES_URL = "https://github.com/AllardQuek/jiroom/issues/new";
 
 export default function FloatingActions() {
+  const t = useTranslations("chrome");
   const [helpOpen, setHelpOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (
-        e.key === "?" &&
+        e.key === '?' &&
         !e.metaKey &&
         !e.ctrlKey &&
         !e.altKey &&
@@ -30,8 +32,8 @@ export default function FloatingActions() {
         setHelpOpen((prev) => !prev);
       }
     };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
   }, []);
 
   return (
@@ -49,11 +51,11 @@ export default function FloatingActions() {
           <Button
             variant="outline"
             size="icon"
-            className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
+            className='rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10'
             onClick={() =>
-              window.open(GITHUB_ISSUES_URL, "_blank", "noopener,noreferrer")
+              window.open(GITHUB_ISSUES_URL, '_blank', 'noopener,noreferrer')
             }
-            aria-label="Report an issue on GitHub"
+            aria-label={t('reportIssue')}
           >
             <Bug className="size-4" />
           </Button>
@@ -63,9 +65,9 @@ export default function FloatingActions() {
           <Button
             variant="outline"
             size="icon"
-            className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
+            className='rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10'
             onClick={() => setHelpOpen(true)}
-            aria-label="Open help"
+            aria-label={t('openHelp')}
           >
             <CircleHelp className="size-4" />
           </Button>
@@ -73,12 +75,12 @@ export default function FloatingActions() {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-200 bg-background border-border size-10"
+          className='rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all duration-200 bg-background border-border size-10'
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-label={menuOpen ? t('closeMenu') : t('openMenu')}
         >
           {menuOpen ? (
-            <X className="size-4" style={{ transform: "rotate(90deg)" }} />
+            <X className="size-4" style={{ transform: 'rotate(90deg)' }} />
           ) : (
             <Menu className="size-4" />
           )}

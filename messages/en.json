@@ -524,5 +524,12 @@
         "signature": "— from JIRoom"
       }
     }
+  },
+  "chrome": {
+    "reportIssue": "Report an issue on GitHub",
+    "openHelp": "Open help",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleTheme": "Toggle theme"
   }
 }
