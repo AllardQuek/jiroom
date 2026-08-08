@@ -1,22 +1,18 @@
 # JIRoom
 
-Stop forgetting which rental you visited yesterday. Your rental hunting brain - now digital.
-
-A web application that helps renters manage shortlisted room listings, apply consistent evaluation templates during viewings, capture notes, and make final decisions through visual comparison tools.
-
-Built from personal frustration with rental hunting chaos - trying to remember details from multiple viewings and make objective decisions.
+JIRoom helps renters organize rental listings, evaluate them consistently during viewings, and compare options before deciding.
 
 ## Quick Start
 
 1. 📋 **Add a listing**: Click "Add listing" on Listings page, paste URL from property portals like PropertyGuru, 99.co, or others
-2. 📝 **Evaluate**: Click listing card, fill evaluation criteria, see score calculate automatically
+2. 📝 **Evaluate**: Click a listing card, fill in evaluation criteria, and see scores calculated automatically
 3. ✅ **Decide**: Set verdict (Yes/Maybe/No) to move to decision columns
 
 💡 **Tip**: Use the sample data (flask icon 🧪) to explore features before adding your own listings.
 
 ## Why JIRoom?
 
-Rental hunting is chaotic. You're juggle multiple listings, struggle to remember details, and can't make objective decisions. JIRoom organizes the chaos:
+Rental hunting can be chaotic. You may juggle multiple listings, forget details, and struggle to compare options objectively. JIRoom helps by:
 
 | Frustration | Solution |
 |------------|----------|
@@ -56,13 +52,13 @@ Rental hunting is chaotic. You're juggle multiple listings, struggle to remember
 
 ## Tech Stack
 
-- **Framework**: Next.js 16.2.7 with React 19.2.4
-- **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 4
+- **Framework**: Next.js with React
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui (Radix UI primitives)
-- **State Management**: Zustand 5.0.14 with localStorage persistence
-- **Forms**: React Hook Form 7.77.0 with Zod 4.4.3 validation
-- **Icons**: Lucide React 1.17.0
+- **State Management**: Zustand with localStorage persistence
+- **Forms**: React Hook Form with Zod validation
+- **Icons**: Lucide React
 
 ## Installation
 
