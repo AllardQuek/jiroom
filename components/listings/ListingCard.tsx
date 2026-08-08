@@ -54,10 +54,15 @@ export function ListingCard({
 
   const viewing = viewings.find((v) => v.listing_id === listing.id);
   const hasVerdict = verdicts.some((v) => v.listing_id === listing.id);
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(0);
   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 60_000);
-    return () => clearInterval(id);
+    const update = () => setNow(Date.now());
+    const timeoutId = setTimeout(update, 0);
+    const intervalId = setInterval(update, 60_000);
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
   }, []);
   const isViewingOverdue =
     !hasVerdict && viewing?.scheduled_date

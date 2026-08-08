@@ -33,12 +33,12 @@ interface PriceInputProps {
  * ```
  */
 export function PriceInput({ field }: PriceInputProps) {
-  const [text, setText] = useState(() =>
-    field.value ? String(field.value) : ""
-  );
+  const { value, ...inputProps } = field;
+  const [text, setText] = useState(() => (value ? String(value) : ""));
 
   return (
     <Input
+      {...inputProps}
       type="text"
       inputMode="numeric"
       placeholder="0"
@@ -48,9 +48,6 @@ export function PriceInput({ field }: PriceInputProps) {
         setText(cleaned);
         field.onChange(cleaned === "" ? undefined : Number(cleaned));
       }}
-      onBlur={field.onBlur}
-      ref={field.ref}
-      name={field.name}
     />
   );
 }
