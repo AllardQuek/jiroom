@@ -47,10 +47,27 @@ test("Add listing button opens dialog", async ({ page }) => {
   await expect(page.getByText("Add New Listing")).toBeVisible();
 });
 
-test("Compare action button appears when two or more listings selected", async ({
+test("Compare action button appears after selecting second listing", async ({
   page,
 }) => {
+  await page.evaluate(() => {
+    localStorage.setItem(
+      "comparison-storage",
+      JSON.stringify({ state: { selectedListingIds: [] }, version: 0 })
+    );
+  });
+  await page.reload();
+  await page.waitForLoadState("networkidle");
+
   await page.getByRole("button", { name: "Compare" }).click();
+  await expect(page.getByRole("button", { name: "Cancel" })).toBeVisible();
+  await expect(page.getByText(/Compare \(\d+\)/)).toHaveCount(0);
+
+  const checkboxes = page.getByRole("checkbox");
+  await checkboxes.nth(0).click();
+  await expect(page.getByText(/Compare \(\d+\)/)).toHaveCount(0);
+
+  await checkboxes.nth(1).click();
   await expect(page.getByText(/Compare \(2\)/)).toBeVisible();
 });
 
