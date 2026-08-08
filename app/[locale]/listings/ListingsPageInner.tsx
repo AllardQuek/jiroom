@@ -56,14 +56,24 @@ export function ListingsPageInner() {
   const tProfile = useTranslations("tenantProfile.fields");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
-    null
+    () =>
+      typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("detail")
+        : null
   );
   const [backupStatus, setBackupStatus] = useState<{
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
-  const [seedMode, setSeedMode] = useState(false);
-  const [compact, setCompact] = useState(false);
+  const [seedMode, setSeedMode] = useState(() => {
+    if (typeof window === "undefined") return false;
+    if (sessionStorage.getItem("import-completed")) return false;
+    return isSeedModeActive();
+  });
+  const [compact, setCompact] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("compact-view") === "true";
+  });
   const [compareMode, setCompareMode] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [copyStatus, setCopyStatus] = useState<{
@@ -83,13 +93,6 @@ export function ListingsPageInner() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const saved = localStorage.getItem("compact-view");
-    if (saved === "true") {
-      setCompact(true);
-    }
-  }, []);
-
-  useEffect(() => {
     localStorage.setItem("compact-view", compact ? "true" : "false");
   }, [compact]);
   const searchParams = useSearchParams();
@@ -98,7 +101,6 @@ export function ListingsPageInner() {
   useEffect(() => {
     const detailId = searchParams.get("detail");
     if (detailId) {
-      setSelectedListingId(detailId);
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete("detail");
       router.replace(`/listings?${newParams.toString()}`, { scroll: false });
@@ -110,13 +112,7 @@ export function ListingsPageInner() {
       sessionStorage.removeItem("import-completed");
       localStorage.removeItem("seed-mode-active");
       localStorage.removeItem("user-data-backup");
-
-      setSeedMode(false);
-      return;
     }
-    // Seed data loading is now handled in useStoreInitialization hook
-
-    setSeedMode(isSeedModeActive());
   }, []);
   const selectedListingIds = useComparisonStore(
     (state) => state.selectedListingIds

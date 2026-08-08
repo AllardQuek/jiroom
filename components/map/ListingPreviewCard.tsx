@@ -11,7 +11,7 @@ import {
 import { Listing } from "@/types/listing";
 import { Eye, ExternalLink } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 import { TakenBadge } from "@/components/listings/TakenBadge";
 import { TakenTooltip } from "@/components/listings/TakenTooltip";
 import {
@@ -48,12 +48,12 @@ export function ListingPreviewCard({
   onViewDetails,
 }: ListingPreviewCardProps) {
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const resolvedTheme = (theme as "light" | "dark") || "light";
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const evaluation = useEvaluationStore((state) =>
     state.getEvaluationByListingId(listing.id)

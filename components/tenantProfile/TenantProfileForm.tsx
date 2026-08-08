@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTenantProfileStore } from "@/store/tenantProfileStore";
 import { TenantProfile } from "@/types/tenantProfile";
 import { Button } from "@/components/ui/button";
@@ -58,11 +58,6 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
 
   const [formData, setFormData] = useState<TenantProfile>(profile);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFormData(profile);
-  }, [profile]);
 
   const handleChange = (field: keyof TenantProfile, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

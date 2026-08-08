@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
@@ -20,12 +20,6 @@ export function InlineNotes({
   const [localValue, setLocalValue] = useState(notes);
   const t = useTranslations("notes");
   const locale = useLocale();
-
-  useEffect(() => {
-    // Sync local state when the prop changes (e.g., external update)
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLocalValue(notes);
-  }, [notes]);
 
   const displayLabel = label ?? t("label");
 

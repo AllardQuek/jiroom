@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
@@ -16,12 +16,6 @@ export function VerdictReasoning({
   const [localValue, setLocalValue] = useState(reasoning);
   const t = useTranslations("verdict");
 
-  useEffect(() => {
-    // Sync local state when the prop changes (e.g., external update)
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setLocalValue(reasoning);
-  }, [reasoning]);
-
   const handleBlur = () => {
     if (localValue !== reasoning) {
       onReasoningChange(localValue);
@@ -29,10 +23,8 @@ export function VerdictReasoning({
   };
 
   return (
-    <div className="space-y-1.5">
-      <span className="text-xs font-medium text-muted-foreground">
-        {t("reasoning")}
-      </span>
+    <div className="space-y-2">
+      <label className="text-sm font-medium">{t("reasoning")}</label>
       <AutoResizeTextarea
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}
