@@ -14,7 +14,7 @@ test("page title and description are visible", async ({ page }) => {
     page.locator("h1").filter({ hasText: "My Listings" }).first()
   ).toBeVisible();
   await expect(
-    page.getByText("JIRA for rental search. Press ? for help.")
+    page.getByText("JIRA for rental search. Press ? for help.").first()
   ).toBeVisible();
 });
 

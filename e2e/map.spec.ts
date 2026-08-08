@@ -60,7 +60,7 @@ test.describe("M1a — Map UX Enhancements", () => {
   });
 
   test("search input is present", async ({ page }) => {
-    await expect(page.getByPlaceholder("Search location...")).toBeVisible();
+    await expect(page.getByPlaceholder("Search location")).toBeVisible();
   });
 });
 

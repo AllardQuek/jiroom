@@ -29,16 +29,18 @@ test("navigating to Map tab updates active state", async ({ page }) => {
 test("navigating to Compare tab", async ({ page }) => {
   await page.getByRole("link", { name: "Compare" }).first().click();
   await page.waitForURL("**/compare");
+  await page.waitForLoadState("networkidle");
   await expect(
-    page.getByRole("heading", { name: /compare/i }).first()
+    page.getByRole("heading", { name: "No listings selected" }).first()
   ).toBeVisible();
 });
 
 test("navigating to Schedule tab", async ({ page }) => {
   await page.getByRole("link", { name: "My Schedule" }).first().click();
   await page.waitForURL("**/schedule");
+  await page.waitForLoadState("networkidle");
   await expect(
-    page.getByRole("heading", { name: /my schedule/i }).first()
+    page.getByRole("heading", { name: "No viewings scheduled" }).first()
   ).toBeVisible();
 });
 
