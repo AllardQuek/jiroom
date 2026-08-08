@@ -22,7 +22,7 @@ interface Suggestion {
       fetchFields: (opts: { fields: string[] }) => Promise<void>;
       displayName?: { text?: string } | string;
       formattedAddress?: string;
-      location?: google.maps.LatLng | null;
+      location?: { lat: () => number; lng: () => number } | null;
       addressComponents?: Array<{
         longText: string;
         shortText: string;

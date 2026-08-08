@@ -1,5 +1,10 @@
+export interface LatLngLike {
+  lat: number;
+  lng: number;
+}
+
 export interface RouteResultData {
-  path: google.maps.LatLngAltitude[];
+  path: LatLngLike[];
   durationText: string;
 }
 
