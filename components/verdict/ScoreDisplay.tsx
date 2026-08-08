@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { useListingStore } from "@/store/listingStore";
@@ -23,6 +24,7 @@ function netColor(net: number) {
 }
 
 export function ScoreDisplay({ listingId }: ScoreDisplayProps) {
+  const t = useTranslations("evaluation");
   const evaluation = useEvaluationStore((state) =>
     state.getEvaluationByListingId(listingId)
   );
@@ -40,7 +42,7 @@ export function ScoreDisplay({ listingId }: ScoreDisplayProps) {
   if (score === null) {
     return (
       <div className="text-sm text-muted-foreground">
-        No evaluation score available
+        {t("noScoreAvailable")}
       </div>
     );
   }
@@ -48,7 +50,7 @@ export function ScoreDisplay({ listingId }: ScoreDisplayProps) {
   return (
     <div>
       <div className="flex items-baseline gap-1">
-        <span className="text-sm text-muted-foreground">Score:</span>
+        <span className="text-sm text-muted-foreground">{t("score")}:</span>
         <span
           className={`text-2xl font-bold tabular-nums ${netColor(score.net)}`}
         >
@@ -64,7 +66,7 @@ export function ScoreDisplay({ listingId }: ScoreDisplayProps) {
         )}
         {score.neutrals > 0 && <span>{score.neutrals}—</span>}
         <span className="text-muted-foreground/40">
-          · {score.answered} scored
+          · {t("scored", { count: score.answered })}
         </span>
       </div>
     </div>

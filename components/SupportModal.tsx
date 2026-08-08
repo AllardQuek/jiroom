@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,30 +15,10 @@ import { Label } from "@/components/ui/label";
 import { Star, Bug, Share2 } from "lucide-react";
 
 const TIERS = [
-  {
-    label: "1",
-    amount: 1,
-    message: "That's a bus fare to the next viewing — thank you!",
-    qr: "/support/paynow-1-sgd.jpg",
-  },
-  {
-    label: "2",
-    amount: 2,
-    message: "That's an iced kopi from the nearest hawker — thank you!",
-    qr: "/support/paynow-2-sgd.jpg",
-  },
-  {
-    label: "5",
-    amount: 5,
-    message: "That's a kopi after a bad viewing — thank you!",
-    qr: "/support/paynow-5-sgd.jpg",
-  },
-  {
-    label: "?",
-    amount: null,
-    message: "A well-deserved lunch between viewings..?",
-    qr: "/support/paynow-custom-sgd.jpg",
-  },
+  { label: "1", amount: 1, qr: "/support/paynow-1-sgd.jpg" },
+  { label: "2", amount: 2, qr: "/support/paynow-2-sgd.jpg" },
+  { label: "5", amount: 5, qr: "/support/paynow-5-sgd.jpg" },
+  { label: "?", amount: null, qr: "/support/paynow-custom-sgd.jpg" },
 ];
 
 interface SupportModalProps {
@@ -51,6 +32,8 @@ export default function SupportModal({
   open,
   onOpenChange,
 }: SupportModalProps) {
+  const t = useTranslations("support.modal");
+  const tierMessages = t.raw("tiers") as Record<string, { message: string }>;
   const [selected, setSelected] = useState<(typeof TIERS)[number] | null>(null);
   const [note, setNote] = useState("");
 
@@ -68,8 +51,8 @@ export default function SupportModal({
     const url = typeof window !== "undefined" ? window.location.origin : "";
     if (navigator.share) {
       await navigator.share({
-        title: "JIRoom",
-        text: "JIRoom helped my rental hunt in Singapore.",
+        title: t("share.title"),
+        text: t("share.text"),
         url,
       });
       return;
@@ -84,12 +67,13 @@ export default function SupportModal({
 
     const tipLine = selected
       ? selected.amount
-        ? `I also sent a S$${selected.amount} tip via PayNow.`
-        : "I also sent a custom tip via PayNow."
-      : "No tip selected.";
+        ? t("email.tipWithAmount", { amount: selected.amount })
+        : t("email.tipCustom")
+      : t("email.noTip");
 
-    const body = `${note.trim()}\n\n${tipLine}\n\n— from JIRoom`;
-    const subject = "A note for JIRoom";
+    const signature = t("email.signature");
+    const body = `${note.trim()}\n\n${tipLine}\n\n${signature}`;
+    const subject = t("email.subject");
 
     window.location.href = `mailto:${supportEmail}?subject=${encodeURIComponent(
       subject
@@ -100,21 +84,21 @@ export default function SupportModal({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md sm:max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Enjoying JIRoom?</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            JIRoom is{" "}
-            <a
-              href="https://github.com/AllardQuek/jiroom"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-foreground transition-colors"
-            >
-              free and open-source
-            </a>
-            .{" "}
-            {showNote
-              ? "A quick note means a lot — and a small tip helps keep it running."
-              : "If it helped your rental hunt, a small tip or share goes a long way."}
+            {t.rich("description", {
+              hasNote: showNote ? "yes" : "other",
+              link: (chunks) => (
+                <a
+                  href="https://github.com/AllardQuek/jiroom"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-foreground transition-colors"
+                >
+                  {chunks}
+                </a>
+              ),
+            })}
           </DialogDescription>
         </DialogHeader>
 
@@ -122,25 +106,32 @@ export default function SupportModal({
           {showNote && (
             <div className="space-y-3">
               <Label htmlFor="support-note" className="text-sm">
-                Say thanks or share a thought
+                {t("noteLabel")}
               </Label>
               <textarea
                 id="support-note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 maxLength={200}
-                placeholder="A quick thanks, bug, or hello..."
+                placeholder={t("notePlaceholder")}
                 className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
               />
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs text-muted-foreground/80">
-                  Opens your email app. If not, send to{" "}
-                  <a href={`mailto:${supportEmail}`} className="underline">
-                    {supportEmail}
-                  </a>
+                  {t.rich("noteHelper", {
+                    email: supportEmail ?? "",
+                    emailLink: (chunks) => (
+                      <a
+                        href={`mailto:${supportEmail ?? ""}`}
+                        className="underline"
+                      >
+                        {chunks}
+                      </a>
+                    ),
+                  })}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  {note.length} / 200
+                  {t("noteCounter", { count: note.length })}
                 </span>
               </div>
               <Button
@@ -150,14 +141,15 @@ export default function SupportModal({
                 disabled={!note.trim()}
                 className="w-full sm:w-auto"
               >
-                Send note
+                {t("sendNote")}
               </Button>
             </div>
           )}
 
           <div className="space-y-2">
             <p className="text-center text-sm text-muted-foreground">
-              Add a tip <span className="text-xs">(S$)</span>
+              {t("tipLabel")}{" "}
+              <span className="text-xs">({t("tipCurrency")})</span>
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {TIERS.map((tier) => {
@@ -169,7 +161,11 @@ export default function SupportModal({
                     variant={isSelected ? "default" : "outline"}
                     onClick={() => setSelected(tier)}
                     className="h-14 w-14 rounded-full p-0 text-lg"
-                    aria-label={tier.amount ? `S$${tier.amount} tip` : "Custom tip"}
+                    aria-label={
+                      tier.amount
+                        ? t("tierAmountLabel", { amount: tier.amount })
+                        : t("customTipLabel")
+                    }
                   >
                     {tier.label}
                   </Button>
@@ -181,12 +177,16 @@ export default function SupportModal({
           {selected && (
             <div className="space-y-3">
               <p className="text-sm text-center text-muted-foreground">
-                {selected.message}
+                {tierMessages[selected.label]?.message}
               </p>
               <div className="flex justify-center bg-white p-2 rounded-lg shadow">
                 <Image
                   src={selected.qr}
-                  alt={`PayNow QR for ${selected.amount ? `SGD ${selected.amount}` : "a custom amount"}`}
+                  alt={
+                    selected.amount
+                      ? t("qrAltAmount", { amount: selected.amount })
+                      : t("qrAltCustom")
+                  }
                   width={645}
                   height={717}
                   className="w-56 h-auto rounded"
@@ -205,7 +205,7 @@ export default function SupportModal({
               onClick={handleShare}
             >
               <Share2 className="size-4" />
-              Share
+              {t("share.button")}
             </Button>
             <Button asChild variant="outline" size="sm" className="gap-1">
               <a
@@ -214,7 +214,7 @@ export default function SupportModal({
                 rel="noopener noreferrer"
               >
                 <Star className="size-4" />
-                Star on GitHub
+                {t("star")}
               </a>
             </Button>
             <Button asChild variant="outline" size="sm" className="gap-1">
@@ -224,7 +224,7 @@ export default function SupportModal({
                 rel="noopener noreferrer"
               >
                 <Bug className="size-4" />
-                Report an issue
+                {t("report")}
               </a>
             </Button>
           </div>

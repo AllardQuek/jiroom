@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Template } from "@/types/evaluation";
 import { useTemplateStore } from "@/store/templateStore";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,6 +32,8 @@ export function TemplateEditor({
   onEditCriteria,
   onDeleteCriteria,
 }: TemplateEditorProps) {
+  const t = useTranslations("templates");
+  const tCommon = useTranslations("common");
   const [name, setName] = useState(template.name);
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
 
@@ -62,7 +65,7 @@ export function TemplateEditor({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Edit Template</DialogTitle>
+          <DialogTitle>{t("editor.editTemplate")}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-5">
@@ -71,13 +74,13 @@ export function TemplateEditor({
               htmlFor="template-name"
               className="text-xs font-medium text-muted-foreground"
             >
-              Name
+              {t("editor.nameLabel")}
             </Label>
             <Input
               id="template-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Template name"
+              placeholder={t("editor.namePlaceholder")}
               className="h-8 text-sm"
             />
           </div>
@@ -103,14 +106,14 @@ export function TemplateEditor({
               onClick={() => onAddCriteria("General")}
               className="text-xs text-muted-foreground"
             >
-              + Add criteria
+              + {t("editor.addCriteria")}
             </Button>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={handleCancel}>
-                Cancel
+                {tCommon("cancel")}
               </Button>
               <Button size="sm" onClick={handleSave}>
-                Save Changes
+                {t("editor.saveChanges")}
               </Button>
             </div>
           </div>

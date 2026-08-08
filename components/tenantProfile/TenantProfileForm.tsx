@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTenantProfileStore } from "@/store/tenantProfileStore";
 import { TenantProfile } from "@/types/tenantProfile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { Check } from "lucide-react";
 
 interface TenantProfileFormProps {
@@ -59,10 +58,6 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
 
   const [formData, setFormData] = useState<TenantProfile>(profile);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
-
-  useEffect(() => {
-    setFormData(profile);
-  }, [profile]);
 
   const handleChange = (field: keyof TenantProfile, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

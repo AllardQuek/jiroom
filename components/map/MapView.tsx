@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import {
-  Map,
-  AdvancedMarker,
-  InfoWindow,
-  Pin,
-} from "@vis.gl/react-google-maps";
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
+import { Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { useListingStore } from "@/store/listingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
@@ -14,13 +16,7 @@ import { useAnchorStore } from "@/store/anchorStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import { getScoringPrice } from "@/lib/utils";
-import {
-  STATUS_COLORS,
-  AREA_PALETTE,
-  getAnchorColors,
-  getStatusColors,
-  getAreaPalette,
-} from "@/lib/constants/colors";
+import { getStatusColors, getAreaPalette } from "@/lib/constants/colors";
 import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
@@ -30,7 +26,7 @@ import { MarkerColorToggle } from "./MarkerColorToggle";
 import type { ColorMode } from "./MarkerColorToggle";
 import { RoutePolyline } from "./RoutePolyline";
 import { TravelModeToggle } from "./TravelModeToggle";
-import { CommuteInfo, type RouteData } from "@/components/distance/CommuteInfo";
+import { CommuteInfo } from "@/components/distance/CommuteInfo";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
 import { getCachedRoute } from "@/lib/utils/routeCache";
 import AnchorMarker from "./AnchorMarker";
@@ -119,11 +115,12 @@ export default function MapView({ onViewDetails }: MapViewProps) {
     y: number;
   } | null>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isTouchDevice = useMemo(
+  const isTouchDevice = useSyncExternalStore(
+    () => () => {},
     () =>
       typeof window !== "undefined" &&
       ("ontouchstart" in window || navigator.maxTouchPoints > 0),
-    []
+    () => false
   );
   const [colorMode, setColorMode] = useState<ColorMode>("area");
   const visibleAnchors = useMemo(
@@ -204,7 +201,8 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       const evaluation = evaluations.find((e) => e.listing_id === l.id);
       const scoreNet =
         evaluation && template
-          ? (calculateScore(evaluation.responses, template, getScoringPrice(l, evaluation))?.net ?? null)
+          ? (calculateScore(evaluation.responses, template, getScoringPrice(l))
+              ?.net ?? null)
           : null;
 
       if (
@@ -521,7 +519,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             />
             <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_var(--shadow-panel)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-80 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
               <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
-                <h2 className="text-sm font-semibold">Anchor Details</h2>
+                <h2 className="text-sm font-semibold">{t("anchorDetails")}</h2>
                 <button
                   onClick={() => setSelectedAnchor(null)}
                   className="p-1 -mr-1 text-muted-foreground hover:text-foreground"

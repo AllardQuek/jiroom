@@ -37,11 +37,11 @@ export function GuidePage() {
 
       <div className="flex-1 min-h-0">
         <JourneyMap
-            nodes={INITIAL_NODES}
-            edges={INITIAL_EDGES}
-            expandedNodeIds={expandedNodeIds}
-            onNodeClick={handleToggleNode}
-          />
+          nodes={INITIAL_NODES}
+          edges={INITIAL_EDGES}
+          expandedNodeIds={expandedNodeIds}
+          onNodeClick={handleToggleNode}
+        />
       </div>
     </div>
   );

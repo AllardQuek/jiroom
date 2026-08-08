@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import SupportModal from "./SupportModal";
@@ -12,6 +13,7 @@ interface SupportButtonProps {
 export default function SupportButton({
   variant = "chip",
 }: SupportButtonProps) {
+  const t = useTranslations("support.button");
   const [open, setOpen] = useState(false);
 
   if (variant === "icon") {
@@ -23,7 +25,7 @@ export default function SupportButton({
           size="icon"
           className="rounded-full shadow-lg hover:shadow-xl hover:bg-accent hover:text-accent-foreground hover:scale-110 active:scale-95 transition-all bg-background border-border size-10"
           onClick={() => setOpen(true)}
-          aria-label="Support JIRoom"
+          aria-label={t("iconLabel")}
         >
           <Heart className="size-4" />
         </Button>
@@ -41,7 +43,7 @@ export default function SupportButton({
         onClick={() => setOpen(true)}
       >
         <Heart className="size-3" />
-        Enjoying JIRoom?
+        {t("chipLabel")}
       </Button>
       <SupportModal open={open} onOpenChange={setOpen} />
     </>

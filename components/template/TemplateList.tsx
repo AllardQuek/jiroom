@@ -1,6 +1,7 @@
 "use client";
 
 import { useTemplateStore } from "@/store/templateStore";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2, Plus, FileText } from "lucide-react";
 
@@ -15,6 +16,7 @@ export function TemplateList({
   onCreate,
   onDelete,
 }: TemplateListProps) {
+  const t = useTranslations("templates");
   const templates = useTemplateStore((state) => state.templates);
 
   if (templates.length === 0) {
@@ -24,14 +26,14 @@ export function TemplateList({
           <FileText size={20} className="text-muted-foreground/50" />
         </div>
         <div>
-          <p className="text-sm font-medium">No templates</p>
+          <p className="text-sm font-medium">{t("list.noTemplates")}</p>
           <p className="text-xs text-muted-foreground/60 mt-0.5">
-            Create one to start scoring listings
+            {t("list.noTemplatesHint")}
           </p>
         </div>
         <Button size="sm" onClick={onCreate}>
           <Plus className="w-4 h-4 mr-1.5" />
-          Create Template
+          {t("list.createTemplate")}
         </Button>
       </div>
     );
@@ -51,7 +53,7 @@ export function TemplateList({
             <div className="min-w-0">
               <p className="text-sm font-medium truncate">{template.name}</p>
               <p className="text-xs text-muted-foreground/50">
-                {template.criteria.length} {template.criteria.length === 1 ? "criterion" : "criteria"}
+                {t("list.criterion", { count: template.criteria.length })}
               </p>
             </div>
           </div>

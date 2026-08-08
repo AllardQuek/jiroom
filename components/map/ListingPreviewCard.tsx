@@ -6,13 +6,12 @@ import { getDisplayPrice, getScoringPrice } from "@/lib/utils";
 import {
   STATUS_COLORS,
   VERDICT_STYLES,
-  getStatusColors,
   getVerdictStyles,
 } from "@/lib/constants/colors";
 import { Listing } from "@/types/listing";
 import { Eye, ExternalLink } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 import { TakenBadge } from "@/components/listings/TakenBadge";
 import { TakenTooltip } from "@/components/listings/TakenTooltip";
 import {
@@ -49,12 +48,12 @@ export function ListingPreviewCard({
   onViewDetails,
 }: ListingPreviewCardProps) {
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const resolvedTheme = (theme as "light" | "dark") || "light";
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const evaluation = useEvaluationStore((state) =>
     state.getEvaluationByListingId(listing.id)
@@ -65,12 +64,11 @@ export function ListingPreviewCard({
   const isNegotiated = listing.negotiated_price !== undefined;
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, getScoringPrice(listing, evaluation))
+      ? calculateScore(evaluation.responses, template, getScoringPrice(listing))
       : null;
   const verdict = useVerdictStore((s) =>
     s.verdicts.find((v) => v.listing_id === listing.id)
   );
-  const statusColors = mounted ? getStatusColors(resolvedTheme) : STATUS_COLORS;
   const verdictStyles = mounted
     ? getVerdictStyles(resolvedTheme)
     : VERDICT_STYLES;
@@ -114,7 +112,7 @@ export function ListingPreviewCard({
                     ? verdictStyle.label
                     : listing.status.replace("_", " ")}
                 </span>
-                {isTaken && <TakenBadge takenDate={listing.taken_date} />}
+                {isTaken && <TakenBadge />}
                 {score !== null && (
                   <span
                     className={`text-[11px] font-semibold tabular-nums ${

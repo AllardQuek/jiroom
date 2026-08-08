@@ -22,7 +22,7 @@ export function MapTooltip({ listing, x, y }: MapTooltipProps) {
   const isNegotiated = listing.negotiated_price !== undefined;
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, getScoringPrice(listing, evaluation))
+      ? calculateScore(evaluation.responses, template, getScoringPrice(listing))
       : null;
 
   return (

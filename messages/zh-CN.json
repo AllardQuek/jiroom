@@ -50,10 +50,10 @@
     "exportFailed": "导出失败",
     "restoredReloading": "已恢复，正在刷新...",
     "invalidFile": "无效文件",
-    "noActiveTemplate": "没有活跃的问题模板",
+    "noActiveTemplate": "没有活跃的问题模板。请在设置中设置一个。",
     "questionsCopied": "问题已复制到剪贴板",
     "profileCopied": "资料已复制到剪贴板",
-    "profileEmpty": "资料为空",
+    "profileEmpty": "资料为空。请在设置中填写。",
     "failedToCopy": "复制失败",
     "columns": {
       "toView": "待看房",
@@ -124,7 +124,8 @@
       "noDate": "无日期",
       "noDateSet": "未设定日期",
       "overdue": "已逾期",
-      "notes": "备注"
+      "notes": "备注",
+      "scheduledViewing": "已安排看房"
     },
     "form": {
       "addTitle": "添加房源",
@@ -144,7 +145,7 @@
     },
     "delete": {
       "title": "删除房源",
-      "confirm": "确定要删除此房源吗？",
+      "confirm": "确定要删除 \"{title}\" 吗？",
       "cannotUndo": "此操作无法撤销。"
     },
     "detail": {
@@ -154,7 +155,63 @@
       "notFound": "找不到房源，可能已被删除。",
       "backToListings": "返回房源列表",
       "listingNotes": "房源备注"
-    }
+    },
+    "create": {
+      "listingUrl": "房源链接",
+      "listingUrlPlaceholder": "粘贴 PropertyGuru、99.co 等链接",
+      "listingUrlDescription": "自动填充来源平台",
+      "duplicateUrlWarning": "该链接已存在于您的房源中",
+      "title": "标题",
+      "titlePlaceholder": "房源标题",
+      "titleDescription": "按需编辑",
+      "location": "地址",
+      "locationRequired": "地址",
+      "locationDescription": "自动填充标题",
+      "area": "区域",
+      "areaPlaceholder": "选择或输入区域",
+      "initialPrice": "初始价格（新币）",
+      "negotiatedPrice": "协商价格（新币）",
+      "platform": "平台",
+      "platformPlaceholder": "自动检测",
+      "notes": "备注",
+      "notesPlaceholder": "添加备注、联系方式或想法",
+      "scheduleViewing": "安排看房",
+      "optional": "（可选）",
+      "set": "已设置",
+      "evaluation": "评估",
+      "saving": "保存中...",
+      "addListing": "添加房源"
+    },
+    "edit": {
+      "sourceUrl": "来源链接",
+      "sourceUrlPlaceholder": "https://example.com/listing",
+      "title": "标题",
+      "titlePlaceholder": "房源标题",
+      "initialPrice": "初始价格",
+      "initialPriceRequired": "初始价格",
+      "negotiatedPrice": "协商价格",
+      "location": "地址",
+      "locationRequired": "地址",
+      "locationDescription": "更新标题",
+      "area": "区域",
+      "areaPlaceholder": "选择或输入区域",
+      "platform": "来源平台",
+      "platformPlaceholder": "自动检测",
+      "status": "状态",
+      "statusPlaceholder": "选择状态",
+      "statusNew": "新",
+      "statusToView": "待看房",
+      "statusViewed": "已看房",
+      "markAsTaken": "标记为已租",
+      "takenDescription": "该房源不再可用",
+      "date": "日期",
+      "datePlaceholder": "选择已租日期",
+      "saving": "保存中...",
+      "saveChanges": "保存更改"
+    },
+    "sortTitle": "排序房源",
+    "taken": "已租",
+    "takenOn": "于 {date} 已租"
   },
   "evaluation": {
     "title": "评估",
@@ -172,11 +229,14 @@
       "neutral": "一般 - 优缺点参半",
       "belowAverage": "较差 - 主要顾虑",
       "poor": "差 - 决定性因素"
-    }
+    },
+    "noScoreAvailable": "暂无评估分数",
+    "scored": "{count} 项已评分"
   },
   "map": {
     "title": "地图",
-    "searchPlaceholder": "搜索位置...",
+    "searchPlaceholder": "搜索位置",
+    "placePlaceholder": "输入地址",
     "addListing": "添加房源",
     "addAnchor": "添加锚点",
     "listingDetails": "房源详情",
@@ -184,8 +244,8 @@
     "editAnchor": "编辑锚点",
     "listing": "房源",
     "anchor": "锚点",
-    "noCoordsWarning": "{count} 个房源缺少地图坐标 \u2014 编辑以添加位置",
-    "noCoordsWarningPlural": "{count} 个房源缺少地图坐标 \u2014 编辑以添加位置",
+    "noCoordsWarning": "{count} 个房源缺少地图坐标 — 编辑以添加位置",
+    "noCoordsWarningPlural": "{count} 个房源缺少地图坐标 — 编辑以添加位置",
     "commute": {
       "title": "通勤",
       "driving": "驾车",
@@ -250,11 +310,15 @@
       "min": "分钟",
       "hint": "选择一个锚点并设置最长通勤时间，只显示该行程时间内的房源。通勤路线使用 Google Maps 按需计算。",
       "setMaxHint": "设置最长通勤时间以筛选地图上的房源"
-    }
+    },
+    "addressLabel": "地址：{address}",
+    "anchorDetails": "锚点详情",
+    "areas": "区域",
+    "unknown": "未知"
   },
   "compare": {
     "title": "对比",
-    "selectListings": "从看板选择 2\u20133 个房源进行并排对比。",
+    "selectListings": "从看板选择 2–3 个房源进行并排对比。",
     "noSelection": "未选择房源",
     "highestScore": "最高评分",
     "criteria": "标准",
@@ -282,7 +346,38 @@
     "viewingsCountPlural": "已安排 {count} 次看房",
     "today": "今天",
     "tomorrow": "明天",
-    "pastPrefix": "已过 —"
+    "pastPrefix": "已过 —",
+    "date": "日期",
+    "time": "时间",
+    "datePlaceholder": "选择日期",
+    "update": "更新",
+    "schedule": "安排",
+    "cancelSchedule": "取消安排",
+    "am": "上午",
+    "pm": "下午",
+    "saving": "保存中...",
+    "viewing": "看房",
+    "notScheduledYet": "尚未安排",
+    "noDateScheduled": "未安排日期",
+    "removeDate": "移除日期"
+  },
+  "notes": {
+    "label": "备注",
+    "placeholder": "添加备注. 使用 '-' 作为项目符号",
+    "updated": "{time} 更新",
+    "justNow": "刚刚",
+    "minAgo": "{count, plural, one {{count} 分钟前} other {{count} 分钟前}}",
+    "allNotes": "全部备注"
+  },
+  "verdict": {
+    "reasoning": " verdict 理由",
+    "reasoningPlaceholder": "添加您对 verdict 的理由",
+    "title": "裁决",
+    "notSetYet": "尚未设定",
+    "clear": "清除裁决",
+    "yes": "是",
+    "maybe": "也许",
+    "no": "否"
   },
   "settings": {
     "title": "设置",
@@ -471,5 +566,225 @@
   "guide": {
     "title": "新加坡租房指南",
     "subtitle": "您的互动式租房导览"
+  },
+  "support": {
+    "button": {
+      "chipLabel": "喜欢 JIRoom 吗？",
+      "iconLabel": "支持 JIRoom"
+    },
+    "modal": {
+      "title": "喜欢 JIRoom 吗？",
+      "description": "JIRoom 是<link>免费开源</link>的。{hasNote, select, yes {一句感谢意义重大，小费也能帮助我们持续运行。} other {如果它帮到了您的租房之旅，一笔小费或分享都将意义非凡。}}",
+      "noteLabel": "写句感谢或分享想法",
+      "notePlaceholder": "一句感谢、问题反馈或问候",
+      "noteHelper": "将打开您的邮件应用。若未打开，请发送至 <emailLink>{email}</emailLink>",
+      "noteCounter": "{count} / 200",
+      "sendNote": "发送留言",
+      "tipLabel": "打赏",
+      "tipCurrency": "新元",
+      "tierAmountLabel": "新币 {amount} 元小费",
+      "customTipLabel": "自定义金额",
+      "qrAltAmount": "PayNow 二维码：{amount} 新元",
+      "qrAltCustom": "PayNow 二维码：自定义金额",
+      "tiers": {
+        "1": {
+          "label": "1",
+          "message": "这够坐下一趟公交去看房了——谢谢！"
+        },
+        "2": {
+          "label": "2",
+          "message": "这能在附近的熟食中心买杯冰咖啡——谢谢！"
+        },
+        "5": {
+          "label": "5",
+          "message": "看完一次糟糕的看房后值得来杯咖啡——谢谢！"
+        },
+        "?": {
+          "label": "?",
+          "message": "看房间隙犒劳自己一顿午饭？"
+        }
+      },
+      "share": {
+        "title": "JIRoom",
+        "text": "JIRoom 帮助我在新加坡租房。",
+        "button": "分享"
+      },
+      "star": "在 GitHub 上标星",
+      "report": "报告问题",
+      "email": {
+        "subject": "给 JIRoom 的留言",
+        "noTip": "未选择小费。",
+        "tipWithAmount": "我还通过 PayNow 发送了新币 {amount} 元的小费。",
+        "tipCustom": "我还通过 PayNow 发送了一笔自定义金额的小费。",
+        "signature": "——来自 JIRoom"
+      }
+    }
+  },
+  "chrome": {
+    "reportIssue": "在 GitHub 上报告问题",
+    "openHelp": "打开帮助",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "toggleTheme": "切换主题"
+  },
+  "anchors": {
+    "title": "锚点",
+    "addAnchor": "添加锚点",
+    "editAnchor": "编辑锚点",
+    "saveChanges": "保存更改",
+    "sortBy": "排序方式：",
+    "sort": "排序：",
+    "name": "名称",
+    "type": "类型",
+    "noAnchors": "暂无锚点",
+    "noAnchorsHintList": "从地图或此页面添加锚点",
+    "noAnchorsHintPanel": "从地图搜索添加锚点",
+    "anchorCount": "{count, plural, one {# 个锚点} other {# 个锚点}}",
+    "form": {
+      "namePlaceholder": "例如：我的办公室、家、裕廊东地铁站",
+      "customTypeLabel": "自定义类型标签",
+      "customTypePlaceholder": "例如：健身房、父母家",
+      "color": "颜色",
+      "location": "位置",
+      "locationHint": "搜索以设置锚点位置"
+    },
+    "types": {
+      "home": "家",
+      "work": "工作地点",
+      "school": "学校",
+      "station": "地铁站",
+      "custom": "自定义"
+    }
+  },
+  "templates": {
+    "criteriaForm": {
+      "name": "标准名称",
+      "namePlaceholder": "例如：房间大小",
+      "description": "描述",
+      "descriptionPlaceholder": "简要描述",
+      "inputType": "输入类型",
+      "inputTypePlaceholder": "选择类型",
+      "checkbox": "复选框（是/否）",
+      "rating": "评分（1-5）",
+      "number": "数字",
+      "text": "文本",
+      "select": "下拉选项",
+      "category": "分类",
+      "categoryPlaceholder": "选择分类",
+      "options": "选项（逗号分隔）",
+      "optionsPlaceholder": "例如：选项1, 选项2, 选项3",
+      "scoreMapping": "每个选项的评分映射",
+      "scoringThresholds": "评分阈值",
+      "addRange": "添加区间",
+      "noThresholds": "未定义阈值 — 该标准将不贡献评分。",
+      "min": "最小",
+      "max": "最大",
+      "saving": "保存中...",
+      "saveCriteria": "保存标准"
+    },
+    "criteriaItem": {
+      "checkbox": "复选框",
+      "rating": "评分",
+      "number": "数字",
+      "text": "文本",
+      "select": "下拉",
+      "derived": "派生",
+      "scoring": "评分",
+      "addRange": "添加区间",
+      "min": "最小",
+      "max": "最大",
+      "checkboxScoring": "是 = +1，否 = -1，不适用 = 不计入",
+      "ratingScoring": "1-2 = -1，3 = 0，4-5 = +1",
+      "scoringDetails": "评分详情"
+    },
+    "editor": {
+      "editTemplate": "编辑模板",
+      "nameLabel": "名称",
+      "namePlaceholder": "模板名称",
+      "addCriteria": "添加标准",
+      "saveChanges": "保存更改"
+    },
+    "list": {
+      "noTemplates": "暂无模板",
+      "noTemplatesHint": "创建一个模板以开始为房源评分",
+      "createTemplate": "创建模板",
+      "criterion": "{count, plural, one {# 个标准} other {# 个标准}}"
+    }
+  },
+  "agentQuestions": {
+    "editor": {
+      "editTemplate": "编辑问题模板",
+      "nameLabel": "名称",
+      "namePlaceholder": "模板名称",
+      "questionsLabel": "问题（每行一个）",
+      "questionsPlaceholder": "访客：\n是否包含烘干机：\n空调使用限制：",
+      "questionCount": "{count, plural, one {# 个问题} other {# 个问题}}",
+      "saveChanges": "保存更改"
+    },
+    "list": {
+      "noTemplates": "暂无问题模板",
+      "noTemplatesHint": "创建一个模板以快速复制问题给中介",
+      "createTemplate": "创建模板",
+      "setAsActive": "设为活跃",
+      "questionCount": "{count, plural, one {# 个问题} other {# 个问题}}"
+    }
+  },
+  "_listings": {
+    "create": {
+      "listingUrl": "房源链接",
+      "listingUrlPlaceholder": "粘贴 PropertyGuru、99.co 等链接",
+      "listingUrlDescription": "自动填充来源平台",
+      "duplicateUrlWarning": "该链接已存在于您的房源中",
+      "title": "标题",
+      "titlePlaceholder": "房源标题",
+      "titleDescription": "按需编辑",
+      "location": "地址",
+      "locationRequired": "地址",
+      "locationDescription": "自动填充标题",
+      "area": "区域",
+      "areaPlaceholder": "选择或输入区域",
+      "initialPrice": "初始价格（新币）",
+      "negotiatedPrice": "协商价格（新币）",
+      "platform": "平台",
+      "platformPlaceholder": "自动检测",
+      "notes": "备注",
+      "notesPlaceholder": "添加备注、联系方式或想法",
+      "scheduleViewing": "安排看房",
+      "optional": "（可选）",
+      "set": "已设置",
+      "evaluation": "评估",
+      "saving": "保存中...",
+      "addListing": "添加房源"
+    },
+    "edit": {
+      "sourceUrl": "来源链接",
+      "sourceUrlPlaceholder": "https://example.com/listing",
+      "title": "标题",
+      "titlePlaceholder": "房源标题",
+      "initialPrice": "初始价格",
+      "initialPriceRequired": "初始价格",
+      "negotiatedPrice": "协商价格",
+      "location": "地址",
+      "locationRequired": "地址",
+      "locationDescription": "更新标题",
+      "area": "区域",
+      "areaPlaceholder": "选择或输入区域",
+      "platform": "来源平台",
+      "platformPlaceholder": "自动检测",
+      "status": "状态",
+      "statusPlaceholder": "选择状态",
+      "statusNew": "新",
+      "statusToView": "待看房",
+      "statusViewed": "已看房",
+      "markAsTaken": "标记为已租",
+      "takenDescription": "该房源不再可用",
+      "date": "日期",
+      "datePlaceholder": "选择已租日期",
+      "saving": "保存中...",
+      "saveChanges": "保存更改"
+    },
+    "sortTitle": "排序房源",
+    "taken": "已租",
+    "takenOn": "于 {date} 已租"
   }
 }

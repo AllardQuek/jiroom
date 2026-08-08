@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { Input } from "@/components/ui/input";
 import { cleanTitle } from "@/lib/data/migrations";
@@ -25,6 +26,7 @@ export default function PlaceAutocomplete({
   placeId,
   className,
 }: PlaceAutocompleteProps) {
+  const t = useTranslations("map");
   const [value, setValue] = useState(initialValue || "");
   const [suggestions, setSuggestions] = useState<
     Array<{ text: string; placePrediction?: object }>
@@ -36,7 +38,10 @@ export default function PlaceAutocomplete({
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const placesLib = useMapsLibrary("places");
   const onPlaceSelectRef = useRef(onPlaceSelect);
-  onPlaceSelectRef.current = onPlaceSelect;
+
+  useEffect(() => {
+    onPlaceSelectRef.current = onPlaceSelect;
+  }, [onPlaceSelect]);
 
   const sessionTokenRef = useRef<unknown>(null);
   const justSelectedRef = useRef(false);
@@ -147,7 +152,7 @@ export default function PlaceAutocomplete({
         fetchFields: (opts: { fields: string[] }) => Promise<void>;
         displayName?: { text?: string; languageCode?: string } | string;
         formattedAddress?: string;
-        location?: google.maps.LatLng | null;
+        location?: { lat: () => number; lng: () => number } | null;
         addressComponents?: Array<{
           longText: string;
           shortText: string;
@@ -213,7 +218,9 @@ export default function PlaceAutocomplete({
   return (
     <div className="relative">
       {address && (
-        <p className="text-xs text-muted-foreground mb-1">Address: {address}</p>
+        <p className="text-xs text-muted-foreground mb-1">
+          {t("addressLabel", { address })}
+        </p>
       )}
       <Input
         ref={inputRef}
@@ -239,7 +246,7 @@ export default function PlaceAutocomplete({
             }
           }, 200);
         }}
-        placeholder="Type an address..."
+        placeholder={t("placePlaceholder")}
         className={className}
       />
       {showDropdown && suggestions.length > 0 && (

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useRouter, usePathname } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -25,6 +25,7 @@ import {
   X,
   MoreVertical,
   Filter,
+  GitCompareArrows,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
@@ -49,27 +50,35 @@ import {
   importData,
   type ExportData,
 } from "@/lib/data/exportImport";
+import { toggleSeedMode } from "@/lib/data/seedData";
 import {
-  loadSeedData,
-  isSeedModeActive,
-  isAnyStoreEmpty,
-  toggleSeedMode,
-} from "@/lib/data/seedData";
+  useLocalStorageValue,
+  setLocalStorageValue,
+} from "@/lib/hooks/useLocalStorageValue";
+import { useLocalStorageState } from "@/lib/hooks/useLocalStorageState";
 
 export function ListingsPageInner() {
   const t = useTranslations("listings");
+  const tCommon = useTranslations("common");
   const tProfile = useTranslations("tenantProfile.fields");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const searchParams = useSearchParams();
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
-    null
+    () => searchParams.get("detail")
   );
   const [backupStatus, setBackupStatus] = useState<{
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
-  const [seedMode, setSeedMode] = useState(false);
-  const [compact, setCompact] = useState(false);
-  const [compareMode, setCompareMode] = useState(false);
+  const seedMode = useLocalStorageValue("seed-mode-active", "false") === "true";
+  const [compactRaw, setCompactRaw] = useLocalStorageState(
+    "compact-view",
+    "false"
+  );
+  const compact = compactRaw === "true";
+  const setCompact = (value: boolean) =>
+    setCompactRaw(value ? "true" : "false");
+  const [compareModeState, setCompareModeState] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [copyStatus, setCopyStatus] = useState<{
     type: "success" | "error" | null;
@@ -85,23 +94,11 @@ export function ListingsPageInner() {
     priceMax: null,
   });
   const router = useRouter();
-  const pathname = usePathname();
-
-  useEffect(() => {
-    const saved = localStorage.getItem("compact-view");
-    if (saved === "true") setCompact(true);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("compact-view", compact ? "true" : "false");
-  }, [compact]);
-  const searchParams = useSearchParams();
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const detailId = searchParams.get("detail");
     if (detailId) {
-      setSelectedListingId(detailId);
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete("detail");
       router.replace(`/listings?${newParams.toString()}`, { scroll: false });
@@ -111,13 +108,9 @@ export function ListingsPageInner() {
   useEffect(() => {
     if (sessionStorage.getItem("import-completed")) {
       sessionStorage.removeItem("import-completed");
-      localStorage.removeItem("seed-mode-active");
-      localStorage.removeItem("user-data-backup");
-      setSeedMode(false);
-      return;
+      setLocalStorageValue("seed-mode-active", null);
+      setLocalStorageValue("user-data-backup", null);
     }
-    // Seed data loading is now handled in useStoreInitialization hook
-    setSeedMode(isSeedModeActive());
   }, []);
   const selectedListingIds = useComparisonStore(
     (state) => state.selectedListingIds
@@ -127,11 +120,7 @@ export function ListingsPageInner() {
   );
   const getProfile = useTenantProfileStore((state) => state.getProfile);
 
-  useEffect(() => {
-    if (pathname === "/listings") {
-      setCompareMode(false);
-    }
-  }, [pathname]);
+  const compareMode = compareModeState;
 
   const handleCompare = () => {
     router.push("/compare");
@@ -307,13 +296,38 @@ export function ListingsPageInner() {
           <div className="flex items-center justify-between gap-2">
             {/* Left side: Listing-specific actions */}
             <div className="flex flex-wrap gap-2 items-center">
-              {compareMode && selectedListingIds.length >= 2 && (
+              {compareMode ? (
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCompareModeState(false)}
+                    className="shrink-0"
+                  >
+                    <X className="h-4 w-4 mr-1" />
+                    {tCommon("cancel")}
+                  </Button>
+                  {selectedListingIds.length >= 2 && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={handleCompare}
+                      className="shrink-0"
+                    >
+                      <GitCompareArrows className="h-4 w-4 mr-1" />
+                      {t("compareCount", { count: selectedListingIds.length })}
+                    </Button>
+                  )}
+                </div>
+              ) : (
                 <Button
-                  variant="default"
-                  onClick={handleCompare}
-                  className="hidden sm:flex"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCompareModeState(true)}
+                  className="shrink-0"
                 >
-                  {t("compareCount", { count: selectedListingIds.length })}
+                  <GitCompareArrows className="h-4 w-4 mr-1" />
+                  {t("compare")}
                 </Button>
               )}
               <Tooltip>
@@ -329,16 +343,6 @@ export function ListingsPageInner() {
                 </TooltipTrigger>
                 <TooltipContent>{t("filterListings")}</TooltipContent>
               </Tooltip>
-              {!compareMode && (
-                <Button
-                  variant="outline"
-                  onClick={() => setCompareMode(true)}
-                  size="sm"
-                  className="shrink-0"
-                >
-                  {t("compare")}
-                </Button>
-              )}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
@@ -474,7 +478,12 @@ export function ListingsPageInner() {
               <div className="hidden sm:flex gap-1">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" onClick={handleExport}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("exportData")}
+                      onClick={handleExport}
+                    >
                       <Download className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -485,6 +494,7 @@ export function ListingsPageInner() {
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label={t("importData")}
                       onClick={() => fileRef.current?.click()}
                     >
                       <Upload className="h-4 w-4" />
@@ -497,6 +507,9 @@ export function ListingsPageInner() {
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label={
+                        seedMode ? t("switchToYours") : t("switchToSample")
+                      }
                       onClick={handleToggleSeed}
                       className={seedMode ? "text-amber-500" : ""}
                     >
@@ -546,9 +559,7 @@ export function ListingsPageInner() {
         onOpenChange={setFilterOpen}
         filters={filters}
         onFiltersChange={setFilters}
-        areas={Array.from(
-          new Set(listings.map((l: any) => l.area).filter(Boolean))
-        )}
+        areas={Array.from(new Set(listings.map((l) => l.area).filter(Boolean)))}
       />
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>

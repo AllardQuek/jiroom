@@ -34,7 +34,11 @@ function renderInline(text: string) {
     }
     const boldMatch = part.match(/^\*\*([^*]+)\*\*$/);
     if (boldMatch) {
-      return <strong key={i} className="font-semibold">{boldMatch[1]}</strong>;
+      return (
+        <strong key={i} className="font-semibold">
+          {boldMatch[1]}
+        </strong>
+      );
     }
     return <span key={i}>{part}</span>;
   });
@@ -81,7 +85,7 @@ function ContentTable({ table }: { table: ContentTable }) {
                       : "text-muted-foreground"
                   }`}
                 >
-                    <span>{renderInline(cell)}</span>
+                  <span>{renderInline(cell)}</span>
                 </td>
               ))}
             </tr>
@@ -95,7 +99,6 @@ function ContentTable({ table }: { table: ContentTable }) {
 export const TopicNode = memo(function TopicNode({ id, data }: NodeProps) {
   const d = data as unknown as TopicData;
   const expanded = d.expanded ?? false;
-
 
   const highlighted = d.highlighted ?? false;
   const content = d.content;
@@ -114,9 +117,9 @@ export const TopicNode = memo(function TopicNode({ id, data }: NodeProps) {
       ? "shadow-selection"
       : "hover:shadow-selection";
 
-const handleContentClick = (e: React.MouseEvent) => {
-  e.stopPropagation();
-};
+  const handleContentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
 
   const { reportHeight } = useContext(MeasuredHeightContext);
   const nodeRef = useRef<HTMLDivElement>(null);
@@ -125,8 +128,15 @@ const handleContentClick = (e: React.MouseEvent) => {
   const measuredRef = useRef(false);
 
   useLayoutEffect(() => {
-    if (!expanded || measuredRef.current || !contentRef.current || !headerRef.current) return;
-    const h = headerRef.current.offsetHeight + contentRef.current.offsetHeight + 1;
+    if (
+      !expanded ||
+      measuredRef.current ||
+      !contentRef.current ||
+      !headerRef.current
+    )
+      return;
+    const h =
+      headerRef.current.offsetHeight + contentRef.current.offsetHeight + 1;
     if (h > 0) {
       measuredRef.current = true;
       reportHeight(id, h);
@@ -160,7 +170,10 @@ const handleContentClick = (e: React.MouseEvent) => {
       <Handle type="target" position={Position.Left} className="!bg-border" />
       <Handle type="source" position={Position.Right} className="!bg-border" />
 
-      <div ref={headerRef} className="flex items-center justify-between gap-2 px-4 py-3 bg-gradient-to-r from-card to-muted/30 select-none">
+      <div
+        ref={headerRef}
+        className="flex items-center justify-between gap-2 px-4 py-3 bg-gradient-to-r from-card to-muted/30 select-none"
+      >
         <div className="flex items-center gap-2.5 min-w-0">
           <span className="text-lg flex-shrink-0 opacity-90">{d.emoji}</span>
           <span className="text-sm font-semibold text-foreground truncate">
@@ -182,10 +195,19 @@ const handleContentClick = (e: React.MouseEvent) => {
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className="border-t border-border/20 guide-scrollable"
           >
-            <div ref={contentRef} className="px-4 pb-4 pt-3 space-y-3 select-text" onClick={handleContentClick}>
+            <div
+              ref={contentRef}
+              className="px-4 pb-4 pt-3 space-y-3 select-text"
+              onClick={handleContentClick}
+            >
               {content.notes?.map((n, i) => (
-                <p key={i} className="text-xs text-muted-foreground leading-relaxed flex items-start gap-1.5">
-                  <span className="text-foreground/30 mt-0.5 flex-shrink-0">•</span>
+                <p
+                  key={i}
+                  className="text-xs text-muted-foreground leading-relaxed flex items-start gap-1.5"
+                >
+                  <span className="text-foreground/30 mt-0.5 flex-shrink-0">
+                    •
+                  </span>
                   <span className="text-muted-foreground/70">{n}</span>
                 </p>
               ))}
@@ -200,7 +222,9 @@ const handleContentClick = (e: React.MouseEvent) => {
                       className="text-xs text-muted-foreground leading-relaxed flex items-start gap-1.5"
                     >
                       {!b.match(/^\p{Emoji}\uFE0F?\s/u) && (
-                        <span className="text-foreground/30 mt-0.5 flex-shrink-0">•</span>
+                        <span className="text-foreground/30 mt-0.5 flex-shrink-0">
+                          •
+                        </span>
                       )}
                       <span>{renderInline(b)}</span>
                     </motion.li>

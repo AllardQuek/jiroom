@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useSyncExternalStore } from "react";
+import { useWindowWidth } from "@/lib/hooks/useWindowWidth";
+import { useLocalStorageState } from "@/lib/hooks/useLocalStorageState";
 import { Link } from "@/i18n/navigation";
 import { Listing, Viewing } from "@/types/listing";
 import { Template, Criterion, Evaluation } from "@/types/evaluation";
@@ -21,11 +23,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { X, Star, Check, Minus } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useTranslations, useLocale } from "next-intl";
@@ -145,13 +142,13 @@ function formatNet(net: number) {
 function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
   const t = useTranslations("compare");
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const resolvedTheme = (theme as "light" | "dark") || "light";
   const net = score?.net ?? null;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const scoreColors = mounted ? getScoreColors(resolvedTheme) : SCORE_COLORS;
 
@@ -291,29 +288,19 @@ export function ComparisonMatrix({
   const t = useTranslations("compare");
   const locale = useLocale();
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const resolvedTheme = (theme as "light" | "dark") || "light";
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  const [isMobile, setIsMobile] = useState(false);
-  const [criteriaColumnWidth, setCriteriaColumnWidth] = useState(170);
-
-  useEffect(() => {
-    // Load saved width from localStorage
-    const savedWidth = localStorage.getItem("criteria-column-width");
-    if (savedWidth) {
-      setCriteriaColumnWidth(Number(savedWidth));
-    }
-
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const isMobile = useWindowWidth() < 768;
+  const [widthRaw, setWidthRaw] = useLocalStorageState(
+    "criteria-column-width",
+    "170"
+  );
+  const criteriaColumnWidth = Number(widthRaw);
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -323,16 +310,12 @@ export function ComparisonMatrix({
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX;
       const newWidth = Math.max(120, Math.min(300, startWidth + deltaX));
-      setCriteriaColumnWidth(newWidth);
+      setWidthRaw(String(newWidth));
     };
 
     const handleMouseUp = () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
-      localStorage.setItem(
-        "criteria-column-width",
-        criteriaColumnWidth.toString()
-      );
     };
 
     document.addEventListener("mousemove", handleMouseMove);
@@ -594,7 +577,7 @@ export function ComparisonMatrix({
       >
         {gridItems}
         <div
-          className="absolute top-0 bottom-0 left-0 w-1 bg-transparent hover:bg-primary cursor-col-resize z-[100] transition-colors"
+          className="absolute top-0 bottom-0 left-0 w-1 bg-transparent hover:bg-primary cursor-col-resize z-10 transition-colors"
           style={{ left: `${criteriaColumnWidth}px` }}
           onMouseDown={handleResizeStart}
         />

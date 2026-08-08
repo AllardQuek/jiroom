@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
 import { Check } from "lucide-react";
 import { useTemplateStore } from "@/store/templateStore";
-import { Criterion, Template } from "@/types/evaluation";
+import { Criterion } from "@/types/evaluation";
 import { calculateScore as calcScore } from "@/lib/utils/calculateScore";
 import {
   hasResponse,
@@ -18,6 +17,7 @@ interface InlineEvaluationProps {
   onResponse: (criterionId: string, value: number | string) => void;
   onClearResponse: (criterionId: string) => void;
   listingPrice?: number;
+  showHeader?: boolean;
 }
 
 export function InlineEvaluation({
@@ -25,11 +25,18 @@ export function InlineEvaluation({
   onResponse,
   onClearResponse,
   listingPrice,
+  showHeader = true,
 }: InlineEvaluationProps) {
   const t = useTranslations("evaluation");
   const templates = useTemplateStore((state) => state.templates);
 
   const template = templates[0];
+  const derivedCriterion = template?.criteria.find((c) => c.type === "derived");
+  const derivedTotal = useDerivedTotal(
+    derivedCriterion,
+    listingPrice,
+    responses
+  );
 
   if (!template) {
     return (
@@ -55,13 +62,6 @@ export function InlineEvaluation({
   }).length;
   const totalCount = template.criteria.length;
   const groupedCriteria = groupCriteriaByCategory(template);
-
-  const derivedCriterion = template.criteria.find((c) => c.type === "derived");
-  const derivedTotal = useDerivedTotal(
-    derivedCriterion,
-    listingPrice,
-    responses
-  );
 
   const renderInput = (criterion: Criterion) => {
     const value = responses[criterion.id];
@@ -182,30 +182,32 @@ export function InlineEvaluation({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">{t("title")}</span>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>
-            {answeredCount}/{totalCount}
-          </span>
-          {score !== null && (
-            <>
-              <span className="text-muted-foreground/40">·</span>
-              <span
-                className={`font-medium tabular-nums ${
-                  score.net > 0
-                    ? "text-emerald-600"
-                    : score.net < 0
-                      ? "text-red-600"
-                      : "text-muted-foreground"
-                }`}
-              >
-                {score.net > 0 ? `+${score.net}` : score.net}
-              </span>
-            </>
-          )}
+      {showHeader && (
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium">{t("title")}</span>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>
+              {answeredCount}/{totalCount}
+            </span>
+            {score !== null && (
+              <>
+                <span className="text-muted-foreground/40">·</span>
+                <span
+                  className={`font-medium tabular-nums ${
+                    score.net > 0
+                      ? "text-emerald-600"
+                      : score.net < 0
+                        ? "text-red-600"
+                        : "text-muted-foreground"
+                  }`}
+                >
+                  {score.net > 0 ? `+${score.net}` : score.net}
+                </span>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {Object.entries(groupedCriteria).map(([category, criteria]) => (
         <div key={category}>

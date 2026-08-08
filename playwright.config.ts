@@ -30,7 +30,14 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         launchOptions: {
-          args: ["--use-gl=angle", "--use-angle=swiftshader"],
+          args: [
+            "--use-gl=angle",
+            "--use-angle=swiftshader",
+            "--enable-webgl",
+            "--ignore-gpu-blocklist",
+            "--enable-gpu-rasterization",
+            "--disable-gpu-sandbox",
+          ],
         },
       },
     },

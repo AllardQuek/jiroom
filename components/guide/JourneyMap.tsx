@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   ReactFlow,
@@ -24,10 +18,7 @@ import { TopicNode } from "./nodes/TopicNode";
 import { PhaseHeaderNode } from "./nodes/PhaseHeaderNode";
 import { PhaseLaneNode } from "./nodes/PhaseLaneNode";
 import { BASELINE_POSITIONS } from "@/data/guide-content";
-import {
-  MeasuredHeightContext,
-  type MeasuredHeightMap,
-} from "./HeightContext";
+import { MeasuredHeightContext, type MeasuredHeightMap } from "./HeightContext";
 import {
   COLLAPSED_NODE_HEIGHT,
   estimateExpandedNodeHeight,
@@ -101,7 +92,7 @@ function computeLayout(
       const d = node.data as GuideNodeData;
       const displayedHeight = expandedNodeIds.has(node.id)
         ? (measuredHeights.get(node.id) ??
-            estimateExpandedNodeHeight(d.content))
+          estimateExpandedNodeHeight(d.content))
         : COLLAPSED_NODE_HEIGHT;
       const y = (base?.y ?? node.position.y) + shift;
       const bottom = y + displayedHeight;
@@ -164,25 +155,22 @@ function FlowInner({
     [onNodeClick]
   );
 
-  const measuredHeights = useRef<MeasuredHeightMap>(new Map());
-  const [measureKey, setMeasureKey] = useState(0);
+  const [measuredHeights, setMeasuredHeights] = useState<MeasuredHeightMap>(
+    new Map()
+  );
 
   const reportHeight = useCallback((nodeId: string, totalHeight: number) => {
-    const prev = measuredHeights.current.get(nodeId);
-    if (prev !== totalHeight) {
-      measuredHeights.current.set(nodeId, totalHeight);
-      setMeasureKey((k) => k + 1);
-    }
+    setMeasuredHeights((prev) => {
+      if (prev.get(nodeId) === totalHeight) return prev;
+      const next = new Map(prev);
+      next.set(nodeId, totalHeight);
+      return next;
+    });
   }, []);
 
   const displayNodes = useMemo(
-    () =>
-      computeLayout(
-        nodes,
-        expandedNodeIds,
-        measuredHeights.current
-      ),
-    [nodes, expandedNodeIds, measureKey]
+    () => computeLayout(nodes, expandedNodeIds, measuredHeights),
+    [nodes, expandedNodeIds, measuredHeights]
   );
 
   const { fitView } = useReactFlow();

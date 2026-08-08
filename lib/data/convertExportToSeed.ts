@@ -1,6 +1,6 @@
-import fs from 'fs';
+import fs from "fs";
 import type { Listing, Viewing } from "@/types/listing";
-import type { Evaluation, Template } from "@/types/evaluation";
+import type { Evaluation } from "@/types/evaluation";
 import type { Verdict } from "@/types/verdict";
 import type { Anchor } from "@/types/anchor";
 import type { ExportData } from "./exportImport";
@@ -15,41 +15,56 @@ interface ConvertedSeedData {
 }
 
 export function convertExportToSeed(jsonPath: string): ConvertedSeedData {
-  const jsonContent = fs.readFileSync(jsonPath, 'utf-8');
+  const jsonContent = fs.readFileSync(jsonPath, "utf-8");
   const exportData: ExportData = JSON.parse(jsonContent);
-  
+
   const data = exportData.data;
-  
+
   // Extract listings
-  const listingStorage = data['listing-storage'] as { state: { listings: Listing[] } };
+  const listingStorage = data["listing-storage"] as {
+    state: { listings: Listing[] };
+  };
   const seedListings = listingStorage?.state?.listings || [];
-  
+
   // Extract viewings (filter to only include fields in current Viewing type)
-  const viewingStorage = data['viewing-storage'] as { state: { viewings: any[] } };
+  const viewingStorage = data["viewing-storage"] as {
+    state: { viewings: unknown[] };
+  };
   const rawViewings = viewingStorage?.state?.viewings || [];
-  const seedViewings: Viewing[] = rawViewings.map((v: any) => ({
-    id: v.id,
-    listing_id: v.listing_id,
-    scheduled_date: v.scheduled_date,
-    created_at: v.created_at,
-  }));
-  
+  const seedViewings: Viewing[] = rawViewings.map((v) => {
+    const item = v as Record<string, unknown>;
+    return {
+      id: item.id as string,
+      listing_id: item.listing_id as string,
+      scheduled_date: item.scheduled_date as string,
+      created_at: item.created_at as string,
+    };
+  });
+
   // Extract evaluations
-  const evaluationStorage = data['evaluation-storage'] as { state: { evaluations: Evaluation[] } };
+  const evaluationStorage = data["evaluation-storage"] as {
+    state: { evaluations: Evaluation[] };
+  };
   const seedEvaluations = evaluationStorage?.state?.evaluations || [];
-  
+
   // Extract verdicts
-  const verdictStorage = data['verdict-storage'] as { state: { verdicts: Verdict[] } };
+  const verdictStorage = data["verdict-storage"] as {
+    state: { verdicts: Verdict[] };
+  };
   const seedVerdicts = verdictStorage?.state?.verdicts || [];
-  
+
   // Extract comparison IDs
-  const comparisonStorage = data['comparison-storage'] as { state: { selectedListingIds: string[] } };
+  const comparisonStorage = data["comparison-storage"] as {
+    state: { selectedListingIds: string[] };
+  };
   const seedComparisonIds = comparisonStorage?.state?.selectedListingIds || [];
-  
+
   // Extract anchors
-  const anchorStorage = data['anchor-storage'] as { state: { anchors: Anchor[] } };
+  const anchorStorage = data["anchor-storage"] as {
+    state: { anchors: Anchor[] };
+  };
   const seedAnchors = anchorStorage?.state?.anchors || [];
-  
+
   return {
     seedListings,
     seedViewings,
@@ -61,8 +76,15 @@ export function convertExportToSeed(jsonPath: string): ConvertedSeedData {
 }
 
 export function generateSeedFile(convertedData: ConvertedSeedData): string {
-  const { seedListings, seedViewings, seedEvaluations, seedVerdicts, seedComparisonIds, seedAnchors } = convertedData;
-  
+  const {
+    seedListings,
+    seedViewings,
+    seedEvaluations,
+    seedVerdicts,
+    seedComparisonIds,
+    seedAnchors,
+  } = convertedData;
+
   let output = `import { getStoreKeys } from "@/lib/utils/localStorage";
 import type { Listing, Viewing } from "@/types/listing";
 import type { Evaluation, Template } from "@/types/evaluation";
@@ -86,25 +108,25 @@ const yearsFromNow = (n: number) => {
 };
 
 `;
-  
+
   // Generate seedListings
   output += `export const seedListings: Listing[] = ${JSON.stringify(seedListings, null, 2)};\n\n`;
-  
+
   // Generate seedViewings
   output += `export const seedViewings: Viewing[] = ${JSON.stringify(seedViewings, null, 2)};\n\n`;
-  
+
   // Generate seedAnchors
   output += `export const seedAnchors: Anchor[] = ${JSON.stringify(seedAnchors, null, 2)};\n\n`;
-  
+
   // Generate seedEvaluations
   output += `export const seedEvaluations: Evaluation[] = ${JSON.stringify(seedEvaluations, null, 2)};\n\n`;
-  
+
   // Generate seedVerdicts
   output += `export const seedVerdicts: Verdict[] = ${JSON.stringify(seedVerdicts, null, 2)};\n\n`;
-  
+
   // Generate seedComparisonIds
   output += `export const seedComparisonIds: string[] = ${JSON.stringify(seedComparisonIds, null, 2)};\n\n`;
-  
+
   // Add the utility functions from the original seedData
   output += `const BACKUP_KEY = "user-data-backup";
 const SEED_FLAG = "seed-mode-active";
@@ -201,7 +223,7 @@ export function toggleSeedMode(): "seed" | "user" | null {
   }
 }
 `;
-  
+
   return output;
 }
 
@@ -209,12 +231,12 @@ export function toggleSeedMode(): "seed" | "user" | null {
 if (require.main === module) {
   const jsonPath = process.argv[2];
   if (!jsonPath) {
-    console.error('Please provide the path to the exported JSON file');
+    console.error("Please provide the path to the exported JSON file");
     process.exit(1);
   }
-  
-  const outputPath = process.argv[3] || 'lib/data/seedData.ts';
-  
+
+  const outputPath = process.argv[3] || "lib/data/seedData.ts";
+
   try {
     const convertedData = convertExportToSeed(jsonPath);
     const seedFileContent = generateSeedFile(convertedData);
@@ -222,11 +244,13 @@ if (require.main === module) {
     console.log(`Successfully generated seed file at ${outputPath}`);
     console.log(`Converted ${convertedData.seedListings.length} listings`);
     console.log(`Converted ${convertedData.seedViewings.length} viewings`);
-    console.log(`Converted ${convertedData.seedEvaluations.length} evaluations`);
+    console.log(
+      `Converted ${convertedData.seedEvaluations.length} evaluations`
+    );
     console.log(`Converted ${convertedData.seedVerdicts.length} verdicts`);
     console.log(`Converted ${convertedData.seedAnchors.length} anchors`);
   } catch (error) {
-    console.error('Error converting export to seed:', error);
+    console.error("Error converting export to seed:", error);
     process.exit(1);
   }
 }

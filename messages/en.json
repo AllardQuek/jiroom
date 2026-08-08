@@ -50,10 +50,10 @@
     "exportFailed": "Export failed",
     "restoredReloading": "Restored. Reloading...",
     "invalidFile": "Invalid file",
-    "noActiveTemplate": "No active question template",
+    "noActiveTemplate": "No active question template. Set one in Settings.",
     "questionsCopied": "Questions copied to clipboard",
     "profileCopied": "Profile copied to clipboard",
-    "profileEmpty": "Profile is empty",
+    "profileEmpty": "Profile is empty. Fill it in Settings.",
     "failedToCopy": "Failed to copy",
     "columns": {
       "toView": "To View",
@@ -124,7 +124,8 @@
       "noDate": "No date",
       "noDateSet": "No date set",
       "overdue": "Overdue",
-      "notes": "Notes"
+      "notes": "Notes",
+      "scheduledViewing": "Scheduled viewing"
     },
     "form": {
       "addTitle": "Add Listing",
@@ -144,7 +145,7 @@
     },
     "delete": {
       "title": "Delete Listing",
-      "confirm": "Are you sure you want to delete this listing?",
+      "confirm": "Are you sure you want to delete \"{title}\"?",
       "cannotUndo": "This action cannot be undone."
     },
     "detail": {
@@ -154,7 +155,63 @@
       "notFound": "Listing not found. It may have been deleted.",
       "backToListings": "Back to Listings",
       "listingNotes": "Listing Notes"
-    }
+    },
+    "create": {
+      "listingUrl": "Listing URL",
+      "listingUrlPlaceholder": "Paste link from PropertyGuru, 99.co, etc.",
+      "listingUrlDescription": "Auto-fills source platform",
+      "duplicateUrlWarning": "This URL is already in your listings",
+      "title": "Title",
+      "titlePlaceholder": "Listing title",
+      "titleDescription": "Edit as needed",
+      "location": "Address",
+      "locationRequired": "Address",
+      "locationDescription": "Auto-fills title",
+      "area": "Area",
+      "areaPlaceholder": "Select or type an area",
+      "initialPrice": "Initial Price ($)",
+      "negotiatedPrice": "Negotiated Price ($)",
+      "platform": "Platform",
+      "platformPlaceholder": "Auto-detected",
+      "notes": "Notes",
+      "notesPlaceholder": "Add notes, contacts, or thoughts",
+      "scheduleViewing": "Schedule Viewing",
+      "optional": "(optional)",
+      "set": "Set",
+      "evaluation": "Evaluation",
+      "saving": "Saving...",
+      "addListing": "Add Listing"
+    },
+    "edit": {
+      "sourceUrl": "Source URL",
+      "sourceUrlPlaceholder": "https://example.com/listing",
+      "title": "Title",
+      "titlePlaceholder": "Listing title",
+      "initialPrice": "Initial Price",
+      "initialPriceRequired": "Initial Price",
+      "negotiatedPrice": "Negotiated Price",
+      "location": "Address",
+      "locationRequired": "Address",
+      "locationDescription": "Updates title",
+      "area": "Area",
+      "areaPlaceholder": "Select or type an area",
+      "platform": "Source Platform",
+      "platformPlaceholder": "Auto-detected",
+      "status": "Status",
+      "statusPlaceholder": "Select status",
+      "statusNew": "New",
+      "statusToView": "To View",
+      "statusViewed": "Viewed",
+      "markAsTaken": "Mark as taken",
+      "takenDescription": "This listing is no longer available",
+      "date": "Date",
+      "datePlaceholder": "Select date taken",
+      "saving": "Saving...",
+      "saveChanges": "Save changes"
+    },
+    "sortTitle": "Sort listings",
+    "taken": "Taken",
+    "takenOn": "Taken on {date}"
   },
   "evaluation": {
     "title": "Evaluation",
@@ -172,11 +229,14 @@
       "neutral": "Neutral - Mixed pros/cons",
       "belowAverage": "Below average - Major concerns",
       "poor": "Poor - Deal-breakers"
-    }
+    },
+    "noScoreAvailable": "No evaluation score available",
+    "scored": "{count} scored"
   },
   "map": {
     "title": "Map",
-    "searchPlaceholder": "Search location...",
+    "searchPlaceholder": "Search location",
+    "placePlaceholder": "Type an address",
     "addListing": "Add Listing",
     "addAnchor": "Add Anchor",
     "listingDetails": "Listing Details",
@@ -250,7 +310,11 @@
       "min": "min",
       "hint": "Select an anchor and set a max commute time to only show listings within that travel time. Commute routes are calculated on-demand using Google Maps.",
       "setMaxHint": "Set a max commute time to filter listings on the map"
-    }
+    },
+    "addressLabel": "Address: {address}",
+    "anchorDetails": "Anchor Details",
+    "areas": "Areas",
+    "unknown": "Unknown"
   },
   "compare": {
     "title": "Compare",
@@ -282,7 +346,38 @@
     "viewingsCountPlural": "{count} viewings scheduled",
     "today": "Today",
     "tomorrow": "Tomorrow",
-    "pastPrefix": "Past —"
+    "pastPrefix": "Past —",
+    "date": "Date",
+    "time": "Time",
+    "datePlaceholder": "Select date",
+    "update": "Update",
+    "schedule": "Schedule",
+    "cancelSchedule": "Cancel Schedule",
+    "am": "AM",
+    "pm": "PM",
+    "saving": "Saving...",
+    "viewing": "Viewing",
+    "notScheduledYet": "Not scheduled yet",
+    "noDateScheduled": "No date scheduled",
+    "removeDate": "Remove date"
+  },
+  "notes": {
+    "label": "Notes",
+    "placeholder": "Add notes. Use '-' for bullet points",
+    "updated": "Updated {time}",
+    "justNow": "Just now",
+    "minAgo": "{count, plural, one {{count} min ago} other {{count} mins ago}}",
+    "allNotes": "All Notes"
+  },
+  "verdict": {
+    "reasoning": "Verdict Reasoning",
+    "reasoningPlaceholder": "Add reasoning for your verdict",
+    "title": "Verdict",
+    "notSetYet": "Not set yet",
+    "clear": "Clear verdict",
+    "yes": "Yes",
+    "maybe": "Maybe",
+    "no": "No"
   },
   "settings": {
     "title": "Settings",
@@ -471,5 +566,225 @@
   "guide": {
     "title": "SG Rental Journey",
     "subtitle": "Your interactive guide to renting in Singapore"
+  },
+  "support": {
+    "button": {
+      "chipLabel": "Enjoying JIRoom?",
+      "iconLabel": "Support JIRoom"
+    },
+    "modal": {
+      "title": "Enjoying JIRoom?",
+      "description": "JIRoom is <link>free and open-source</link>. {hasNote, select, yes {A quick note means a lot — and a small tip helps keep it running.} other {If it helped your rental hunt, a small tip or share goes a long way.}}",
+      "noteLabel": "Say thanks or share a thought",
+      "notePlaceholder": "A quick thanks, bug, or hello",
+      "noteHelper": "Opens your email app. If not, send to <emailLink>{email}</emailLink>",
+      "noteCounter": "{count} / 200",
+      "sendNote": "Send note",
+      "tipLabel": "Add a tip",
+      "tipCurrency": "S$",
+      "tierAmountLabel": "S${amount} tip",
+      "customTipLabel": "Custom tip",
+      "qrAltAmount": "PayNow QR for SGD {amount}",
+      "qrAltCustom": "PayNow QR for a custom amount",
+      "tiers": {
+        "1": {
+          "label": "1",
+          "message": "That's a bus fare to the next viewing — thank you!"
+        },
+        "2": {
+          "label": "2",
+          "message": "That's an iced kopi from the nearest hawker — thank you!"
+        },
+        "5": {
+          "label": "5",
+          "message": "That's a kopi after a bad viewing — thank you!"
+        },
+        "?": {
+          "label": "?",
+          "message": "A well-deserved lunch between viewings..?"
+        }
+      },
+      "share": {
+        "title": "JIRoom",
+        "text": "JIRoom helped my rental hunt in Singapore.",
+        "button": "Share"
+      },
+      "star": "Star on GitHub",
+      "report": "Report an issue",
+      "email": {
+        "subject": "A note for JIRoom",
+        "noTip": "No tip selected.",
+        "tipWithAmount": "I also sent a S${amount} tip via PayNow.",
+        "tipCustom": "I also sent a custom tip via PayNow.",
+        "signature": "— from JIRoom"
+      }
+    }
+  },
+  "chrome": {
+    "reportIssue": "Report an issue on GitHub",
+    "openHelp": "Open help",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleTheme": "Toggle theme"
+  },
+  "anchors": {
+    "title": "Anchors",
+    "addAnchor": "Add anchor",
+    "editAnchor": "Edit Anchor",
+    "saveChanges": "Save changes",
+    "sortBy": "Sort by:",
+    "sort": "Sort:",
+    "name": "Name",
+    "type": "Type",
+    "noAnchors": "No anchors yet",
+    "noAnchorsHintList": "Add anchors from the map or from this page",
+    "noAnchorsHintPanel": "Add anchors from the map search",
+    "anchorCount": "{count, plural, one {# anchor} other {# anchors}}",
+    "form": {
+      "namePlaceholder": "e.g. My Office, Home, Jurong East MRT",
+      "customTypeLabel": "Custom Type Label",
+      "customTypePlaceholder": "e.g. Gym, Parents' House",
+      "color": "Color",
+      "location": "Location",
+      "locationHint": "Search to set the anchor location"
+    },
+    "types": {
+      "home": "Home",
+      "work": "Work",
+      "school": "School",
+      "station": "MRT / Station",
+      "custom": "Custom"
+    }
+  },
+  "templates": {
+    "criteriaForm": {
+      "name": "Criteria Name",
+      "namePlaceholder": "e.g., Room size",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description",
+      "inputType": "Input Type",
+      "inputTypePlaceholder": "Select type",
+      "checkbox": "Checkbox (Yes/No)",
+      "rating": "Rating (1-5)",
+      "number": "Number",
+      "text": "Text",
+      "select": "Select (Dropdown)",
+      "category": "Category",
+      "categoryPlaceholder": "Select category",
+      "options": "Options (comma-separated)",
+      "optionsPlaceholder": "e.g., Option 1, Option 2, Option 3",
+      "scoreMapping": "Score mapping per option",
+      "scoringThresholds": "Scoring thresholds",
+      "addRange": "Add range",
+      "noThresholds": "No thresholds defined — this criterion will not contribute to the score.",
+      "min": "Min",
+      "max": "Max",
+      "saving": "Saving...",
+      "saveCriteria": "Save Criteria"
+    },
+    "criteriaItem": {
+      "checkbox": "Checkbox",
+      "rating": "Rating",
+      "number": "Number",
+      "text": "Text",
+      "select": "Select",
+      "derived": "Derived",
+      "scoring": "Scoring",
+      "addRange": "Add range",
+      "min": "Min",
+      "max": "Max",
+      "checkboxScoring": "Yes = +1, No = -1, N/A = excluded",
+      "ratingScoring": "1-2 = -1, 3 = 0, 4-5 = +1",
+      "scoringDetails": "Scoring details"
+    },
+    "editor": {
+      "editTemplate": "Edit Template",
+      "nameLabel": "Name",
+      "namePlaceholder": "Template name",
+      "addCriteria": "Add criteria",
+      "saveChanges": "Save Changes"
+    },
+    "list": {
+      "noTemplates": "No templates",
+      "noTemplatesHint": "Create one to start scoring listings",
+      "createTemplate": "Create Template",
+      "criterion": "{count, plural, one {# criterion} other {# criteria}}"
+    }
+  },
+  "agentQuestions": {
+    "editor": {
+      "editTemplate": "Edit Question Template",
+      "nameLabel": "Name",
+      "namePlaceholder": "Template name",
+      "questionsLabel": "Questions (one per line)",
+      "questionsPlaceholder": "Visitors: \nDryer included: \nAircon usage limitations:",
+      "questionCount": "{count, plural, one {# question} other {# questions}}",
+      "saveChanges": "Save Changes"
+    },
+    "list": {
+      "noTemplates": "No question templates",
+      "noTemplatesHint": "Create one to quickly copy questions to agents",
+      "createTemplate": "Create Template",
+      "setAsActive": "Set as active",
+      "questionCount": "{count, plural, one {# question} other {# questions}}"
+    }
+  },
+  "_listings": {
+    "create": {
+      "listingUrl": "Listing URL",
+      "listingUrlPlaceholder": "Paste link from PropertyGuru, 99.co, etc.",
+      "listingUrlDescription": "Auto-fills source platform",
+      "duplicateUrlWarning": "This URL is already in your listings",
+      "title": "Title",
+      "titlePlaceholder": "Listing title",
+      "titleDescription": "Edit as needed",
+      "location": "Address",
+      "locationRequired": "Address",
+      "locationDescription": "Auto-fills title",
+      "area": "Area",
+      "areaPlaceholder": "Select or type an area",
+      "initialPrice": "Initial Price ($)",
+      "negotiatedPrice": "Negotiated Price ($)",
+      "platform": "Platform",
+      "platformPlaceholder": "Auto-detected",
+      "notes": "Notes",
+      "notesPlaceholder": "Add notes, contacts, or thoughts",
+      "scheduleViewing": "Schedule Viewing",
+      "optional": "(optional)",
+      "set": "Set",
+      "evaluation": "Evaluation",
+      "saving": "Saving...",
+      "addListing": "Add Listing"
+    },
+    "edit": {
+      "sourceUrl": "Source URL",
+      "sourceUrlPlaceholder": "https://example.com/listing",
+      "title": "Title",
+      "titlePlaceholder": "Listing title",
+      "initialPrice": "Initial Price",
+      "initialPriceRequired": "Initial Price",
+      "negotiatedPrice": "Negotiated Price",
+      "location": "Address",
+      "locationRequired": "Address",
+      "locationDescription": "Updates title",
+      "area": "Area",
+      "areaPlaceholder": "Select or type an area",
+      "platform": "Source Platform",
+      "platformPlaceholder": "Auto-detected",
+      "status": "Status",
+      "statusPlaceholder": "Select status",
+      "statusNew": "New",
+      "statusToView": "To View",
+      "statusViewed": "Viewed",
+      "markAsTaken": "Mark as taken",
+      "takenDescription": "This listing is no longer available",
+      "date": "Date",
+      "datePlaceholder": "Select date taken",
+      "saving": "Saving...",
+      "saveChanges": "Save changes"
+    },
+    "sortTitle": "Sort listings",
+    "taken": "Taken",
+    "takenOn": "Taken on {date}"
   }
 }

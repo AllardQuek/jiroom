@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { ArrowUpDown } from "lucide-react";
 
 type SortField =
@@ -64,6 +67,7 @@ export function SortButton({
   openSortCol,
   setOpenSortCol,
 }: SortButtonProps) {
+  const t = useTranslations("listings");
   const config = sortConfigs[columnId] ?? null;
   return (
     <div className="relative">
@@ -77,7 +81,7 @@ export function SortButton({
             ? "bg-primary/10 text-primary"
             : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/60"
         }`}
-        title="Sort listings"
+        title={t("sortTitle")}
       >
         <ArrowUpDown size={12} />
       </button>

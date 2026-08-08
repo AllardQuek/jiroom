@@ -3,12 +3,28 @@ import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
-import { CommuteInfo, type RouteData } from "@/components/distance/CommuteInfo";
+import { type RouteData } from "@/components/distance/CommuteInfo";
 import {
   getCachedRoute,
   setCachedRoute,
   type RouteResultData,
+  type LatLngLike,
 } from "@/lib/utils/routeCache";
+
+interface RouteResponse {
+  path?: LatLngLike[];
+  legs?: Array<{ localizedValues?: { duration?: string } }>;
+}
+
+interface RouteClass {
+  computeRoutes(opts: {
+    origin: { lat: number; lng: number };
+    destination: { lat: number; lng: number };
+    travelMode: string;
+    departureTime?: Date;
+    fields: string[];
+  }): Promise<{ routes: RouteResponse[] }>;
+}
 
 interface UseRouteCalculatorProps {
   selectedListing: Listing | null;
@@ -68,9 +84,7 @@ export function useRouteCalculator({
 
     const targets = visibleAnchors;
     const listing = selectedListing;
-    const RouteClass = (
-      routesLib as unknown as { Route: typeof google.maps.routes.Route }
-    ).Route;
+    const RouteClass = (routesLib as unknown as { Route: RouteClass }).Route;
 
     const initial: Record<string, RouteData> = {};
     targets.forEach((a) => {
@@ -93,7 +107,7 @@ export function useRouteCalculator({
         const { routes } = await RouteClass.computeRoutes({
           origin: { lat: listing.lat!, lng: listing.lng! },
           destination: { lat: anchor.lat, lng: anchor.lng },
-          travelMode: travelMode as google.maps.TravelMode,
+          travelMode,
           departureTime: travelMode === "TRANSIT" ? new Date() : undefined,
           fields: ["path", "legs"],
         });

@@ -1,4 +1,4 @@
-import { Criterion, Template } from "@/types/evaluation";
+import { Template } from "@/types/evaluation";
 
 function scoreFromThresholds(
   value: number,

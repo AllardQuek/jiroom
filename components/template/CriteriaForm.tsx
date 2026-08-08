@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useState, useEffect, useMemo } from "react";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Resolver } from "react-hook-form";
 import {
   createCriterionSchema,
   CriterionFormData,
 } from "@/lib/schemas/templateSchema";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,10 +42,14 @@ export function CriteriaForm({
   onSubmit,
   onCancel,
 }: CriteriaFormProps) {
+  const t = useTranslations("templates");
+  const tCommon = useTranslations("common");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CriterionFormData>({
-    resolver: zodResolver(createCriterionSchema) as any,
+    resolver: zodResolver(
+      createCriterionSchema
+    ) as unknown as Resolver<CriterionFormData>,
     defaultValues: {
       name: "",
       description: "",
@@ -56,8 +62,14 @@ export function CriteriaForm({
     },
   });
 
-  const watchType = form.watch("type");
-  const watchOptions = form.watch("options");
+  const watchType = useWatch({ control: form.control, name: "type" });
+  const watchOptions = useWatch({ control: form.control, name: "options" });
+  const scores = useWatch({ control: form.control, name: "scores" });
+  const thresholds = useWatch({ control: form.control, name: "thresholds" });
+  const optionsKey = useMemo(
+    () => watchOptions?.join(",") ?? "",
+    [watchOptions]
+  );
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -72,7 +84,7 @@ export function CriteriaForm({
       newScores[opt] = currentScores[opt] ?? 0;
     }
     form.setValue("scores", newScores);
-  }, [watchOptions?.join(","), form]);
+  }, [optionsKey, watchOptions, form]);
 
   const handleSubmit = async (data: CriterionFormData) => {
     setIsSubmitting(true);
@@ -106,9 +118,12 @@ export function CriteriaForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Criteria Name *</FormLabel>
+              <FormLabel>{t("criteriaForm.name")}</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Room size" {...field} />
+                <Input
+                  placeholder={t("criteriaForm.namePlaceholder")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,9 +135,12 @@ export function CriteriaForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t("criteriaForm.description")}</FormLabel>
               <FormControl>
-                <Input placeholder="Brief description" {...field} />
+                <Input
+                  placeholder={t("criteriaForm.descriptionPlaceholder")}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -134,19 +152,29 @@ export function CriteriaForm({
           name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Input Type *</FormLabel>
+              <FormLabel>{t("criteriaForm.inputType")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
+                    <SelectValue
+                      placeholder={t("criteriaForm.inputTypePlaceholder")}
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="checkbox">Checkbox (Yes/No)</SelectItem>
-                  <SelectItem value="rating">Rating (1-5)</SelectItem>
-                  <SelectItem value="number">Number</SelectItem>
-                  <SelectItem value="text">Text</SelectItem>
-                  <SelectItem value="select">Select (Dropdown)</SelectItem>
+                  <SelectItem value="checkbox">
+                    {t("criteriaForm.checkbox")}
+                  </SelectItem>
+                  <SelectItem value="rating">
+                    {t("criteriaForm.rating")}
+                  </SelectItem>
+                  <SelectItem value="number">
+                    {t("criteriaForm.number")}
+                  </SelectItem>
+                  <SelectItem value="text">{t("criteriaForm.text")}</SelectItem>
+                  <SelectItem value="select">
+                    {t("criteriaForm.select")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -159,11 +187,13 @@ export function CriteriaForm({
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category *</FormLabel>
+              <FormLabel>{t("criteriaForm.category")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
+                    <SelectValue
+                      placeholder={t("criteriaForm.categoryPlaceholder")}
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -186,10 +216,10 @@ export function CriteriaForm({
               name="options"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Options (comma-separated) *</FormLabel>
+                  <FormLabel>{t("criteriaForm.options")}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g., Option 1, Option 2, Option 3"
+                      placeholder={t("criteriaForm.optionsPlaceholder")}
                       {...field}
                       onChange={(e) =>
                         field.onChange(
@@ -206,7 +236,7 @@ export function CriteriaForm({
             {(watchOptions ?? []).length > 0 && (
               <div className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">
-                  Score mapping per option
+                  {t("criteriaForm.scoreMapping")}
                 </Label>
                 {watchOptions
                   ?.filter((o) => o)
@@ -223,7 +253,7 @@ export function CriteriaForm({
                             type="button"
                             onClick={() => setScoreForOption(option, val)}
                             className={`h-6 w-8 rounded text-xs font-medium transition-colors ${
-                              (form.watch("scores")?.[option] ?? 0) === val
+                              (scores?.[option] ?? 0) === val
                                 ? val === 1
                                   ? "bg-emerald-100 text-emerald-700"
                                   : val === -1
@@ -246,7 +276,9 @@ export function CriteriaForm({
         {watchType === "number" && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label className="text-sm">Scoring thresholds</Label>
+              <Label className="text-sm">
+                {t("criteriaForm.scoringThresholds")}
+              </Label>
               <Button
                 type="button"
                 variant="outline"
@@ -257,14 +289,13 @@ export function CriteriaForm({
                 className="h-7 text-xs"
               >
                 <Plus className="h-3 w-3 mr-1" />
-                Add range
+                {t("criteriaForm.addRange")}
               </Button>
             </div>
 
             {fields.length === 0 && (
               <p className="text-xs text-muted-foreground">
-                No thresholds defined — this criterion will not contribute to
-                the score.
+                {t("criteriaForm.noThresholds")}
               </p>
             )}
 
@@ -277,7 +308,7 @@ export function CriteriaForm({
                   <div className="flex items-center gap-1.5 flex-1">
                     <Input
                       type="number"
-                      placeholder="Min"
+                      placeholder={t("criteriaForm.min")}
                       className="h-7 w-16 text-xs"
                       {...form.register(`thresholds.${index}.min`, {
                         setValueAs: (v) => (v === "" ? undefined : Number(v)),
@@ -288,7 +319,7 @@ export function CriteriaForm({
                     </span>
                     <Input
                       type="number"
-                      placeholder="Max"
+                      placeholder={t("criteriaForm.max")}
                       className="h-7 w-16 text-xs"
                       {...form.register(`thresholds.${index}.max`, {
                         setValueAs: (v) => (v === "" ? undefined : Number(v)),
@@ -305,7 +336,7 @@ export function CriteriaForm({
                           form.setValue(`thresholds.${index}.score`, val)
                         }
                         className={`h-6 w-8 rounded text-xs font-medium transition-colors ${
-                          form.watch(`thresholds.${index}.score`) === val
+                          thresholds?.[index]?.score === val
                             ? val === 1
                               ? "bg-emerald-100 text-emerald-700"
                               : val === -1
@@ -336,10 +367,12 @@ export function CriteriaForm({
 
         <div className="flex gap-2 justify-end">
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : "Save Criteria"}
+            {isSubmitting
+              ? t("criteriaForm.saving")
+              : t("criteriaForm.saveCriteria")}
           </Button>
         </div>
       </form>

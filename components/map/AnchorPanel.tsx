@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAnchorStore } from "@/store/anchorStore";
 import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { Anchor } from "@/types/anchor";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { CreateAnchorForm } from "@/components/anchors/CreateAnchorForm";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Pencil, X, ChevronDown } from "lucide-react";
+import { Plus, Trash2, Pencil, ChevronDown } from "lucide-react";
 
 interface AnchorPanelProps {
   open: boolean;
@@ -25,6 +26,9 @@ export default function AnchorPanel({
   onClose,
   onAnchorSelect,
 }: AnchorPanelProps) {
+  const t = useTranslations("anchors");
+  const tCommon = useTranslations("common");
+  const typeLabels = t.raw("types") as Record<string, string>;
   const anchors = useAnchorStore((state) => state.anchors);
   const deleteAnchor = useAnchorStore((state) => state.deleteAnchor);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -53,7 +57,7 @@ export default function AnchorPanel({
             >
               <ChevronDown size={20} />
             </button>
-            <h2 className="text-base font-bold">Anchors</h2>
+            <h2 className="text-base font-bold">{t("title")}</h2>
             <span className="text-xs text-muted-foreground">
               {anchors.length}
             </span>
@@ -64,12 +68,12 @@ export default function AnchorPanel({
             className="gap-1 h-8"
           >
             <Plus className="h-3.5 w-3.5" />
-            Add
+            {tCommon("add")}
           </Button>
         </div>
 
         <div className="flex items-center gap-2 px-4 py-2 border-b bg-muted/30 shrink-0">
-          <span className="text-xs text-muted-foreground">Sort:</span>
+          <span className="text-xs text-muted-foreground">{t("sort")}</span>
           <button
             onClick={() => setSortBy("title")}
             className={`text-xs px-2 py-0.5 rounded ${
@@ -78,7 +82,7 @@ export default function AnchorPanel({
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Name
+            {t("name")}
           </button>
           <button
             onClick={() => setSortBy("type")}
@@ -88,15 +92,15 @@ export default function AnchorPanel({
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            Type
+            {t("type")}
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
           {sorted.length === 0 && (
             <div className="text-center text-muted-foreground py-8">
-              <p className="text-sm">No anchors yet</p>
-              <p className="text-xs mt-1">Add anchors from the map search</p>
+              <p className="text-sm">{t("noAnchors")}</p>
+              <p className="text-xs mt-1">{t("noAnchorsHintPanel")}</p>
             </div>
           )}
 
@@ -124,7 +128,7 @@ export default function AnchorPanel({
                     >
                       {anchor.type === "custom" && anchor.customTypeLabel
                         ? anchor.customTypeLabel
-                        : anchor.type.replace("_", " ")}
+                        : (typeLabels[anchor.type] ?? anchor.type)}
                     </span>
                     {anchor.address && (
                       <span className="text-xs text-muted-foreground truncate">
@@ -168,7 +172,7 @@ export default function AnchorPanel({
         <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {editingAnchor ? "Edit Anchor" : "Add Anchor"}
+              {editingAnchor ? t("editAnchor") : t("addAnchor")}
             </DialogTitle>
           </DialogHeader>
           <CreateAnchorForm

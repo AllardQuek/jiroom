@@ -1,5 +1,3 @@
-import { AnchorType } from "@/types/anchor";
-
 /**
  * Centralized color constants for the application.
  * These colors are used in JavaScript/React contexts where CSS variables cannot be directly used.

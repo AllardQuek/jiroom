@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Viewing } from "@/types/listing";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
@@ -17,13 +17,11 @@ const hours = Array.from({ length: 12 }, (_, i) => String(i + 1));
 const minutes = ["00", "15", "30", "45"];
 
 function parseExistingDate(isoString?: string) {
-  const now = new Date();
-
   if (!isoString) {
     return {
       hour: "12",
       minute: "00",
-      ampm: "PM" as const,
+      ampm: "pm" as const,
     };
   }
   const d = new Date(isoString);
@@ -31,7 +29,7 @@ function parseExistingDate(isoString?: string) {
   return {
     hour: h === 0 ? "12" : h > 12 ? String(h - 12) : String(h),
     minute: String(Math.round(d.getMinutes() / 15) * 15).padStart(2, "0"),
-    ampm: (h >= 12 ? "PM" : "AM") as "AM" | "PM",
+    ampm: (h >= 12 ? "pm" : "am") as "am" | "pm",
   };
 }
 
@@ -52,6 +50,7 @@ export function ScheduleViewingForm({
   isScheduled = false,
   scheduledDate,
 }: ScheduleViewingFormProps) {
+  const t = useTranslations("schedule");
   const locale = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const initial = parseExistingDate(viewing?.scheduled_date);
@@ -60,7 +59,7 @@ export function ScheduleViewingForm({
   );
   const [hour, setHour] = useState(initial.hour);
   const [minute, setMinute] = useState(initial.minute);
-  const [ampm, setAmpm] = useState<"AM" | "PM">(initial.ampm);
+  const [ampm, setAmpm] = useState<"am" | "pm">(initial.ampm);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -69,8 +68,8 @@ export function ScheduleViewingForm({
       if (selectedDate) {
         const date = new Date(selectedDate);
         let hour24 = parseInt(hour);
-        if (ampm === "PM" && hour24 !== 12) hour24 += 12;
-        if (ampm === "AM" && hour24 === 12) hour24 = 0;
+        if (ampm === "pm" && hour24 !== 12) hour24 += 12;
+        if (ampm === "am" && hour24 === 12) hour24 = 0;
         date.setHours(hour24, parseInt(minute), 0, 0);
         scheduled_date = date.toISOString();
       }
@@ -99,18 +98,18 @@ export function ScheduleViewingForm({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1.5 w-full">
               <label className="text-xs font-medium text-muted-foreground">
-                Date
+                {t("date")}
               </label>
               <DatePicker
                 value={selectedDate}
                 onChange={setSelectedDate}
-                placeholder="Select date"
+                placeholder={t("datePlaceholder")}
               />
             </div>
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-muted-foreground">
-                Time
+                {t("time")}
               </label>
               <div className="flex items-center justify-center gap-1.5 w-full">
                 <Select value={hour} onValueChange={setHour}>
@@ -144,10 +143,10 @@ export function ScheduleViewingForm({
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setAmpm(ampm === "AM" ? "PM" : "AM")}
+                  onClick={() => setAmpm(ampm === "am" ? "pm" : "am")}
                   className="h-9 w-[64px] text-xs font-medium"
                 >
-                  {ampm}
+                  {ampm === "am" ? t("am") : t("pm")}
                 </Button>
               </div>
             </div>
@@ -161,7 +160,11 @@ export function ScheduleViewingForm({
               size="sm"
               className="flex-1 h-8 text-xs"
             >
-              {isSubmitting ? "Saving..." : viewing ? "Update" : "Schedule"}
+              {isSubmitting
+                ? t("saving")
+                : viewing
+                  ? t("update")
+                  : t("schedule")}
             </Button>
           </div>
         </>
@@ -196,7 +199,7 @@ export function ScheduleViewingForm({
               size="sm"
               className="flex-1 h-8 text-xs"
             >
-              Cancel Schedule
+              {t("cancelSchedule")}
             </Button>
           </div>
         </div>

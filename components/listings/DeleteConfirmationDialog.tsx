@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +24,9 @@ export function DeleteConfirmationDialog({
   onConfirm,
   listingTitle,
 }: DeleteConfirmationDialogProps) {
+  const t = useTranslations("listings.delete");
+  const tCommon = useTranslations("common");
+
   const handleConfirm = () => {
     onConfirm();
     onOpenChange(false);
@@ -30,18 +36,17 @@ export function DeleteConfirmationDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete Listing</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{listingTitle}"? This action cannot
-            be undone.
+            {t("confirm", { title: listingTitle })} {t("cannotUndo")}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {tCommon("cancel")}
           </Button>
           <Button variant="destructive" onClick={handleConfirm}>
-            Delete
+            {tCommon("delete")}
           </Button>
         </DialogFooter>
       </DialogContent>

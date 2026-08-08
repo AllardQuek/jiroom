@@ -1,6 +1,7 @@
 "use client";
 
 import { useAgentQuestionStore } from "@/store/agentQuestionStore";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2, Plus, FileText, Check } from "lucide-react";
 
@@ -15,6 +16,7 @@ export function AgentQuestionList({
   onCreate,
   onDelete,
 }: AgentQuestionListProps) {
+  const t = useTranslations("agentQuestions");
   const templates = useAgentQuestionStore((state) => state.templates);
   const activeTemplateId = useAgentQuestionStore(
     (state) => state.activeTemplateId
@@ -30,14 +32,14 @@ export function AgentQuestionList({
           <FileText size={20} className="text-muted-foreground/50" />
         </div>
         <div>
-          <p className="text-sm font-medium">No question templates</p>
+          <p className="text-sm font-medium">{t("list.noTemplates")}</p>
           <p className="text-xs text-muted-foreground/60 mt-0.5">
-            Create one to quickly copy questions to agents
+            {t("list.noTemplatesHint")}
           </p>
         </div>
         <Button size="sm" onClick={onCreate}>
           <Plus className="w-4 h-4 mr-1.5" />
-          Create Template
+          {t("list.createTemplate")}
         </Button>
       </div>
     );
@@ -62,8 +64,7 @@ export function AgentQuestionList({
                 )}
               </div>
               <p className="text-xs text-muted-foreground/50">
-                {template.questions.length} question
-                {template.questions.length !== 1 ? "s" : ""}
+                {t("list.questionCount", { count: template.questions.length })}
               </p>
             </div>
           </div>
@@ -74,7 +75,7 @@ export function AgentQuestionList({
                 size="icon"
                 onClick={() => setActiveTemplate(template.id)}
                 className="h-7 w-7"
-                title="Set as active"
+                title={t("list.setAsActive")}
               >
                 <Check size={12} />
               </Button>

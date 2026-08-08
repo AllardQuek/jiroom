@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Listing } from "@/types/listing";
 import { Card } from "@/components/ui/card";
 import { ListingSelector } from "@/components/comparison/ListingSelector";
@@ -54,9 +54,19 @@ export function ListingCard({
 
   const viewing = viewings.find((v) => v.listing_id === listing.id);
   const hasVerdict = verdicts.some((v) => v.listing_id === listing.id);
+  const [now, setNow] = useState(0);
+  useEffect(() => {
+    const update = () => setNow(Date.now());
+    const timeoutId = setTimeout(update, 0);
+    const intervalId = setInterval(update, 60_000);
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
+  }, []);
   const isViewingOverdue =
     !hasVerdict && viewing?.scheduled_date
-      ? new Date(viewing.scheduled_date).getTime() + 30 * 60 * 1000 < Date.now()
+      ? new Date(viewing.scheduled_date).getTime() + 30 * 60 * 1000 < now
       : false;
   const template = templates[0];
   const answeredCount = template
@@ -75,7 +85,7 @@ export function ListingCard({
 
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, getScoringPrice(listing, evaluation))
+      ? calculateScore(evaluation.responses, template, getScoringPrice(listing))
       : null;
 
   const handleClick = () => {
@@ -163,7 +173,7 @@ export function ListingCard({
                       {t("noDate")}
                     </span>
                   )}
-                  {isTaken && <TakenBadge takenDate={listing.taken_date} />}
+                  {isTaken && <TakenBadge />}
                   {hasNotes && (
                     <FileText size={10} className="text-muted-foreground/40" />
                   )}
@@ -290,7 +300,7 @@ export function ListingCard({
                   <CommuteBadge listing={listing} />
                 </div>
                 <div className="flex items-center gap-2">
-                  {isTaken && <TakenBadge takenDate={listing.taken_date} />}
+                  {isTaken && <TakenBadge />}
                   {hasNotes && (
                     <button
                       type="button"
@@ -312,7 +322,7 @@ export function ListingCard({
                   {viewing?.scheduled_date ? (
                     <span
                       className={`text-[10px] ${isViewingOverdue ? "text-amber-500 font-semibold" : "text-muted-foreground/60"}`}
-                      title="Scheduled viewing"
+                      title={t("scheduledViewing")}
                     >
                       <CalendarDays
                         size={10}

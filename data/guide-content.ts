@@ -58,7 +58,6 @@ const TOPICS: TopicDef[] = [
         "Agent fee: landlord pays by default, unless you hire your own agent too.",
       ],
       tips: [],
-
     },
   },
   {
@@ -73,7 +72,6 @@ const TOPICS: TopicDef[] = [
         "Tampines West, Tampines, Upper Changi, and Tampines East are on the blue line — direct train to Expo.",
       ],
       tips: [],
-
     },
   },
   {
@@ -88,15 +86,24 @@ const TOPICS: TopicDef[] = [
         "Prepare a tenant profile to send to agents: occupation, nationality, move-in date, budget range, etc.",
       ],
       table: {
-        headers: [
-          "Platform",
-          "Best For",
-        ],
+        headers: ["Platform", "Best For"],
         rows: [
-          ["[PropertyGuru](https://www.propertyguru.com.sg)", "Largest inventory of rooms and units; mostly agent-listed"],
-          ["[99.co](https://www.99.co/singapore)", "**Map** and room search with MRT commute filtering; **floor plans** on most listings"],
-          ["[Carousell](https://www.carousell.sg)", "Direct-owner rooms and budget-friendly deals"],
-          ["[Facebook](https://www.facebook.com/marketplace/singapore/propertyrental)", "Room shares and sublets (harder to filter)"],
+          [
+            "[PropertyGuru](https://www.propertyguru.com.sg)",
+            "Largest inventory of rooms and units; mostly agent-listed",
+          ],
+          [
+            "[99.co](https://www.99.co/singapore)",
+            "**Map** and room search with MRT commute filtering; **floor plans** on most listings",
+          ],
+          [
+            "[Carousell](https://www.carousell.sg)",
+            "Direct-owner rooms and budget-friendly deals",
+          ],
+          [
+            "[Facebook](https://www.facebook.com/marketplace/singapore/propertyrental)",
+            "Room shares and sublets (harder to filter)",
+          ],
         ],
       },
     },
@@ -213,7 +220,7 @@ const LANE_NODES: Node[] = PHASE_IDS.map((id) => {
   const col = PHASE_CONFIG[id];
   const maxRows = Math.max(
     ...TOPICS.filter((t) => t.phaseId === id).map((t) => t.row),
-    0,
+    0
   );
   const laneHeight = PHASE_HEADER_HEIGHT + 20 + (maxRows + 1) * ROW_HEIGHT + 60;
   return {
@@ -271,7 +278,6 @@ const EDGE_DEFS: [string, string][] = [
   ["touring-checklist", "verifying-everything"],
   ["verifying-everything", "understanding-ta"],
   ["understanding-ta", "option-to-handover"],
-
 ];
 
 export const INITIAL_EDGES: Edge[] = EDGE_DEFS.map(([from, to]) => ({

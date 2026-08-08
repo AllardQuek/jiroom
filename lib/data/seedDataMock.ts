@@ -1,10 +1,8 @@
 import { getStoreKeys } from "@/lib/utils/localStorage";
 import type { Listing, Viewing } from "@/types/listing";
-import type { Evaluation, Template } from "@/types/evaluation";
+import type { Evaluation } from "@/types/evaluation";
 import type { Verdict } from "@/types/verdict";
 import type { Anchor } from "@/types/anchor";
-
-const now = new Date("2026-06-08T10:00:00+08:00").toISOString();
 const daysAgo = (n: number) =>
   new Date(Date.now() - n * 86400000).toISOString();
 const daysFromNow = (n: number) =>

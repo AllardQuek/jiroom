@@ -12,6 +12,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { AlertCircle } from "lucide-react";
 
 const Form = FormProvider;
 
@@ -84,19 +85,32 @@ const FormItem = React.forwardRef<
 });
 FormItem.displayName = "FormItem";
 
+type FormLabelProps = React.ComponentPropsWithoutRef<
+  typeof LabelPrimitive.Root
+> & {
+  required?: boolean;
+};
+
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField();
+  FormLabelProps
+>(({ className, children, required, ...props }, ref) => {
+  const { formItemId } = useFormField();
 
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-error", className)}
+      className={cn("inline-block", className)}
       htmlFor={formItemId}
       {...props}
-    />
+    >
+      {children}
+      {required && (
+        <span className="ml-0.5 text-destructive" aria-hidden="true">
+          *
+        </span>
+      )}
+    </Label>
   );
 });
 FormLabel.displayName = "FormLabel";
@@ -134,7 +148,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-[0.8rem] text-muted-foreground", className)}
       {...props}
     />
   );
@@ -156,9 +170,17 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-sm font-medium text-error", className)}
+      className={cn(
+        "text-sm font-medium text-destructive flex items-center gap-1.5 animate-fade-in",
+        className
+      )}
+      aria-live="polite"
+      aria-atomic="true"
       {...props}
     >
+      {error && (
+        <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+      )}
       {body}
     </p>
   );

@@ -5,6 +5,7 @@ import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { CUSTOM_ANCHOR_PALETTE_EXPORT } from "@/lib/constants/colors";
 import { Anchor } from "@/types/anchor";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -21,6 +22,9 @@ import { Button } from "@/components/ui/button";
 import { Plus, Trash2, Pencil, Palette } from "lucide-react";
 
 export default function AnchorListPage() {
+  const t = useTranslations("anchors");
+  const tCommon = useTranslations("common");
+  const typeLabels = t.raw("types") as Record<string, string>;
   const anchors = useAnchorStore((state) => state.anchors);
   const deleteAnchor = useAnchorStore((state) => state.deleteAnchor);
   const updateAnchor = useAnchorStore((state) => state.updateAnchor);
@@ -36,19 +40,19 @@ export default function AnchorListPage() {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between p-4 border-b">
-        <h1 className="text-lg font-bold">Anchors</h1>
+        <h1 className="text-lg font-bold">{t("title")}</h1>
         <Button
           onClick={() => setShowCreateDialog(true)}
           size="sm"
           className="gap-1"
         >
           <Plus className="h-4 w-4" />
-          Add
+          {tCommon("add")}
         </Button>
       </div>
 
       <div className="flex items-center gap-2 px-4 py-2 border-b bg-muted/30">
-        <span className="text-xs text-muted-foreground">Sort by:</span>
+        <span className="text-xs text-muted-foreground">{t("sortBy")}</span>
         <button
           onClick={() => setSortBy("title")}
           className={`text-xs px-2 py-0.5 rounded ${
@@ -57,7 +61,7 @@ export default function AnchorListPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          Name
+          {t("name")}
         </button>
         <button
           onClick={() => setSortBy("type")}
@@ -67,20 +71,18 @@ export default function AnchorListPage() {
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
-          Type
+          {t("type")}
         </button>
         <span className="text-xs text-muted-foreground ml-auto">
-          {anchors.length} anchor{anchors.length !== 1 ? "s" : ""}
+          {t("anchorCount", { count: anchors.length })}
         </span>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
         {sorted.length === 0 && (
           <div className="text-center text-muted-foreground py-12">
-            <p className="text-sm">No anchors yet</p>
-            <p className="text-xs mt-1">
-              Add anchors from the map or from this page
-            </p>
+            <p className="text-sm">{t("noAnchors")}</p>
+            <p className="text-xs mt-1">{t("noAnchorsHintList")}</p>
           </div>
         )}
 
@@ -107,7 +109,7 @@ export default function AnchorListPage() {
                   >
                     {anchor.type === "custom" && anchor.customTypeLabel
                       ? anchor.customTypeLabel
-                      : anchor.type.replace("_", " ")}
+                      : (typeLabels[anchor.type] ?? anchor.type)}
                   </span>
                   {anchor.address && (
                     <span className="text-xs text-muted-foreground truncate">
@@ -130,7 +132,9 @@ export default function AnchorListPage() {
                           key={color}
                           onClick={() => updateAnchor(anchor.id, { color })}
                           className={`w-6 h-6 rounded-full transition-transform hover:scale-110 ${
-                            color === getAnchorColor(anchor) ? "ring-2 ring-offset-2 ring-primary" : ""
+                            color === getAnchorColor(anchor)
+                              ? "ring-2 ring-offset-2 ring-primary"
+                              : ""
                           }`}
                           style={{ backgroundColor: color }}
                         />
@@ -168,7 +172,7 @@ export default function AnchorListPage() {
         <DialogContent className="max-w-md max-h-[90dvh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {editingAnchor ? "Edit Anchor" : "Add Anchor"}
+              {editingAnchor ? t("editAnchor") : t("addAnchor")}
             </DialogTitle>
           </DialogHeader>
           <CreateAnchorForm

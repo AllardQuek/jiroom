@@ -1,16 +1,21 @@
-import { test, expect, type Page } from "@playwright/test";
-import { seedLocalStorage } from "./helpers";
+import { test, type Page } from "@playwright/test";
+import { seedLocalStorage, dismissMapErrorDialog } from "./helpers";
 
 const MOBILE_VIEWPORT = { width: 390, height: 844 };
 const DESKTOP_VIEWPORT = { width: 1280, height: 800 };
 
-async function seedAndNavigate(page: Page, url: string, viewport = MOBILE_VIEWPORT) {
+async function seedAndNavigate(
+  page: Page,
+  url: string,
+  viewport = MOBILE_VIEWPORT
+) {
   await page.setViewportSize(viewport);
   await page.goto("/map");
   await page.waitForLoadState("domcontentloaded");
   await seedLocalStorage(page);
   await page.goto(url);
   await page.waitForLoadState("networkidle");
+  await dismissMapErrorDialog(page);
   await page.waitForTimeout(500);
 }
 
@@ -81,7 +86,7 @@ test.describe("Screenshots", () => {
   test("08 - Map with anchors panel (mobile)", async ({ page }) => {
     await seedAndNavigate(page, "/map");
     await page.waitForTimeout(2000);
-    await page.locator("button:has(svg.lucide-menu)").click();
+    await page.locator("button:has(svg.lucide-menu)").first().click();
     await page.waitForTimeout(300);
     await page.getByRole("button", { name: "Anchors", exact: true }).click();
     await page.waitForTimeout(500);

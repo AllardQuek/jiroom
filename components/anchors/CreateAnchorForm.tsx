@@ -1,12 +1,17 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Resolver } from "react-hook-form";
 import { anchorSchema, type AnchorFormData } from "@/lib/schemas/anchorSchema";
-import { ANCHOR_COLORS, getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
-import { getAnchorColorForType, CUSTOM_ANCHOR_PALETTE_EXPORT } from "@/lib/constants/colors";
+import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
+import {
+  getAnchorColorForType,
+  CUSTOM_ANCHOR_PALETTE_EXPORT,
+} from "@/lib/constants/colors";
 import { useAnchorStore } from "@/store/anchorStore";
 import { Anchor, AnchorType } from "@/types/anchor";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin } from "lucide-react";
@@ -20,12 +25,12 @@ import {
 } from "@/components/ui/form";
 import PlaceAutocomplete from "@/components/map/PlaceAutocomplete";
 
-const PREDEFINED_TYPES: { value: AnchorType; label: string }[] = [
-  { value: "home", label: "Home" },
-  { value: "work", label: "Work" },
-  { value: "school", label: "School" },
-  { value: "station", label: "MRT / Station" },
-  { value: "custom", label: "Custom" },
+const PREDEFINED_TYPES: AnchorType[] = [
+  "home",
+  "work",
+  "school",
+  "station",
+  "custom",
 ];
 
 interface CreateAnchorFormProps {
@@ -41,11 +46,21 @@ export function CreateAnchorForm({
   defaultValues: defaultValuesProp,
   anchorToEdit,
 }: CreateAnchorFormProps) {
+  const t = useTranslations("anchors");
+  const tCommon = useTranslations("common");
   const addAnchor = useAnchorStore((state) => state.addAnchor);
   const updateAnchor = useAnchorStore((state) => state.updateAnchor);
 
+  const TYPE_LABELS: Record<AnchorType, string> = {
+    home: t("types.home"),
+    work: t("types.work"),
+    school: t("types.school"),
+    station: t("types.station"),
+    custom: t("types.custom"),
+  };
+
   const form = useForm<AnchorFormData>({
-    resolver: zodResolver(anchorSchema) as any,
+    resolver: zodResolver(anchorSchema) as unknown as Resolver<AnchorFormData>,
     defaultValues: {
       title: "",
       type: "home",
@@ -69,8 +84,8 @@ export function CreateAnchorForm({
     },
   });
 
-  const selectedType = form.watch("type");
-  const selectedColor = form.watch("color");
+  const selectedType = useWatch({ control: form.control, name: "type" });
+  const selectedColor = useWatch({ control: form.control, name: "color" });
 
   const onSubmit = async (data: AnchorFormData) => {
     if (anchorToEdit) {
@@ -96,12 +111,9 @@ export function CreateAnchorForm({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>{t("name")}</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="e.g. My Office, Home, Jurong East MRT"
-                  {...field}
-                />
+                <Input placeholder={t("form.namePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -113,32 +125,40 @@ export function CreateAnchorForm({
           name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Type</FormLabel>
+              <FormLabel>{t("type")}</FormLabel>
               <FormControl>
                 <div className="flex flex-wrap gap-2">
-                  {PREDEFINED_TYPES.map((t) => (
+                  {PREDEFINED_TYPES.map((anchorType) => (
                     <button
-                      key={t.value}
+                      key={anchorType}
                       type="button"
                       onClick={() => {
-                        field.onChange(t.value);
-                        // Auto-set color when type changes (if not custom)
-                        if (t.value !== "custom") {
-                          form.setValue("color", getAnchorColorForType(t.value));
+                        field.onChange(anchorType);
+                        if (anchorType !== "custom") {
+                          form.setValue(
+                            "color",
+                            getAnchorColorForType(anchorType)
+                          );
                         }
                       }}
                       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
-                        field.value === t.value
+                        field.value === anchorType
                           ? "border-transparent text-white"
                           : "border-muted-foreground/20 text-muted-foreground hover:border-muted-foreground/40"
                       }`}
                       style={
-                        field.value === t.value
-                          ? { backgroundColor: t.value === "custom" && selectedColor ? selectedColor : ANCHOR_COLORS[t.value] || getAnchorColorForType(t.value) }
+                        field.value === anchorType
+                          ? {
+                              backgroundColor:
+                                anchorType === "custom" && selectedColor
+                                  ? selectedColor
+                                  : ANCHOR_COLORS[anchorType] ||
+                                    getAnchorColorForType(anchorType),
+                            }
                           : {}
                       }
                     >
-                      {t.label}
+                      {TYPE_LABELS[anchorType]}
                     </button>
                   ))}
                 </div>
@@ -154,10 +174,10 @@ export function CreateAnchorForm({
             name="customTypeLabel"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Custom Type Label</FormLabel>
+                <FormLabel>{t("form.customTypeLabel")}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="e.g. Gym, Parents' House"
+                    placeholder={t("form.customTypePlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -173,7 +193,7 @@ export function CreateAnchorForm({
             name="color"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Color</FormLabel>
+                <FormLabel>{t("form.color")}</FormLabel>
                 <FormControl>
                   <div className="flex flex-wrap gap-2">
                     {CUSTOM_ANCHOR_PALETTE_EXPORT.map((color) => (
@@ -182,7 +202,9 @@ export function CreateAnchorForm({
                         type="button"
                         onClick={() => field.onChange(color)}
                         className={`w-8 h-8 rounded-full transition-transform hover:scale-110 ${
-                          selectedColor === color ? "ring-2 ring-offset-2 ring-primary" : ""
+                          selectedColor === color
+                            ? "ring-2 ring-offset-2 ring-primary"
+                            : ""
                         }`}
                         style={{ backgroundColor: color }}
                       />
@@ -199,7 +221,7 @@ export function CreateAnchorForm({
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
             <span className="flex items-center gap-2">
               <MapPin size={14} className="text-primary" />
-              Location
+              {t("form.location")}
             </span>
           </label>
           <PlaceAutocomplete
@@ -216,7 +238,7 @@ export function CreateAnchorForm({
             className="bg-primary/5 border border-primary/20 rounded-lg px-3 py-2 w-full text-sm outline-none"
           />
           <p className="text-[0.8rem] text-muted-foreground mt-1.5">
-            Search to set the anchor location
+            {t("form.locationHint")}
           </p>
         </div>
 
@@ -225,7 +247,7 @@ export function CreateAnchorForm({
 
         <div className="flex flex-row-reverse gap-3 pt-4 border-t">
           <Button type="submit" className="flex-1 font-bold">
-            {anchorToEdit ? "Save changes" : "Add anchor"}
+            {anchorToEdit ? t("saveChanges") : t("addAnchor")}
           </Button>
           <Button
             type="button"
@@ -233,7 +255,7 @@ export function CreateAnchorForm({
             onClick={onCancel}
             className="flex-1"
           >
-            Cancel
+            {tCommon("cancel")}
           </Button>
         </div>
       </form>

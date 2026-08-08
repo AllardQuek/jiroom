@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Criterion } from "@/types/evaluation";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -26,15 +27,6 @@ interface CriteriaItemProps {
   onEdit: () => void;
   onDelete: () => void;
 }
-
-const typeMeta: Record<string, { label: string; icon: React.ReactNode }> = {
-  checkbox: { label: "Checkbox", icon: <CheckSquare className="h-3 w-3" /> },
-  rating: { label: "Rating", icon: <Star className="h-3 w-3" /> },
-  number: { label: "Number", icon: <Hash className="h-3 w-3" /> },
-  text: { label: "Text", icon: <Type className="h-3 w-3" /> },
-  select: { label: "Select", icon: <List className="h-3 w-3" /> },
-  derived: { label: "Derived", icon: <FunctionSquare className="h-3 w-3" /> },
-};
 
 function ScoreToggle({
   value,
@@ -83,6 +75,7 @@ function ScorePopover({
   open: boolean;
   onClose: () => void;
 }) {
+  const t = useTranslations("templates");
   const popoverRef = useRef<HTMLDivElement>(null);
   const updateTemplate = useTemplateStore((s) => s.updateTemplate);
   const templates = useTemplateStore((s) => s.templates);
@@ -156,7 +149,7 @@ function ScorePopover({
       <style>{`@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}`}</style>
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs font-medium text-muted-foreground">
-          Scoring
+          {t("criteriaItem.scoring")}
         </span>
         <button
           type="button"
@@ -188,12 +181,12 @@ function ScorePopover({
 
       {(criterion.type === "number" || criterion.type === "derived") && (
         <div className="space-y-1.5">
-          {(criterion.thresholds ?? []).map((t, i) => (
+          {(criterion.thresholds ?? []).map((threshold, i) => (
             <div key={i} className="flex items-center gap-1.5">
               <Input
                 type="number"
-                placeholder="Min"
-                value={t.min ?? ""}
+                placeholder={t("criteriaItem.min")}
+                value={threshold.min ?? ""}
                 onChange={(e) =>
                   updateThreshold(i, {
                     min:
@@ -207,8 +200,8 @@ function ScorePopover({
               <span className="text-xs text-muted-foreground/40">&ndash;</span>
               <Input
                 type="number"
-                placeholder="Max"
-                value={t.max ?? ""}
+                placeholder={t("criteriaItem.max")}
+                value={threshold.max ?? ""}
                 onChange={(e) =>
                   updateThreshold(i, {
                     max:
@@ -220,7 +213,7 @@ function ScorePopover({
                 className="h-7 w-14 text-xs [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
               <ScoreToggle
-                value={t.score}
+                value={threshold.score}
                 onChange={(v) => updateThreshold(i, { score: v })}
               />
               <button
@@ -238,7 +231,7 @@ function ScorePopover({
             className="flex items-center gap-1 text-xs text-muted-foreground/50 hover:text-foreground mt-1"
           >
             <Plus className="h-3 w-3" />
-            Add range
+            {t("criteriaItem.addRange")}
           </button>
         </div>
       )}
@@ -246,8 +239,8 @@ function ScorePopover({
       {(criterion.type === "checkbox" || criterion.type === "rating") && (
         <p className="text-xs text-muted-foreground/50">
           {criterion.type === "checkbox"
-            ? "Yes = +1, No = -1, N/A = excluded"
-            : "1&ndash;2 = -1, 3 = 0, 4&ndash;5 = +1"}
+            ? t("criteriaItem.checkboxScoring")
+            : t("criteriaItem.ratingScoring")}
         </p>
       )}
     </div>
@@ -260,18 +253,45 @@ export function CriteriaItem({
   onEdit,
   onDelete,
 }: CriteriaItemProps) {
+  const t = useTranslations("templates");
   const hasScores =
     criterion.scores && Object.keys(criterion.scores).length > 0;
   const hasThresholds = criterion.thresholds && criterion.thresholds.length > 0;
   const hasScoring = hasScores || hasThresholds;
-  const meta = typeMeta[criterion.type] ?? typeMeta.text;
   const [popoverOpen, setPopoverOpen] = useState(false);
+
+  const typeMeta: Record<string, { label: string; icon: React.ReactNode }> = {
+    checkbox: {
+      label: t("criteriaItem.checkbox"),
+      icon: <CheckSquare className="h-3 w-3" />,
+    },
+    rating: {
+      label: t("criteriaItem.rating"),
+      icon: <Star className="h-3 w-3" />,
+    },
+    number: {
+      label: t("criteriaItem.number"),
+      icon: <Hash className="h-3 w-3" />,
+    },
+    text: { label: t("criteriaItem.text"), icon: <Type className="h-3 w-3" /> },
+    select: {
+      label: t("criteriaItem.select"),
+      icon: <List className="h-3 w-3" />,
+    },
+    derived: {
+      label: t("criteriaItem.derived"),
+      icon: <FunctionSquare className="h-3 w-3" />,
+    },
+  };
+  const meta = typeMeta[criterion.type] ?? typeMeta.text;
 
   return (
     <div className="flex items-start gap-3 py-2.5 group relative">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <h4 className="font-medium text-sm text-foreground leading-snug">{criterion.name}</h4>
+          <h4 className="font-medium text-sm text-foreground leading-snug">
+            {criterion.name}
+          </h4>
           <Badge
             variant="outline"
             className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0 font-normal text-muted-foreground/50 border-border/20"
@@ -287,7 +307,7 @@ export function CriteriaItem({
                 setPopoverOpen(true);
               }}
               className="h-5 w-5 rounded flex items-center justify-center text-muted-foreground/30 hover:text-foreground hover:bg-muted-foreground/10 transition-colors"
-              title="Scoring details"
+              title={t("criteriaItem.scoringDetails")}
             >
               <Gauge className="h-3 w-3" />
             </button>
