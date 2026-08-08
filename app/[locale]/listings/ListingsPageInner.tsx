@@ -298,11 +298,7 @@ export function ListingsPageInner() {
             {/* Left side: Listing-specific actions */}
             <div className="flex flex-wrap gap-2 items-center">
               {compareMode && selectedListingIds.length >= 2 && (
-                <Button
-                  variant="default"
-                  onClick={handleCompare}
-                  className="hidden sm:flex"
-                >
+                <Button variant="default" onClick={handleCompare}>
                   {t("compareCount", { count: selectedListingIds.length })}
                 </Button>
               )}
