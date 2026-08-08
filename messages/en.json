@@ -687,6 +687,9 @@
       "datePlaceholder": "Select date taken",
       "saving": "Saving...",
       "saveChanges": "Save changes"
-    }
+    },
+    "sortTitle": "Sort listings",
+    "taken": "Taken",
+    "takenOn": "Taken on {date}"
   }
 }

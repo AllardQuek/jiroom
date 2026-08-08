@@ -687,6 +687,9 @@
       "datePlaceholder": "选择已租日期",
       "saving": "保存中...",
       "saveChanges": "保存更改"
-    }
+    },
+    "sortTitle": "排序房源",
+    "taken": "已租",
+    "takenOn": "于 {date} 已租"
   }
 }
