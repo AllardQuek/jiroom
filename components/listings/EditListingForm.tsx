@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { DatePicker } from "@/components/ui/date-picker";
-import { MapPin, XCircle } from "lucide-react";
+
 import {
   Form,
   FormControl,
@@ -109,7 +109,7 @@ export function EditListingForm({
           name="source_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("edit.sourceUrl")}</FormLabel>
+              <FormLabel required>{t("edit.sourceUrl")}</FormLabel>
               <FormControl>
                 <Input
                   placeholder={t("edit.sourceUrlPlaceholder")}
@@ -133,7 +133,7 @@ export function EditListingForm({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("edit.title")}</FormLabel>
+              <FormLabel required>{t("edit.title")}</FormLabel>
               <FormControl>
                 <Input placeholder={t("edit.titlePlaceholder")} {...field} />
               </FormControl>
@@ -147,7 +147,7 @@ export function EditListingForm({
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("edit.initialPriceRequired")}</FormLabel>
+              <FormLabel required>{t("edit.initialPriceRequired")}</FormLabel>
               <FormControl>
                 <PriceInput field={field} />
               </FormControl>
@@ -172,9 +172,9 @@ export function EditListingForm({
 
         <div>
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
-            <span className="flex items-center gap-2">
-              <MapPin size={14} className="text-primary" />
-              {t("edit.locationRequired")}
+            {t("edit.locationRequired")}
+            <span className="ml-0.5 text-destructive" aria-hidden="true">
+              *
             </span>
           </label>
           <PlaceAutocomplete
@@ -199,10 +199,7 @@ export function EditListingForm({
           name="area"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="flex items-center gap-2">
-                <MapPin size={14} className="text-primary" />
-                {t("edit.area")}
-              </FormLabel>
+              <FormLabel>{t("edit.area")}</FormLabel>
               <FormControl>
                 <CreatableSelect
                   value={field.value}
@@ -269,11 +266,10 @@ export function EditListingForm({
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between py-2">
                 <div className="space-y-0.5">
-                  <FormLabel className="text-base flex items-center gap-2 cursor-pointer">
-                    <XCircle size={16} className="text-muted-foreground" />
+                  <FormLabel className="text-base cursor-pointer">
                     {t("edit.markAsTaken")}
                   </FormLabel>
-                  <p className="text-[0.8rem] text-muted-foreground">
+                  <p className="text-[0.8rem] text-muted-foreground/80">
                     {t("edit.takenDescription")}
                   </p>
                 </div>

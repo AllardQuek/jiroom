@@ -17,6 +17,7 @@ interface InlineEvaluationProps {
   onResponse: (criterionId: string, value: number | string) => void;
   onClearResponse: (criterionId: string) => void;
   listingPrice?: number;
+  showHeader?: boolean;
 }
 
 export function InlineEvaluation({
@@ -24,6 +25,7 @@ export function InlineEvaluation({
   onResponse,
   onClearResponse,
   listingPrice,
+  showHeader = true,
 }: InlineEvaluationProps) {
   const t = useTranslations("evaluation");
   const templates = useTemplateStore((state) => state.templates);
@@ -180,30 +182,32 @@ export function InlineEvaluation({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">{t("title")}</span>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>
-            {answeredCount}/{totalCount}
-          </span>
-          {score !== null && (
-            <>
-              <span className="text-muted-foreground/40">·</span>
-              <span
-                className={`font-medium tabular-nums ${
-                  score.net > 0
-                    ? "text-emerald-600"
-                    : score.net < 0
-                      ? "text-red-600"
-                      : "text-muted-foreground"
-                }`}
-              >
-                {score.net > 0 ? `+${score.net}` : score.net}
-              </span>
-            </>
-          )}
+      {showHeader && (
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium">{t("title")}</span>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>
+              {answeredCount}/{totalCount}
+            </span>
+            {score !== null && (
+              <>
+                <span className="text-muted-foreground/40">·</span>
+                <span
+                  className={`font-medium tabular-nums ${
+                    score.net > 0
+                      ? "text-emerald-600"
+                      : score.net < 0
+                        ? "text-red-600"
+                        : "text-muted-foreground"
+                  }`}
+                >
+                  {score.net > 0 ? `+${score.net}` : score.net}
+                </span>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {Object.entries(groupedCriteria).map(([category, criteria]) => (
         <div key={category}>

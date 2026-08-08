@@ -17,7 +17,7 @@ import { extractFromUrl } from "@/lib/utils/urlExtract";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Globe, MapPin, FileText } from "lucide-react";
+
 import { InlineEvaluation } from "@/components/evaluation/InlineEvaluation";
 import { ScheduleViewingForm } from "@/components/viewing/ScheduleViewingForm";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
@@ -205,10 +205,7 @@ export function CreateListingForm({
             name="source_url"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">
-                  <Globe size={14} className="text-primary" />
-                  {t("create.listingUrl")}
-                </FormLabel>
+                <FormLabel required>{t("create.listingUrl")}</FormLabel>
                 <FormControl>
                   <Input
                     placeholder={t("create.listingUrlPlaceholder")}
@@ -226,7 +223,7 @@ export function CreateListingForm({
                   {t("create.listingUrlDescription")}
                 </FormDescription>
                 {isDuplicateUrl && (
-                  <div className="text-xs font-medium text-amber-600 dark:text-amber-400 mt-1 flex items-center gap-1.5">
+                  <div className="text-xs font-semibold text-[var(--warning-foreground)] mt-1 flex items-center gap-1.5">
                     <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
                     {t("create.duplicateUrlWarning")}
                   </div>
@@ -236,40 +233,12 @@ export function CreateListingForm({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center gap-2">
-                  {t("create.title")}
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder={t("create.titlePlaceholder")}
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  {t("create.titleDescription")}
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-muted" />
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
-                <span className="flex items-center gap-2">
-                  <MapPin size={14} className="text-primary" />
-                  {t("create.locationRequired")}
+                {t("create.locationRequired")}
+                <span className="ml-0.5 text-destructive" aria-hidden="true">
+                  *
                 </span>
               </label>
               <PlaceAutocomplete
@@ -282,7 +251,7 @@ export function CreateListingForm({
                   }
                 }}
               />
-              <p className="text-[0.8rem] text-muted-foreground mt-1.5">
+              <p className="text-[0.8rem] text-muted-foreground/80 mt-1.5">
                 {t("create.locationDescription")}
               </p>
             </div>
@@ -293,10 +262,7 @@ export function CreateListingForm({
                 name="area"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <MapPin size={14} className="text-primary" />
-                      {t("create.area")}
-                    </FormLabel>
+                    <FormLabel>{t("create.area")}</FormLabel>
                     <FormControl>
                       <CreatableSelect
                         value={field.value}
@@ -311,13 +277,33 @@ export function CreateListingForm({
               />
             </div>
 
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel required>{t("create.title")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder={t("create.titlePlaceholder")}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    {t("create.titleDescription")}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("create.initialPrice")}</FormLabel>
+                    <FormLabel required>{t("create.initialPrice")}</FormLabel>
                     <FormControl>
                       <PriceInput field={field} />
                     </FormControl>
@@ -368,10 +354,7 @@ export function CreateListingForm({
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">
-                  <FileText size={14} className="text-primary" />
-                  {t("create.notes")}
-                </FormLabel>
+                <FormLabel>{t("create.notes")}</FormLabel>
                 <FormControl>
                   <AutoResizeTextarea
                     placeholder={t("create.notesPlaceholder")}
@@ -384,7 +367,7 @@ export function CreateListingForm({
           />
         </div>
 
-        <div className="border-t pt-8 mt-8">
+        <div className="pt-8 mt-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">
@@ -425,26 +408,17 @@ export function CreateListingForm({
         </div>
 
         {template && (
-          <div className="border-t pt-8">
+          <div className="pt-8">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold">
-                  {t("create.evaluation")}{" "}
-                  <span className="text-muted-foreground font-normal ml-1">
-                    {t("create.optional")}
-                  </span>
+              <span className="text-sm font-semibold">
+                {t("create.evaluation")}{" "}
+                <span className="text-muted-foreground font-normal ml-1">
+                  {t("create.optional")}
                 </span>
-                {evalAnsweredCount > 0 && (
-                  <span className="text-[11px] bg-primary/10 text-primary rounded-full px-2 py-0.5 font-medium">
-                    {evalAnsweredCount}
-                  </span>
-                )}
+              </span>
+              <div className="text-xs text-muted-foreground">
+                {evalAnsweredCount}/{template.criteria.length}
               </div>
-              {evalAnsweredCount > 0 && (
-                <div className="text-xs text-muted-foreground">
-                  {evalAnsweredCount}/{template.criteria.length}
-                </div>
-              )}
             </div>
 
             <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
@@ -452,6 +426,7 @@ export function CreateListingForm({
                 responses={evalResponses}
                 onResponse={handleEvalResponse}
                 onClearResponse={handleEvalClear}
+                showHeader={false}
                 listingPrice={
                   (negotiatedPriceValue ?? priceValue) > 0
                     ? (negotiatedPriceValue ?? priceValue)
