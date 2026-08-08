@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resolver } from "react-hook-form";
 import {
@@ -80,7 +80,7 @@ export function EditListingForm({
     },
   });
 
-  const isTaken = form.watch("is_taken");
+  const isTaken = useWatch({ control: form.control, name: "is_taken" });
 
   // Auto-set taken_date when is_taken is enabled
   useEffect(() => {

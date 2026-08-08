@@ -292,7 +292,7 @@ export default function SchedulePage() {
     }
 
     return groups;
-  }, [viewings, listings]);
+  }, [viewings, listings, t]);
 
   const totalCount = groupedDays.reduce((sum, g) => sum + g.viewings.length, 0);
 

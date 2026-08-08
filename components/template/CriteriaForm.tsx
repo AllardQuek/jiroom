@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resolver } from "react-hook-form";
 import {
@@ -62,8 +62,10 @@ export function CriteriaForm({
     },
   });
 
-  const watchType = form.watch("type");
-  const watchOptions = form.watch("options");
+  const watchType = useWatch({ control: form.control, name: "type" });
+  const watchOptions = useWatch({ control: form.control, name: "options" });
+  const scores = useWatch({ control: form.control, name: "scores" });
+  const thresholds = useWatch({ control: form.control, name: "thresholds" });
   const optionsKey = useMemo(
     () => watchOptions?.join(",") ?? "",
     [watchOptions]
@@ -251,7 +253,7 @@ export function CriteriaForm({
                             type="button"
                             onClick={() => setScoreForOption(option, val)}
                             className={`h-6 w-8 rounded text-xs font-medium transition-colors ${
-                              (form.watch("scores")?.[option] ?? 0) === val
+                              (scores?.[option] ?? 0) === val
                                 ? val === 1
                                   ? "bg-emerald-100 text-emerald-700"
                                   : val === -1
@@ -334,7 +336,7 @@ export function CriteriaForm({
                           form.setValue(`thresholds.${index}.score`, val)
                         }
                         className={`h-6 w-8 rounded text-xs font-medium transition-colors ${
-                          form.watch(`thresholds.${index}.score`) === val
+                          thresholds?.[index]?.score === val
                             ? val === 1
                               ? "bg-emerald-100 text-emerald-700"
                               : val === -1

@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Resolver } from "react-hook-form";
 import { anchorSchema, type AnchorFormData } from "@/lib/schemas/anchorSchema";
@@ -84,8 +84,8 @@ export function CreateAnchorForm({
     },
   });
 
-  const selectedType = form.watch("type");
-  const selectedColor = form.watch("color");
+  const selectedType = useWatch({ control: form.control, name: "type" });
+  const selectedColor = useWatch({ control: form.control, name: "color" });
 
   const onSubmit = async (data: AnchorFormData) => {
     if (anchorToEdit) {
