@@ -9,10 +9,7 @@ import { useAnchorStore } from "@/store/anchorStore";
 import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import { getScoringPrice } from "@/lib/utils";
-import {
-  getStatusColors,
-  getAreaPalette,
-} from "@/lib/constants/colors";
+import { getStatusColors, getAreaPalette } from "@/lib/constants/colors";
 import { getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";

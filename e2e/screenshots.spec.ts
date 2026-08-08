@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, type Page } from "@playwright/test";
 import { seedLocalStorage } from "./helpers";
 
 const MOBILE_VIEWPORT = { width: 390, height: 844 };

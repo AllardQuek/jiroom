@@ -1,6 +1,6 @@
 import fs from "fs";
 import type { Listing, Viewing } from "@/types/listing";
-import type { Evaluation, Template } from "@/types/evaluation";
+import type { Evaluation } from "@/types/evaluation";
 import type { Verdict } from "@/types/verdict";
 import type { Anchor } from "@/types/anchor";
 import type { ExportData } from "./exportImport";
@@ -28,15 +28,18 @@ export function convertExportToSeed(jsonPath: string): ConvertedSeedData {
 
   // Extract viewings (filter to only include fields in current Viewing type)
   const viewingStorage = data["viewing-storage"] as {
-    state: { viewings: any[] };
+    state: { viewings: unknown[] };
   };
   const rawViewings = viewingStorage?.state?.viewings || [];
-  const seedViewings: Viewing[] = rawViewings.map((v: any) => ({
-    id: v.id,
-    listing_id: v.listing_id,
-    scheduled_date: v.scheduled_date,
-    created_at: v.created_at,
-  }));
+  const seedViewings: Viewing[] = rawViewings.map((v) => {
+    const item = v as Record<string, unknown>;
+    return {
+      id: item.id as string,
+      listing_id: item.listing_id as string,
+      scheduled_date: item.scheduled_date as string,
+      created_at: item.created_at as string,
+    };
+  });
 
   // Extract evaluations
   const evaluationStorage = data["evaluation-storage"] as {
