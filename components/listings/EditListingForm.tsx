@@ -10,6 +10,7 @@ import {
 import { useListingStore } from "@/store/listingStore";
 import { Listing } from "@/types/listing";
 import { normalizeUrl } from "@/lib/utils/url";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -45,6 +46,8 @@ export function EditListingForm({
   onSuccess,
   onCancel,
 }: EditListingFormProps) {
+  const t = useTranslations("listings");
+  const tCommon = useTranslations("common");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const updateListing = useListingStore((state) => state.updateListing);
   const listings = useListingStore((state) => state.listings);
@@ -103,10 +106,10 @@ export function EditListingForm({
           name="source_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Source URL *</FormLabel>
+              <FormLabel>{t("edit.sourceUrl")}</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="https://example.com/listing"
+                  placeholder={t("edit.sourceUrlPlaceholder")}
                   {...field}
                   onBlur={(e) => {
                     const normalized = normalizeUrl(e.target.value);
@@ -127,9 +130,9 @@ export function EditListingForm({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>{t("edit.title")}</FormLabel>
               <FormControl>
-                <Input placeholder="Listing title" {...field} />
+                <Input placeholder={t("edit.titlePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -141,7 +144,7 @@ export function EditListingForm({
           name="price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Initial Price *</FormLabel>
+              <FormLabel>{t("edit.initialPriceRequired")}</FormLabel>
               <FormControl>
                 <PriceInput field={field} />
               </FormControl>
@@ -155,7 +158,7 @@ export function EditListingForm({
           name="negotiated_price"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Negotiated Price</FormLabel>
+              <FormLabel>{t("edit.negotiatedPrice")}</FormLabel>
               <FormControl>
                 <PriceInput field={field} />
               </FormControl>
@@ -168,7 +171,7 @@ export function EditListingForm({
           <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block">
             <span className="flex items-center gap-2">
               <MapPin size={14} className="text-primary" />
-              Location *
+              {t("edit.locationRequired")}
             </span>
           </label>
           <PlaceAutocomplete
@@ -184,8 +187,7 @@ export function EditListingForm({
             placeId={listing.googlePlaceId}
           />
           <p className="text-[0.8rem] text-muted-foreground mt-1.5">
-            Updates the listing title and map coordinates from the selected
-            place
+            {t("edit.locationDescription")}
           </p>
         </div>
 
@@ -196,14 +198,14 @@ export function EditListingForm({
             <FormItem>
               <FormLabel className="flex items-center gap-2">
                 <MapPin size={14} className="text-primary" />
-                Area
+                {t("edit.area")}
               </FormLabel>
               <FormControl>
                 <CreatableSelect
                   value={field.value}
                   onChange={field.onChange}
                   options={areaOptions}
-                  placeholder="Select or type an area..."
+                  placeholder={t("edit.areaPlaceholder")}
                 />
               </FormControl>
               <FormMessage />
@@ -216,13 +218,13 @@ export function EditListingForm({
           name="source_platform"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Source Platform</FormLabel>
+              <FormLabel>{t("edit.platform")}</FormLabel>
               <FormControl>
                 <CreatableSelect
                   value={field.value}
                   onChange={field.onChange}
                   options={platformOptions}
-                  placeholder="Auto-detected..."
+                  placeholder={t("edit.platformPlaceholder")}
                 />
               </FormControl>
               <FormMessage />
@@ -235,17 +237,21 @@ export function EditListingForm({
           name="status"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Status</FormLabel>
+              <FormLabel>{t("edit.status")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue placeholder={t("edit.statusPlaceholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="new">New</SelectItem>
-                  <SelectItem value="to_view">To View</SelectItem>
-                  <SelectItem value="viewed">Viewed</SelectItem>
+                  <SelectItem value="new">{t("edit.statusNew")}</SelectItem>
+                  <SelectItem value="to_view">
+                    {t("edit.statusToView")}
+                  </SelectItem>
+                  <SelectItem value="viewed">
+                    {t("edit.statusViewed")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -262,10 +268,10 @@ export function EditListingForm({
                 <div className="space-y-0.5">
                   <FormLabel className="text-base flex items-center gap-2 cursor-pointer">
                     <XCircle size={16} className="text-muted-foreground" />
-                    Mark as taken
+                    {t("edit.markAsTaken")}
                   </FormLabel>
                   <p className="text-[0.8rem] text-muted-foreground">
-                    This listing is no longer available
+                    {t("edit.takenDescription")}
                   </p>
                 </div>
                 <FormControl>
@@ -284,12 +290,12 @@ export function EditListingForm({
               name="taken_date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>{t("edit.date")}</FormLabel>
                   <FormControl>
                     <DatePicker
                       value={field.value}
                       onChange={field.onChange}
-                      placeholder="Select date taken"
+                      placeholder={t("edit.datePlaceholder")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -302,11 +308,11 @@ export function EditListingForm({
         <div className="flex gap-2 justify-end">
           {onCancel && (
             <Button type="button" variant="outline" onClick={onCancel}>
-              Cancel
+              {tCommon("cancel")}
             </Button>
           )}
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : "Save changes"}
+            {isSubmitting ? t("edit.saving") : t("edit.saveChanges")}
           </Button>
         </div>
       </form>
