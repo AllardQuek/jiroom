@@ -98,7 +98,12 @@ const FormLabel = React.forwardRef<
   const { formItemId } = useFormField();
 
   return (
-    <Label ref={ref} className={cn(className)} htmlFor={formItemId} {...props}>
+    <Label
+      ref={ref}
+      className={cn("inline-block", className)}
+      htmlFor={formItemId}
+      {...props}
+    >
       {children}
       {required && (
         <span className="ml-0.5 text-destructive" aria-hidden="true">
