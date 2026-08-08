@@ -50,10 +50,10 @@
     "exportFailed": "导出失败",
     "restoredReloading": "已恢复，正在刷新...",
     "invalidFile": "无效文件",
-    "noActiveTemplate": "没有活跃的问题模板",
+    "noActiveTemplate": "没有活跃的问题模板。请在设置中设置一个。",
     "questionsCopied": "问题已复制到剪贴板",
     "profileCopied": "资料已复制到剪贴板",
-    "profileEmpty": "资料为空",
+    "profileEmpty": "资料为空。请在设置中填写。",
     "failedToCopy": "复制失败",
     "columns": {
       "toView": "待看房",

@@ -50,10 +50,10 @@
     "exportFailed": "Export failed",
     "restoredReloading": "Restored. Reloading...",
     "invalidFile": "Invalid file",
-    "noActiveTemplate": "No active question template",
+    "noActiveTemplate": "No active question template. Set one in Settings.",
     "questionsCopied": "Questions copied to clipboard",
     "profileCopied": "Profile copied to clipboard",
-    "profileEmpty": "Profile is empty",
+    "profileEmpty": "Profile is empty. Fill it in Settings.",
     "failedToCopy": "Failed to copy",
     "columns": {
       "toView": "To View",
