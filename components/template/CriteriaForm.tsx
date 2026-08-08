@@ -46,7 +46,6 @@ export function CriteriaForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CriterionFormData>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(createCriterionSchema) as any,
     defaultValues: {
       name: "",

@@ -52,7 +52,6 @@ export function ListingPreviewCard({
   const resolvedTheme = (theme as "light" | "dark") || "light";
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 

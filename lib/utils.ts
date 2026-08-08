@@ -41,7 +41,7 @@ export function getDisplayPrice(
 
 export function getScoringPrice(
   listing: Listing,
-  _evaluation?: Evaluation // eslint-disable-line @typescript-eslint/no-unused-vars
+  _evaluation?: Evaluation
 ): number {
   // Base rent only. Cost responses (c2/c4) are summed inside calculateScore's
   // derived branch — do NOT pass getDisplayPrice (which already includes them)

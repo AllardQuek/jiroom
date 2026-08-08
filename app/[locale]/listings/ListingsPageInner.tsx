@@ -85,7 +85,6 @@ export function ListingsPageInner() {
   useEffect(() => {
     const saved = localStorage.getItem("compact-view");
     if (saved === "true") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCompact(true);
     }
   }, []);
@@ -99,7 +98,6 @@ export function ListingsPageInner() {
   useEffect(() => {
     const detailId = searchParams.get("detail");
     if (detailId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedListingId(detailId);
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete("detail");
@@ -112,12 +110,12 @@ export function ListingsPageInner() {
       sessionStorage.removeItem("import-completed");
       localStorage.removeItem("seed-mode-active");
       localStorage.removeItem("user-data-backup");
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+
       setSeedMode(false);
       return;
     }
     // Seed data loading is now handled in useStoreInitialization hook
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+
     setSeedMode(isSeedModeActive());
   }, []);
   const selectedListingIds = useComparisonStore(
