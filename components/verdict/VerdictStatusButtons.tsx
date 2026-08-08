@@ -1,17 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface VerdictStatusButtonsProps {
   currentStatus: string;
   onStatusChange: (status: string) => void;
 }
-
-const statusLabels: Record<string, string> = {
-  yes: "Yes",
-  maybe: "Maybe",
-  no: "No",
-};
 
 const statusColors: Record<string, string> = {
   yes: "bg-emerald-700 text-white border-emerald-800 hover:bg-emerald-800",
@@ -23,6 +18,7 @@ export function VerdictStatusButtons({
   currentStatus,
   onStatusChange,
 }: VerdictStatusButtonsProps) {
+  const t = useTranslations("verdict");
   const statuses: Array<"yes" | "maybe" | "no"> = ["yes", "maybe", "no"];
 
   return (
@@ -39,7 +35,7 @@ export function VerdictStatusButtons({
           }
           onClick={() => onStatusChange(status)}
         >
-          {statusLabels[status]}
+          {t(status)}
         </Button>
       ))}
     </div>

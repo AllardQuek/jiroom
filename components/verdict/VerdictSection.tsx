@@ -1,10 +1,10 @@
 "use client";
 
 import { Verdict } from "@/types/verdict";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Gavel } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { VerdictStatusButtons } from "./VerdictStatusButtons";
 import { ScoreDisplay } from "./ScoreDisplay";
 import { VerdictReasoning } from "./VerdictReasoning";
@@ -16,12 +16,6 @@ interface VerdictSectionProps {
   onVerdictCreate: (verdict: Verdict) => void;
   onVerdictDelete?: () => void;
 }
-
-const statusLabels: Record<string, string> = {
-  yes: "Yes",
-  maybe: "Maybe",
-  no: "No",
-};
 
 const statusColors: Record<string, string> = {
   yes: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -36,6 +30,7 @@ export function VerdictSection({
   onVerdictCreate,
   onVerdictDelete,
 }: VerdictSectionProps) {
+  const t = useTranslations("verdict");
   const [isExpanded, setIsExpanded] = useState(true);
 
   if (!verdict) {
@@ -44,10 +39,10 @@ export function VerdictSection({
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Gavel className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Verdict</span>
+            <span className="text-sm font-medium">{t("title")}</span>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground mb-3">Not set yet</p>
+        <p className="text-sm text-muted-foreground mb-3">{t("notSetYet")}</p>
         <VerdictStatusButtons
           currentStatus=""
           onStatusChange={(status) => {
@@ -70,7 +65,7 @@ export function VerdictSection({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Gavel className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">Verdict</span>
+          <span className="text-sm font-medium">{t("title")}</span>
         </div>
         <Button
           size="icon"
@@ -120,7 +115,7 @@ export function VerdictSection({
               onClick={onVerdictDelete}
               className="text-xs text-muted-foreground/50 hover:text-destructive transition-colors"
             >
-              Clear verdict
+              {t("clear")}
             </button>
           )}
         </div>

@@ -145,7 +145,7 @@
     },
     "delete": {
       "title": "Delete Listing",
-      "confirm": "Are you sure you want to delete this listing?",
+      "confirm": "Are you sure you want to delete \"{title}\"?",
       "cannotUndo": "This action cannot be undone."
     },
     "detail": {
@@ -229,7 +229,9 @@
       "neutral": "Neutral - Mixed pros/cons",
       "belowAverage": "Below average - Major concerns",
       "poor": "Poor - Deal-breakers"
-    }
+    },
+    "noScoreAvailable": "No evaluation score available",
+    "scored": "{count} scored"
   },
   "map": {
     "title": "Map",
@@ -308,7 +310,11 @@
       "min": "min",
       "hint": "Select an anchor and set a max commute time to only show listings within that travel time. Commute routes are calculated on-demand using Google Maps.",
       "setMaxHint": "Set a max commute time to filter listings on the map"
-    }
+    },
+    "addressLabel": "Address: {address}",
+    "anchorDetails": "Anchor Details",
+    "areas": "Areas",
+    "unknown": "Unknown"
   },
   "compare": {
     "title": "Compare",
@@ -356,11 +362,18 @@
     "placeholder": "Add notes... Use '-' for bullet points",
     "updated": "Updated {time}",
     "justNow": "Just now",
-    "minAgo": "{count, plural, one {{count} min ago} other {{count} mins ago}}"
+    "minAgo": "{count, plural, one {{count} min ago} other {{count} mins ago}}",
+    "allNotes": "All Notes"
   },
   "verdict": {
     "reasoning": "Verdict Reasoning",
-    "reasoningPlaceholder": "Add reasoning for your verdict..."
+    "reasoningPlaceholder": "Add reasoning for your verdict...",
+    "title": "Verdict",
+    "notSetYet": "Not set yet",
+    "clear": "Clear verdict",
+    "yes": "Yes",
+    "maybe": "Maybe",
+    "no": "No"
   },
   "settings": {
     "title": "Settings",

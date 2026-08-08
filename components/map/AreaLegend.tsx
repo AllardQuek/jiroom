@@ -1,17 +1,20 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 interface AreaLegendProps {
   areaColors: Record<string, string>;
 }
 
 export function AreaLegend({ areaColors }: AreaLegendProps) {
+  const t = useTranslations("map");
   const entries = Object.entries(areaColors);
 
   if (entries.length === 0) return null;
 
   return (
     <div className="border-t border-border/30 pt-3">
-      <span className="text-xs font-semibold">Areas</span>
+      <span className="text-xs font-semibold">{t("areas")}</span>
       <div className="flex flex-wrap gap-1.5 mt-1.5">
         {entries.map(([area, color]) => (
           <div
@@ -23,7 +26,7 @@ export function AreaLegend({ areaColors }: AreaLegendProps) {
               style={{ backgroundColor: color }}
             />
             <span className="text-muted-foreground">
-              {area === "" ? "Unknown" : area}
+              {area === "" ? t("unknown") : area}
             </span>
           </div>
         ))}

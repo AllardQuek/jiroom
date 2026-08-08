@@ -204,7 +204,11 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       const evaluation = evaluations.find((e) => e.listing_id === l.id);
       const scoreNet =
         evaluation && template
-          ? (calculateScore(evaluation.responses, template, getScoringPrice(l, evaluation))?.net ?? null)
+          ? (calculateScore(
+              evaluation.responses,
+              template,
+              getScoringPrice(l, evaluation)
+            )?.net ?? null)
           : null;
 
       if (
@@ -521,7 +525,7 @@ export default function MapView({ onViewDetails }: MapViewProps) {
             />
             <div className="fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border shadow-[0_-4px_24px_var(--shadow-panel)] max-h-[60dvh] flex flex-col animate-slide-up sm:bottom-auto sm:left-auto sm:top-14 sm:right-4 sm:w-80 sm:max-h-[calc(100dvh-6rem)] sm:rounded-2xl sm:shadow-xl sm:animate-fade-in">
               <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
-                <h2 className="text-sm font-semibold">Anchor Details</h2>
+                <h2 className="text-sm font-semibold">{t("anchorDetails")}</h2>
                 <button
                   onClick={() => setSelectedAnchor(null)}
                   className="p-1 -mr-1 text-muted-foreground hover:text-foreground"

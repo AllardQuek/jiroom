@@ -4,7 +4,7 @@ import { Viewing } from "@/types/listing";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Eye } from "lucide-react";
 import { useState } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ScheduleViewingForm } from "./ScheduleViewingForm";
 
 interface ViewingSectionProps {
@@ -20,8 +20,9 @@ export function ViewingSection({
   onViewingUpdate,
   onViewingCreate,
 }: ViewingSectionProps) {
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const t = useTranslations("schedule");
   const locale = useLocale();
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -40,13 +41,15 @@ export function ViewingSection({
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Eye className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Viewing</span>
+            <span className="text-sm font-medium">{t("viewing")}</span>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground mb-3">Not scheduled yet</p>
+        <p className="text-sm text-muted-foreground mb-3">
+          {t("notScheduledYet")}
+        </p>
         <Button size="sm" onClick={() => setIsFormOpen(true)}>
           <Calendar className="h-4 w-4 mr-1.5" />
-          Schedule
+          {t("schedule")}
         </Button>
         {isFormOpen && (
           <div className="mt-4">
@@ -73,7 +76,7 @@ export function ViewingSection({
     <div className="rounded-xl bg-muted/50 p-4">
       <div className="flex items-center gap-2 mb-3">
         <Eye className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm font-medium">Viewing</span>
+        <span className="text-sm font-medium">{t("viewing")}</span>
       </div>
 
       <div className="space-y-3">
@@ -90,7 +93,7 @@ export function ViewingSection({
               </div>
             ) : (
               <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
-                No date scheduled
+                {t("noDateScheduled")}
               </p>
             )}
           </button>
@@ -103,7 +106,7 @@ export function ViewingSection({
                 className="h-7 text-xs text-muted-foreground shrink-0"
                 onClick={() => onViewingUpdate({ scheduled_date: undefined })}
               >
-                Remove date
+                {t("removeDate")}
               </Button>
             )}
           </div>

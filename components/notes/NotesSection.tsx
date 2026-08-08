@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -18,6 +19,7 @@ interface NotesSectionProps {
 }
 
 export function NotesSection({ sources }: NotesSectionProps) {
+  const t = useTranslations("notes");
   const [isExpanded, setIsExpanded] = useState(true);
 
   const hasNotes = sources.some((source) => source.notes);
@@ -30,7 +32,7 @@ export function NotesSection({ sources }: NotesSectionProps) {
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">All Notes</CardTitle>
+          <CardTitle className="text-lg">{t("allNotes")}</CardTitle>
           <Button
             variant="ghost"
             size="icon"

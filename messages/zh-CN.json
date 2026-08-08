@@ -145,7 +145,7 @@
     },
     "delete": {
       "title": "删除房源",
-      "confirm": "确定要删除此房源吗？",
+      "confirm": "确定要删除 \"{title}\" 吗？",
       "cannotUndo": "此操作无法撤销。"
     },
     "detail": {
@@ -229,7 +229,9 @@
       "neutral": "一般 - 优缺点参半",
       "belowAverage": "较差 - 主要顾虑",
       "poor": "差 - 决定性因素"
-    }
+    },
+    "noScoreAvailable": "暂无评估分数",
+    "scored": "{count} 项已评分"
   },
   "map": {
     "title": "地图",
@@ -308,7 +310,11 @@
       "min": "分钟",
       "hint": "选择一个锚点并设置最长通勤时间，只显示该行程时间内的房源。通勤路线使用 Google Maps 按需计算。",
       "setMaxHint": "设置最长通勤时间以筛选地图上的房源"
-    }
+    },
+    "addressLabel": "地址：{address}",
+    "anchorDetails": "锚点详情",
+    "areas": "区域",
+    "unknown": "未知"
   },
   "compare": {
     "title": "对比",
@@ -356,11 +362,18 @@
     "placeholder": "添加备注... 使用 '-' 作为项目符号",
     "updated": "{time} 更新",
     "justNow": "刚刚",
-    "minAgo": "{count, plural, one {{count} 分钟前} other {{count} 分钟前}}"
+    "minAgo": "{count, plural, one {{count} 分钟前} other {{count} 分钟前}}",
+    "allNotes": "全部备注"
   },
   "verdict": {
     "reasoning": " verdict 理由",
-    "reasoningPlaceholder": "添加您对 verdict 的理由..."
+    "reasoningPlaceholder": "添加您对 verdict 的理由...",
+    "title": "裁决",
+    "notSetYet": "尚未设定",
+    "clear": "清除裁决",
+    "yes": "是",
+    "maybe": "也许",
+    "no": "否"
   },
   "settings": {
     "title": "设置",
