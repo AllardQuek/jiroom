@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -37,9 +37,6 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
 
   const agentTemplates = useAgentQuestionStore((state) => state.templates);
   const addAgentTemplate = useAgentQuestionStore((state) => state.addTemplate);
-  const updateAgentTemplate = useAgentQuestionStore(
-    (state) => state.updateTemplate
-  );
   const deleteAgentTemplate = useAgentQuestionStore(
     (state) => state.deleteTemplate
   );

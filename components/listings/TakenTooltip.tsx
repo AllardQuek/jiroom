@@ -12,11 +12,16 @@ export function TakenTooltip({ takenDate }: TakenTooltipProps) {
 
   if (!takenDate) return <span>{t("taken")}</span>;
 
+  let formattedDate: string | null = null;
   try {
-    const date = new Date(takenDate);
-    const formattedDate = format(date, "MMM d, yyyy");
-    return <span>{t("takenOn", { date: formattedDate })}</span>;
+    formattedDate = format(new Date(takenDate), "MMM d, yyyy");
   } catch {
-    return <span>{t("taken")}</span>;
+    formattedDate = null;
   }
+
+  return (
+    <span>
+      {formattedDate ? t("takenOn", { date: formattedDate }) : t("taken")}
+    </span>
+  );
 }

@@ -3,7 +3,7 @@ import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
 import { Listing } from "@/types/listing";
 import { Anchor } from "@/types/anchor";
-import { CommuteInfo, type RouteData } from "@/components/distance/CommuteInfo";
+import { type RouteData } from "@/components/distance/CommuteInfo";
 import {
   getCachedRoute,
   setCachedRoute,

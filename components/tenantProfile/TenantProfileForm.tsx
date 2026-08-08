@@ -60,6 +60,7 @@ export function TenantProfileForm({ onSave }: TenantProfileFormProps) {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved">("idle");
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFormData(profile);
   }, [profile]);
 

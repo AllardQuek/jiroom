@@ -6,7 +6,6 @@ import { getDisplayPrice, getScoringPrice } from "@/lib/utils";
 import {
   STATUS_COLORS,
   VERDICT_STYLES,
-  getStatusColors,
   getVerdictStyles,
 } from "@/lib/constants/colors";
 import { Listing } from "@/types/listing";
@@ -53,6 +52,7 @@ export function ListingPreviewCard({
   const resolvedTheme = (theme as "light" | "dark") || "light";
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -74,7 +74,6 @@ export function ListingPreviewCard({
   const verdict = useVerdictStore((s) =>
     s.verdicts.find((v) => v.listing_id === listing.id)
   );
-  const statusColors = mounted ? getStatusColors(resolvedTheme) : STATUS_COLORS;
   const verdictStyles = mounted
     ? getVerdictStyles(resolvedTheme)
     : VERDICT_STYLES;

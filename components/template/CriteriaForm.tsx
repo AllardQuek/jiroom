@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -46,6 +46,7 @@ export function CriteriaForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CriterionFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(createCriterionSchema) as any,
     defaultValues: {
       name: "",
@@ -61,6 +62,10 @@ export function CriteriaForm({
 
   const watchType = form.watch("type");
   const watchOptions = form.watch("options");
+  const optionsKey = useMemo(
+    () => watchOptions?.join(",") ?? "",
+    [watchOptions]
+  );
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -75,7 +80,7 @@ export function CriteriaForm({
       newScores[opt] = currentScores[opt] ?? 0;
     }
     form.setValue("scores", newScores);
-  }, [watchOptions?.join(","), form]);
+  }, [optionsKey, watchOptions, form]);
 
   const handleSubmit = async (data: CriterionFormData) => {
     setIsSubmitting(true);
