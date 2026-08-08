@@ -577,7 +577,7 @@ export function ComparisonMatrix({
       >
         {gridItems}
         <div
-          className="absolute top-0 bottom-0 left-0 w-1 bg-transparent hover:bg-primary cursor-col-resize z-[100] transition-colors"
+          className="absolute top-0 bottom-0 left-0 w-1 bg-transparent hover:bg-primary cursor-col-resize z-10 transition-colors"
           style={{ left: `${criteriaColumnWidth}px` }}
           onMouseDown={handleResizeStart}
         />
