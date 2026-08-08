@@ -65,7 +65,11 @@ export function ListingPreviewCard({
   const isNegotiated = listing.negotiated_price !== undefined;
   const score =
     evaluation && template
-      ? calculateScore(evaluation.responses, template, getScoringPrice(listing, evaluation))
+      ? calculateScore(
+          evaluation.responses,
+          template,
+          getScoringPrice(listing, evaluation)
+        )
       : null;
   const verdict = useVerdictStore((s) =>
     s.verdicts.find((v) => v.listing_id === listing.id)

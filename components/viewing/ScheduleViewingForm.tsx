@@ -17,8 +17,6 @@ const hours = Array.from({ length: 12 }, (_, i) => String(i + 1));
 const minutes = ["00", "15", "30", "45"];
 
 function parseExistingDate(isoString?: string) {
-  const now = new Date();
-
   if (!isoString) {
     return {
       hour: "12",

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   ReactFlow,
@@ -24,10 +18,7 @@ import { TopicNode } from "./nodes/TopicNode";
 import { PhaseHeaderNode } from "./nodes/PhaseHeaderNode";
 import { PhaseLaneNode } from "./nodes/PhaseLaneNode";
 import { BASELINE_POSITIONS } from "@/data/guide-content";
-import {
-  MeasuredHeightContext,
-  type MeasuredHeightMap,
-} from "./HeightContext";
+import { MeasuredHeightContext, type MeasuredHeightMap } from "./HeightContext";
 import {
   COLLAPSED_NODE_HEIGHT,
   estimateExpandedNodeHeight,
@@ -101,7 +92,7 @@ function computeLayout(
       const d = node.data as GuideNodeData;
       const displayedHeight = expandedNodeIds.has(node.id)
         ? (measuredHeights.get(node.id) ??
-            estimateExpandedNodeHeight(d.content))
+          estimateExpandedNodeHeight(d.content))
         : COLLAPSED_NODE_HEIGHT;
       const y = (base?.y ?? node.position.y) + shift;
       const bottom = y + displayedHeight;
@@ -176,12 +167,7 @@ function FlowInner({
   }, []);
 
   const displayNodes = useMemo(
-    () =>
-      computeLayout(
-        nodes,
-        expandedNodeIds,
-        measuredHeights.current
-      ),
+    () => computeLayout(nodes, expandedNodeIds, measuredHeights.current),
     [nodes, expandedNodeIds, measureKey]
   );
 

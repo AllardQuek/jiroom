@@ -10,9 +10,7 @@ const PHASE_BORDERS: Record<string, string> = {
   execute: "border-emerald-500/20",
 };
 
-export const PhaseLaneNode = memo(function PhaseLaneNode({
-  data,
-}: NodeProps) {
+export const PhaseLaneNode = memo(function PhaseLaneNode({ data }: NodeProps) {
   const d = data as unknown as GuideNodeData;
   const phaseId = d.phaseId ?? "";
   const border = PHASE_BORDERS[phaseId] ?? "border-border/10";

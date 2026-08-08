@@ -29,6 +29,5 @@ export function useStoreInitialization() {
     // Initialize templates and agent questions
     templateStore.initializeTemplates();
     agentQuestionStore.initializeTemplates();
-
   }, []); // Empty dependency array - runs once on mount
 }

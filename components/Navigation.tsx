@@ -2,12 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import {
-  LayoutList,
-  GitCompareArrows,
-  CalendarDays,
-  Map,
-} from "lucide-react";
+import { LayoutList, GitCompareArrows, CalendarDays, Map } from "lucide-react";
 
 export default function Navigation() {
   const pathname = usePathname();

@@ -351,7 +351,8 @@ export function ListingList({
                       const viewing = viewings.find(
                         (v) => v.listing_id === l.id
                       );
-                      const hasScheduledDate = viewing?.scheduled_date !== undefined;
+                      const hasScheduledDate =
+                        viewing?.scheduled_date !== undefined;
                       return toViewFilter === "scheduled"
                         ? hasScheduledDate
                         : !hasScheduledDate;
@@ -397,10 +398,9 @@ export function ListingList({
               col.id === "to_view"
                 ? (l: Listing) => {
                     if (toViewFilter === "all") return true;
-                    const viewing = viewings.find(
-                      (v) => v.listing_id === l.id
-                    );
-                    const hasScheduledDate = viewing?.scheduled_date !== undefined;
+                    const viewing = viewings.find((v) => v.listing_id === l.id);
+                    const hasScheduledDate =
+                      viewing?.scheduled_date !== undefined;
                     return toViewFilter === "scheduled"
                       ? hasScheduledDate
                       : !hasScheduledDate;

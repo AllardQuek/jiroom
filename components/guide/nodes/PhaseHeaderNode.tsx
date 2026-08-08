@@ -25,7 +25,6 @@ export const PhaseHeaderNode = memo(function PhaseHeaderNode({
         "px-8 py-3.5 rounded-2xl",
         `bg-gradient-to-b ${gradient}`,
         "border border-border/30 shadow-panel",
-
       ].join(" ")}
     >
       <span className="text-base font-extrabold tracking-[0.2em] text-foreground/80 uppercase">
