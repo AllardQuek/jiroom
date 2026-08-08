@@ -29,6 +29,12 @@ export function InlineEvaluation({
   const templates = useTemplateStore((state) => state.templates);
 
   const template = templates[0];
+  const derivedCriterion = template?.criteria.find((c) => c.type === "derived");
+  const derivedTotal = useDerivedTotal(
+    derivedCriterion,
+    listingPrice,
+    responses
+  );
 
   if (!template) {
     return (
@@ -54,13 +60,6 @@ export function InlineEvaluation({
   }).length;
   const totalCount = template.criteria.length;
   const groupedCriteria = groupCriteriaByCategory(template);
-
-  const derivedCriterion = template.criteria.find((c) => c.type === "derived");
-  const derivedTotal = useDerivedTotal(
-    derivedCriterion,
-    listingPrice,
-    responses
-  );
 
   const renderInput = (criterion: Criterion) => {
     const value = responses[criterion.id];

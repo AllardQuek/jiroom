@@ -35,6 +35,14 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
 
   const template = templates[0];
   const listing = listings.find((l) => l.id === listingId);
+  const responses = evaluation?.responses ?? {};
+  const listingPrice = listing?.negotiated_price ?? listing?.price;
+  const derivedCriterion = template?.criteria.find((c) => c.type === "derived");
+  const derivedTotal = useDerivedTotal(
+    derivedCriterion,
+    listingPrice,
+    responses
+  );
 
   if (!template) {
     return (
@@ -44,8 +52,6 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
     );
   }
 
-  const responses = evaluation?.responses ?? {};
-  const listingPrice = listing?.negotiated_price ?? listing?.price;
   const score = evaluation
     ? calcScore(responses, template, listingPrice)
     : null;
@@ -63,13 +69,6 @@ export function EvaluationSection({ listingId }: EvaluationSectionProps) {
   const completionPercent =
     totalCount > 0 ? Math.round((answeredCount / totalCount) * 100) : 0;
   const groupedCriteria = groupCriteriaByCategory(template);
-
-  const derivedCriterion = template.criteria.find((c) => c.type === "derived");
-  const derivedTotal = useDerivedTotal(
-    derivedCriterion,
-    listingPrice,
-    responses
-  );
 
   const saveResponse = (criterionId: string, value: number | string) => {
     const now = new Date().toISOString();

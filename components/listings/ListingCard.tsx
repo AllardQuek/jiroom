@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Listing } from "@/types/listing";
 import { Card } from "@/components/ui/card";
 import { ListingSelector } from "@/components/comparison/ListingSelector";
@@ -54,9 +54,14 @@ export function ListingCard({
 
   const viewing = viewings.find((v) => v.listing_id === listing.id);
   const hasVerdict = verdicts.some((v) => v.listing_id === listing.id);
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, []);
   const isViewingOverdue =
     !hasVerdict && viewing?.scheduled_date
-      ? new Date(viewing.scheduled_date).getTime() + 30 * 60 * 1000 < Date.now()
+      ? new Date(viewing.scheduled_date).getTime() + 30 * 60 * 1000 < now
       : false;
   const template = templates[0];
   const answeredCount = template

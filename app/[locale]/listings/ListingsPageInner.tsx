@@ -74,7 +74,7 @@ export function ListingsPageInner() {
     if (typeof window === "undefined") return false;
     return localStorage.getItem("compact-view") === "true";
   });
-  const [compareModeState, setCompareMode] = useState(false);
+  const [compareModeState, setCompareModeState] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [copyStatus, setCopyStatus] = useState<{
     type: "success" | "error" | null;
@@ -323,7 +323,7 @@ export function ListingsPageInner() {
               {!compareMode && (
                 <Button
                   variant="outline"
-                  onClick={() => setCompareMode(true)}
+                  onClick={() => setCompareModeState(true)}
                   size="sm"
                   className="shrink-0"
                 >
