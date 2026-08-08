@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-08-08
+
+### Added
+- **Full i18n externalization**: Listings, templates, anchors, agent questions, settings, notes, verdicts, and support modal text now use `next-intl`.
+- **Tenant profile & agent question seed data**: Sample data now seeds a default tenant profile and active agent-question template.
+- **Hydration-safe hooks**: `useLocalStorageValue`, `useLocalStorageState`, and `useWindowWidth` for safe `localStorage`/`window` reads.
+
+### Changed
+- **Compare-mode toolbar**: Compare toggle now shows `Cancel` and a `Compare (n)` action button once two or more listings are selected.
+- **Listing forms**: Refined labels, focus states, spacing, placeholders, and "Address" copy in create/edit forms.
+- **Checkbox contrast**: Checkbox borders now use `border-foreground` for visibility in both light and dark modes.
+- **E2E tests**: Updated selectors for i18n/UI changes and re-enabled the Compare action test.
+
+### Fixed
+- **Hydration mismatches**: Removed SSR-risky `useState` initializers that read `localStorage`/`window` on first render.
+- **Compare resizer z-index**: Lowered resizer handle so it no longer overlaps the bottom navigation.
+
 ## [3.2.0] - 2026-07-09
 
 ### Changed
@@ -18,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - **Unused Components**: Removed zero-byte ViewingStatusButtons component
 
+[3.3.0]: https://github.com/AllardQuek/jiroom/releases/tag/v3.3.0
 [3.2.0]: https://github.com/AllardQuek/jiroom/releases/tag/v3.2.0
 
 ## [3.1.0] - 2025-07-05
