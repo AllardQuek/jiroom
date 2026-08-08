@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Template } from "@/types/evaluation";
 import { useTemplateStore } from "@/store/templateStore";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,6 +32,8 @@ export function TemplateEditor({
   onEditCriteria,
   onDeleteCriteria,
 }: TemplateEditorProps) {
+  const t = useTranslations('templates');
+  const tCommon = useTranslations('common');
   const [name, setName] = useState(template.name);
   const updateTemplate = useTemplateStore((state) => state.updateTemplate);
 
@@ -60,29 +63,29 @@ export function TemplateEditor({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+      <DialogContent className='max-w-lg max-h-[85vh] overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle>Edit Template</DialogTitle>
+          <DialogTitle>{t('editor.editTemplate')}</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-5">
-          <div className="space-y-1.5">
+        <div className='space-y-5'>
+          <div className='space-y-1.5'>
             <Label
-              htmlFor="template-name"
-              className="text-xs font-medium text-muted-foreground"
+              htmlFor='template-name'
+              className='text-xs font-medium text-muted-foreground'
             >
-              Name
+              {t('editor.nameLabel')}
             </Label>
             <Input
-              id="template-name"
+              id='template-name'
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Template name"
-              className="h-8 text-sm"
+              placeholder={t('editor.namePlaceholder')}
+              className='h-8 text-sm'
             />
           </div>
 
-          <div className="space-y-3">
+          <div className='space-y-3'>
             {Object.entries(groupedCriteria).map(([category, criteria]) => (
               <CategorySection
                 key={category}
@@ -96,21 +99,21 @@ export function TemplateEditor({
             ))}
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t">
+          <div className='flex items-center justify-between pt-2 border-t'>
             <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onAddCriteria("General")}
-              className="text-xs text-muted-foreground"
+              variant='ghost'
+              size='sm'
+              onClick={() => onAddCriteria('General')}
+              className='text-xs text-muted-foreground'
             >
-              + Add criteria
+              + {t('editor.addCriteria')}
             </Button>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={handleCancel}>
-                Cancel
+            <div className='flex gap-2'>
+              <Button variant='outline' size='sm' onClick={handleCancel}>
+                {tCommon('cancel')}
               </Button>
-              <Button size="sm" onClick={handleSave}>
-                Save Changes
+              <Button size='sm' onClick={handleSave}>
+                {t('editor.saveChanges')}
               </Button>
             </div>
           </div>

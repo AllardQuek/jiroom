@@ -560,5 +560,60 @@
       "station": "MRT / Station",
       "custom": "Custom"
     }
+  },
+  "templates": {
+    "criteriaForm": {
+      "name": "Criteria Name",
+      "namePlaceholder": "e.g., Room size",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description",
+      "inputType": "Input Type",
+      "inputTypePlaceholder": "Select type",
+      "checkbox": "Checkbox (Yes/No)",
+      "rating": "Rating (1-5)",
+      "number": "Number",
+      "text": "Text",
+      "select": "Select (Dropdown)",
+      "category": "Category",
+      "categoryPlaceholder": "Select category",
+      "options": "Options (comma-separated)",
+      "optionsPlaceholder": "e.g., Option 1, Option 2, Option 3",
+      "scoreMapping": "Score mapping per option",
+      "scoringThresholds": "Scoring thresholds",
+      "addRange": "Add range",
+      "noThresholds": "No thresholds defined — this criterion will not contribute to the score.",
+      "min": "Min",
+      "max": "Max",
+      "saving": "Saving...",
+      "saveCriteria": "Save Criteria"
+    },
+    "criteriaItem": {
+      "checkbox": "Checkbox",
+      "rating": "Rating",
+      "number": "Number",
+      "text": "Text",
+      "select": "Select",
+      "derived": "Derived",
+      "scoring": "Scoring",
+      "addRange": "Add range",
+      "min": "Min",
+      "max": "Max",
+      "checkboxScoring": "Yes = +1, No = -1, N/A = excluded",
+      "ratingScoring": "1-2 = -1, 3 = 0, 4-5 = +1",
+      "scoringDetails": "Scoring details"
+    },
+    "editor": {
+      "editTemplate": "Edit Template",
+      "nameLabel": "Name",
+      "namePlaceholder": "Template name",
+      "addCriteria": "Add criteria",
+      "saveChanges": "Save Changes"
+    },
+    "list": {
+      "noTemplates": "No templates",
+      "noTemplatesHint": "Create one to start scoring listings",
+      "createTemplate": "Create Template",
+      "criterion": "{count, plural, one {# criterion} other {# criteria}}"
+    }
   }
 }
