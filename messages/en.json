@@ -531,5 +531,34 @@
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
     "toggleTheme": "Toggle theme"
+  },
+  "anchors": {
+    "title": "Anchors",
+    "addAnchor": "Add anchor",
+    "editAnchor": "Edit Anchor",
+    "saveChanges": "Save changes",
+    "sortBy": "Sort by:",
+    "sort": "Sort:",
+    "name": "Name",
+    "type": "Type",
+    "noAnchors": "No anchors yet",
+    "noAnchorsHintList": "Add anchors from the map or from this page",
+    "noAnchorsHintPanel": "Add anchors from the map search",
+    "anchorCount": "{count, plural, one {# anchor} other {# anchors}}",
+    "form": {
+      "namePlaceholder": "e.g. My Office, Home, Jurong East MRT",
+      "customTypeLabel": "Custom Type Label",
+      "customTypePlaceholder": "e.g. Gym, Parents' House",
+      "color": "Color",
+      "location": "Location",
+      "locationHint": "Search to set the anchor location"
+    },
+    "types": {
+      "home": "Home",
+      "work": "Work",
+      "school": "School",
+      "station": "MRT / Station",
+      "custom": "Custom"
+    }
   }
 }

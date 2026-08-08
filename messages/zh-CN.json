@@ -531,5 +531,34 @@
     "openMenu": "打开菜单",
     "closeMenu": "关闭菜单",
     "toggleTheme": "切换主题"
+  },
+  "anchors": {
+    "title": "锚点",
+    "addAnchor": "添加锚点",
+    "editAnchor": "编辑锚点",
+    "saveChanges": "保存更改",
+    "sortBy": "排序方式：",
+    "sort": "排序：",
+    "name": "名称",
+    "type": "类型",
+    "noAnchors": "暂无锚点",
+    "noAnchorsHintList": "从地图或此页面添加锚点",
+    "noAnchorsHintPanel": "从地图搜索添加锚点",
+    "anchorCount": "{count, plural, one {# 个锚点} other {# 个锚点}}",
+    "form": {
+      "namePlaceholder": "例如：我的办公室、家、裕廊东地铁站",
+      "customTypeLabel": "自定义类型标签",
+      "customTypePlaceholder": "例如：健身房、父母家",
+      "color": "颜色",
+      "location": "位置",
+      "locationHint": "搜索以设置锚点位置"
+    },
+    "types": {
+      "home": "家",
+      "work": "工作地点",
+      "school": "学校",
+      "station": "地铁站",
+      "custom": "自定义"
+    }
   }
 }
