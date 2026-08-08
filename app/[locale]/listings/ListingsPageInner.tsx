@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { useRouter, usePathname } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -90,7 +90,6 @@ export function ListingsPageInner() {
     priceMax: null,
   });
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     localStorage.setItem("compact-view", compact ? "true" : "false");
@@ -122,7 +121,7 @@ export function ListingsPageInner() {
   );
   const getProfile = useTenantProfileStore((state) => state.getProfile);
 
-  const compareMode = pathname === "/listings" ? false : compareModeState;
+  const compareMode = compareModeState;
 
   const handleCompare = () => {
     router.push("/compare");
