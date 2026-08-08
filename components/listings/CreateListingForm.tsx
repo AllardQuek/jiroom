@@ -367,7 +367,7 @@ export function CreateListingForm({
           />
         </div>
 
-        <div className="pt-8 mt-8">
+        <div className="pt-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">
@@ -408,7 +408,7 @@ export function CreateListingForm({
         </div>
 
         {template && (
-          <div className="pt-8">
+          <div className="pt-6">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-semibold">
                 {t("create.evaluation")}{" "}
