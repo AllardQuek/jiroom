@@ -154,7 +154,63 @@
       "notFound": "找不到房源，可能已被删除。",
       "backToListings": "返回房源列表",
       "listingNotes": "房源备注"
-    }
+    },
+    "create": {
+      "listingUrl": "房源链接",
+      "listingUrlPlaceholder": "粘贴 PropertyGuru、99.co 等链接",
+      "listingUrlDescription": "我们会尝试从链接自动填充详情",
+      "duplicateUrlWarning": "该链接已存在于您的房源中",
+      "title": "标题",
+      "titlePlaceholder": "从链接自动填充",
+      "titleDescription": "从链接或位置自动填充 — 编辑以区分",
+      "location": "位置",
+      "locationRequired": "位置 *",
+      "locationDescription": "从所选地点设置房源标题和地图坐标",
+      "area": "区域",
+      "areaPlaceholder": "选择或输入区域...",
+      "initialPrice": "初始价格（新币）",
+      "negotiatedPrice": "协商价格（新币）",
+      "platform": "平台",
+      "platformPlaceholder": "自动检测...",
+      "notes": "房源备注",
+      "notesPlaceholder": "添加任何一般观察、联系方式或对该房源的想法...",
+      "scheduleViewing": "安排看房",
+      "optional": "（可选）",
+      "set": "已设置",
+      "evaluation": "评估",
+      "saving": "保存中...",
+      "addListing": "添加房源"
+    },
+    "edit": {
+      "sourceUrl": "来源链接",
+      "sourceUrlPlaceholder": "https://example.com/listing",
+      "title": "标题",
+      "titlePlaceholder": "房源标题",
+      "initialPrice": "初始价格",
+      "initialPriceRequired": "初始价格 *",
+      "negotiatedPrice": "协商价格",
+      "location": "位置",
+      "locationRequired": "位置 *",
+      "locationDescription": "更新所选地点的房源标题和地图坐标",
+      "area": "区域",
+      "areaPlaceholder": "选择或输入区域...",
+      "platform": "来源平台",
+      "platformPlaceholder": "自动检测...",
+      "status": "状态",
+      "statusPlaceholder": "选择状态",
+      "statusNew": "新",
+      "statusToView": "待看房",
+      "statusViewed": "已看房",
+      "markAsTaken": "标记为已租",
+      "takenDescription": "该房源不再可用",
+      "date": "日期",
+      "datePlaceholder": "选择已租日期",
+      "saving": "保存中...",
+      "saveChanges": "保存更改"
+    },
+    "sortTitle": "排序房源",
+    "taken": "已租",
+    "takenOn": "于 {date} 已租"
   },
   "evaluation": {
     "title": "评估",
@@ -634,7 +690,7 @@
       "questionCount": "{count, plural, one {# 个问题} other {# 个问题}}"
     }
   },
-  "listings": {
+  "_listings": {
     "create": {
       "listingUrl": "房源链接",
       "listingUrlPlaceholder": "粘贴 PropertyGuru、99.co 等链接",
