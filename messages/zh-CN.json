@@ -355,7 +355,11 @@
     "cancelSchedule": "取消安排",
     "am": "上午",
     "pm": "下午",
-    "saving": "保存中..."
+    "saving": "保存中...",
+    "viewing": "看房",
+    "notScheduledYet": "尚未安排",
+    "noDateScheduled": "未安排日期",
+    "removeDate": "移除日期"
   },
   "notes": {
     "label": "备注",

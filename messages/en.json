@@ -355,7 +355,11 @@
     "cancelSchedule": "Cancel Schedule",
     "am": "AM",
     "pm": "PM",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "viewing": "Viewing",
+    "notScheduledYet": "Not scheduled yet",
+    "noDateScheduled": "No date scheduled",
+    "removeDate": "Remove date"
   },
   "notes": {
     "label": "Notes",
