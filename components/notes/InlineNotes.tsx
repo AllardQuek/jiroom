@@ -22,6 +22,8 @@ export function InlineNotes({
   const locale = useLocale();
 
   useEffect(() => {
+    // Sync local state when the prop changes (e.g., external update)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocalValue(notes);
   }, [notes]);
 

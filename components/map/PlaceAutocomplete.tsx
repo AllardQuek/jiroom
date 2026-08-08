@@ -38,7 +38,10 @@ export default function PlaceAutocomplete({
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const placesLib = useMapsLibrary("places");
   const onPlaceSelectRef = useRef(onPlaceSelect);
-  onPlaceSelectRef.current = onPlaceSelect;
+
+  useEffect(() => {
+    onPlaceSelectRef.current = onPlaceSelect;
+  }, [onPlaceSelect]);
 
   const sessionTokenRef = useRef<unknown>(null);
   const justSelectedRef = useRef(false);

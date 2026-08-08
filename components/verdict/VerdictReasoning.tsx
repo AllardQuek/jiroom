@@ -17,6 +17,8 @@ export function VerdictReasoning({
   const t = useTranslations("verdict");
 
   useEffect(() => {
+    // Sync local state when the prop changes (e.g., external update)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocalValue(reasoning);
   }, [reasoning]);
 

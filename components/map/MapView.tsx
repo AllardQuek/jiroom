@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
-import {
-  Map,
-  AdvancedMarker,
-  InfoWindow,
-  Pin,
-} from "@vis.gl/react-google-maps";
+import { Map, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import { useListingStore } from "@/store/listingStore";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
@@ -15,9 +10,6 @@ import { useVerdictStore } from "@/store/verdictStore";
 import { calculateScore } from "@/lib/utils/calculateScore";
 import { getScoringPrice } from "@/lib/utils";
 import {
-  STATUS_COLORS,
-  AREA_PALETTE,
-  getAnchorColors,
   getStatusColors,
   getAreaPalette,
 } from "@/lib/constants/colors";
@@ -30,7 +22,7 @@ import { MarkerColorToggle } from "./MarkerColorToggle";
 import type { ColorMode } from "./MarkerColorToggle";
 import { RoutePolyline } from "./RoutePolyline";
 import { TravelModeToggle } from "./TravelModeToggle";
-import { CommuteInfo, type RouteData } from "@/components/distance/CommuteInfo";
+import { CommuteInfo } from "@/components/distance/CommuteInfo";
 import { useRoutePrefsStore } from "@/store/routePrefsStore";
 import { getCachedRoute } from "@/lib/utils/routeCache";
 import AnchorMarker from "./AnchorMarker";
