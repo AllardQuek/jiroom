@@ -16,13 +16,7 @@ import { extractFromUrl } from "@/lib/utils/urlExtract";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Globe,
-  MapPin,
-  FileText,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
+import { Globe, MapPin, FileText } from "lucide-react";
 import { InlineEvaluation } from "@/components/evaluation/InlineEvaluation";
 import { ScheduleViewingForm } from "@/components/viewing/ScheduleViewingForm";
 import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";

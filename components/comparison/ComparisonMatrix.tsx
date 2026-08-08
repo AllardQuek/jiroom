@@ -21,11 +21,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { X, Star, Check, Minus } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useTranslations, useLocale } from "next-intl";

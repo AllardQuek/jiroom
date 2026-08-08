@@ -42,7 +42,7 @@ describe("pricing helpers", () => {
   });
 
   it("getScoringPrice returns BASE rent (costs are summed inside calculateScore)", () => {
-    expect(getScoringPrice(listing, evaluation)).toBe(900);
+    expect(getScoringPrice(listing)).toBe(900);
   });
 });
 
@@ -51,7 +51,7 @@ describe("calculateScore derived criterion", () => {
     const result = calculateScore(
       evaluation.responses,
       makeTemplate(),
-      getScoringPrice(listing, evaluation)
+      getScoringPrice(listing)
     );
     expect(result).not.toBeNull();
     // derivedValue = 900 + 100 + 100 = 1100 -> <= 1200 -> neutral (0)
@@ -59,7 +59,7 @@ describe("calculateScore derived criterion", () => {
   });
 
   it("regression guard: never pass getDisplayPrice (cost-inclusive) as listingPrice", () => {
-    const base = getScoringPrice(listing, evaluation); // 900
+    const base = getScoringPrice(listing); // 900
     const display = getDisplayPrice(listing, evaluation); // 1100 (base + costs)
     expect(display).toBe(base + 100 + 100);
 

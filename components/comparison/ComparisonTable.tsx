@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useComparisonStore } from "@/store/comparisonStore";
 import { useListingStore } from "@/store/listingStore";
 import { useTemplateStore } from "@/store/templateStore";
@@ -41,9 +41,7 @@ export function ComparisonTable() {
     const evaluation = evaluations.find((e) => e.listing_id === listingId);
     const listing = listings.find((l) => l.id === listingId);
     if (!evaluation || !template) return null;
-    const scoringPrice = listing
-      ? getScoringPrice(listing, evaluation)
-      : undefined;
+    const scoringPrice = listing ? getScoringPrice(listing) : undefined;
     return calculateScore(evaluation.responses, template, scoringPrice);
   };
 

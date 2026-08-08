@@ -148,11 +148,7 @@ function DaySection({
                               )}
                             </div>
                             <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              {viewing.listing.is_taken && (
-                                <TakenBadge
-                                  takenDate={viewing.listing.taken_date}
-                                />
-                              )}
+                              {viewing.listing.is_taken && <TakenBadge />}
                               <span
                                 className={`font-semibold ${
                                   isPast

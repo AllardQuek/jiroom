@@ -193,11 +193,8 @@ export default function MapView({ onViewDetails }: MapViewProps) {
       const evaluation = evaluations.find((e) => e.listing_id === l.id);
       const scoreNet =
         evaluation && template
-          ? (calculateScore(
-              evaluation.responses,
-              template,
-              getScoringPrice(l, evaluation)
-            )?.net ?? null)
+          ? (calculateScore(evaluation.responses, template, getScoringPrice(l))
+              ?.net ?? null)
           : null;
 
       if (

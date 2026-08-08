@@ -137,11 +137,11 @@ function compareListings(
       const priceB = getDisplayPrice(b, evalB);
       const scoreA =
         evalA && template
-          ? calculateScore(evalA.responses, template, getScoringPrice(a, evalA))
+          ? calculateScore(evalA.responses, template, getScoringPrice(a))
           : null;
       const scoreB =
         evalB && template
-          ? calculateScore(evalB.responses, template, getScoringPrice(b, evalB))
+          ? calculateScore(evalB.responses, template, getScoringPrice(b))
           : null;
       const netA = scoreA?.net ?? 0;
       const netB = scoreB?.net ?? 0;

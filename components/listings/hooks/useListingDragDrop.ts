@@ -6,7 +6,6 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { useListingStore } from "@/store/listingStore";
 import { useVerdictStore } from "@/store/verdictStore";
 
 interface UseListingDragDropProps {

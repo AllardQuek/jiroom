@@ -65,7 +65,7 @@ export function ListingsPageInner() {
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
-  const [seedMode, setSeedMode] = useState(() => {
+  const [seedMode] = useState(() => {
     if (typeof window === "undefined") return false;
     if (sessionStorage.getItem("import-completed")) return false;
     return isSeedModeActive();

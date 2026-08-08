@@ -39,10 +39,7 @@ export function getDisplayPrice(
   return basePrice;
 }
 
-export function getScoringPrice(
-  listing: Listing,
-  _evaluation?: Evaluation
-): number {
+export function getScoringPrice(listing: Listing): number {
   // Base rent only. Cost responses (c2/c4) are summed inside calculateScore's
   // derived branch — do NOT pass getDisplayPrice (which already includes them)
   // or the "total monthly cost" criterion will be counted twice.

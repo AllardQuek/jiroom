@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
 import { Check } from "lucide-react";
 import { useTemplateStore } from "@/store/templateStore";
-import { Criterion, Template } from "@/types/evaluation";
+import { Criterion } from "@/types/evaluation";
 import { calculateScore as calcScore } from "@/lib/utils/calculateScore";
 import {
   hasResponse,

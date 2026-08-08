@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { anchorSchema, type AnchorFormData } from "@/lib/schemas/anchorSchema";
-import { ANCHOR_COLORS, getAnchorColor } from "@/lib/constants/ANCHOR_COLORS";
+import { ANCHOR_COLORS } from "@/lib/constants/ANCHOR_COLORS";
 import {
   getAnchorColorForType,
   CUSTOM_ANCHOR_PALETTE_EXPORT,

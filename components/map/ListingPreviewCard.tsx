@@ -64,11 +64,7 @@ export function ListingPreviewCard({
   const isNegotiated = listing.negotiated_price !== undefined;
   const score =
     evaluation && template
-      ? calculateScore(
-          evaluation.responses,
-          template,
-          getScoringPrice(listing, evaluation)
-        )
+      ? calculateScore(evaluation.responses, template, getScoringPrice(listing))
       : null;
   const verdict = useVerdictStore((s) =>
     s.verdicts.find((v) => v.listing_id === listing.id)
@@ -116,7 +112,7 @@ export function ListingPreviewCard({
                     ? verdictStyle.label
                     : listing.status.replace("_", " ")}
                 </span>
-                {isTaken && <TakenBadge takenDate={listing.taken_date} />}
+                {isTaken && <TakenBadge />}
                 {score !== null && (
                   <span
                     className={`text-[11px] font-semibold tabular-nums ${

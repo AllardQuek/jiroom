@@ -75,11 +75,7 @@ export function ListingCard({
 
   const score =
     evaluation && template
-      ? calculateScore(
-          evaluation.responses,
-          template,
-          getScoringPrice(listing, evaluation)
-        )
+      ? calculateScore(evaluation.responses, template, getScoringPrice(listing))
       : null;
 
   const handleClick = () => {
@@ -167,7 +163,7 @@ export function ListingCard({
                       {t("noDate")}
                     </span>
                   )}
-                  {isTaken && <TakenBadge takenDate={listing.taken_date} />}
+                  {isTaken && <TakenBadge />}
                   {hasNotes && (
                     <FileText size={10} className="text-muted-foreground/40" />
                   )}
@@ -294,7 +290,7 @@ export function ListingCard({
                   <CommuteBadge listing={listing} />
                 </div>
                 <div className="flex items-center gap-2">
-                  {isTaken && <TakenBadge takenDate={listing.taken_date} />}
+                  {isTaken && <TakenBadge />}
                   {hasNotes && (
                     <button
                       type="button"

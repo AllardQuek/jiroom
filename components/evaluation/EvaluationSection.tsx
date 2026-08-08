@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-import { Check, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
 import { useEvaluationStore } from "@/store/evaluationStore";
 import { useTemplateStore } from "@/store/templateStore";
 import { useListingStore } from "@/store/listingStore";
-import { Criterion, Evaluation, Template } from "@/types/evaluation";
+import { Criterion, Evaluation } from "@/types/evaluation";
 import { calculateScore as calcScore } from "@/lib/utils/calculateScore";
 import {
   hasResponse,
