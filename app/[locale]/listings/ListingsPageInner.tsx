@@ -25,6 +25,7 @@ import {
   X,
   MoreVertical,
   Filter,
+  GitCompareArrows,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
@@ -53,6 +54,7 @@ import { isSeedModeActive, toggleSeedMode } from "@/lib/data/seedData";
 
 export function ListingsPageInner() {
   const t = useTranslations("listings");
+  const tCommon = useTranslations("common");
   const tProfile = useTranslations("tenantProfile.fields");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedListingId, setSelectedListingId] = useState<string | null>(
@@ -297,9 +299,38 @@ export function ListingsPageInner() {
           <div className="flex items-center justify-between gap-2">
             {/* Left side: Listing-specific actions */}
             <div className="flex flex-wrap gap-2 items-center">
-              {compareMode && selectedListingIds.length >= 2 && (
-                <Button variant="default" onClick={handleCompare}>
-                  {t("compareCount", { count: selectedListingIds.length })}
+              {compareMode ? (
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCompareModeState(false)}
+                    className="shrink-0"
+                  >
+                    <X className="h-4 w-4 mr-1" />
+                    {tCommon("cancel")}
+                  </Button>
+                  {selectedListingIds.length >= 2 && (
+                    <Button
+                      variant="default"
+                      size="sm"
+                      onClick={handleCompare}
+                      className="shrink-0"
+                    >
+                      <GitCompareArrows className="h-4 w-4 mr-1" />
+                      {t("compareCount", { count: selectedListingIds.length })}
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setCompareModeState(true)}
+                  className="shrink-0"
+                >
+                  <GitCompareArrows className="h-4 w-4 mr-1" />
+                  {t("compare")}
                 </Button>
               )}
               <Tooltip>
@@ -315,16 +346,6 @@ export function ListingsPageInner() {
                 </TooltipTrigger>
                 <TooltipContent>{t("filterListings")}</TooltipContent>
               </Tooltip>
-              {!compareMode && (
-                <Button
-                  variant="outline"
-                  onClick={() => setCompareModeState(true)}
-                  size="sm"
-                  className="shrink-0"
-                >
-                  {t("compare")}
-                </Button>
-              )}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
