@@ -8,19 +8,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.3.0] - 2026-08-08
 
 ### Added
-- **Full i18n externalization**: Listings, templates, anchors, agent questions, settings, notes, verdicts, and support modal text now use `next-intl`.
-- **Tenant profile & agent question seed data**: Sample data now seeds a default tenant profile and active agent-question template.
-- **Hydration-safe hooks**: `useLocalStorageValue`, `useLocalStorageState`, and `useWindowWidth` for safe `localStorage`/`window` reads.
+- **Support & Tipping**: BMC-style support modal with PayNow QR tip tiers, an optional note, and support entry points
+- **Singapore Rental Guide**: New consolidated guide page for the rental journey
+- **Full i18n Externalization**: All user-facing strings (listings, templates, anchors, agent questions, settings, notes, verdicts, support modal, map, and dialogs) now use `next-intl`
+- **Tenant Profile & Agent Question Seed Data**: Sample data now includes a default tenant profile and active agent-question template
+- **Hydration-Safe Hooks**: `useLocalStorageValue`, `useLocalStorageState`, and `useWindowWidth` for safe client-side storage and window reads
+- **Vercel Analytics**: Added analytics to the root layout
 
 ### Changed
-- **Compare-mode toolbar**: Compare toggle now shows `Cancel` and a `Compare (n)` action button once two or more listings are selected.
-- **Listing forms**: Refined labels, focus states, spacing, placeholders, and "Address" copy in create/edit forms.
-- **Checkbox contrast**: Checkbox borders now use `border-foreground` for visibility in both light and dark modes.
-- **E2E tests**: Updated selectors for i18n/UI changes and re-enabled the Compare action test.
+- **Compare Mode**: Redesigned toolbar — click `Compare` to enter selection mode, `Cancel` to exit, and `Compare (n)` appears only after selecting two or more listings
+- **Listing Forms**: Refined create/edit listing labels, focus rings, spacing, placeholders, and renamed location labels to `Address`
+- **Checkbox Visibility**: Checkbox borders now use `border-foreground` for visibility in both light and dark modes
+- **Empty-State Copy**: `noActiveTemplate` and `profileEmpty` messages now point users to Settings
+- **Schedule Filtering**: `Unscheduled`/`Scheduled` tabs now correctly check `scheduled_date` instead of viewing record existence
+- **Support UI**: Polished note field, support chip placement and copy, and aligned listings/schedule headers to `My Listings` / `My Schedule`
+- **QR Card Styling**: Reduced white padding and softened borders/shadow for dark mode
 
 ### Fixed
-- **Hydration mismatches**: Removed SSR-risky `useState` initializers that read `localStorage`/`window` on first render.
-- **Compare resizer z-index**: Lowered resizer handle so it no longer overlaps the bottom navigation.
+- **Hydration Mismatches**: Removed SSR-risky `useState` initializers that read `localStorage`/`window` on first render
+- **Compare Column Resizer**: Lowered z-index so it no longer overlaps the bottom navigation
+- **Support Email Exposure**: Support email is no longer exposed in the UI; fallback copies the note to clipboard
+- **Compare Mode Toggle**: Fixed compare action visibility on mobile and activation from the listings page
+
+### Removed
+- **Unused Code**: Removed the `AreaLegend` component and `useListingSort` hook
 
 ## [3.2.0] - 2026-07-09
 

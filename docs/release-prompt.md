@@ -16,7 +16,8 @@ Release JIRoom version X.Y.Z:
 
 Notes:
 - Do not create the GitHub Release manually; the workflow handles it.
-- If you skip the CHANGELOG update, the release will still be created with auto-generated notes.
+- The `Release` workflow extracts the `## [X.Y.Z]` section from `CHANGELOG.md` and uses it as the release body, so the `CHANGELOG.md` update must be accurate and complete before pushing the tag.
+- If you skip the CHANGELOG update, the release body will be empty.
 - Pushing the tag before CI passes will still create a release, but the deployed code may be from the previous `main` push.
 ```
 
