@@ -74,7 +74,7 @@ export function ListingsPageInner() {
     if (typeof window === "undefined") return false;
     return localStorage.getItem("compact-view") === "true";
   });
-  const [compareMode, setCompareMode] = useState(false);
+  const [compareModeState, setCompareMode] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [copyStatus, setCopyStatus] = useState<{
     type: "success" | "error" | null;
@@ -122,11 +122,7 @@ export function ListingsPageInner() {
   );
   const getProfile = useTenantProfileStore((state) => state.getProfile);
 
-  useEffect(() => {
-    if (pathname === "/listings") {
-      setCompareMode(false);
-    }
-  }, [pathname]);
+  const compareMode = pathname === "/listings" ? false : compareModeState;
 
   const handleCompare = () => {
     router.push("/compare");

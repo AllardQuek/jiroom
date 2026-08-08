@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useSyncExternalStore } from "react";
 import { Link } from "@/i18n/navigation";
 import { Listing, Viewing } from "@/types/listing";
 import { Template, Criterion, Evaluation } from "@/types/evaluation";
@@ -140,13 +140,13 @@ function formatNet(net: number) {
 function CompactScoreDisplay({ score }: { score: ScoreResult | null }) {
   const t = useTranslations("compare");
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const resolvedTheme = (theme as "light" | "dark") || "light";
   const net = score?.net ?? null;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const scoreColors = mounted ? getScoreColors(resolvedTheme) : SCORE_COLORS;
 
@@ -286,28 +286,26 @@ export function ComparisonMatrix({
   const t = useTranslations("compare");
   const locale = useLocale();
   const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const resolvedTheme = (theme as "light" | "dark") || "light";
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  const [isMobile, setIsMobile] = useState(false);
-  const [criteriaColumnWidth, setCriteriaColumnWidth] = useState(170);
-
-  useEffect(() => {
-    // Load saved width from localStorage
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < 768 : false
+  );
+  const [criteriaColumnWidth, setCriteriaColumnWidth] = useState(() => {
+    if (typeof window === "undefined") return 170;
     const savedWidth = localStorage.getItem("criteria-column-width");
-    if (savedWidth) {
-      setCriteriaColumnWidth(Number(savedWidth));
-    }
+    return savedWidth ? Number(savedWidth) : 170;
+  });
 
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleResizeStart = (e: React.MouseEvent) => {

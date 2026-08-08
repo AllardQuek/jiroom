@@ -4,16 +4,16 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const t = useTranslations("chrome");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   const handleToggle = () => {
     setTheme(theme === "dark" ? "light" : "dark");

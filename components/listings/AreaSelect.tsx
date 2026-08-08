@@ -45,10 +45,6 @@ export function CreatableSelect({
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  useEffect(() => {
-    setSearch(value || "");
-  }, [value]);
-
   return (
     <div className="relative">
       <Input
