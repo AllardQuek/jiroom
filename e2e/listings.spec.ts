@@ -47,10 +47,11 @@ test("Add listing button opens dialog", async ({ page }) => {
   await expect(page.getByText("Add New Listing")).toBeVisible();
 });
 
-test.fixme("Compare button appears when listings selected", async ({
+test("Compare action button appears when two or more listings selected", async ({
   page,
 }) => {
-  await expect(page.getByText(/Compare \(\d+\)/)).toBeVisible();
+  await page.getByRole("button", { name: "Compare" }).click();
+  await expect(page.getByText(/Compare \(2\)/)).toBeVisible();
 });
 
 test("export button is present", async ({ page }) => {
