@@ -59,8 +59,8 @@ Thumbs.db
 # Tooling
 .codegraph/
 
-# Package manager lockfiles (project uses npm)
-pnpm-lock.yaml
+# Package manager lockfiles (project uses pnpm)
+package-lock.json
 yarn.lock
 
 # Logs
